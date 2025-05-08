@@ -100,7 +100,7 @@ public class ClienteBean {
     }
 
     public void setcF(String cF) {
-        if(cF != null && !cF.isBlank())
+        if(cF != null && !cF.isBlank() && cF.length() == 16)
             this.cF = cF;
     }
 }
