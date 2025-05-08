@@ -21,7 +21,7 @@ public class ClienteBean {
         this.cF = cF;
     }
 
-    public ClienteBean getByCheckEmail(int idCliente, String nome, String cognome, String dataNascita, String email, String cF) {
+    public static ClienteBean getByCheckEmail(int idCliente, String nome, String cognome, String dataNascita, String email, String cF) {
         ClienteBean cliente = null;
         if(mailSyntaxCheck(email)) {
             cliente = new ClienteBean(idCliente, nome, cognome, dataNascita, email, cF);
@@ -29,7 +29,7 @@ public class ClienteBean {
         return cliente;
     }
 
-    private boolean mailSyntaxCheck(String email)
+    private static boolean mailSyntaxCheck(String email)
     {
         // Create the Pattern using the regex
         Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
