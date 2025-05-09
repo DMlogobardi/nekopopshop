@@ -1,4 +1,4 @@
-package model;
+package model.Bean;
 
 import java.io.Serializable;
 import java.util.StringTokenizer;
