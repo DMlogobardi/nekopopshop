@@ -1,6 +1,8 @@
 package model;
 
-public class CarelloBean {
+import java.io.Serializable;
+
+public class CarelloBean implements Serializable {
     private int idCarello;
     private double tot;
     private double speseSped;

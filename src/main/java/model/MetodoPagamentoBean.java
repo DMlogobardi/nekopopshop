@@ -1,6 +1,8 @@
 package model;
 
-public class MetodoPagamentoBean {
+import java.io.Serializable;
+
+public class MetodoPagamentoBean implements Serializable {
     private int idMetodoPagamento;
     private String nCarta;
     private String tipo;

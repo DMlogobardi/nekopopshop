@@ -1,6 +1,8 @@
 package model;
 
-public class CapitoloBean {
+import java.io.Serializable;
+
+public class CapitoloBean implements Serializable {
     private int idCapitolo;
     private float numCapitolo;
     private String dataPub;

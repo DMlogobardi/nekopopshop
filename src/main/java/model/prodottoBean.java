@@ -1,4 +1,81 @@
 package model;
 
-public class prodottoBean {
+import java.io.Serializable;
+
+public class prodottoBean implements Serializable {
+    private int idProdotto;
+    private String nome;
+    private int quantita;
+    private double prezzo;
+    private String autore;
+    private byte[] imgProd;
+    private String descrizione;
+
+    public prodottoBean(int idProdotto, String nome, int quantita, double prezzo, String autore, byte[] imgProd, String descrizione) {
+        this.idProdotto = idProdotto;
+        this.nome = nome;
+        this.quantita = quantita;
+        this.prezzo = prezzo;
+        this.autore = autore;
+        this.imgProd = imgProd;
+        this.descrizione = descrizione;
+    }
+
+    public int getIdProdotto() {
+        return idProdotto;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        if(nome != null && !nome.isBlank())
+            this.nome = nome;
+    }
+
+    public int getQuantita() {
+        return quantita;
+    }
+
+    public void setQuantita(int quantita) {
+        if(quantita >= 0)
+            this.quantita = quantita;
+    }
+
+    public double getPrezzo() {
+        return prezzo;
+    }
+
+    public void setPrezzo(double prezzo) {
+        if(prezzo >= 0.0)
+            this.prezzo = prezzo;
+    }
+
+    public String getAutore() {
+        return autore;
+    }
+
+    public void setAutore(String autore) {
+        if(!autore.isBlank() || autore == null)
+            this.autore = autore;
+    }
+
+    public byte[] getImgProd() {
+        return imgProd;
+    }
+
+    public void setImgProd(byte[] imgProd) {
+        if(imgProd.length > 0)
+            this.imgProd = imgProd;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        if(descrizione != null && !descrizione.isBlank())
+            this.descrizione = descrizione;
+    }
 }

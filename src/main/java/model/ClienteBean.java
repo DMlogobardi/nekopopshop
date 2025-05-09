@@ -1,10 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ClienteBean {
+public class ClienteBean implements Serializable {
     private int idCliente;
     private String nome;
     private String cognome;

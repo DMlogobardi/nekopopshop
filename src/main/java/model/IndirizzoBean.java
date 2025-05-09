@@ -1,6 +1,8 @@
 package model;
 
-public class IndirizzoBean {
+import java.io.Serializable;
+
+public class IndirizzoBean implements Serializable {
     private int idIndirizzo;
     private String via;
     private int nCivico;

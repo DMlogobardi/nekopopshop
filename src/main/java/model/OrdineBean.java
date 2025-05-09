@@ -1,6 +1,8 @@
 package model;
 
-public class OrdineBean {
+import java.io.Serializable;
+
+public class OrdineBean implements Serializable {
     private int idOrdine;
     private double tot;
     private String dataOrdine;

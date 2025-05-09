@@ -1,6 +1,8 @@
 package model;
 
-public class NumTelefonoBean {
+import java.io.Serializable;
+
+public class NumTelefonoBean implements Serializable {
     private int idTelefono;
     private String prefisso;
     private String numero;
