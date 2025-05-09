@@ -102,6 +102,35 @@ public class AccountDAO implements GenralDAO<AccountBean>{
         return account;
     }
 
+    public AccountBean doRetrieveByNick(String nick) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        AccountBean account = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE nickName = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setString(1, nick);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                account = new AccountBean(rs.getInt("idAccount"), rs.getString("password"), rs.getString("nickName"), rs.getInt("idCliente"));
+                if(rs.getInt("adminFlag") == 1){
+                    account.setAdmin();
+                }
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return account;
+    }
+
     @Override
     public Collection<AccountBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;

@@ -21,7 +21,7 @@ public class AccountBean implements Serializable {
         this.adminFlag = false;
         this.idCliente = idCliente;
     }
-    private String hashPassword(String password) {
+    public static String hashPassword(String password) {
         String hashedPassword = "";
         try{
             MessageDigest md = MessageDigest.getInstance("SHA-512");
