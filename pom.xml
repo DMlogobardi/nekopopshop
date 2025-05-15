@@ -18,6 +18,13 @@
   </properties>
 
   <dependencies>
+      <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-j</artifactId>
+          <version>9.1.0</version>
+          <scope>system</scope>
+          <systemPath>${project.basedir}/.mvn/mysql-connector-j-9.1.0.jar</systemPath>
+      </dependency>
 <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>

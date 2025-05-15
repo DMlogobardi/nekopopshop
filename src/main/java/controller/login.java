@@ -32,6 +32,7 @@ public class login extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.print("doGet");
 
     }
 
@@ -39,7 +40,12 @@ public class login extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DataSource ds = (DataSource) getServletContext().getAttribute("db");
+        if(request.getAttribute("logToken") != null) {
+            request.setAttribute("errors", "utent alredy logged in");
+            request.getRequestDispatcher("index.html").forward(request, response);
+        }
+
+        DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
         AccountDAO accDB = new AccountDAO(ds);
         String pass = request.getParameter("pass");
         String nick = request.getParameter("nick");
@@ -70,7 +76,7 @@ public class login extends HttpServlet {
                 } else {
                     request.getSession().setAttribute("logToken", false);
                 }
-                response.sendRedirect("/index.jsp");
+                response.sendRedirect("index.jsp");
             }
 
             errors.add("invalid login attempt");
