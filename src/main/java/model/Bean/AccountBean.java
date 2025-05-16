@@ -16,7 +16,7 @@ public class AccountBean implements Serializable {
 
     public AccountBean(int idAccount, String password, String nickName, int idCliente) {
         this.idAccount = idAccount;
-        this.password = hashPassword(password);
+        this.password = password;
         this.nickName = nickName;
         this.adminFlag = false;
         this.idCliente = idCliente;

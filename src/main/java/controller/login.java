@@ -40,9 +40,10 @@ public class login extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(request.getAttribute("logToken") != null) {
+        if(request.getSession().getAttribute("logToken") != null) {
             request.setAttribute("errors", "utent alredy logged in");
-            request.getRequestDispatcher("index.html").forward(request, response);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            return;
         }
 
         DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
@@ -52,7 +53,7 @@ public class login extends HttpServlet {
         ArrayList<String> errors = new ArrayList<>();
         RequestDispatcher loginDispatch = request.getRequestDispatcher("login.jsp");
 
-        if(pass == null || nick.trim().isEmpty()) {
+        if(pass == null || pass.trim().isEmpty()) {
             errors.add("the field password is empty");
         }
         if(nick == null || nick.trim().isEmpty()) {
@@ -61,6 +62,7 @@ public class login extends HttpServlet {
         if(!errors.isEmpty()) {
             request.setAttribute("errors", errors);
             loginDispatch.forward(request, response);
+            System.out.println("errors: " + errors);
             return;
         }
 
@@ -70,18 +72,26 @@ public class login extends HttpServlet {
         try {
             acc = accDB.doRetrieveByNick(nick.strip());
 
+            System.out.println(acc.getPassword() + " " + hashPass);
+
             if(acc.getPassword().equals(hashPass)) {
                 if(acc.isAdminFlag()){
                     request.getSession().setAttribute("logToken", true);
                 } else {
                     request.getSession().setAttribute("logToken", false);
                 }
-                response.sendRedirect("index.jsp");
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                String success = "{\"satus\": \"success\", \"message\": \"login successful\"}";
+                response.getWriter().write(success);
+                System.out.println("login success");
+                return;
             }
 
             errors.add("invalid login attempt");
             request.setAttribute("error", errors);
             loginDispatch.forward(request, response);
+            System.out.println("errors: " + errors);
 
         } catch (SQLException e) {
             System.out.println("login servlet error: " + e.getMessage());

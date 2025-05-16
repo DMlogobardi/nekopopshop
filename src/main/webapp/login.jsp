@@ -13,11 +13,9 @@
             password: <input type="password" name="pass"><br>
             <input type="submit" value="Submit">
         </form>
-        <% if(request.getAttribute("errors") != null) {%>
-            <p>non puoi loggare</p>
-        <% } else { %>
-            <p>success</p>
-        <%}%>
+        <%if(request.getAttribute("errors") != null)%>
+            <p>non puoi loggare: <%= request.getAttribute("errors") %> </p>
+        <p> <%= session.getAttribute("logtoken")%> </p>
     </div>
 </body>
 </html>
