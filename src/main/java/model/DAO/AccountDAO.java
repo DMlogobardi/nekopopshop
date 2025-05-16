@@ -138,9 +138,10 @@ public class AccountDAO implements GenralDAO<AccountBean>{
         Collection<AccountBean> accounts = new LinkedList<AccountBean>();
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if(order != null && orderWhitelist.contains(order)){
+        if(order != null && orderWhitelist.contains(order.strip())){
             selectAllSQL += " ORDER BY " + order;
         }
+
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
