@@ -123,4 +123,36 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
         }
         return acList;
     }
+
+    @Override
+    public Collection<AcquistatoBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<AcquistatoBean> acList = new LinkedList<AcquistatoBean>();
+
+        String selectAllSQL = " SELECT * FROM " + TABLE_NAME;
+        if(order != null && orderWhiteList.contains(order.strip())) {
+            selectAllSQL += " ORDER BY " + order;
+        }
+        if(limit > 0 && page > 0){
+            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                AcquistatoBean ac = new AcquistatoBean(rs.getInt("idAcquistato"), rs.getInt("idOrdine"), rs.getInt("idProdotto"));
+                acList.add(ac);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return acList;
+    }
 }

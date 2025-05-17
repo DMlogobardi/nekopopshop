@@ -162,4 +162,38 @@ public class AccountDAO implements GenralDAO<AccountBean>{
         }
         return accounts;
     }
+
+    @Override
+    public Collection<AccountBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<AccountBean> accounts = new LinkedList<AccountBean>();
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
+        if(order != null && orderWhitelist.contains(order.strip())){
+            selectAllSQL += " ORDER BY " + order;
+        }
+        if(limit > 0 && page > 0){
+            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
+        }
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                AccountBean account = new AccountBean(rs.getInt("idAccount"), rs.getString("password"), rs.getString("nickName"), rs.getInt("idCliente"));
+                if(rs.getInt("adminFlag") == 1){
+                    account.setAdmin();
+                }
+                accounts.add(account);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return accounts;
+    }
 }

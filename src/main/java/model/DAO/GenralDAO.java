@@ -12,4 +12,6 @@ public interface GenralDAO<T>{
     public T doRetrieveByKey(int code) throws SQLException;
 
     public Collection<T> doRetrieveAll(String order) throws SQLException;
+
+    public Collection<T> doRetrieveAllLimit(String order, int limit, int page) throws SQLException;
 }

@@ -1,6 +1,8 @@
 package model.Bean;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,6 +82,12 @@ public class ClienteBean implements Serializable {
 
     public String getDataNascita() {
         return dataNascita;
+    }
+
+    public LocalDate getDataNascitaFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        LocalDate date =LocalDate.parse(dataNascita, format);
+        return date;
     }
 
     public void setDataNascita(String dataNascita) {
