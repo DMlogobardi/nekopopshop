@@ -1,6 +1,8 @@
 package model.Bean;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class MetodoPagamentoBean implements Serializable {
     private int idMetodoPagamento;
@@ -45,6 +47,12 @@ public class MetodoPagamentoBean implements Serializable {
 
     public String getDataScadenza() {
         return dataScadenza;
+    }
+
+    public LocalDate getDataScadenzaFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        LocalDate date =LocalDate.parse(dataScadenza, format);
+        return date;
     }
 
     public void setDataScadenza(String dataScadenza) {

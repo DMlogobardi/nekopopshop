@@ -102,8 +102,8 @@ public class CapitoloDAO implements GenralDAO<CapitoloBean>{
         Collection<CapitoloBean> capitoli = new LinkedList<CapitoloBean>();
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if( order != null && orderWhiteList.contains(order) ) {
-            selectAllSQL += " ORDER BY " + order;
+        if( order != null && orderWhiteList.contains(order.strip())) {
+            selectAllSQL += " ORDER BY " + order.strip();
         }
         try{
             con = ds.getConnection();
@@ -130,8 +130,8 @@ public class CapitoloDAO implements GenralDAO<CapitoloBean>{
         Collection<CapitoloBean> capitoli = new LinkedList<CapitoloBean>();
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if( order != null && orderWhiteList.contains(order) ) {
-            selectAllSQL += " ORDER BY " + order;
+        if( order != null && orderWhiteList.contains(order.strip())) {
+            selectAllSQL += " ORDER BY " + order.strip();
         }
         if(limit > 0 && page > 0){
             selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;

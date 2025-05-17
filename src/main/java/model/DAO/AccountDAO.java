@@ -139,7 +139,7 @@ public class AccountDAO implements GenralDAO<AccountBean>{
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
         if(order != null && orderWhitelist.contains(order.strip())){
-            selectAllSQL += " ORDER BY " + order;
+            selectAllSQL += " ORDER BY " + order.strip();
         }
 
         try {
@@ -171,7 +171,7 @@ public class AccountDAO implements GenralDAO<AccountBean>{
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
         if(order != null && orderWhitelist.contains(order.strip())){
-            selectAllSQL += " ORDER BY " + order;
+            selectAllSQL += " ORDER BY " + order.strip();
         }
         if(limit > 0 && page > 0){
             selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;

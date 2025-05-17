@@ -1,4 +1,185 @@
 package model.DAO;
 
-public class MetodopagamentoDAO {
+import model.Bean.MetodoPagamentoBean;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+
+public class MetodopagamentoDAO implements GenralDAO<MetodoPagamentoBean>{
+    private static final String TABLE_NAME = "metodopagamento";
+    private DataSource ds = null;
+    private List<String> orderWhiteList = List.of("idMetodoPag", "nCarta", "tipo", "dataScadenza", "nomeInte", "cognomeInt", "idCliente");
+
+    public MetodopagamentoDAO(DataSource ds) {
+        this.ds = ds;
+    }
+
+    @Override
+    public void doSave(MetodoPagamentoBean bean) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        String insertSQL = "insert into" + TABLE_NAME + "(nCarte, tipo, dataScadenza, nomeInte, cognomeInt, idCliente) values (?,?,?,?,?,?)";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(insertSQL);
+            ps.setString(1, bean.getnCarta());
+            ps.setString(2, bean.getTipo());
+            ps.setString(3, bean.getDataScadenzaFormatted().toString());
+            ps.setString(4, bean.getNomeInte());
+            ps.setInt(5, bean.getIdCliente());
+
+            ps.executeUpdate();
+
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+    }
+
+    @Override
+    public boolean doDelete(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String deleteSQL = "delete from " + TABLE_NAME + " where idMetodoPag = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(deleteSQL);
+            ps.setInt(1, code);
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return(result != 0);
+    }
+
+    @Override
+    public MetodoPagamentoBean doRetrieveByKey(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        MetodoPagamentoBean mPag = null;
+
+        String selectSQL = "select * from " + TABLE_NAME + " where idMetodoPag = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                mPag = new MetodoPagamentoBean(
+                        rs.getInt("idMetodoPag"),
+                        rs.getString("nCarta"),
+                        rs.getString("tipo"),
+                        rs.getString("dataScadenza"),
+                        rs.getString("nomeInte"),
+                        rs.getString("cognomeInt"),
+                        rs.getInt("idCliente")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return mPag;
+    }
+
+    @Override
+    public Collection<MetodoPagamentoBean> doRetrieveAll(String order) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<MetodoPagamentoBean> mpagList = new LinkedHashSet<MetodoPagamentoBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME;
+        if(order != null && orderWhiteList.contains(order.strip())){
+            selectAllSQL += " order by nCarta " + order.strip();
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                MetodoPagamentoBean mPag = new MetodoPagamentoBean(
+                        rs.getInt("idMetodoPag"),
+                        rs.getString("nCarta"),
+                        rs.getString("tipo"),
+                        rs.getString("dataScadenza"),
+                        rs.getString("nomeInte"),
+                        rs.getString("cognomeInt"),
+                        rs.getInt("idCliente")
+                );
+                mpagList.add(mPag);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return mpagList;
+    }
+
+    @Override
+    public Collection<MetodoPagamentoBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<MetodoPagamentoBean> mpagList = new LinkedHashSet<MetodoPagamentoBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME;
+        if(order != null && orderWhiteList.contains(order.strip())){
+            selectAllSQL += " order by nCarta " + order.strip();
+        }
+        if(limit > 0 && page > 0){
+            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                MetodoPagamentoBean mPag = new MetodoPagamentoBean(
+                        rs.getInt("idMetodoPag"),
+                        rs.getString("nCarta"),
+                        rs.getString("tipo"),
+                        rs.getString("dataScadenza"),
+                        rs.getString("nomeInte"),
+                        rs.getString("cognomeInt"),
+                        rs.getInt("idCliente")
+                );
+                mpagList.add(mPag);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return mpagList;
+    }
 }

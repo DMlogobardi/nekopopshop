@@ -1,6 +1,8 @@
 package model.Bean;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class OrdineBean implements Serializable {
     private int idOrdine;
@@ -10,10 +12,11 @@ public class OrdineBean implements Serializable {
     private int idCliente;
     private int idMetodoPag;
 
-    public OrdineBean(int idOrdine, double tot,  String dataOrdine, int idCliente, int idMetodoPag) {
+    public OrdineBean(int idOrdine, double tot,  String dataOrdine, String dataArrivo ,int idCliente, int idMetodoPag) {
         this.idOrdine = idOrdine;
         this.tot = tot;
         this.dataOrdine = dataOrdine;
+        this.dataArrivos = dataArrivos;
         this.idCliente = idCliente;
         this.idMetodoPag = idMetodoPag;
     }
@@ -35,13 +38,25 @@ public class OrdineBean implements Serializable {
         return dataOrdine;
     }
 
+    public LocalDate getDataOrdineFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        LocalDate date =LocalDate.parse(dataOrdine, format);
+        return date;
+    }
+
     public void setDataOrdine(String dataOrdine) {
         if(dataOrdine != null && !dataOrdine.isBlank())
             this.dataOrdine = dataOrdine;
     }
 
-    public String getDataArrivos() {
+    public String getDataArrivo() {
         return dataArrivos;
+    }
+
+    public LocalDate getDataArrivoFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        LocalDate date =LocalDate.parse(dataArrivos, format);
+        return date;
     }
 
     public void setDataArrivos(String dataArrivos) {

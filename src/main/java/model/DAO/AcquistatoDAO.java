@@ -102,7 +102,7 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
 
         String selectAllSQL = " SELECT * FROM " + TABLE_NAME;
         if(order != null && orderWhiteList.contains(order.strip())) {
-            selectAllSQL += " ORDER BY " + order;
+            selectAllSQL += " ORDER BY " + order.strip();
         }
 
         try{
@@ -132,7 +132,7 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
 
         String selectAllSQL = " SELECT * FROM " + TABLE_NAME;
         if(order != null && orderWhiteList.contains(order.strip())) {
-            selectAllSQL += " ORDER BY " + order;
+            selectAllSQL += " ORDER BY " + order.strip();
         }
         if(limit > 0 && page > 0){
             selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;

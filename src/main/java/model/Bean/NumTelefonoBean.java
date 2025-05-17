@@ -6,9 +6,9 @@ public class NumTelefonoBean implements Serializable {
     private int idTelefono;
     private String prefisso;
     private String numero;
-    private String idCliente;
+    private int idCliente;
 
-    public NumTelefonoBean(int idTelefono, String prefisso, String numero, String idCliente) {
+    public NumTelefonoBean(int idTelefono, String prefisso, String numero, int idCliente) {
         this.idTelefono = idTelefono;
         this.prefisso = prefisso;
         this.numero = numero;
@@ -37,7 +37,7 @@ public class NumTelefonoBean implements Serializable {
             this.numero = numero;
     }
 
-    public String getIdCliente() {
+    public int getIdCliente() {
         return idCliente;
     }
 }

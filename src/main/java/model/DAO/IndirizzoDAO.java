@@ -3,8 +3,12 @@ package model.DAO;
 import model.Bean.IndirizzoBean;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
@@ -18,26 +22,153 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
 
     @Override
     public void doSave(IndirizzoBean bean) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
 
+        String insertSQL = "INSERT INTO " + TABLE_NAME + "(via, nCivico, cap, idCliente)" + " VALUES (?,?,?,?)";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(insertSQL);
+            ps.setString(1, bean.getVia());
+            ps.setInt(2, bean.getnCivico());
+            ps.setString(3, bean.getCap());
+            ps.setInt(4, bean.getIdCliente());
+
+            ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
     }
 
     @Override
     public boolean doDelete(int code) throws SQLException {
-        return false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String deleteSQL = "DELETE FROM " + TABLE_NAME + " WHERE code=?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(deleteSQL);
+            ps.setInt(1, code);
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return(result != 0);
     }
 
     @Override
     public IndirizzoBean doRetrieveByKey(int code) throws SQLException {
-        return null;
+        Connection con = null;
+        PreparedStatement ps = null;
+        IndirizzoBean indirizzo = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE code=?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                indirizzo = new IndirizzoBean(
+                        rs.getInt("idIndirizzo"),
+                        rs.getString("via"),
+                        rs.getInt("nCivico"),
+                        rs.getString("cap"),
+                        rs.getInt("idCliente")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return indirizzo;
     }
 
     @Override
     public Collection<IndirizzoBean> doRetrieveAll(String order) throws SQLException {
-        return List.of();
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<IndirizzoBean> indirizzi = new LinkedList<IndirizzoBean>();
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
+        if(order != null && orderWhiteList.contains(order.strip())){
+            selectAllSQL += " ORDER BY " + order.strip();
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                IndirizzoBean indirizzo = new IndirizzoBean(
+                        rs.getInt("idIndirizzo"),
+                        rs.getString("via"),
+                        rs.getInt("nCivico"),
+                        rs.getString("cap"),
+                        rs.getInt("idCliente")
+                );
+                indirizzi.add(indirizzo);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return indirizzi;
     }
 
     @Override
     public Collection<IndirizzoBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
-        return List.of();
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<IndirizzoBean> indirizzi = new LinkedList<IndirizzoBean>();
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
+        if(order != null && orderWhiteList.contains(order.strip())){
+            selectAllSQL += " ORDER BY " + order.strip();
+        }
+        if(limit > 0 && page > 0){
+            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                IndirizzoBean indirizzo = new IndirizzoBean(
+                        rs.getInt("idIndirizzo"),
+                        rs.getString("via"),
+                        rs.getInt("nCivico"),
+                        rs.getString("cap"),
+                        rs.getInt("idCliente")
+                );
+                indirizzi.add(indirizzo);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return indirizzi;
     }
 }
