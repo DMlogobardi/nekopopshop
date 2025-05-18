@@ -1,6 +1,8 @@
 package model.Bean;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class ReaderBean implements Serializable {
     private int idReader;
@@ -25,6 +27,12 @@ public class ReaderBean implements Serializable {
         return dataAcquisto;
     }
 
+    public LocalDate getDataAcquistoFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        LocalDate date =LocalDate.parse(dataAcquisto, format);
+        return date;
+    }
+
     public void setDataAcquisto(String dataAcquisto) {
         if(dataAcquisto != null && !dataAcquisto.isBlank()) {}
             this.dataAcquisto = dataAcquisto;
@@ -34,6 +42,11 @@ public class ReaderBean implements Serializable {
         return dataUltimaApertura;
     }
 
+    public LocalDate getDataUltimaAperturaFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        LocalDate date =LocalDate.parse(dataUltimaApertura, format);
+        return date;
+    }
     public void setDataUltimaApertura(String dataUltimaApertura) {
         if(!dataUltimaApertura.isBlank() || dataUltimaApertura == null) {}
             this.dataUltimaApertura = dataUltimaApertura;

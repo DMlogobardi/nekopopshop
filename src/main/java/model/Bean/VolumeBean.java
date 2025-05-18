@@ -1,6 +1,8 @@
 package model.Bean;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class VolumeBean implements Serializable {
     private int idVolume;
@@ -54,6 +56,12 @@ public class VolumeBean implements Serializable {
 
     public String getDataPubl() {
         return dataPubl;
+    }
+
+    public LocalDate getDataPublFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        LocalDate date =LocalDate.parse(dataPubl, format);
+        return date;
     }
 
     public void setDataPubl(String dataPubl) {

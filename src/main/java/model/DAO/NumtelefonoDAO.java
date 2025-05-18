@@ -161,7 +161,7 @@ public class NumtelefonoDAO implements GenralDAO<NumTelefonoBean>{
                 );
                 tels.add(tel);
             }
-        }  finally {
+        } finally {
             try {
                 if (ps != null) ps.close();
             } finally {

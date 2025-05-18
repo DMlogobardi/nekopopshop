@@ -1,4 +1,177 @@
 package model.DAO;
 
-public class PaginaDAO {
+import model.Bean.PaginaBean;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+public class PaginaDAO implements GenralDAO<PaginaBean>{
+    private static final String TABLE_NAME = "pagina";
+    private DataSource ds = null;
+    private List<String> orderWhiteList = List.of("idPagina", "numPag", "dataCaricamento", "idCapitolo");
+
+    public PaginaDAO(DataSource ds) {
+        this.ds = ds;
+    }
+
+    @Override
+    public void doSave(PaginaBean bean) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        String insertSQL = "insert into" + TABLE_NAME + "(numPag, dataCaricamento, tavola,idCapitolo)" + " values(?,?,?,?)";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(insertSQL);
+            ps.setInt(1, bean.getNumPag());
+            ps.setString(2, bean.getDataCaricamentoFormatted().toString());
+            ps.setBytes(3, bean.getTavola());
+            ps.setInt(4, bean.getIdCapitolo());
+
+            ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+    }
+
+    @Override
+    public boolean doDelete(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String deleteSQL = "delete from " + TABLE_NAME + " where idPagina = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(deleteSQL);
+            ps.setInt(1, code);
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return(result != 0);
+    }
+
+    @Override
+    public PaginaBean doRetrieveByKey(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        PaginaBean pag = null;
+
+        String selectSQL = "select * from " + TABLE_NAME + " where idPagina = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                pag = new PaginaBean(
+                        rs.getInt("idPagina"),
+                        rs.getInt("numPag"),
+                        rs.getBytes("tavola"),
+                        rs.getString("dataCaricamento"),
+                        rs.getInt("idCapitolo")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return pag;
+    }
+
+    @Override
+    public Collection<PaginaBean> doRetrieveAll(String order) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<PaginaBean> pages = new LinkedList<PaginaBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME;
+        if(order != null && orderWhiteList.contains(order.strip())){
+            selectAllSQL += " order by " + order.strip();
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                PaginaBean pag = new PaginaBean(
+                        rs.getInt("idPagina"),
+                        rs.getInt("numPag"),
+                        rs.getBytes("tavola"),
+                        rs.getString("dataCaricamento"),
+                        rs.getInt("idCapitolo")
+                );
+                pages.add(pag);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return pages;
+    }
+
+    @Override
+    public Collection<PaginaBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<PaginaBean> pages = new LinkedList<PaginaBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME;
+        if(order != null && orderWhiteList.contains(order.strip())){
+            selectAllSQL += " order by " + order.strip();
+        }
+        if(limit > 0 && page > 0){
+            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                PaginaBean pag = new PaginaBean(
+                        rs.getInt("idPagina"),
+                        rs.getInt("numPag"),
+                        rs.getBytes("tavola"),
+                        rs.getString("dataCaricamento"),
+                        rs.getInt("idCapitolo")
+                );
+                pages.add(pag);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return pages;
+    }
 }

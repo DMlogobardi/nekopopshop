@@ -2,7 +2,7 @@ package model.Bean;
 
 import java.io.Serializable;
 
-public class prodottoBean implements Serializable {
+public class ProdottoBean implements Serializable {
     private int idProdotto;
     private String nome;
     private int quantita;
@@ -11,7 +11,7 @@ public class prodottoBean implements Serializable {
     private byte[] imgProd;
     private String descrizione;
 
-    public prodottoBean(int idProdotto, String nome, int quantita, double prezzo, String autore, byte[] imgProd, String descrizione) {
+    public ProdottoBean(int idProdotto, String nome, int quantita, double prezzo, String autore, byte[] imgProd, String descrizione) {
         this.idProdotto = idProdotto;
         this.nome = nome;
         this.quantita = quantita;
