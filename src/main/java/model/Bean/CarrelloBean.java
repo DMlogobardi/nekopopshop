@@ -2,14 +2,14 @@ package model.Bean;
 
 import java.io.Serializable;
 
-public class CarelloBean implements Serializable {
+public class CarrelloBean implements Serializable {
     private int idCarello;
     private double tot;
     private double speseSped;
     private Double sconti;
     private int idCliente;
 
-    public CarelloBean(int idCarello, double tot, double speseSped, Double sconti, int idCliente) {
+    public CarrelloBean(int idCarello, double tot, double speseSped, Double sconti, int idCliente) {
         this.idCarello = idCarello;
         this.tot = tot;
         this.speseSped = speseSped;

@@ -1,6 +1,6 @@
 package model.DAO;
 
-import model.Bean.CarelloBean;
+import model.Bean.CarrelloBean;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,17 +11,17 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CarelloDAO implements GenralDAO<CarelloBean>{
-    private static final String TABLE_NAME = "carello";
+public class CarrelloDAO implements GenralDAO<CarrelloBean>{
+    private static final String TABLE_NAME = "carrello";
     private DataSource ds = null;
-    private List<String> orderWhiteList = List.of("idCarello", "tot", "speseSped", "sconti", "idCliente");
+    private List<String> orderWhiteList = List.of("idCarrello", "tot", "speseSped", "sconti", "idCliente");
 
-    public CarelloDAO(DataSource ds) {
+    public CarrelloDAO(DataSource ds) {
         this.ds = ds;
     }
 
     @Override
-    public void doSave(CarelloBean bean) throws SQLException {
+    public void doSave(CarrelloBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
 
@@ -52,7 +52,7 @@ public class CarelloDAO implements GenralDAO<CarelloBean>{
         PreparedStatement ps = null;
         int result = 0;
 
-        String deleteSQl = "delete from " + TABLE_NAME + " where idCarello = ?";
+        String deleteSQl = "delete from " + TABLE_NAME + " where idCarrello = ?";
 
         try{
             con = ds.getConnection();
@@ -71,12 +71,12 @@ public class CarelloDAO implements GenralDAO<CarelloBean>{
     }
 
     @Override
-    public CarelloBean doRetrieveByKey(int code) throws SQLException {
+    public CarrelloBean doRetrieveByKey(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        CarelloBean carl = null;
+        CarrelloBean carl = null;
 
-        String selectSQL = "select * from " + TABLE_NAME + " where idCarello = ?";
+        String selectSQL = "select * from " + TABLE_NAME + " where idCarrello = ?";
 
         try{
             con = ds.getConnection();
@@ -84,7 +84,7 @@ public class CarelloDAO implements GenralDAO<CarelloBean>{
             ps.setInt(1, code);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                carl = new CarelloBean(rs.getInt("idCarello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
+                carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
             }
         } finally {
             try {
@@ -97,10 +97,10 @@ public class CarelloDAO implements GenralDAO<CarelloBean>{
     }
 
     @Override
-    public Collection<CarelloBean> doRetrieveAll(String order) throws SQLException {
+    public Collection<CarrelloBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<CarelloBean> carelli = new LinkedList<CarelloBean>();
+        Collection<CarrelloBean> carelli = new LinkedList<CarrelloBean>();
 
         String selectAllSQL = "select * from " + TABLE_NAME;
         if(order != null && orderWhiteList.contains(order.strip())){
@@ -111,7 +111,7 @@ public class CarelloDAO implements GenralDAO<CarelloBean>{
             ps = con.prepareStatement(selectAllSQL);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                CarelloBean carl = new CarelloBean(rs.getInt("idCarello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
+                CarrelloBean carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
                 carelli.add(carl);
             }
         }  finally {
@@ -125,10 +125,10 @@ public class CarelloDAO implements GenralDAO<CarelloBean>{
     }
 
     @Override
-    public Collection<CarelloBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
+    public Collection<CarrelloBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<CarelloBean> carelli = new LinkedList<CarelloBean>();
+        Collection<CarrelloBean> carelli = new LinkedList<CarrelloBean>();
 
         String selectAllSQL = "select * from " + TABLE_NAME;
         if(order != null && orderWhiteList.contains(order.strip())){
@@ -142,7 +142,7 @@ public class CarelloDAO implements GenralDAO<CarelloBean>{
             ps = con.prepareStatement(selectAllSQL);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                CarelloBean carl = new CarelloBean(rs.getInt("idCarello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
+                CarrelloBean carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
                 carelli.add(carl);
             }
         }  finally {
