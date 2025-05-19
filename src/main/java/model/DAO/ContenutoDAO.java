@@ -1,6 +1,7 @@
 package model.DAO;
 
 import model.Bean.ContenutoBean;
+import model.Bean.ProdottoBean;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -98,12 +99,12 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
         return contenuto;
     }
 
-    public ContenutoBean doRetrieveByCart(int code) throws SQLException {
+    public Collection<ProdottoBean> doRetrieveAllproduct(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        ContenutoBean contenuto = null;
+        Collection<ProdottoBean> prodotti = new LinkedList<ProdottoBean>();
 
-        String selectSQL = "select * from " + TABLE_NAME + " where idCarrello = ?";
+        String selectSQL = "select * from " + TABLE_NAME + " where idCarrello = ? join prodotto on " + TABLE_NAME +".idContenuto = prodotto.idProdotto";
 
         try {
             con = ds.getConnection();
@@ -112,11 +113,16 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                contenuto = new ContenutoBean(
-                        rs.getInt("idContenuto"),
-                        rs.getInt("idCarrello"),
-                        rs.getInt("idProdotto")
+                ProdottoBean prod = new ProdottoBean(
+                        rs.getInt("idProdotto"),
+                        rs.getString("nome"),
+                        rs.getInt("quantità"),
+                        rs.getDouble("prezzo"),
+                        rs.getString("autore"),
+                        rs.getBytes("imgProd"),
+                        rs.getString("descrizione")
                 );
+                prodotti.add(prod);
             }
         }  finally {
             try {
@@ -125,7 +131,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
                 if (con != null) con.close();
             }
         }
-        return contenuto;
+        return prodotti;
     }
 
     @Override
