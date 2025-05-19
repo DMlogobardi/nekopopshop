@@ -7,7 +7,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Bean.AccountBean;
+import model.Bean.CarrelloBean;
 import model.DAO.AccountDAO;
+import model.DAO.CarrelloDAO;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -32,7 +34,6 @@ public class login extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.print("doGet");
 
     }
 
@@ -80,6 +81,7 @@ public class login extends HttpServlet {
                 } else {
                     request.getSession().setAttribute("logToken", false);
                 }
+                CarrelloBean cart = CarrelloDAO ca = new CarrelloDAO(ds).do
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 String success = "{\"satus\": \"success\", \"message\": \"login successful\"}";
