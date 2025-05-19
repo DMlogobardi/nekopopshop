@@ -1,3 +1,5 @@
+package model;
+
 import model.Bean.CarrelloBean;
 import model.Bean.ProdottoBean;
 
@@ -49,5 +51,10 @@ public class SessionCart{
     public void setCarelloRefernz(CarrelloBean carelloRefernz) {
         if(carelloRefernz != null)
             this.carelloRefernz = carelloRefernz;
+    }
+
+    public void setProdotti(Collection<ProdottoBean> prodotti) {
+        if(prodotti != null)
+            this.prodotti = prodotti;
     }
 }

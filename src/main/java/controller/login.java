@@ -8,13 +8,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Bean.AccountBean;
 import model.Bean.CarrelloBean;
+import model.Bean.ProdottoBean;
 import model.DAO.AccountDAO;
 import model.DAO.CarrelloDAO;
+import model.DAO.ContenutoDAO;
+import model.SessionCart;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Servlet implementation class login
@@ -81,7 +85,21 @@ public class login extends HttpServlet {
                 } else {
                     request.getSession().setAttribute("logToken", false);
                 }
-                CarrelloBean cart = CarrelloDAO ca = new CarrelloDAO(ds).do
+                //inserisco il carrello nella sesione
+                CarrelloDAO ca = new CarrelloDAO(ds);
+                ContenutoDAO in = new ContenutoDAO(ds);
+                CarrelloBean cart = ca.doRetrieveByAccount(acc.getIdAccount());
+                if(cart == null) {
+                    cart = new CarrelloBean(0, 0.0, 0.0, 0, acc.getIdCliente());
+                    ca.doSave(cart);
+                }
+                SessionCart sCart = new SessionCart();
+                sCart.setCarelloRefernz(cart);
+                Collection<ProdottoBean> prodotti = in.doRetrieveAllproduct(cart.getIdCarello());
+                if(!prodotti.isEmpty())
+                    sCart.setProdotti(prodotti);
+                request.getSession().setAttribute("cart", sCart);
+
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 String success = "{\"satus\": \"success\", \"message\": \"login successful\"}";

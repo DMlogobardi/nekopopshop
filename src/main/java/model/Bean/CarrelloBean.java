@@ -6,10 +6,10 @@ public class CarrelloBean implements Serializable {
     private int idCarello;
     private double tot;
     private double speseSped;
-    private Double sconti;
+    private int sconti;
     private int idCliente;
 
-    public CarrelloBean(int idCarello, double tot, double speseSped, Double sconti, int idCliente) {
+    public CarrelloBean(int idCarello, double tot, double speseSped, int sconti, int idCliente) {
         this.idCarello = idCarello;
         this.tot = tot;
         this.speseSped = speseSped;
@@ -29,7 +29,7 @@ public class CarrelloBean implements Serializable {
         return speseSped;
     }
 
-    public Double getSconti() {
+    public int getSconti() {
         return sconti;
     }
 
@@ -47,8 +47,8 @@ public class CarrelloBean implements Serializable {
             this.speseSped = speseSped;
     }
 
-    public void setSconti(Double sconti) {
-        if(sconti > 0.0)
+    public void setSconti(int sconti) {
+        if(sconti > 0)
             this.sconti = sconti;
     }
 }
