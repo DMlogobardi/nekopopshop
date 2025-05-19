@@ -96,6 +96,31 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
         return carl;
     }
 
+    public CarrelloBean doRetrieveByAccount(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        CarrelloBean carl = null;
+
+        String selectSQL = "select * from " + TABLE_NAME + " where idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return carl;
+    }
+
     @Override
     public Collection<CarrelloBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;

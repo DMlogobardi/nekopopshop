@@ -98,6 +98,36 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
         return contenuto;
     }
 
+    public ContenutoBean doRetrieveByCart(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ContenutoBean contenuto = null;
+
+        String selectSQL = "select * from " + TABLE_NAME + " where idCarrello = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                contenuto = new ContenutoBean(
+                        rs.getInt("idContenuto"),
+                        rs.getInt("idCarrello"),
+                        rs.getInt("idProdotto")
+                );
+            }
+        }  finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return contenuto;
+    }
+
     @Override
     public Collection<ContenutoBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;
