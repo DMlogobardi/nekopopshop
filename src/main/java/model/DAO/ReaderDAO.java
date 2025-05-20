@@ -21,9 +21,10 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
     }
 
     @Override
-    public void doSave(ReaderBean bean) throws SQLException {
+    public int doSave(ReaderBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = " insert into " + TABLE_NAME + "(dataAcquisto, dataUltimaApertura, idProdotto, idCliente)" + "values(?,?,?,?)";
 
@@ -36,6 +37,9 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
             ps.setInt(4, bean.getIdCliente());
 
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -43,6 +47,7 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

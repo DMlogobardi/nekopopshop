@@ -21,9 +21,10 @@ public class MetodopagamentoDAO implements GenralDAO<MetodoPagamentoBean>{
     }
 
     @Override
-    public void doSave(MetodoPagamentoBean bean) throws SQLException {
+    public int doSave(MetodoPagamentoBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "insert into" + TABLE_NAME + "(nCarte, tipo, dataScadenza, nomeInte, cognomeInt, idCliente) values (?,?,?,?,?,?)";
 
@@ -37,7 +38,9 @@ public class MetodopagamentoDAO implements GenralDAO<MetodoPagamentoBean>{
             ps.setInt(5, bean.getIdCliente());
 
             ps.executeUpdate();
-
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -45,6 +48,7 @@ public class MetodopagamentoDAO implements GenralDAO<MetodoPagamentoBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

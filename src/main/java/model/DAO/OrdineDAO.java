@@ -21,9 +21,10 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
     }
 
     @Override
-    public void doSave(OrdineBean bean) throws SQLException {
+    public int doSave(OrdineBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "insert into " + TABLE_NAME + "(tot, dataOrdine, dataArrivoS, idCliente, idMetodoPag)" + " values(?,?,?,?,?)";
 
@@ -37,6 +38,9 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
           ps.setInt(5, bean.getIdMetodoPag());
 
           ps.executeUpdate();
+          ResultSet rs = ps.getGeneratedKeys();
+          rs.next();
+          id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -44,6 +48,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

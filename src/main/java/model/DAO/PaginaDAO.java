@@ -21,9 +21,10 @@ public class PaginaDAO implements GenralDAO<PaginaBean>{
     }
 
     @Override
-    public void doSave(PaginaBean bean) throws SQLException {
+    public int doSave(PaginaBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "insert into" + TABLE_NAME + "(numPag, dataCaricamento, tavola,idCapitolo)" + " values(?,?,?,?)";
 
@@ -36,6 +37,9 @@ public class PaginaDAO implements GenralDAO<PaginaBean>{
             ps.setInt(4, bean.getIdCapitolo());
 
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -43,6 +47,7 @@ public class PaginaDAO implements GenralDAO<PaginaBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

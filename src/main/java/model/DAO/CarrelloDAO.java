@@ -21,9 +21,10 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
     }
 
     @Override
-    public void doSave(CarrelloBean bean) throws SQLException {
+    public int doSave(CarrelloBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQl = "insert into " + TABLE_NAME + "(tot, speseSped, sconti, idCliente)" + " values(?,?,?,?)";
 
@@ -32,10 +33,13 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
             ps = con.prepareStatement(insertSQl);
             ps.setDouble(1, bean.getTot());
             ps.setDouble(2, bean.getSpeseSped());
-            ps.setDouble(3, bean.getSconti());
+            ps.setInt(3, bean.getSconti());
             ps.setInt(4, bean.getIdCliente());
 
             ps.executeUpdate();
+            ResultSet i = ps.getGeneratedKeys();
+            i.next();
+            id = i.getInt(1);
 
         } finally {
             try {
@@ -44,6 +48,7 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override
@@ -84,7 +89,7 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
             ps.setInt(1, code);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
+                carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getInt("sconti"), rs.getInt("idCliente"));
             }
         } finally {
             try {
@@ -109,7 +114,7 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
             ps.setInt(1, code);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
+                carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getInt("sconti"), rs.getInt("idCliente"));
             }
         } finally {
             try {
@@ -136,7 +141,7 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
             ps = con.prepareStatement(selectAllSQL);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                CarrelloBean carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
+                CarrelloBean carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getInt("sconti"), rs.getInt("idCliente"));
                 carelli.add(carl);
             }
         }  finally {
@@ -167,7 +172,7 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
             ps = con.prepareStatement(selectAllSQL);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                CarrelloBean carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getDouble("sconti"), rs.getInt("idCliente"));
+                CarrelloBean carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getInt("sconti"), rs.getInt("idCliente"));
                 carelli.add(carl);
             }
         }  finally {

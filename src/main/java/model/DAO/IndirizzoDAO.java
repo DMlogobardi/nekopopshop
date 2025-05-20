@@ -21,9 +21,10 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
     }
 
     @Override
-    public void doSave(IndirizzoBean bean) throws SQLException {
+    public int doSave(IndirizzoBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "INSERT INTO " + TABLE_NAME + "(via, nCivico, cap, idCliente)" + " VALUES (?,?,?,?)";
 
@@ -36,6 +37,9 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
             ps.setInt(4, bean.getIdCliente());
 
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -43,6 +47,7 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Bean.AccountBean;
 import model.Bean.CarrelloBean;
+import model.Bean.ContenutoBean;
 import model.Bean.ProdottoBean;
 import model.DAO.AccountDAO;
 import model.DAO.CarrelloDAO;
@@ -24,13 +25,13 @@ import java.util.Collection;
  * Servlet implementation class login
  */
 @WebServlet("/login")
-public class login extends HttpServlet {
+public class Login extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor.
      */
-    public login() {
+    public Login() {
         // TODO Auto-generated constructor stub
     }
 
@@ -95,9 +96,9 @@ public class login extends HttpServlet {
                 }
                 SessionCart sCart = new SessionCart();
                 sCart.setCarelloRefernz(cart);
-                Collection<ProdottoBean> prodotti = in.doRetrieveAllproduct(cart.getIdCarello());
-                if(!prodotti.isEmpty())
-                    sCart.setProdotti(prodotti);
+                Collection<ContenutoBean> contenuti = in.doRetrieveAllproduct(cart.getIdCarello());
+                if(!contenuti.isEmpty())
+                    sCart.setContenuti(contenuti);
                 request.getSession().setAttribute("cart", sCart);
 
                 response.setContentType("application/json");

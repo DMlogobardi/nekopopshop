@@ -21,9 +21,10 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
     }
 
     @Override
-    public void doSave(ProdottoBean bean) throws SQLException {
+    public int doSave(ProdottoBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "INSERT INTO " + TABLE_NAME + "(nome, quantità, prezzo, autore, imgProd, descrizione)" +" VALUES (?,?,?,?,?,?)";
 
@@ -38,6 +39,9 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
             ps.setString(6,bean.getDescrizione());
 
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -45,6 +49,7 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

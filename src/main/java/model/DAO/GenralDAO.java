@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public interface GenralDAO<T>{
 
-    public void doSave(T bean) throws SQLException;
+    public int doSave(T bean) throws SQLException;
 
     public boolean doDelete(int code) throws SQLException;
 

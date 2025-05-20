@@ -21,9 +21,10 @@ public class ClienteDAO implements GenralDAO<ClienteBean>{
     }
 
     @Override
-    public void doSave(ClienteBean bean) throws SQLException {
+    public int doSave(ClienteBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "insert into" + TABLE_NAME + "(nome, cognome, dataNascita, email, cF) values (?, ?, ?, ?, ?)";
 
@@ -35,7 +36,11 @@ public class ClienteDAO implements GenralDAO<ClienteBean>{
             ps.setString(3, bean.getDataNascitaFormatted().toString());
             ps.setString(4, bean.getEmail());
             ps.setString(5, bean.getcF());
+
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -43,6 +48,7 @@ public class ClienteDAO implements GenralDAO<ClienteBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

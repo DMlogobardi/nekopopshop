@@ -21,9 +21,10 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
     }
 
     @Override
-    public void doSave(WishlistBean bean) throws SQLException {
+    public int doSave(WishlistBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "insert into" + TABLE_NAME + "(idProdotto, idCliente) values (?,?)";
 
@@ -34,6 +35,9 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
             ps.setInt(2, bean.getIdCliente());
 
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -41,6 +45,7 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

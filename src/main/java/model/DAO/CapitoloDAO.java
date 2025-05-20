@@ -19,9 +19,10 @@ public class CapitoloDAO implements GenralDAO<CapitoloBean>{
     }
 
     @Override
-    public void doSave(CapitoloBean bean) throws SQLException {
+    public int doSave(CapitoloBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "INSERT INTO " + TABLE_NAME + "(numCapitolo, dataPub, idVolume)" + " VALUES (?,?,?)";
 
@@ -33,7 +34,9 @@ public class CapitoloDAO implements GenralDAO<CapitoloBean>{
             ps.setInt(3, bean.getIdVolume());
 
             ps.executeUpdate();
-
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -41,6 +44,7 @@ public class CapitoloDAO implements GenralDAO<CapitoloBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

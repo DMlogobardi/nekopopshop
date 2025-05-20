@@ -21,9 +21,10 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
     }
 
     @Override
-    public void doSave(AcquistatoBean bean) throws SQLException {
+    public int doSave(AcquistatoBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "INSERT INTO" + TABLE_NAME + " (idOrdine, idProdotto) VALUES (?, ?)";
 
@@ -34,6 +35,9 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
             ps.setInt(2, bean.getIdProdotto());
 
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -41,6 +45,7 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

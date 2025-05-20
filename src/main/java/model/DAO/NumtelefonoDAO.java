@@ -21,9 +21,10 @@ public class NumtelefonoDAO implements GenralDAO<NumTelefonoBean>{
     }
 
     @Override
-    public void doSave(NumTelefonoBean bean) throws SQLException {
+    public int doSave(NumTelefonoBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "INSERT INTO " + TABLE_NAME + "(prefisso, numero, idCliente)" + " VALUES (?,?,?)";
 
@@ -35,6 +36,9 @@ public class NumtelefonoDAO implements GenralDAO<NumTelefonoBean>{
             ps.setInt(3, bean.getIdCliente());
 
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -42,6 +46,7 @@ public class NumtelefonoDAO implements GenralDAO<NumTelefonoBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override

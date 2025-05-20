@@ -15,26 +15,30 @@ import java.util.List;
 public class ContenutoDAO implements GenralDAO<ContenutoBean>{
     private static final String TABLE_NAME = "contenuto";
     private DataSource ds = null;
-    private List<String> orderWhiteLst = List.of("idCarrello", "idProdotto");
+    private List<String> orderWhiteLst = List.of("idContenuto","qCarrello", "idCarrello", "idProdotto");
 
     public ContenutoDAO(DataSource ds) {
         this.ds = ds;
     }
 
     @Override
-    public void doSave(ContenutoBean bean) throws SQLException {
+    public int  doSave(ContenutoBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-
-        String insertSQL = " insert into " + TABLE_NAME + "(idCarrello,idProdotto) values (?,?)";
+        int id = 0;
+        String insertSQL = " insert into " + TABLE_NAME + "(qCarrello, idCarrello, idProdotto) values (?,?,?)";
 
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(insertSQL);
-            ps.setInt(1, bean.getIdCarrello());
-            ps.setInt(2, bean.getIdProdotto());
+            ps.setInt(1, bean.getqCarrello());
+            ps.setInt(2, bean.getIdCarrello());
+            ps.setInt(3, bean.getIdProdotto());
 
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         }  finally {
             try {
                 if (ps != null) ps.close();
@@ -42,6 +46,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
                 if (con != null) con.close();
             }
         }
+        return id;
     }
 
     @Override
@@ -85,6 +90,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             while (rs.next()) {
                 contenuto = new ContenutoBean(
                         rs.getInt("idContenuto"),
+                        rs.getInt("qCarrello"),
                         rs.getInt("idCarrello"),
                         rs.getInt("idProdotto")
                 );
@@ -99,12 +105,12 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
         return contenuto;
     }
 
-    public Collection<ProdottoBean> doRetrieveAllproduct(int code) throws SQLException {
+    public Collection<ContenutoBean> doRetrieveAllproduct(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<ProdottoBean> prodotti = new LinkedList<ProdottoBean>();
+        Collection<ContenutoBean> contenuti = new LinkedList<ContenutoBean>();
 
-        String selectSQL = "select * from " + TABLE_NAME + " where idCarrello = ? join prodotto on " + TABLE_NAME +".idContenuto = prodotto.idProdotto";
+        String selectSQL = "select * from " + TABLE_NAME + " where idCarrello = ?";
 
         try {
             con = ds.getConnection();
@@ -113,16 +119,13 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                ProdottoBean prod = new ProdottoBean(
-                        rs.getInt("idProdotto"),
-                        rs.getString("nome"),
-                        rs.getInt("quantità"),
-                        rs.getDouble("prezzo"),
-                        rs.getString("autore"),
-                        rs.getBytes("imgProd"),
-                        rs.getString("descrizione")
+                ContenutoBean conte = new ContenutoBean(
+                        rs.getInt("idContenuto"),
+                        rs.getInt("qContenuto"),
+                        rs.getInt("idCarrello"),
+                        rs.getInt("idProdotto")
                 );
-                prodotti.add(prod);
+                contenuti.add(conte);
             }
         }  finally {
             try {
@@ -131,7 +134,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
                 if (con != null) con.close();
             }
         }
-        return prodotti;
+        return contenuti;
     }
 
     @Override
@@ -152,6 +155,40 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             while (rs.next()) {
                 ContenutoBean contenuto = new ContenutoBean(
                         rs.getInt("idContenuto"),
+                        rs.getInt("qCarrello"),
+                        rs.getInt("idCarrello"),
+                        rs.getInt("idProdotto")
+                );
+                contenuti.add(contenuto);
+            }
+        }  finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return contenuti;
+    }
+
+    public Collection<ContenutoBean> doRetrieveAll(String order, int id) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<ContenutoBean> contenuti = new LinkedList<ContenutoBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME + " where idCarrello = ?";
+        if(order != null && orderWhiteLst.contains(order.strip())){
+            selectAllSQL += " order by " + order.strip();
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ContenutoBean contenuto = new ContenutoBean(
+                        rs.getInt("idContenuto"),
+                        rs.getInt("qCarrello"),
                         rs.getInt("idCarrello"),
                         rs.getInt("idProdotto")
                 );
@@ -188,6 +225,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             while (rs.next()) {
                 ContenutoBean contenuto = new ContenutoBean(
                         rs.getInt("idContenuto"),
+                        rs.getInt("qCarrello"),
                         rs.getInt("idCarrello"),
                         rs.getInt("idProdotto")
                 );

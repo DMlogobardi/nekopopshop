@@ -22,9 +22,10 @@ public class AccountDAO implements GenralDAO<AccountBean>{
 
 
     @Override
-    public void doSave(AccountBean bean) throws SQLException {
+    public int doSave(AccountBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
+        int id = 0;
 
         String insertSQL = "INSERT INTO " + TABLE_NAME + "(password, nickName, adminFlag, idCliente) VALUES ( ?,?,?,?)";
 
@@ -37,6 +38,9 @@ public class AccountDAO implements GenralDAO<AccountBean>{
             ps.setInt(4, bean.getIdCliente());
 
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -44,7 +48,7 @@ public class AccountDAO implements GenralDAO<AccountBean>{
                 if (con != null) con.close();
             }
         }
-
+        return id;
     }
 
     @Override
