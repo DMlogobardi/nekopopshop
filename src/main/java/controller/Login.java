@@ -82,9 +82,9 @@ public class Login extends HttpServlet {
 
             if(acc.getPassword().equals(hashPass)) {
                 if(acc.isAdminFlag()){
-                    request.getSession().setAttribute("logToken", true);
+                    request.getSession().setAttribute("logToken", "A");
                 } else {
-                    request.getSession().setAttribute("logToken", false);
+                    request.getSession().setAttribute("logToken", "C");
                 }
                 //inserisco il carrello nella sesione
                 CarrelloDAO ca = new CarrelloDAO(ds);

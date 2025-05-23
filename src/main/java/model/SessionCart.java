@@ -68,10 +68,6 @@ public class SessionCart{
             CarrelloDAO cartSQL = new CarrelloDAO(ds);
             ContenutoDAO contSQL = new ContenutoDAO(ds);
 
-            Collection<ContenutoBean> dbProd = contSQL.doRetrieveAll( "idContenuto" ,this.carelloRefernz.getIdCarello());
-            for(ContenutoBean contenuto : dbProd){
-                contSQL.doDelete(contenuto.getIdContenuto());
-            }
             cartSQL.doDelete(this.carelloRefernz.getIdCarello());
             int idCart = cartSQL.doSave(this.carelloRefernz);
 
