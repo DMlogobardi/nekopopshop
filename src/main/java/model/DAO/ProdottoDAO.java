@@ -187,4 +187,47 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         }
         return prodotti;
     }
+
+    public Collection<ProdottoBean> doRetrieveAllLimitLike(String order, int limit, int page, String serch) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<ProdottoBean> prodotti = new LinkedList<ProdottoBean>();
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
+        if(!serch.isEmpty()){
+            selectAllSQL += " WHERE LOWER(nome) " + " LIKE " + "'%" + serch.toLowerCase() + "%'";
+        }
+        if(order != null && orderWhiteList.contains(order.strip())){
+            selectAllSQL += " ORDER BY " + order.strip();
+        }
+        if(limit > 0 && page > 0){
+            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                ProdottoBean prod = new ProdottoBean(
+                        rs.getInt("idProdotto"),
+                        rs.getString("nome"),
+                        rs.getInt("quantità"),
+                        rs.getDouble("prezzo"),
+                        rs.getString("autore"),
+                        rs.getBytes("imgProd"),
+                        rs.getString("descrizione")
+                );
+                prodotti.add(prod);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return prodotti;
+    }
 }
+

@@ -111,6 +111,40 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
         return volume;
     }
 
+    public VolumeBean doRetrieveByProduct(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        VolumeBean volume = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idProdotto = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                volume = new VolumeBean(
+                        rs.getInt("idVolume"),
+                        rs.getInt("numVolumi"),
+                        rs.getDouble("prezzo"),
+                        rs.getInt("quantità"),
+                        rs.getString("dataPubl"),
+                        rs.getBytes("imgVol"),
+                        rs.getInt("idProdotto")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return volume;
+    }
+
     @Override
     public Collection<VolumeBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;
@@ -155,6 +189,48 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
         Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
+        if(order != null && orderWhiteList.contains(order.strip())){
+            selectAllSQL += " ORDER BY " + order.strip();
+        }
+        if(limit > 0 && page > 0){
+            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
+        }
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                VolumeBean volume = new VolumeBean(
+                        rs.getInt("idVolume"),
+                        rs.getInt("numVolumi"),
+                        rs.getDouble("prezzo"),
+                        rs.getInt("quantità"),
+                        rs.getString("dataPubl"),
+                        rs.getBytes("imgVol"),
+                        rs.getInt("idProdotto")
+                );
+                volumes.add(volume);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return volumes;
+    }
+
+    public Collection<VolumeBean> doRetrieveAllLimit(String order, int limit, int page, String serch) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
+        if(!serch.isEmpty()){
+            selectAllSQL += "Join prodotto on prodotto.idProdotto = volume.idProdotto " + "WHERE LOWER(prodotto.nome) " + " LIKE " + "'%" + serch.toLowerCase() + "%'";
+        }
         if(order != null && orderWhiteList.contains(order.strip())){
             selectAllSQL += " ORDER BY " + order.strip();
         }

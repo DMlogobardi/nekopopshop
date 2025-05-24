@@ -6,12 +6,12 @@ public class ProdottoBean implements Serializable {
     private int idProdotto;
     private String nome;
     private int quantita;
-    private double prezzo;
+    private Double prezzo;
     private String autore;
     private byte[] imgProd;
     private String descrizione;
 
-    public ProdottoBean(int idProdotto, String nome, int quantita, double prezzo, String autore, byte[] imgProd, String descrizione) {
+    public ProdottoBean(int idProdotto, String nome, int quantita, Double prezzo, String autore, byte[] imgProd, String descrizione) {
         this.idProdotto = idProdotto;
         this.nome = nome;
         this.quantita = quantita;
@@ -43,11 +43,11 @@ public class ProdottoBean implements Serializable {
             this.quantita = quantita;
     }
 
-    public double getPrezzo() {
+    public Double getPrezzo() {
         return prezzo;
     }
 
-    public void setPrezzo(double prezzo) {
+    public void setPrezzo(Double prezzo) {
         if(prezzo >= 0.0)
             this.prezzo = prezzo;
     }

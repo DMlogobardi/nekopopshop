@@ -117,6 +117,7 @@ public class Login extends HttpServlet {
         } catch (SQLException e) {
             System.out.println("login servlet error: " + e.getMessage());
             errors.add("internal error");
+            request.setAttribute("error", errors);
             loginDispatch.forward(request, response);
         }
     }
