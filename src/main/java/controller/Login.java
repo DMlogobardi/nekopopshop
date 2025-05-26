@@ -6,13 +6,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Bean.AccountBean;
-import model.Bean.CarrelloBean;
-import model.Bean.ContenutoBean;
-import model.Bean.ProdottoBean;
+import model.Bean.*;
 import model.DAO.AccountDAO;
 import model.DAO.CarrelloDAO;
 import model.DAO.ContenutoDAO;
+import model.DAO.VolumeDAO;
 import model.SessionCart;
 
 import javax.sql.DataSource;
@@ -20,6 +18,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * Servlet implementation class login
@@ -78,9 +77,7 @@ public class Login extends HttpServlet {
         try {
             acc = accDB.doRetrieveByNick(nick.strip());
 
-            System.out.println(acc.getPassword() + " " + hashPass);
-
-            if(acc.getPassword().equals(hashPass)) {
+            if( acc != null && acc.getPassword().equals(hashPass)) {
                 if(acc.isAdminFlag()){
                     request.getSession().setAttribute("logToken", "A");
                 } else {
@@ -97,8 +94,9 @@ public class Login extends HttpServlet {
                 SessionCart sCart = new SessionCart();
                 sCart.setCarelloRefernz(cart);
                 Collection<ContenutoBean> contenuti = in.doRetrieveAllproduct(cart.getIdCarello());
-                if(!contenuti.isEmpty())
+                if(!contenuti.isEmpty()) {
                     sCart.setContenuti(contenuti);
+                }
                 request.getSession().setAttribute("cart", sCart);
 
                 response.setContentType("application/json");

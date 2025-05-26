@@ -8,11 +8,11 @@ public class AccountBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    int idAccount;
-    String password;
-    String nickName;
-    boolean adminFlag;
-    int idCliente;
+    private int idAccount;
+    private String password;
+    private String nickName;
+    private boolean adminFlag;
+    private int idCliente;
 
     public AccountBean(int idAccount, String password, String nickName, int idCliente) {
         this.idAccount = idAccount;

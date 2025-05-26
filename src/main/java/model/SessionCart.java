@@ -3,6 +3,7 @@ package model;
 import model.Bean.CarrelloBean;
 import model.Bean.ContenutoBean;
 import model.Bean.ProdottoBean;
+import model.Bean.VolumeBean;
 import model.DAO.CarrelloDAO;
 import model.DAO.ContenutoDAO;
 

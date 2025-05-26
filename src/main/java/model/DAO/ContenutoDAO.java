@@ -15,7 +15,7 @@ import java.util.List;
 public class ContenutoDAO implements GenralDAO<ContenutoBean>{
     private static final String TABLE_NAME = "contenuto";
     private DataSource ds = null;
-    private List<String> orderWhiteLst = List.of("idContenuto","qCarrello", "idCarrello", "idProdotto");
+    private List<String> orderWhiteLst = List.of("idContenuto","qCarrello", "idCarrello", "idProdotto", "idVolume");
 
     public ContenutoDAO(DataSource ds) {
         this.ds = ds;
@@ -26,7 +26,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
         Connection con = null;
         PreparedStatement ps = null;
         int id = 0;
-        String insertSQL = " insert into " + TABLE_NAME + "(qCarrello, idCarrello, idProdotto) values (?,?,?)";
+        String insertSQL = " insert into " + TABLE_NAME + "(qCarrello, idCarrello, idProdotto, idVolume) values (?,?,?,?)";
 
         try{
             con = ds.getConnection();
@@ -34,6 +34,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             ps.setInt(1, bean.getqCarrello());
             ps.setInt(2, bean.getIdCarrello());
             ps.setInt(3, bean.getIdProdotto());
+            ps.setInt(4, bean.getIdVolume());
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -92,7 +93,8 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
                         rs.getInt("idContenuto"),
                         rs.getInt("qCarrello"),
                         rs.getInt("idCarrello"),
-                        rs.getInt("idProdotto")
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume")
                 );
             }
         }  finally {
@@ -123,7 +125,8 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
                         rs.getInt("idContenuto"),
                         rs.getInt("qContenuto"),
                         rs.getInt("idCarrello"),
-                        rs.getInt("idProdotto")
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume")
                 );
                 contenuti.add(conte);
             }
@@ -157,7 +160,8 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
                         rs.getInt("idContenuto"),
                         rs.getInt("qCarrello"),
                         rs.getInt("idCarrello"),
-                        rs.getInt("idProdotto")
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume")
                 );
                 contenuti.add(contenuto);
             }
@@ -190,7 +194,8 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
                         rs.getInt("idContenuto"),
                         rs.getInt("qCarrello"),
                         rs.getInt("idCarrello"),
-                        rs.getInt("idProdotto")
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume")
                 );
                 contenuti.add(contenuto);
             }
@@ -227,7 +232,8 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
                         rs.getInt("idContenuto"),
                         rs.getInt("qCarrello"),
                         rs.getInt("idCarrello"),
-                        rs.getInt("idProdotto")
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume")
                 );
                 contenuti.add(contenuto);
             }
