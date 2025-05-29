@@ -3,10 +3,7 @@ package model.DAO;
 import model.Bean.WishlistBean;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
 
         try{
             con = ds.getConnection();
-            ps = con.prepareStatement(insertSQL);
+            ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, bean.getIdProdotto());
             ps.setInt(2, bean.getIdCliente());
 

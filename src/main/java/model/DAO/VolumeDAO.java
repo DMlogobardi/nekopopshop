@@ -3,10 +3,7 @@ package model.DAO;
 import model.Bean.VolumeBean;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
 
         try{
             con = ds.getConnection();
-            ps = con.prepareStatement(insertSQL);
+            ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, bean.getNumVolumi());
             ps.setDouble(2, bean.getPrezzo());
             ps.setInt(3, bean.getQuantita());

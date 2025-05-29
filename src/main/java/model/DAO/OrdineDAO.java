@@ -3,10 +3,7 @@ package model.DAO;
 import model.Bean.OrdineBean;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
 
         try{
           con = ds.getConnection();
-          ps = con.prepareStatement(insertSQL);
+          ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
           ps.setDouble(1, bean.getTot());
           ps.setString(2, bean.getDataOrdineFormatted().toString());
           ps.setString(3, bean.getDataArrivoFormatted().toString());

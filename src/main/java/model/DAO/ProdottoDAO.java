@@ -3,10 +3,7 @@ package model.DAO;
 import model.Bean.ProdottoBean;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
 
         try{
             con = ds.getConnection();
-            ps = con.prepareStatement(insertSQL);
+            ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getNome());
             ps.setInt(2,bean.getQuantita());
             ps.setDouble(3,bean.getPrezzo());

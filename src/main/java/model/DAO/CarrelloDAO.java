@@ -3,10 +3,7 @@ package model.DAO;
 import model.Bean.CarrelloBean;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
 
         try{
             con = ds.getConnection();
-            ps = con.prepareStatement(insertSQl);
+            ps = con.prepareStatement(insertSQl, Statement.RETURN_GENERATED_KEYS);
             ps.setDouble(1, bean.getTot());
             ps.setDouble(2, bean.getSpeseSped());
             ps.setInt(3, bean.getSconti());

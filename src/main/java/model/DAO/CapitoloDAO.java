@@ -28,7 +28,7 @@ public class CapitoloDAO implements GenralDAO<CapitoloBean>{
 
         try{
             con = ds.getConnection();
-            ps = con.prepareStatement(insertSQL);
+            ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setFloat(1, bean.getNumCapitolo());
             ps.setString(2, bean.getDataPubFormatted().toString());
             ps.setInt(3, bean.getIdVolume());
