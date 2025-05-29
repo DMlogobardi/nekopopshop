@@ -3,10 +3,7 @@ package model.DAO;
 import model.Bean.NumTelefonoBean;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,9 +27,9 @@ public class NumtelefonoDAO implements GenralDAO<NumTelefonoBean>{
 
         try{
             con = ds.getConnection();
-            ps = con.prepareStatement(insertSQL);
-            ps.setString(1, bean.getNumero());
-            ps.setString(2, bean.getPrefisso());
+            ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, bean.getPrefisso());
+            ps.setString(2, bean.getNumero());
             ps.setInt(3, bean.getIdCliente());
 
             ps.executeUpdate();

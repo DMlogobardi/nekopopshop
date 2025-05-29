@@ -1,6 +1,6 @@
 package controller;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.xdevapi.Session;
+
+import controller.tools.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,7 +18,6 @@ import model.DAO.NumtelefonoDAO;
 import model.DTO.RegisterDTO;
 
 import javax.sql.DataSource;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -55,20 +54,20 @@ public class register extends HttpServlet {
 			return;
 		}
 
-		DataSource ds = (DataSource) session.getAttribute("dataSource");
+		DataSource ds = (DataSource) session.getServletContext().getAttribute("dataSource");
+		RegisterDTO registerData = null;
+		JsonConverter<RegisterDTO> converter = JsonConverter.factory(RegisterDTO.class, request.getReader());
 
-		StringBuilder jsonBuilder = new StringBuilder();
-		try (BufferedReader reader = request.getReader()) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				jsonBuilder.append(line);
-			}
+		try {
+
+			registerData = (RegisterDTO) converter.parse();
+
+		} catch (Exception e){
+			System.out.println("register servlet | json pars error: " + e.getMessage());
+			request.setAttribute("errors", e.getMessage());
+			request.getRequestDispatcher("index.jsp").forward(request, response);
+			return;
 		}
-
-		String requestBody = jsonBuilder.toString();
-
-		ObjectMapper mapper = new ObjectMapper();
-		RegisterDTO registerData = mapper.readValue(requestBody, RegisterDTO.class);
 
 		ClienteBean cliente = ClienteBean.getByCheckEmail(
 				0,

@@ -3,10 +3,7 @@ package model.DAO;
 import model.Bean.IndirizzoBean;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
 
         try{
             con = ds.getConnection();
-            ps = con.prepareStatement(insertSQL);
+            ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getVia());
             ps.setInt(2, bean.getnCivico());
             ps.setString(3, bean.getCap());
@@ -56,7 +53,7 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
         PreparedStatement ps = null;
         int result = 0;
 
-        String deleteSQL = "DELETE FROM " + TABLE_NAME + " WHERE code=?";
+        String deleteSQL = "DELETE FROM " + TABLE_NAME + " WHERE idIndirizzo = ?";
 
         try{
             con = ds.getConnection();

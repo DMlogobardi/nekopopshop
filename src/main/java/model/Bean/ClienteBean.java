@@ -1,6 +1,7 @@
 package model.Bean;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.StringTokenizer;
@@ -84,10 +85,10 @@ public class ClienteBean implements Serializable {
         return dataNascita;
     }
 
-    public LocalDate getDataNascitaFormatted() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
-        LocalDate date =LocalDate.parse(dataNascita, format);
-        return date;
+    public Date getDataNascitaFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate formDate =LocalDate.parse(dataNascita, format);
+        return Date.valueOf(formDate);
     }
 
     public void setDataNascita(String dataNascita) {

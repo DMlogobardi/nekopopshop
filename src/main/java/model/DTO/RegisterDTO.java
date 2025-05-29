@@ -1,5 +1,9 @@
 package model.DTO;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 public class RegisterDTO implements Serializable {
@@ -18,7 +22,8 @@ public class RegisterDTO implements Serializable {
     private String password;
     private String nick;
 
-    public RegisterDTO(String name, String cognome, String nascita, String email, String cf, String via, int civico, String cap, String prefisso, String numero, String password, String nick) {
+    @JsonCreator
+    public RegisterDTO(@JsonProperty("name") String name, @JsonProperty("cognome") String cognome, @JsonProperty("nascita") String nascita, @JsonProperty("email") String email, @JsonProperty("cf") String cf, @JsonProperty("via") String via, @JsonProperty("civico") int civico, @JsonProperty("cap") String cap, @JsonProperty("prefisso") String prefisso, @JsonProperty("numero") String numero, @JsonProperty("password") String password, @JsonProperty("nicl") String nick) {
         this.name = name;
         this.cognome = cognome;
         this.nascita = nascita;

@@ -1,4 +1,4 @@
-package controller;
+package controller.common;
 
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;

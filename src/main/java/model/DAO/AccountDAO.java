@@ -3,10 +3,7 @@ package model.DAO;
 import model.Bean.AccountBean;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +28,7 @@ public class AccountDAO implements GenralDAO<AccountBean>{
 
         try{
             con = ds.getConnection();
-            ps = con.prepareStatement(insertSQL);
+            ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getPassword());
             ps.setString(2, bean.getNickName());
             ps.setBoolean(3, bean.isAdminFlag());

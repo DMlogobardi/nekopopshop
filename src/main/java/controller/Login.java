@@ -86,10 +86,10 @@ public class Login extends HttpServlet {
                 //inserisco il carrello nella sesione
                 CarrelloDAO ca = new CarrelloDAO(ds);
                 ContenutoDAO in = new ContenutoDAO(ds);
-                CarrelloBean cart = ca.doRetrieveByAccount(acc.getIdAccount());
+                CarrelloBean cart = ca.doRetrieveByAccount(acc.getIdCliente());
+                System.out.println(cart);
                 if(cart == null) {
                     cart = new CarrelloBean(0, 0.0, 0.0, 0, acc.getIdCliente());
-                    ca.doSave(cart);
                 }
                 SessionCart sCart = new SessionCart();
                 sCart.setCarelloRefernz(cart);

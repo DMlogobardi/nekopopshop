@@ -3,10 +3,7 @@ package model.DAO;
 import model.Bean.ClienteBean;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,11 +23,11 @@ public class ClienteDAO implements GenralDAO<ClienteBean>{
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = "insert into" + TABLE_NAME + "(nome, cognome, dataNascita, email, cF) values (?, ?, ?, ?, ?)";
+        String insertSQL = "insert into " + TABLE_NAME + "(nome, cognome, dataNascita, email, cF)" + " values (?, ?, ?, ?, ?)";
 
         try{
             con = ds.getConnection();
-            ps = con.prepareStatement(insertSQL);
+            ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getNome());
             ps.setString(2, bean.getCognome());
             ps.setString(3, bean.getDataNascitaFormatted().toString());
