@@ -25,13 +25,13 @@ import java.sql.SQLException;
  * Servlet implementation class login
  */
 @WebServlet("/register")
-public class register extends HttpServlet {
+public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor. 
      */
-    public register() {
+    public Register() {
         // TODO Auto-generated constructor stub
     }
 
