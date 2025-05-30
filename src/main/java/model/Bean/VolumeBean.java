@@ -81,4 +81,9 @@ public class VolumeBean implements Serializable {
     public int getIdProdotto() {
         return idProdotto;
     }
+
+    public void setIdProdotto(int idProdotto) {
+        if(idProdotto > 0)
+            this.idProdotto = idProdotto;
+    }
 }

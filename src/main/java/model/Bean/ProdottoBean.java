@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class ProdottoBean implements Serializable {
     private int idProdotto;
     private String nome;
-    private int quantita;
+    private Integer quantita;
     private Double prezzo;
     private String autore;
     private byte[] imgProd;
     private String descrizione;
 
-    public ProdottoBean(int idProdotto, String nome, int quantita, Double prezzo, String autore, byte[] imgProd, String descrizione) {
+    public ProdottoBean(int idProdotto, String nome, Integer quantita, Double prezzo, String autore, byte[] imgProd, String descrizione) {
         this.idProdotto = idProdotto;
         this.nome = nome;
         this.quantita = quantita;
@@ -34,11 +34,11 @@ public class ProdottoBean implements Serializable {
             this.nome = nome;
     }
 
-    public int getQuantita() {
+    public Integer getQuantita() {
         return quantita;
     }
 
-    public void setQuantita(int quantita) {
+    public void setQuantita(Integer quantita) {
         if(quantita >= 0)
             this.quantita = quantita;
     }
