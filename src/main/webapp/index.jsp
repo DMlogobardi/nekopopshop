@@ -160,8 +160,8 @@
                             <a href="profile.jsp" class="profile-icon">Profilo</a>
                         </c:otherwise>
                     </c:choose>
-                    <a href="cart.jsp" class="cart-icon">Carrello (${not empty sessionScope.cart ? sessionScope.cart.contenuti.size() : 0})</a>
-                    <a href="logout">Logout</a>
+                    <a href="cart.jsp" class="cart-icon">Carrello (${not empty sessionScope.cart ? sessionScope.cart.prodotti.size() : 0})</a>
+                    <a href="logout.jsp">Logout</a>
                 </c:when>
                 <c:otherwise>
                     <a href="login.jsp" class="profile-icon">Login</a>

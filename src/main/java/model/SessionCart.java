@@ -2,8 +2,6 @@ package model;
 
 import model.Bean.CarrelloBean;
 import model.Bean.ContenutoBean;
-import model.Bean.ProdottoBean;
-import model.Bean.VolumeBean;
 import model.DAO.CarrelloDAO;
 import model.DAO.ContenutoDAO;
 
@@ -12,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class SessionCart{
+public class SessionCart {
     private Collection<ContenutoBean> contenuti;
     private CarrelloBean carelloRefernz;
 
@@ -20,21 +18,30 @@ public class SessionCart{
         this.contenuti = new ArrayList<ContenutoBean>();
     }
 
-    public void addPrd (ContenutoBean prod){
-        if(prod != null){
+    // Aggiungi questo getter
+    public Collection<ContenutoBean> getContenuti() {
+        return this.contenuti;
+    }
+
+    // Mantieni gli altri metodi esistenti
+    public void addPrd(ContenutoBean prod) {
+        if(prod != null) {
             this.contenuti.add(prod);
         }
     }
 
-    public int removeProd(int idCont){
-       if(contenuti.removeIf(cont -> cont.getIdContenuto() == idCont))
-           return 1;
-       return 0;
+    public int removeProd(int idCont) {
+        if(contenuti.removeIf(cont -> cont.getIdContenuto() == idCont))
+            return 1;
+        return 0;
     }
 
-    public ContenutoBean getProd(int idCont){
+    public ContenutoBean getProd(int idCont) {
         if(idCont >= 0)
-            return (ContenutoBean) this.contenuti.stream().filter(cont -> cont.getIdContenuto() == idCont);
+            return this.contenuti.stream()
+                .filter(cont -> cont.getIdContenuto() == idCont)
+                .findFirst()
+                .orElse(null);
         return null;
     }
 
@@ -44,8 +51,9 @@ public class SessionCart{
 
     public Collection<ContenutoBean> getProdottiByLimit(int limit, int offset) {
         if(limit > 0 && offset >= 0) {
-            Collection<ContenutoBean> cont = (Collection<ContenutoBean>) this.contenuti.stream().skip((offset - 1) * limit).limit(limit);
-            return cont;
+            return new ArrayList<>(this.contenuti)
+                .subList(Math.min(offset, contenuti.size()), 
+                        Math.min(offset + limit, contenuti.size()));
         }
         return null;
     }
@@ -64,7 +72,7 @@ public class SessionCart{
             this.contenuti = contenuti;
     }
 
-    public void push(DataSource ds){
+    public void push(DataSource ds) {
         try {
             CarrelloDAO cartSQL = new CarrelloDAO(ds);
             ContenutoDAO contSQL = new ContenutoDAO(ds);
@@ -72,12 +80,11 @@ public class SessionCart{
             cartSQL.doDelete(this.carelloRefernz.getIdCarello());
             int idCart = cartSQL.doSave(this.carelloRefernz);
 
-            for(ContenutoBean contenuto : this.contenuti){
+            for(ContenutoBean contenuto : this.contenuti) {
                 contenuto.setIdCarrello(idCart);
                 contSQL.doSave(contenuto);
             }
-
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error " + e.getMessage());
         }
     }
