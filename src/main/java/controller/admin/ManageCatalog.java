@@ -160,7 +160,42 @@ public class ManageCatalog extends HttpServlet {
             request.setAttribute("success", "success");
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } else if (action.equals("edit")) {
-            
+            String update = request.getParameter("update");
+
+            if(update.equals("prodotto")) {
+                Part image = (Part) request.getParts();
+                JsonConverter<ProdottoDTO> converter = JsonConverter.factory(ProdottoDTO.class, request.getReader());
+                ProdottoDTO prod = null;
+
+                try {
+                    prod = converter.parse();
+                } catch (Exception e) {
+                    System.out.println("ManageCatalog servlet DTO pars error: " + e.getMessage());
+                    request.setAttribute("errors", "internal error");
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                    return;
+                }
+
+                ProdottoDAO prodDB = new ProdottoDAO(ds);
+                byte[] img = ImgByteConverter.Converter(image);
+                ProdottoBean prd = new ProdottoBean(0, prod.getNome(), prod.getQuantita(), prod.getPrezzo(), prod.getAutor(), img, prod.getDescrizzione());
+
+                try{
+                    prodDB.uppdate(prd);
+                } catch (SQLException e) {
+                    System.out.println("ManageCatalog servlet sql uppdate error: " + e.getMessage());
+                    request.setAttribute("errors", "internal error");
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                    return;
+                }
+
+                request.setAttribute("success", "success");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            }
+        } else {
+            System.out.println("ManageCatalog wrong action");
+            request.setAttribute("errors", "internal error");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
 
     }

@@ -226,5 +226,34 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         }
         return prodotti;
     }
+
+    public boolean uppdate (ProdottoBean prod) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String updateSQL = "update " + TABLE_NAME + "set nome = ?, quantità = ?, prezzo = ?, autore = ?, imgProd = ?, descrizione = ? where idProdotto = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setString(1, prod.getNome());
+            ps.setInt(2, prod.getQuantita());
+            ps.setDouble(3, prod.getPrezzo());
+            ps.setString(4, prod.getAutore());
+            ps.setBytes(5, prod.getImgProd());
+            ps.setString(6, prod.getDescrizione());
+            ps.setInt(7, prod.getIdProdotto());
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
+    }
 }
 
