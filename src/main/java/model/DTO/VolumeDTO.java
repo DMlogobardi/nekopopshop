@@ -16,7 +16,7 @@ public class VolumeDTO implements Serializable {
     private String datapubl;
 
     @JsonCreator
-    public VolumeDTO(@JsonProperty("idImg") int idImg, @JsonProperty("idProd") int idProd, @JsonProperty("numVolume") int numVolume, @JsonProperty("prezzo") double prezzo, @JsonProperty("quantita") int quantita, @JsonProperty("dataPubl") String datapubl) {
+    public VolumeDTO(@JsonProperty("idImg") int idImg, @JsonProperty("idProd") int idProd, @JsonProperty("numVolume") int numVolume, @JsonProperty("prezzo") double prezzo, @JsonProperty("quantita") int quantita, @JsonProperty("datapubl") String datapubl) {
         this.idImg = idImg;
         this.idProd = idProd;
         this.numVolume = numVolume;

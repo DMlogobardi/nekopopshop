@@ -50,29 +50,34 @@ public class ManageCatalog extends HttpServlet {
         // TODO Auto-generated method stub
         HttpSession session = request.getSession();
         if(session.getAttribute("logToken") != "A") {
+            System.out.println("session is not admin " + session.getServletContext().getAttribute("logToken"));
             request.setAttribute("errors", "access denied");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
 
         String action = request.getParameter("action");
 
         if(action == null) {
+            System.out.println("action is null");
             request.setAttribute("errors", "access denied");
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
 
-        DataSource ds = (DataSource) session.getServletContext().getAttribute("ds");
+        DataSource ds = (DataSource) session.getServletContext().getAttribute("dataSource");
+        System.out.println(ds);
 
         if(action.equals("insert")) {
-            JsonConverter<ManageCatalogDTO> converter = JsonConverter.factory(ManageCatalogDTO.class, request.getReader());
-            Collection<Part> images = (Collection<Part>) request.getParts();
+            System.out.println("insert");
+            JsonConverter<ManageCatalogDTO> converter = JsonConverter.factory(ManageCatalogDTO.class, null);
             Collection<ProdottoBean> prodotti;
             Collection<VolumeBean> volume;
 
             try {
-                ManageCatalogDTO dati = converter.parse();
+                String json = request.getParameter("json");
+                Collection<Part> images = (Collection<Part>) request.getParts();
+                ManageCatalogDTO dati = converter.parse(json);
                 ProdottoDAO prodDB = new ProdottoDAO(ds);
                 VolumeDAO volDB = new VolumeDAO(ds);
                 ProdottoBean pro = null;
@@ -81,12 +86,17 @@ public class ManageCatalog extends HttpServlet {
                 for (ProdottoDTO prod : dati.getProdotti()){
                     VolumeDTO volDTO = null;
                     if(prod.getPrezzo() == null){
-                        volDTO = (VolumeDTO) dati.getVolumi().stream().filter(v -> v.getIdProd() == prod.getIdTempVolume());
+                        volDTO = dati.getVolumi().stream().filter(v -> v.getIdProd() == prod.getIdTempVolume()).findFirst().orElse(null);
+                        if (volDTO == null) {
+                            request.setAttribute("errors", "volume not found");
+                            request.getRequestDispatcher("/index.jsp").forward(request, response);
+                            return;
+                        }
                         Optional<Part> imgPart = ImgByteConverter.getPartByID(images, volDTO.getIdImg());
 
                         if(imgPart.isEmpty()) {
                             request.setAttribute("errors", "image not found");
-                            request.getRequestDispatcher("index.jsp").forward(request, response);
+                            request.getRequestDispatcher("/index.jsp").forward(request, response);
                             return;
                         }
 
@@ -111,27 +121,28 @@ public class ManageCatalog extends HttpServlet {
                 }
                 
                 request.setAttribute("success", "success");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
                 return;
                 
             } catch (Exception e) {
                 System.out.println("ManageCatalog servlet DTO pars error: " + e.getMessage());
                 request.setAttribute("errors", "internal error");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
                 return;
             }
             
         } else if (action.equals("delete")) {
-            JsonConverter<DeletElementCatalogDTO> converter = JsonConverter.factory(DeletElementCatalogDTO.class, request.getReader());
+            JsonConverter<DeletElementCatalogDTO> converter = JsonConverter.factory(DeletElementCatalogDTO.class, null);
+            String json = request.getParameter("json");
             DeletElementCatalogDTO delete;
             ArrayList<String> sqlErrors = new ArrayList<>();
             
             try {
-                delete = converter.parse();
+                delete = converter.parse(json);
             } catch (Exception e) {
                 System.out.println("ManageCatalog servlet DTO pars error: " + e.getMessage());
                 request.setAttribute("errors", "internal error");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
                 return;
             }
 
@@ -153,26 +164,27 @@ public class ManageCatalog extends HttpServlet {
             if(!sqlErrors.isEmpty()){
                 System.out.println("ManageCatalog servlet sql delete error: " + sqlErrors.toString());
                 request.setAttribute("errors", sqlErrors);
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
                 return;
             }
             
             request.setAttribute("success", "success");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         } else if (action.equals("edit")) {
             String update = request.getParameter("update");
 
             if(update.equals("prodotto")) {
                 Part image = (Part) request.getParts();
-                JsonConverter<ProdottoDTO> converter = JsonConverter.factory(ProdottoDTO.class, request.getReader());
+                JsonConverter<ProdottoDTO> converter = JsonConverter.factory(ProdottoDTO.class, null);
+                String json = request.getParameter("json");
                 ProdottoDTO prod = null;
 
                 try {
-                    prod = converter.parse();
+                    prod = converter.parse(json);
                 } catch (Exception e) {
                     System.out.println("ManageCatalog servlet DTO pars error: " + e.getMessage());
                     request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
                     return;
                 }
 
@@ -185,17 +197,59 @@ public class ManageCatalog extends HttpServlet {
                 } catch (SQLException e) {
                     System.out.println("ManageCatalog servlet sql uppdate error: " + e.getMessage());
                     request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
                     return;
                 }
 
                 request.setAttribute("success", "success");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
+            if (update.equals("volume")) {
+                Part image = request.getPart("img"); // Assicurati che il campo file abbia name="img"
+
+                JsonConverter<VolumeDTO> converter = JsonConverter.factory(VolumeDTO.class, null);
+                String json = request.getParameter("json");
+                VolumeDTO vol = null;
+
+                try {
+                    vol = converter.parse(json);
+                } catch (Exception e) {
+                    System.out.println("ManageCatalog servlet DTO parse error (Volume): " + e.getMessage());
+                    request.setAttribute("errors", "internal error");
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    return;
+                }
+
+                VolumeDAO volDB = new VolumeDAO(ds);
+                byte[] img = ImgByteConverter.Converter(image);
+
+                VolumeBean vbean = new VolumeBean(
+                        0,
+                        vol.getNumVolume(),
+                        vol.getPrezzo(),
+                        vol.getQuantita(),
+                        vol.getDatapubl(),
+                        img,
+                        vol.getIdProd()
+                );
+
+                try {
+                    volDB.uppdate(vbean); // supponendo tu abbia un metodo "uppdate" simile a quello dei prodotti
+                } catch (SQLException e) {
+                    System.out.println("ManageCatalog servlet SQL update error (Volume): " + e.getMessage());
+                    request.setAttribute("errors", "internal error");
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    return;
+                }
+
+                request.setAttribute("success", "success");
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+            }
+
         } else {
             System.out.println("ManageCatalog wrong action");
             request.setAttribute("errors", "internal error");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
 
     }

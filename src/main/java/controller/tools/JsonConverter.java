@@ -13,6 +13,11 @@ public class JsonConverter<T> {
         this.clazz = clazz;
     }
 
+    public JsonConverter(Class<T> clazz) {
+        this.reader = null;
+        this.clazz = clazz;
+    }
+
     public T parse() throws Exception {
         StringBuilder jsonBuilder = new StringBuilder();
         String line;
@@ -25,7 +30,15 @@ public class JsonConverter<T> {
         return mapper.readValue(jsonBuilder.toString(), clazz);
     }
 
+    public T parse(String json) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(json, clazz);
+    }
+
     public static <T> JsonConverter<T> factory(Class<T> clazz, BufferedReader reader) {
+        if (reader == null) {
+            return new JsonConverter<>(clazz);
+        }
         return new JsonConverter<>(reader, clazz);
     }
 }
