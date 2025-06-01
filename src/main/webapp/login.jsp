@@ -13,11 +13,11 @@
             theme: {
                 extend: {
                     colors: {
-                        'rosa-chiaro': '#FBD8DA',
-                        'rosa-scuro': '#E55458',
-                        'beige': '#F2D5BB',
-                        'arancio': '#F29966',
-                        'rosso': '#F24535'
+                        'nekopink': '#FBD8DA',
+                        'nekopeach': '#E55458',
+                        'nekobeige': '#F2D5BB',
+                        'nekoorange': '#F29966',
+                        'nekored': '#F24535'
                     },
                     fontFamily: {
                         'comic': ['"Comic Sans MS"', 'cursive', 'sans-serif'],
@@ -233,10 +233,10 @@
     <div class="cat-ears absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12"></div>
 
     <div class="text-center mb-8">
-        <h1 class="cat-face text-4xl font-bold text-rosa-scuro mb-2">
-            <i class="fas fa-book mr-2"></i>Manga Heaven
+        <h1 class="cat-face text-4xl font-bold text-nekopeach mb-2">
+            <i class="fas fa-book mr-2"></i>NekoPop Shop
         </h1>
-        <p class="cat-nose text-arancio text-lg">La tua libreria di manga e action figure</p>
+        <p class="cat-nose text-nekopeach text-lg">Il tuo shop di manga e action figure</p>
     </div>
 
     <!-- Mostra messaggi di errore -->
@@ -259,7 +259,7 @@
     <div class="bg-white bg-opacity-90 rounded-2xl p-6 mb-6 shadow-md">
         <form id="loginForm" method="POST" action="login" class="space-y-5">
             <div>
-                <label class="block text-rosa-scuro font-medium mb-2" for="nick">
+                <label class="block text-nekopeach font-medium mb-2" for="nick">
                     <i class="fas fa-user mr-2"></i>Nickname
                 </label>
                 <div class="relative">
@@ -268,7 +268,7 @@
                             id="nick"
                             name="nick"
                             required
-                            class="form-input w-full px-4 py-3 pl-10 rounded-xl border-2 border-beige focus:border-rosa-scuro focus:outline-none"
+                            class="form-input w-full px-4 py-3 pl-10 rounded-xl border-2 border-beige focus:border-nekopeach focus:outline-none"
                             placeholder="Il tuo nickname..."
                     >
                     <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-arancio">
@@ -278,7 +278,7 @@
             </div>
 
             <div>
-                <label class="block text-rosa-scuro font-medium mb-2" for="pass">
+                <label class="block text-nekopeach font-medium mb-2" for="pass">
                     <i class="fas fa-lock mr-2"></i>Password
                 </label>
                 <div class="relative">
@@ -287,7 +287,7 @@
                             id="pass"
                             name="pass"
                             required
-                            class="form-input w-full px-4 py-3 pl-10 rounded-xl border-2 border-beige focus:border-rosa-scuro focus:outline-none"
+                            class="form-input w-full px-4 py-3 pl-10 rounded-xl border-2 border-beige focus:border-nekopeach focus:outline-none"
                             placeholder="La tua password..."
                     >
                     <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-arancio">
@@ -301,11 +301,11 @@
                     <input
                             type="checkbox"
                             id="remember"
-                            class="w-4 h-4 text-rosa-scuro rounded focus:ring-0"
+                            class="w-4 h-4 text-nekopeach rounded focus:ring-0"
                     >
-                    <label for="remember" class="ml-2 text-rosa-scuro text-sm">Ricordami</label>
+                    <label for="remember" class="ml-2 text-nekopeach text-sm">Ricordami</label>
                 </div>
-                <a href="#" class="text-arancio text-sm hover:text-rosa-scuro transition">
+                <a href="#" class="text-nekoorange text-sm hover:text-nekopeach transition">
                     Password dimenticata?
                 </a>
             </div>
@@ -317,17 +317,17 @@
     </div>
 
     <div class="text-center">
-        <p class="text-rosa-scuro">
+        <p class="text-nekopeach">
             Non hai un account?
-            <a href="register.jsp" class="text-arancio font-bold hover:text-rosa-scuro transition">Registrati</a>
+            <a href="register.jsp" class="text-nekoorange font-bold hover:text-nekopeach transition">Registrati</a>
         </p>
     </div>
 
     <div class="text-center mt-4">
-        <p class="text-sm text-rosa-scuro">
+        <p class="text-sm text-nekopeach">
             Creato con <span class="text-rosso">❤️</span> per gli amanti dei manga
-            <span class="footer-kitty inline-block"></span>
-            <span class="footer-kitty inline-block"></span>
+            <span class="text-rosso">🐈</span>
+            <span class="text-rosso">🐈</span>
         </p>
     </div>
 </div>
