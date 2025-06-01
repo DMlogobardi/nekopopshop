@@ -104,13 +104,14 @@ public class Login extends HttpServlet {
                 String success = "{\"satus\": \"success\", \"message\": \"login successful\"}";
                 response.getWriter().write(success);
                 System.out.println("login success");
-                return;
-            }
 
-            errors.add("invalid login attempt");
-            request.setAttribute("error", errors);
-            loginDispatch.forward(request, response);
-            System.out.println("errors: " + errors);
+            } else {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                String success = "{\"satus\": \"Error\", \"message\": \"invalid login attempt\"}";
+                response.getWriter().write(success);
+                System.out.println("invalid login attempt");
+            }
 
         } catch (SQLException e) {
             System.out.println("login servlet error: " + e.getMessage());
