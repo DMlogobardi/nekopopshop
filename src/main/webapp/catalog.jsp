@@ -40,9 +40,30 @@
 
         body {
             font-family: 'Nunito', sans-serif;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVHJhbnNmb3JtPSJyb3RhdGUoNDUpIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48Y2lyY2xlIGN4PSI1IiBjeT0iNSIgcj0iMyIgZmlsbD0iI2ZmZWZmZiIgZmlsbC1vcGFjaXR5PSIwLjAiPjwvY2lyY2xlPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2ZmZWZmZiI+PC9yZWN0PjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjcGF0dGVybikiPjwvcmVjdD48L3N2Zz4='), radial-gradient(circle at top right, #F29966, #F24535, #fbd8da);
-            background-attachment: fixed;
+            background-color: #f0f0f0;
+
+            /* Immagine di background principale */
+            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+
+            /* Centra e copre tutto lo spazio senza ripetizioni */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            /* Altezza minima = viewport height */
+            min-height: 100vh;
+
+            /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
+            background-attachment: scroll;
+
+            /* Ottimizzazione prestazioni */
+            image-rendering: smooth;
             overflow-x: hidden;
+        }
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed;
+            }
         }
 
         .folder-tab {

@@ -23,6 +23,14 @@
         }
     </script>
     <style>
+        @font-face {
+            font-family: 'Milkyway';  /* Scegli un nome per il font */
+            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+            font-weight: normal;        /* Peso del font (es. 400, 700) */
+            font-style: normal;        /* normale, italic, ecc. */
+            font-display: swap;        /* Ottimizza il rendering */
+        }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
@@ -36,10 +44,32 @@
         }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVHJhbnNmb3JtPSJyb3RhdGUoNDUpIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48Y2lyY2xlIGN4PSI1IiBjeT0iNSIgcj0iMyIgZmlsbD0iI2ZmZWZmZiIgZmlsbC1vcGFjaXR5PSIwLjAiPjwvY2lyY2xlPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2ZmZWZmZiI+PC9yZWN0PjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjcGF0dGVybikiPjwvcmVjdD48L3N2Zz4='), radial-gradient(circle at top right, #F29966, #F24535, #fbd8da);
-            background-attachment: fixed;
+            font-family: 'Helvetica', sans-serif;
+
+            background-color: #f0f0f0;
+
+            /* Immagine di background principale */
+            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+
+            /* Centra e copre tutto lo spazio senza ripetizioni */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            /* Altezza minima = viewport height */
+            min-height: 100vh;
+
+            /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
+            background-attachment: scroll;
+
+            /* Ottimizzazione prestazioni */
+            image-rendering: smooth;
             overflow-x: hidden;
+        }
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed;
+            }
         }
 
         .folder-tab {
@@ -86,7 +116,7 @@
             position: absolute;
             width: 30px;
             height: 30px;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxLTE4IDB6Ii8+PHBhdGggZD0iTTYwIDYwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDAgMTggMiAyIDAgMCAwIDIgMiA5IDkgMCAwIDEgMC0xOHoiLz48L2c+PC9zdmc+');
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxLTE4IDB6Ii8+PHBhdGggZD0iTTYwIDYwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDAgMTggMiAyIDAgMCAwIDIgMiA5IDkgMCAwIDEgMC0xOHoiLz48L2c+PC9zdmc+d');
             background-size: cover;
             animation: blossom-fall 15s linear infinite;
         }
@@ -125,23 +155,16 @@
         }
 
         .nekotag {
-            background: linear-gradient(90deg, #E55458, #f2d5bb);
+            background: linear-gradient(90deg, #E55458, #F29966);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             position: relative;
-            font-weight: 800;
+            font-weight: 900;
+            font-size: 50px;
+
         }
 
-        .nekotag::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #E55458, #f2d5bb);
-            border-radius: 10px;
-        }
+
 
         .timeline-item {
             position: relative;
@@ -177,6 +200,27 @@
             -webkit-text-fill-color: transparent;
             font-size: 3rem;
         }
+        .text-3xl{
+              font-family: 'Milkyway', sans-serif;
+              font-size: 2.5rem;
+              color: #333;
+          }
+        .text-sm{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
+        .text-4xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
+        .text-2xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
+
     </style>
 </head>
 <body class="relative overflow-x-hidden">
@@ -198,10 +242,14 @@
                      class="rounded-full border-4 border-white shadow-lg">
             </div>
             <div class="ml-4">
-                <h1 class="text-3xl font-bold mb-4"><span class="nekotag">NekoPop Shop</span></h1>
-                <p class="text-sm text-nekopeach font-bold">Manga & Action Figure</p>
+                <h1 class="text-3xl font-bold "><span class="nekotag">NekoPop Shop</span></h1>
+                <p class="text-sm text-nekopeach font-bold" style="font-size: 20px; background: linear-gradient(90deg, #E55458, #F29966);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;">Manga & Action Figure</p>
             </div>
         </div>
+
+
 
         <!-- Navigation -->
         <div class="w-full lg:w-auto">
@@ -235,7 +283,7 @@
 
     <!-- Our Story Section -->
     <div class="bg-white rounded-2xl border-2 border-nekopeach p-8 mb-12 relative">
-        <div class="absolute -top-3 -left-3 w-16 h-16 rounded-full bg-nekopink flex items-center justify-center">
+        <div class="absolute -top-3 -left-3 w-16 h-16 rounded-full bg-nekopeach flex items-center justify-center">
             <i class="fas fa-book-open text-white text-2xl"></i>
         </div>
         <h2 class="text-3xl font-bold text-nekopeach mb-6 ml-12">La Nostra Storia</h2>
@@ -244,7 +292,7 @@
                 <p class="text-gray-700 mb-6">NekoPopShop &egrave nato nel 2015 dall'amore per la cultura giapponese e la passione per il design. Tutto &egrave iniziato con una piccola collezione di adesivi per laptop ispirati ai nostri personaggi preferiti e si &egrave rapidamente trasformato in un negozio online con migliaia di prodotti per tutti gli appassionati.</p>
                 <p class="text-gray-700 mb-6">Da un piccolo garage a Milano a uno dei negozi di riferimento per gli amanti dei manga e delle action figure in Italia, il nostro viaggio &egrave stato ricco di sfide e soddisfazioni.</p>
                 <div class="bg-nekopink/20 p-4 rounded-lg border-l-4 border-nekopeach">
-                    <p class="text-gray-700 italic">"Volevamo creare un posto dove gli appassionati come noi potessero trovare prodotti di qualit&agrave con un tocco unico e personale."</p>
+                    <p class="text-gray-700 italic font-bold" style="font-family: 'Bradley Hand ITC'">"Volevamo creare un posto dove gli appassionati come noi potessero trovare prodotti di qualit&agrave con un tocco unico e personale."</p>
                     <p class="text-right text-nekopeach font-bold mt-2">- Il Team NekoPop</p>
                 </div>
             </div>
@@ -335,7 +383,7 @@
                     </div>
                 </div>
                 <div>
-                    <blockquote class="text-xl italic text-gray-700 mb-4">
+                    <blockquote class="text-xl italic text-gray-700 font-bold mb-4" style="font-family: 'Bradley Hand ITC'">
                         "Non vendiamo semplicemente prodotti, condividiamo emozioni. Ogni manga, ogni action figure racconta una storia che vogliamo far vivere ai nostri clienti."
                     </blockquote>
                     <p class="text-right font-bold text-nekoorange">- Il Team NekoPop</p>
