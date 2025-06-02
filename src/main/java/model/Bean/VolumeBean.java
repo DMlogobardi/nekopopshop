@@ -1,9 +1,6 @@
 package model.Bean;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -14,26 +11,16 @@ public class VolumeBean implements Serializable {
     private int quantita;
     private String dataPubl;
     private byte[] imgVol;
-    private String tag;
     private int idProdotto;
 
-    public VolumeBean(int idVolume, int numVolumi, double prezzo, int quantita, String dataPubl, byte[] imgVol, String tag, int idProdotto) {
+    public VolumeBean(int idVolume, int numVolumi, double prezzo, int quantita, String dataPubl, byte[] imgVol, int idProdotto) {
         this.idVolume = idVolume;
         this.numVolumi = numVolumi;
         this.prezzo = prezzo;
         this.quantita = quantita;
         this.dataPubl = dataPubl;
         this.imgVol = imgVol;
-        this.tag = tag;
         this.idProdotto = idProdotto;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
     }
 
     public int getIdVolume() {
@@ -71,11 +58,10 @@ public class VolumeBean implements Serializable {
         return dataPubl;
     }
 
-    @JsonIgnore
-    public Date getDataPublFormatted() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public LocalDate getDataPublFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
         LocalDate date =LocalDate.parse(dataPubl, format);
-        return Date.valueOf(date);
+        return date;
     }
 
     public void setDataPubl(String dataPubl) {
@@ -94,10 +80,5 @@ public class VolumeBean implements Serializable {
 
     public int getIdProdotto() {
         return idProdotto;
-    }
-
-    public void setIdProdotto(int idProdotto) {
-        if(idProdotto > 0)
-            this.idProdotto = idProdotto;
     }
 }
