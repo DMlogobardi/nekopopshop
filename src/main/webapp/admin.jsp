@@ -28,6 +28,16 @@
         }
     </script>
     <style>
+
+        @font-face {
+            font-family: 'Milkyway';  /* Scegli un nome per il font */
+            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+            font-weight: normal;        /* Peso del font (es. 400, 700) */
+            font-style: normal;        /* normale, italic, ecc. */
+            font-display: swap;        /* Ottimizza il rendering */
+        }
+
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
@@ -42,10 +52,32 @@
 
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f0f0f0;
+
+            /* Immagine di background principale */
+            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+
+            /* Centra e copre tutto lo spazio senza ripetizioni */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            /* Altezza minima = viewport height */
             min-height: 100vh;
+
+            /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
+            background-attachment: scroll;
+
+            /* Ottimizzazione prestazioni */
+            image-rendering: smooth;
             overflow-x: hidden;
         }
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed;
+            }
+        }
+
 
         .folder-tab {
             position: relative;
@@ -94,6 +126,7 @@
 
         .admin-card {
             transition: all 0.3s ease;
+            background: #fbd8da;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 2px solid rgba(229, 84, 88, 0.1);
         }
@@ -121,7 +154,7 @@
             height: 4px;
             border-radius: 2px;
             overflow: hidden;
-            background-color: #f3f4f6;
+            background-color: #f2d5bb;
         }
 
         .stat-card .progress-bar {
@@ -533,7 +566,7 @@
         }
 
         .alert-warning {
-            background-color: rgba(245, 158, 11, 0.1);
+            background-color: lightyellow;
             color: #f59e0b;
             border-left: 4px solid #f59e0b;
         }
@@ -602,7 +635,7 @@
         }
 
         .text-admin-gradient {
-            background: linear-gradient(135deg, #3a86ff, #5e60ce);
+            background: linear-gradient(135deg, #e55458, #F29966);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -670,6 +703,27 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #E55458;
         }
+
+        .text-3xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-lg{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .fa-star, .fas, .far {
+            font-style: normal !important;
+        }
+
+
     </style>
 </head>
 <body class="relative overflow-x-hidden bg-gray-50">
@@ -683,15 +737,15 @@
         <div class="flex items-center">
             <div class="relative">
                 <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-kawaililac z-10 flex items-center justify-center animate-pulse">
-                    <i class="fas fa-shield-alt text-white text-xl"></i>
+                    <i class="fas fa-shield-alt text-white text-2xl"></i>
                 </div>
                 <div class="w-16 h-16 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center">
                     <i class="fas fa-user-shield text-2xl text-nekopeach"></i>
                 </div>
             </div>
             <div class="ml-4">
-                <h1 class="text-2xl font-bold"><span class="text-admin-gradient">Admin Dashboard</span></h1>
-                <p class="text-sm text-gray-500 font-semibold">NekoPop Shop Management</p>
+                <h1 class="text-3xl font-bold" style="font-size: 45px"><span class="text-admin-gradient">Admin Dashboard</span></h1>
+                <p class="text-xl text-nekopeach font-semibold">NekoPop Shop Management</p>
             </div>
         </div>
 
@@ -716,7 +770,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sticky top-6">
                 <!-- User Profile -->
                 <div class="flex items-center mb-6 pb-6 border-b border-gray-200">
-                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-adminblue to-adminindigo flex items-center justify-center text-white text-xl font-bold">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-adminblue to-adminindigo flex items-center justify-center text-white text-2xl font-bold">
                         AM
                     </div>
                     <div class="ml-4">
@@ -838,7 +892,7 @@
                 <i class="fas fa-exclamation-circle alert-icon"></i>
                 <div>
                     <div class="font-bold">Avviso di Manutenzione</div>
-                    <div class="text-sm">Il sistema sarà in manutenzione domani dalle 2:00 alle 4:00 AM. Si prega di pianificare di conseguenza.</div>
+                    <div class="text-sm">Il sistema sar&agrave in manutenzione domani dalle 2:00 alle 4:00 AM. Si prega di pianificare di conseguenza.</div>
                 </div>
             </div>
 
@@ -849,7 +903,7 @@
                     <div class="flex items-start justify-between">
                         <div>
                             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Ordini Oggi</p>
-                            <h3 class="text-2xl font-bold text-gray-800 mt-1">24</h3>
+                            <h3 class="text-xs font-bold text-gray-800 mt-1">24</h3>
                             <div class="mt-3">
                   <span class="text-green-500 text-xs font-bold flex items-center">
                     <i class="fas fa-arrow-up mr-1"></i> 12% vs ieri
@@ -857,7 +911,7 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-nekopink/20 flex items-center justify-center">
-                            <i class="fas fa-shopping-cart text-nekopeach text-lg"></i>
+                            <i class="fas fa-shopping-cart text-nekopeach text-2xl"></i>
                         </div>
                     </div>
                     <div class="mt-4">
@@ -872,7 +926,7 @@
                     <div class="flex items-start justify-between">
                         <div>
                             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Guadagni Oggi</p>
-                            <h3 class="text-2xl font-bold text-gray-800 mt-1">€1,245</h3>
+                            <h3 class="text-xs font-bold text-gray-800 mt-1">&#8364 1,245</h3>
                             <div class="mt-3">
                   <span class="text-green-500 text-xs font-bold flex items-center">
                     <i class="fas fa-arrow-up mr-1"></i> 8% vs ieri
@@ -880,7 +934,7 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-green-100/20 flex items-center justify-center">
-                            <i class="fas fa-euro-sign text-green-500 text-lg"></i>
+                            <i class="fas fa-euro-sign text-green-500 text-2xl"></i>
                         </div>
                     </div>
                     <div class="mt-4">
@@ -895,7 +949,7 @@
                     <div class="flex items-start justify-between">
                         <div>
                             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Nuovi Clienti</p>
-                            <h3 class="text-2xl font-bold text-gray-800 mt-1">18</h3>
+                            <h3 class="text- font-bold text-gray-800 mt-1">18</h3>
                             <div class="mt-3">
                   <span class="text-green-500 text-xs font-bold flex items-center">
                     <i class="fas fa-arrow-up mr-1"></i> 5 vs ieri
@@ -903,7 +957,7 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-blue-100/20 flex items-center justify-center">
-                            <i class="fas fa-user-plus text-blue-500 text-lg"></i>
+                            <i class="fas fa-user-plus text-blue-500 text-2xl"></i>
                         </div>
                     </div>
                     <div class="mt-4">
@@ -917,8 +971,8 @@
                 <div class="stat-card p-5">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Scorte Basse</p>
-                            <h3 class="text-2xl font-bold text-gray-800 mt-1">5</h3>
+                            <p class="text-xs foxsnt-semibold text-gray-500 uppercase tracking-wider">Scorte Basse</p>
+                            <h3 class="text-xs font-bold text-gray-800 mt-1">5</h3>
                             <div class="mt-3">
                   <span class="text-red-500 text-xs font-bold flex items-center">
                     <i class="fas fa-exclamation-circle mr-1"></i> Rifornimento necessario
@@ -926,7 +980,7 @@
                             </div>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-red-100/20 flex items-center justify-center">
-                            <i class="fas fa-box-open text-red-500 text-lg"></i>
+                            <i class="fas fa-box-open text-red-500 text-2xl"></i>
                         </div>
                     </div>
                     <div class="mt-4">
@@ -942,7 +996,7 @@
                 <!-- Sales Chart -->
                 <div class="admin-card p-5">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">Vendite Ultimi 7 Giorni</h3>
+                        <h3 class="text-2xl font-bold text-gray-800">Vendite Ultimi 7 Giorni</h3>
                         <div class="flex">
                             <button class="text-xs px-3 py-1 bg-gray-100 rounded-l-lg">Settimana</button>
                             <button class="text-xs px-3 py-1 border border-gray-200">Mese</button>
@@ -957,7 +1011,7 @@
                 <!-- Revenue Chart -->
                 <div class="admin-card p-5">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">Guadagni Ultimi 7 Giorni</h3>
+                        <h3 class="text-2xl font-bold text-gray-800">Guadagni Ultimi 7 Giorni</h3>
                         <div>
                             <select class="form-select text-xs py-1">
                                 <option>Ultimi 7 giorni</option>
@@ -977,7 +1031,7 @@
                 <!-- Recent Orders -->
                 <div class="admin-card">
                     <div class="p-5 border-b border-gray-200">
-                        <h3 class="text-lg font-bold text-gray-800">Ordini Recenti</h3>
+                        <h3 class="text-lg font-bold text-gray-800" style="font-size: 30px">Ordini Recenti</h3>
                         <p class="text-sm text-gray-500">Ultimi 10 ordini effettuati</p>
                     </div>
                     <div class="overflow-x-auto">
@@ -998,7 +1052,7 @@
                                     <span>Marta Rossi</span>
                                 </td>
                                 <td><span class="order-status status-processing"></span> <span class="badge badge-primary">In lavorazione</span></td>
-                                <td class="font-bold">€84.99</td>
+                                <td class="font-bold">&#8364 84.99</td>
                             </tr>
                             <tr>
                                 <td>#ORD-10244</td>
@@ -1007,7 +1061,7 @@
                                     <span>Luca Bianchi</span>
                                 </td>
                                 <td><span class="order-status status-shipped"></span> <span class="badge badge-success">Spedito</span></td>
-                                <td class="font-bold">€45.50</td>
+                                <td class="font-bold">&#8364 45.50</td>
                             </tr>
                             <tr>
                                 <td>#ORD-10243</td>
@@ -1016,7 +1070,7 @@
                                     <span>Anna Verdi</span>
                                 </td>
                                 <td><span class="order-status status-delivered"></span> <span class="badge badge-info">Consegnato</span></td>
-                                <td class="font-bold">€112.99</td>
+                                <td class="font-bold">&#8364 112.99</td>
                             </tr>
                             <tr>
                                 <td>#ORD-10242</td>
@@ -1025,7 +1079,7 @@
                                     <span>Marco Neri</span>
                                 </td>
                                 <td><span class="order-status status-pending"></span> <span class="badge badge-warning">In attesa</span></td>
-                                <td class="font-bold">€67.30</td>
+                                <td class="font-bold">&#8364 67.30</td>
                             </tr>
                             <tr>
                                 <td>#ORD-10241</td>
@@ -1034,7 +1088,7 @@
                                     <span>Sara Gialli</span>
                                 </td>
                                 <td><span class="order-status status-cancelled"></span> <span class="badge badge-danger">Cancellato</span></td>
-                                <td class="font-bold">€99.99</td>
+                                <td class="font-bold">&#8364 99.99</td>
                             </tr>
                             </tbody>
                         </table>
@@ -1047,7 +1101,7 @@
                 <!-- Top Products -->
                 <div class="admin-card">
                     <div class="p-5 border-b border-gray-200">
-                        <h3 class="text-lg font-bold text-gray-800">Prodotti Più Venduti</h3>
+                        <h3 class="text-lg font-bold text-gray-800" style="font-size: 30px">Prodotti Pi&ugrave Venduti</h3>
                         <p class="text-sm text-gray-500">I 5 prodotti migliori di questo mese</p>
                     </div>
                     <div class="overflow-x-auto">
@@ -1067,7 +1121,7 @@
                                     <span>Maglia Neko Kawaii</span>
                                 </td>
                                 <td>124</td>
-                                <td class="font-bold">€1,240</td>
+                                <td class="font-bold">&#8364 1,240</td>
                                 <td>
                                     <i class="fas fa-ellipsis-h text-gray-400"></i>
                                 </td>
@@ -1078,7 +1132,7 @@
                                     <span>Felpa Neko Pop</span>
                                 </td>
                                 <td>89</td>
-                                <td class="font-bold">€1,068</td>
+                                <td class="font-bold">&#8364 1,068</td>
                                 <td>
                                     <i class="fas fa-ellipsis-h text-gray-400"></i>
                                 </td>
@@ -1089,7 +1143,7 @@
                                     <span>Portachiavi Neko</span>
                                 </td>
                                 <td>76</td>
-                                <td class="font-bold">€456</td>
+                                <td class="font-bold">&#8364 456</td>
                                 <td>
                                     <i class="fas fa-ellipsis-h text-gray-400"></i>
                                 </td>
@@ -1100,7 +1154,7 @@
                                     <span>Felpa con Coda Neko</span>
                                 </td>
                                 <td>54</td>
-                                <td class="font-bold">€756</td>
+                                <td class="font-bold">&#8364 756</td>
                                 <td>
                                     <i class="fas fa-ellipsis-h text-gray-400"></i>
                                 </td>
@@ -1111,7 +1165,7 @@
                                     <span>Peluche Neko Grande</span>
                                 </td>
                                 <td>48</td>
-                                <td class="font-bold">€576</td>
+                                <td class="font-bold">&#8364 576</td>
                                 <td>
                                     <i class="fas fa-ellipsis-h text-gray-400"></i>
                                 </td>
@@ -1130,7 +1184,7 @@
                 <!-- Recent Reviews -->
                 <div class="admin-card p-5">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">Recensioni Recenti</h3>
+                        <h3 class="text-lg font-bold text-gray-800" style="font-size: 30px">Recensioni Recenti</h3>
                         <span class="text-xs bg-nekopink/20 text-nekopeach px-2 py-1 rounded-full">3 Nuove</span>
                     </div>
                     <div class="space-y-4">
@@ -1152,7 +1206,7 @@
                                     </div>
                                     <span class="text-xs text-gray-500 ml-2">4.5/5</span>
                                 </div>
-                                <p class="text-sm text-gray-600">"La felpa è fantastica! Ottima qualità e molto carina. Consiglio a tutti gli amanti del stile kawaii."</p>
+                                <p class="text-sm text-gray-600">"La felpa &egrave fantastica! Ottima qualit&agrave e molto carina. Consiglio a tutti gli amanti del stile kawaii."</p>
                                 <div class="mt-2 flex items-center">
                                     <span class="text-xs text-gray-500">PRODOTTO: </span>
                                     <a href="#" class="text-xs text-blue-500 hover:underline ml-1">Felpa Neko Pop</a>
@@ -1178,7 +1232,7 @@
                                     </div>
                                     <span class="text-xs text-gray-500 ml-2">4/5</span>
                                 </div>
-                                <p class="text-sm text-gray-600">"Il prodotto è arrivato velocemente. La taglia è un po' piccola ma la qualità è ottima."</p>
+                                <p class="text-sm text-gray-600">"Il prodotto &egrave arrivato velocemente. La taglia &egrave un po' piccola ma la qualit&agrave &egrave ottima."</p>
                                 <div class="mt-2 flex items-center">
                                     <span class="text-xs text-gray-500">PRODOTTO: </span>
                                     <a href="#" class="text-xs text-blue-500 hover:underline ml-1">Maglia Neko Kawaii</a>
@@ -1204,7 +1258,7 @@
                                     </div>
                                     <span class="text-xs text-gray-500 ml-2">5/5</span>
                                 </div>
-                                <p class="text-sm text-gray-600">"Assolutamente perfetto! L'ho regalato a mia figlia ed è impazzita per questo peluche. Spedizione rapidissima!"</p>
+                                <p class="text-sm text-gray-600">"Assolutamente perfetto! L'ho regalato a mia figlia ed &egrave impazzita per questo peluche. Spedizione rapidissima!"</p>
                                 <div class="mt-2 flex items-center">
                                     <span class="text-xs text-gray-500">PRODOTTO: </span>
                                     <a href="#" class="text-xs text-blue-500 hover:underline ml-1">Peluche Neko Grande</a>
@@ -1220,7 +1274,7 @@
                 <!-- Low Stock Products -->
                 <div class="admin-card p-5">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">Scorte Basse</h3>
+                        <h3 class="text-lg font-bold text-gray-800" style="font-size: 30px">Scorte Basse</h3>
                         <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Urgente</span>
                     </div>
                     <div class="overflow-x-auto">

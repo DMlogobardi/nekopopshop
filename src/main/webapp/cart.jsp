@@ -157,8 +157,8 @@
     }
 
     .quantity-selector {
-      display: flex;
-      align-items: center;
+      display: inline-flex;
+      align-items:center;
       border: 1px solid #E55458;
       border-radius: 20px;
       overflow: hidden;
@@ -319,12 +319,13 @@
                 <img src="https://images.unsplash.com/photo-1622372738946-e62b40262c90?q=80&w=1000"
                      alt="Chainsaw Man"
                      class="w-full h-full object-cover">
-                <div class="discount-badge">-20%</div>
+
               </div>
 
               <div class="md:ml-4 mt-4 md:mt-0 flex-1">
                 <div class="flex justify-between">
                   <h3 class= "font-bold text-gray-800 text-lg" style="font-size: 20px" >Chainsaw Man Vol.1</h3>
+                  <div class="discount-badge">-20%</div>
                   <button class="remove-btn text-xl">
                     <i class="fas fa-trash-alt"></i>
                   </button>
@@ -334,7 +335,8 @@
                 <div class="mt-4 flex flex-col md:flex-row md:items-center justify-between">
                   <div class= "flex items-center mb-3 md:mb-0">
                     <span class= "text-gray-500 line-through mr-2">&#8364 16,99</span>
-                    <span class="text-2xl font-bold text-nekopink">&#8364 13,59</span>
+                    <span class="text-2xl font-bold text-nekored">&#8364 13,59</span>
+
                   </div>
 
                   <div class="quantity-selector">
@@ -347,6 +349,7 @@
                     </button>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -371,7 +374,7 @@
 
                 <div class="mt-4 flex flex-col md:flex-row md:items-center justify-between">
                   <div class="flex items-center mb-3 md:mb-0">
-                    <span class="text-2xl font-bold text-nekopink">&#8364 14,99</span>
+                    <span class="text-2xl font-bold text-nekored">&#8364 14,99</span>
                   </div>
 
                   <div class="quantity-selector">
@@ -410,7 +413,7 @@
                 <div class="mt-4 flex flex-col md:flex-row md:items-center justify-between">
                   <div class="flex items-center mb-3 md:mb-0">
                     <span class="text-gray-500 line-through mr-2">&#8364 49,99</span>
-                    <span class="text-2xl font-bold text-nekopink">&#8364 39,99</span>
+                    <span class="text-2xl font-bold text-nekored">&#8364 39,99</span>
                   </div>
 
                   <div class="quantity-selector">

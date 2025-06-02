@@ -263,7 +263,7 @@
         </div>
 
         <div class="text-center">
-            <h2 class= "text-2xl font-bold text-white mb-2"> Esplora il Nostro Catalogo</h2>
+            <h2 class= "text-2xl font-bold text-white mb-2" style="font-size: 30px"> Esplora il Nostro Catalogo</h2>
             <p class="text-white/90">Scopri la nostra vasta selezione di manga e volumi a prezzi incredibili</p>
         </div>
     </div>
@@ -417,7 +417,7 @@
     <div class="bg-white rounded-2xl border-2 border-nekoorange p-6 mb-8">
         <div class="flex items-center mb-6">
             <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
-                <i class= "fas fa-layer-group text-white"></i>
+                <i class= "fas fa-dragon text-white"></i>
             </div>
             <h2 class= "text-2xl font-bold text-nekopeach"> Le nostre Action Figure</h2>
         </div>
