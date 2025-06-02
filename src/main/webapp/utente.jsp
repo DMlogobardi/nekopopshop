@@ -411,7 +411,7 @@
                     </button>
                     <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="orders">
                         <i class="fas fa-shopping-bag mr-3"></i> I miei ordini
-                        <div class="notification-badge">3</div>
+
                     </button>
                     <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="wishlist">
                         <i class="fas fa-heart mr-3"></i> Lista desideri
