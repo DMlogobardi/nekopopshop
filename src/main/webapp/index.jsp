@@ -239,7 +239,7 @@
                 <div class="bg-kawaililac rounded-xl px-4 py-2 flex items-center">
                     <i class="fas fa-star text-yellow-400 text-2xl mr-3"> </i>
                     <div>
-                        <h3 class="font-bold text-white text-xl" style="font-size: 25px"> Offerta del giorno!</h3>
+                        <h3 class="font-bold text-white text-xl" style="font-size: 30px"> Offerta del giorno!</h3>
                         <p class="text-white text-xs">Sconti fino al 30%</p>
                     </div>
                 </div>
@@ -260,8 +260,8 @@
                             <p class="text-2xl font-bold text-nekopink">&#8364 5,00</p>
                         </div>
                         <div class="mt-2 flex gap-2 justify-center md:justify-start">
-                            <span class="bg-kawaiblue px-2 py-1 rounded-lg text-white text-xs">Limited Edition</span>
-                            <span class="bg-nekopink px-2 py-1 rounded-lg text-white text-xs">-30%</span>
+                            <span class="bg-nekoorange px-2 py-1 rounded-lg text-white text-xs">Limited Edition</span>
+                            <span class="bg-nekored px-2 py-1 rounded-lg text-white text-xs">-30%</span>
                         </div>
                     </div>
                 </div>
@@ -288,7 +288,7 @@
                     <i class="fas fa-headset text-4xl text-white"></i>
                 </div>
 
-                <h3 class= "text-xl font-bold text-center text-white mt-4" style="font-size: 25px" >Supporto Premium</h3>
+                <h3 class= "text-xl font-bold text-center text-white mt-4" style="font-size: 30px" >Supporto Premium</h3>
                 <p class="text-center text-gray-600 text-sm mt-2">Iscriviti oggi e ricevi un action figure in omaggio!</p>
 
                 <button class="bg-nekopeach hover:bg-nekopurple text-white px-4 py-2 rounded-lg mt-4 font-bold transition-all">
@@ -372,7 +372,7 @@
             <div class="bg-white rounded-xl border-2 border-nekopeach mt-6 overflow-hidden">
                 <div class="bg-gradient-to-r from-nekopink to-nekopeach p-4">
                     <h2 class="text-xl font-bold text-nekopeach flex items-center">
-                        <i class="fas fa-crown mr-3"></i> Selezione della Settimana
+                        <i class="fas fa-crown mr-3" style="font-size: 30px"></i> Selezione della Settimana
                     </h2>
                 </div>
 
@@ -388,8 +388,8 @@
                             <h3 class="font-bold text-gray-800">Chainsaw Man Vol.1</h3>
                             <p class="text-gray-600 text-sm mt-1">Denji &egrave un ragazzo semplice con un sogno semplice...</p>
                             <div class="flex justify-between items-center mt-4">
-                                <span class="text-nekopink font-bold">&#8364 12,99</span>
-                                <button class="bg-nekopurple hover:bg-nekopink text-white py-2 px-4 rounded-lg text-sm transition">
+                                <span class="text-nekored font-bold">&#8364 12,99</span>
+                                <button class="bg-nekored hover:bg-nekopink text-white py-2 px-4 rounded-lg text-sm transition">
                                     <i class="fas fa-cart-plus mr-1"></i> Aggiungi
                                 </button>
                             </div>
@@ -408,8 +408,8 @@
                             <h3 class="font-bold text-gray-800">Berserk Vol.2</h3>
                             <p class="text-gray-600 text-sm mt-1">L'epico dark fantasy che ha ispirato una generazione...</p>
                             <div class="flex justify-between items-center mt-4">
-                                <span class="text-nekopink font-bold">&#8364 14,99</span>
-                                <button class="bg-kawaiblue hover:bg-nekopink text-white py-2 px-4 rounded-lg text-sm transition">
+                                <span class="text-nekored font-bold">&#8364 14,99</span>
+                                <button class="bg-nekored hover:bg-nekopink text-white py-2 px-4 rounded-lg text-sm transition">
                                     <i class="fas fa-cart-plus mr-1"></i> Aggiungi
                                 </button>
                             </div>
@@ -425,7 +425,7 @@
             <div class="bg-white rounded-xl border-2 border-nekoorange overflow-hidden h-full">
                 <div class="bg-gradient-to-r from-nekopink to-nekoorange p-4">
                     <h2 class="text-xl font-bold text-nekopeach flex items-center">
-                        <i class="fas fa-fire mr-3"></i> Pi&#249 Acquistati
+                        <i class="fas fa-fire mr-3" style="font-size: 30px"></i> Pi&#249 Acquistati
                     </h2>
                 </div>
 
@@ -443,7 +443,7 @@
                                 <h3 class="font-bold text-gray-800">My Hero Academia Vol.30</h3>
                                 <p class="text-gray-600 text-xs mt-1">Midoriya continua la sua formazione per diventare...</p>
                                 <div class="mt-2 flex justify-between items-center">
-                                    <span class="text-nekopink font-bold">&#8364 10,99</span>
+                                    <span class="text-nekoorange font-bold">&#8364 10,99</span>
                                     <div class="flex items-center">
                                         <i class="fas fa-star text-yellow-400 text-sm"></i>
                                         <span class="ml-1 text-xs text-gray-600">4.9</span>
@@ -469,7 +469,7 @@
                                 <h3 class="font-bold text-gray-800">One Piece Vol.102</h3>
                                 <p class="text-gray-600 text-xs mt-1">Le nuove avventure di Rufy e la sua ciurma...</p>
                                 <div class="mt-2 flex justify-between items-center">
-                                    <span class="text-nekopink font-bold">&#8364 11,49</span>
+                                    <span class="text-nekoorange font-bold">&#8364 11,49</span>
                                     <div class="flex items-center">
                                         <i class="fas fa-star text-yellow-400 text-sm"></i>
                                         <span class="ml-1 text-xs text-gray-600">4.8</span>
@@ -495,7 +495,7 @@
                                 <h3 class="font-bold text-gray-800">Jujutsu Kaisen Vol.19</h3>
                                 <p class="text-gray-600 text-xs mt-1">La battaglia contro i maledetti continua...</p>
                                 <div class="mt-2 flex justify-between items-center">
-                                    <span class="text-nekopink font-bold">&#8364 10,99</span>
+                                    <span class="text-nekoorange font-bold">&#8364 10,99</span>
                                     <div class="flex items-center">
                                         <i class="fas fa-star text-yellow-400 text-sm"></i>
                                         <span class="ml-1 text-xs text-gray-600">4.7</span>
@@ -528,7 +528,7 @@
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-user-ninja text-2xl text-nekopurple"></i>
                 </div>
-                <h3 class="font-bold text-nekopeach text-lg">Shonen</h3>
+                <h3 class="font-bold text-nekopeach text-lg" style="font-size: 25px">Shonen</h3>
                 <p class="text-gray-600 mt-2 text-sm">Action e avventure epiche</p>
                 <div class="mt-3 flex justify-center">
                     <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
@@ -542,7 +542,7 @@
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-heart text-2xl text-pink-500"></i>
                 </div>
-                <h3 class="font-bold text-nekopeach text-lg">Shojo</h3>
+                <h3 class="font-bold text-nekopeach text-lg" style="font-size: 25px">Shojo</h3>
                 <p class="text-gray-600 mt-2 text-sm">Storie romantiche</p>
                 <div class="mt-3 flex justify-center">
                     <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
@@ -556,7 +556,7 @@
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-brain text-2xl text-blue-500"></i>
                 </div>
-                <h3 class="font-bold text-nekopeach text-lg">Seinen</h3>
+                <h3 class="font-bold text-nekopeach text-lg" style="font-size: 25px">Seinen</h3>
                 <p class="text-gray-600 mt-2 text-sm">Per lettori maturi</p>
                 <div class="mt-3 flex justify-center">
                     <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
@@ -570,7 +570,7 @@
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-paw text-2xl text-green-500"></i>
                 </div>
-                <h3 class="font-bold text-nekopeach text-lg">Kemono</h3>
+                <h3 class="font-bold text-nekopeach text-lg" style="font-size: 25px">Kemono</h3>
                 <p class="text-gray-600 mt-2 text-sm">Animali antropomorfi</p>
                 <div class="mt-3 flex justify-center">
                     <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
@@ -584,7 +584,7 @@
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fab fa-fort-awesome text-2xl text-red-500"></i>
                 </div>
-                <h3 class="font-bold text-nekopeach text-lg">Kodomo</h3>
+                <h3 class="font-bold text-nekopeach text-lg" style="font-size: 25px">Kodomo</h3>
                 <p class="text-gray-600 mt-2 text-sm">Per piccoli lettori</p>
                 <div class="mt-3 flex justify-center">
                     <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
@@ -598,7 +598,7 @@
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-venus-double text-2xl text-fuchsia-600"></i>
                 </div>
-                <h3 class="font-bold text-nekopeach text-lg">Josei</h3>
+                <h3 class="font-bold text-nekopeach text-lg" style="font-size: 25px">Josei</h3>
                 <p class="text-gray-600 mt-2 text-sm">Intrighi ed emozioni al femminile</p>
                 <div class="mt-3 flex justify-center">
                     <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
@@ -612,7 +612,7 @@
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-syringe text-2xl text-blue-600"></i>
                 </div>
-                <h3 class="font-bold text-nekopeach text-lg">Sci-Fi</h3>
+                <h3 class="font-bold text-nekopeach text-lg" style="font-size: 25px">Sci-Fi</h3>
                 <p class="text-gray-600 mt-2 text-sm">Tra realt&agrave e fantascienza</p>
                 <div class="mt-3 flex justify-center">
                     <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
@@ -626,7 +626,7 @@
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-spider text-2xl text-black-600"></i>
                 </div>
-                <h3 class="font-bold text-nekopeach text-lg">Horror</h3>
+                <h3 class="font-bold text-nekopeach text-lg" style="font-size: 25px">Horror</h3>
                 <p class="text-gray-600 mt-2 text-sm">Brividi e terrore</p>
                 <div class="mt-3 flex justify-center">
                     <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">

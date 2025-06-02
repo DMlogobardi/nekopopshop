@@ -275,7 +275,7 @@
     </div>
 
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-nekopink to-nekopeach rounded-2xl p-8 md:p-12 mb-12 relative overflow-hidden">
+    <div class="bg-gradient-to-r from-nekoorange to-nekopeach rounded-2xl p-8 md:p-12 mb-12 relative overflow-hidden">
         <div class="absolute top-0 left-0 right-0 bottom-0 opacity-10">
             <div class="absolute top-10 left-10 w-32 h-32 rounded-full bg-white animate-ping"></div>
             <div class="absolute bottom-10 right-10 w-24 h-24 rounded-full bg-white animate-ping"></div>

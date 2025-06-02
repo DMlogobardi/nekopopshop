@@ -20,7 +20,6 @@
                         'nekored': '#F24535'
                     },
                     fontFamily: {
-                        'comic': ['"Comic Sans MS"', 'cursive', 'sans-serif'],
                         'nunito': ['Nunito', 'sans-serif']
                     }
                 }
@@ -28,6 +27,15 @@
         }
     </script>
     <style>
+        @font-face {
+            font-family: 'Milkyway';  /* Scegli un nome per il font */
+            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+            font-weight: normal;        /* Peso del font (es. 400, 700) */
+            font-style: normal;        /* normale, italic, ecc. */
+            font-display: swap;        /* Ottimizza il rendering */
+        }
+
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
 
         body {
@@ -211,12 +219,46 @@
             animation: shake 0.5s;
         }
 
+        .underline {
+            text-decoration: underline;
+        }
+
         @keyframes shake {
             0%, 100% {transform: translateX(0);}
             20% {transform: translateX(-10px);}
             40% {transform: translateX(10px);}
             60% {transform: translateX(-10px);}
             80% {transform: translateX(10px);}
+        }
+        .text-3xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-sm{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
+        .text-4xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
+        .text-2xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
+        .text-xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
+        .text-right{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
         }
     </style>
 </head>
@@ -310,7 +352,7 @@
                 </a>
             </div>
 
-            <button type="submit" class="btn-login w-full py-3 rounded-full text-white font-bold text-lg">
+            <button type="submit" class="btn-login w-full py-3 rounded-full text-white font-bold text-2xl">
                 Accedi <i class="fas fa-sign-in-alt ml-2"></i>
             </button>
         </form>
@@ -319,7 +361,9 @@
     <div class="text-center">
         <p class="text-nekopeach">
             Non hai un account?
-            <a href="register.jsp" class="text-nekoorange font-bold hover:text-nekopeach transition">Registrati</a>
+            <a href="register.jsp" class="text-nekoorange font-bold hover:text-nekopeach transition">
+                <span class="underline">Registrati</span>
+            </a>
         </p>
     </div>
 
