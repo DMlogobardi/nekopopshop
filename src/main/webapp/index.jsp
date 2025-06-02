@@ -23,6 +23,15 @@
         }
     </script>
     <style>
+        @font-face {
+            font-family: 'Milkyway';  /* Scegli un nome per il font */
+            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+            font-weight: normal;        /* Peso del font (es. 400, 700) */
+            font-style: normal;        /* normale, italic, ecc. */
+            font-display: swap;        /* Ottimizza il rendering */
+        }
+
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
@@ -150,23 +159,34 @@
         }
 
         .nekotag {
-            background: linear-gradient(90deg, #E55458, #f2d5bb);
+            background: linear-gradient(90deg, #E55458, #F29966);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             position: relative;
             font-weight: 800;
+            font-size: 45px;
         }
 
-        .nekotag::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #E55458, #f2d5bb);
-            border-radius: 10px;
+
+        .text-3xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
         }
+        .text-xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-lg{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .fa-star, .fas, .far {
+            font-style: normal !important;
+        }
+
     </style>
 </head>
 <body class="relative overflow-x-hidden">
@@ -180,7 +200,7 @@
         <div class="flex items-center">
             <div class="relative">
                 <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-kawaililac z-10 flex items-center justify-center animate-pulse">
-                    <i class="fas fa-paw text-white text-xl"></i>
+                    <i class="fas fa-paw text-white text-2xl"></i>
                 </div>
                 <img src="${pageContext.request.contextPath}/frontend/images/logo_nekopop.jpg"
                      alt="NekoPop Logo"
@@ -188,8 +208,10 @@
                      class="rounded-full border-4 border-white shadow-lg">
             </div>
             <div class="ml-4">
-                <h1 class="text-3xl font-bold mb-4"><span class="nekotag">NekoPop Shop</span></h1>
-                <p class="text-sm text-nekopeach font-bold">Manga & Action Figure</p>
+                <h1 class="text-3xl font-bold"><span class="nekotag">NekoPop Shop</span></h1>
+                <p class="text-xl text-nekopeach font-bold" style="font-size: 20px; background: linear-gradient(90deg, #E55458, #F29966);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;">Manga & Action Figure</p>
             </div>
         </div>
 
@@ -218,9 +240,9 @@
 
             <div class="flex flex-col md:flex-row items-center gap-4">
                 <div class="bg-kawaililac rounded-xl px-4 py-2 flex items-center">
-                    <i class="fas fa-star text-yellow-400 text-3xl mr-3"></i>
+                    <i class="fas fa-star text-yellow-400 text-2xl mr-3"> </i>
                     <div>
-                        <h3 class="font-bold text-white text-lg">Offerta del giorno!</h3>
+                        <h3 class="font-bold text-white text-xl" style="font-size: 25px"> Offerta del giorno!</h3>
                         <p class="text-white text-xs">Sconti fino al 30%</p>
                     </div>
                 </div>
@@ -250,7 +272,7 @@
 
             <div class="mt-4 flex justify-between items-center">
                 <p class="text-white text-sm">Offerta valida fino al 31/12/2023</p>
-                <button class="bg-nekopurple hover:bg-nekopink text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                <button class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
                     <i class="fas fa-gift mr-2"></i> Approfitta ora
                 </button>
             </div>
@@ -269,7 +291,7 @@
                     <i class="fas fa-headset text-4xl text-white"></i>
                 </div>
 
-                <h3 class="text-xl font-bold text-center text-white mt-4">Supporto Premium</h3>
+                <h3 class= "text-xl font-bold text-center text-white mt-4" style="font-size: 25px" >Supporto Premium</h3>
                 <p class="text-center text-gray-600 text-sm mt-2">Iscriviti oggi e ricevi un action figure in omaggio!</p>
 
                 <button class="bg-nekopeach hover:bg-nekopurple text-white px-4 py-2 rounded-lg mt-4 font-bold transition-all">
@@ -285,10 +307,10 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- News Section -->
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-xl border-2 border-kawaiblue overflow-hidden">
+            <div class= "bg-white rounded-xl border-2 border-nekopeach overflow-hidden">
                 <div class="bg-gradient-to-r from-kawaiblue to-nekopurple p-4 flex items-center">
                     <i class="fas fa-newspaper text-white text-2xl mr-3"></i>
-                    <h2 class="text-xl font-bold text-nekopeach">Ultime Novit&agrave</h2>
+                    <h2 class= "text-xl font-bold text-nekopeach" style="font-size: 30px">Ultime Novit&agrave</h2>
                     <div class="ml-auto flex">
                         <i class="fas fa-cat text-white text-xl mr-2 animate-bounce"></i>
                         <i class="fas fa-cat text-white text-xl"></i>
@@ -304,7 +326,7 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="font-bold text-lg text-nekopurple mb-2">Consegna Espressa!</h3>
+                            <h3 class= "font-semibold text-lg text-nekopurple mb-2" style="font-size: 25px"> Consegna Espressa!</h3>
                             <p class="text-gray-600">Nuovo servizio di consegna in giornata per tutta la città di Milano! Dai un'occhiata alla nostra sezione informazioni.</p>
                             <div class="mt-3 flex items-center">
                                 <span class="bg-nekopeach text-white px-2 py-1 rounded-md text-xs">Esclusiva</span>
@@ -321,7 +343,7 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="font-bold text-lg text-nekopurple mb-2">Sconto Compleanno!</h3>
+                            <h3 class="font-semibold text-lg text-nekopurple mb-2" style="font-size: 25px">Sconto Compleanno!</h3>
                             <p class="text-gray-600">Registra il tuo compleanno nel tuo profilo e ricevi un coupon del 15% da utilizzare nel tuo mese speciale!</p>
                             <div class="mt-3 flex items-center">
                                 <span class="bg-nekopeach text-white px-2 py-1 rounded-md text-xs">Omaggio</span>
@@ -338,7 +360,7 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="font-bold text-lg text-nekopurple mb-2">Sakura Festival</h3>
+                            <h3 class="font-semibold text-lg text-nekopurple mb-2" style="font-size: 25px">Sakura Festival</h3>
                             <p class="text-gray-600">Festeggia con noi il Sakura Festival nel nostro negozio di Milano con sconti esclusivi su manga giapponesi e art book!</p>
                             <div class="mt-3 flex items-center">
                                 <span class="bg-nekopeach text-white px-2 py-1 rounded-md text-xs">Evento</span>
@@ -367,7 +389,7 @@
                         </div>
                         <div class="p-4">
                             <h3 class="font-bold text-gray-800">Chainsaw Man Vol.1</h3>
-                            <p class="text-gray-600 text-sm mt-1">Denji è un ragazzo semplice con un sogno semplice...</p>
+                            <p class="text-gray-600 text-sm mt-1">Denji &egrave un ragazzo semplice con un sogno semplice...</p>
                             <div class="flex justify-between items-center mt-4">
                                 <span class="text-nekopink font-bold">&#8364 12,99</span>
                                 <button class="bg-nekopurple hover:bg-nekopink text-white py-2 px-4 rounded-lg text-sm transition">
@@ -403,7 +425,7 @@
 
         <!-- Featured Manga -->
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-xl border-2 border-nekopurple overflow-hidden h-full">
+            <div class="bg-white rounded-xl border-2 border-nekoorange overflow-hidden h-full">
                 <div class="bg-gradient-to-r from-nekopink to-nekoorange p-4">
                     <h2 class="text-xl font-bold text-nekopeach flex items-center">
                         <i class="fas fa-fire mr-3"></i> Pi&#249 Acquistati
@@ -489,7 +511,7 @@
                         </div>
                     </div>
 
-                    <a href="#" class="block mt-4 bg-nekopink hover:bg-nekopurple text-white text-center py-3 rounded-lg font-bold transition">
+                    <a href="#" class="block mt-4 bg-nekoorange hover:bg-nekopink text-white text-center py-3 rounded-lg font-bold transition">
                         <i class="fas fa-arrow-right mr-2"></i> Vedi l'intera classifica
                     </a>
                 </div>
@@ -499,13 +521,13 @@
 
     <!-- Category Section -->
     <div class="mt-12">
-        <h2 class="text-2xl font-bold text-center mb-8">
+        <h2 class="text-3xl font-bold text-center mb-8">
             <span class="nekotag">Esplora le Categorie</span>
         </h2>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopink text-center group hover:shadow-lg transition">
+            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-user-ninja text-2xl text-nekopurple"></i>
                 </div>
@@ -519,7 +541,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopurple text-center group hover:shadow-lg transition">
+            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-heart text-2xl text-pink-500"></i>
                 </div>
@@ -533,7 +555,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-kawaiblue text-center group hover:shadow-lg transition">
+            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-brain text-2xl text-blue-500"></i>
                 </div>
@@ -547,12 +569,68 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-kawaililac text-center group hover:shadow-lg transition">
+            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-paw text-2xl text-green-500"></i>
                 </div>
                 <h3 class="font-bold text-nekopeach text-lg">Kemono</h3>
                 <p class="text-gray-600 mt-2 text-sm">Animali antropomorfi</p>
+                <div class="mt-3 flex justify-center">
+                    <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category -->
+            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+                <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
+                    <i class="fab fa-fort-awesome text-2xl text-red-500"></i>
+                </div>
+                <h3 class="font-bold text-nekopeach text-lg">Kodomo</h3>
+                <p class="text-gray-600 mt-2 text-sm">Per piccoli lettori</p>
+                <div class="mt-3 flex justify-center">
+                    <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category -->
+            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+                <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-venus-double text-2xl text-fuchsia-600"></i>
+                </div>
+                <h3 class="font-bold text-nekopeach text-lg">Josei</h3>
+                <p class="text-gray-600 mt-2 text-sm">Intrighi ed emozioni al femminile</p>
+                <div class="mt-3 flex justify-center">
+                    <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category -->
+            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+                <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-syringe text-2xl text-blue-600"></i>
+                </div>
+                <h3 class="font-bold text-nekopeach text-lg">Sci-Fi</h3>
+                <p class="text-gray-600 mt-2 text-sm">Tra realt&agrave e fantascienza</p>
+                <div class="mt-3 flex justify-center">
+                    <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category -->
+            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+                <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-spider text-2xl text-black-600"></i>
+                </div>
+                <h3 class="font-bold text-nekopeach text-lg">Horror</h3>
+                <p class="text-gray-600 mt-2 text-sm">Brividi e terrore</p>
                 <div class="mt-3 flex justify-center">
                     <div class="w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center">
                         <i class="fas fa-plus"></i>
@@ -567,7 +645,7 @@
         <div class="absolute inset-0 bg-gradient-to-r from-nekopink to-nekopeach z-0"></div>
         <div class="relative z-10 p-8 md:p-12 flex flex-col md:flex-row items-center">
             <div class="text-center md:text-left mb-6 md:mb-0">
-                <h3 class="text-2xl md:text-3xl font-bold text-white">Action Figure Limited Edition!</h3>
+                <h3 class="text-2xl md: text-3xl font-bold text-white">Action Figure Limited Edition!</h3>
                 <p class="text-white mt-2 max-w-md">Collezione esclusiva di figure da collezione con effetti luminosi e dettagli premium!</p>
                 <button class="mt-4 bg-white text-nekopeach px-6 py-3 rounded-full font-bold hover:bg-pink-50 transition">
                     <i class="fas fa-gifts mr-2"></i> Scopri le offerte
@@ -601,16 +679,16 @@
             <div>
                 <div class="flex items-center mb-4">
                     <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
-                        <i class="fas fa-paw text-nekopink text-xl"></i>
+                        <i class="fas fa-paw text-nekopink text-2xl"></i>
                     </div>
-                    <h4 class="font-bold text-xl ml-3">NekoPop Shop</h4>
+                    <h4 class="font-bold text-xl ml-3 text-white">NekoPop Shop</h4>
                 </div>
                 <p class="text-pink-100">Il tuo negozio preferito per manga e action figure, fornito da appassionati per appassionati!</p>
             </div>
 
             <!-- Footer section -->
             <div>
-                <h4 class="font-bold text-lg mb-4">Contatti</h4>
+                <h4 class="font-bold text-lg mb-4 text-white">Contatti</h4>
                 <p class="text-pink-100 flex items-center mb-3">
                     <i class="fas fa-map-marker-alt mr-3"></i>
                     <span>Via dei Manga, 123<br>Milano, Italia</span>
@@ -625,7 +703,7 @@
 
             <!-- Footer section -->
             <div>
-                <h4 class="font-bold text-lg mb-4">Link Utili</h4>
+                <h4 class="font-bold text-lg text-white mb-4">Link Utili</h4>
                 <ul class="space-y-2">
                     <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
                         <i class="fas fa-caret-right mr-2"></i> Assistenza Clienti
@@ -644,7 +722,7 @@
 
             <!-- Footer section -->
             <div>
-                <h4 class="font-bold text-lg mb-4">Iscriviti alla Newsletter</h4>
+                <h4 class="font-bold text-lg text-white mb-4">Iscriviti alla Newsletter</h4>
                 <div class="flex mt-2">
                     <input type="email" placeholder="Tua email" class="bg-white/20 border border-pink-300 text-white rounded-l-lg px-4 py-3 w-full placeholder-pink-200 focus:outline-none">
                     <button class="bg-white text-nekopink font-bold px-4 rounded-r-lg">
@@ -676,10 +754,10 @@
             <p>&copy; 2023 NekoPopShop. Tutti i diritti riservati.</p>
             <div class="flex justify-center mt-4">
                 <div class="flex items-center gap-4">
-                    <i class="fab fa-cc-visa text-3xl"></i>
-                    <i class="fab fa-cc-mastercard text-3xl"></i>
-                    <i class="fab fa-cc-paypal text-3xl"></i>
-                    <i class="fab fa-cc-apple-pay text-3xl"></i>
+                    <i class="fab fa-cc-visa text-2xl"></i>
+                    <i class="fab fa-cc-mastercard text-2xl"></i>
+                    <i class="fab fa-cc-paypal text-2xl"></i>
+                    <i class="fab fa-cc-apple-pay text-2xl"></i>
                 </div>
             </div>
         </div>
