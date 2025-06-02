@@ -291,6 +291,9 @@
             <button class="filter-btn" onclick="setFilter('volumi')">
                 <i class="fas fa-book-open mr-2"></i> Volumi
             </button>
+            <button class="filter-btn" onclick="setFilter('action figure')">
+                <i class="fas fa-dragon mr-2"></i> Action Figure
+            </button>
             <button class="filter-btn" onclick="setFilter('nome')">
                 <i class="fas fa-sort-alpha-down mr-2"></i> Per Nome
             </button>
@@ -404,6 +407,85 @@
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">103+ volumi</span>
                         <span class="bg-nekopeach text-white px-2 py-1 rounded-md">In corso</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="bg-white rounded-2xl border-2 border-nekoorange p-6 mb-8">
+        <div class="flex items-center mb-6">
+            <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
+                <i class= "fas fa-layer-group text-white"></i>
+            </div>
+            <h2 class= "text-2xl font-bold text-nekopeach"> Le nostre Action Figure</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Action Figure Item 1 -->
+            <div class="product-card">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://m.media-amazon.com/images/I/71FQ9+Y2KRL._AC_UF1000,1000_QL80_.jpg"
+                         alt="Nana"
+                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-gray-800">Komatsu Nana & Osaki Nana Action Girl Figure</h3>
+                    <p class="text-gray-600 text-lg mt-2">Action figure in PVC delle due protagonoste pi&ugrave amate dei racconti di Ai Yazawa.</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-nekopeach font-bold">&#8364 24.99</span>
+                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                            <i class="fas fa-eye mr-1"></i> Dettagli
+                        </button>
+                    </div>
+                    <div class="mt-2 flex items-center text-xs">
+                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Completo</span>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Figure Item 2 -->
+            <div class="product-card">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://m.media-amazon.com/images/I/91QYVKf0K6L._AC_UF1000,1000_QL80_.jpg"
+                         alt="Naruto"
+                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-gray-800">Naruto Shippuden naruto Uzumaki</h3>
+                    <p class="text-gray-600 text-lg mt-2">La storia del ninja dai capelli biondi che vuole diventare Hokage, ora reso action figure da collezionare.</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-nekopeach font-bold">Disponibile</span>
+                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                            <i class="fas fa-eye mr-1"></i> Dettagli
+                        </button>
+                    </div>
+                    <div class="mt-2 flex items-center text-xs">
+                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Disponibili</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Figure Item 3 -->
+            <div class="product-card">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://m.media-amazon.com/images/I/91LiEf8M9kL._AC_UF1000,1000_QL80_.jpg"
+                         alt="One Piece"
+                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-gray-800"> Megahouse One Piece Luffy Taro VAH</h3>
+                    <p class="text-gray-600 text-lg mt-2">Il mitico Luffy alla leggendaria ricerca del tesoro pi&ugrave ambito dai pirati ora disponibile in action figure nella sua versione Taro dalla omonima saga.</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-nekopeach font-bold">Disponibile</span>
+                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                            <i class="fas fa-eye mr-1"></i> Dettagli
+                        </button>
+                    </div>
+                    <div class="mt-2 flex items-center text-xs">
+                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Ultimi pezzi</span>
                     </div>
                 </div>
             </div>
