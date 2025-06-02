@@ -44,7 +44,7 @@
         }
 
         body {
-            font-family: 'Helvetica', sans-serif;
+            font-family: 'Nunito', sans-serif;
 
             background-color: #f0f0f0;
 
@@ -160,7 +160,8 @@
             -webkit-text-fill-color: transparent;
             position: relative;
             font-weight: 900;
-            font-size: 50px;
+            font-size: 45px;
+
 
         }
 
@@ -220,6 +221,16 @@
             font-size: 3rem;
             color: #333;
         }
+        .text-xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
+        .text-right{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
 
     </style>
 </head>
@@ -234,7 +245,7 @@
         <div class="flex items-center">
             <div class="relative">
                 <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-nekopeach z-10 flex items-center justify-center animate-pulse">
-                    <i class="fas fa-paw text-white text-xl"></i>
+                    <i class="fas fa-paw text-white text-lg"></i>
                 </div>
                 <img src="${pageContext.request.contextPath}/frontend/images/logo_nekopop.jpg"
                      alt="NekoPop Logo"
@@ -284,7 +295,7 @@
     <!-- Our Story Section -->
     <div class="bg-white rounded-2xl border-2 border-nekopeach p-8 mb-12 relative">
         <div class="absolute -top-3 -left-3 w-16 h-16 rounded-full bg-nekopeach flex items-center justify-center">
-            <i class="fas fa-book-open text-white text-2xl"></i>
+            <i class="fas fa-book-open text-white text-lg"></i>
         </div>
         <h2 class="text-3xl font-bold text-nekopeach mb-6 ml-12">La Nostra Storia</h2>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -293,7 +304,7 @@
                 <p class="text-gray-700 mb-6">Da un piccolo garage a Milano a uno dei negozi di riferimento per gli amanti dei manga e delle action figure in Italia, il nostro viaggio &egrave stato ricco di sfide e soddisfazioni.</p>
                 <div class="bg-nekopink/20 p-4 rounded-lg border-l-4 border-nekopeach">
                     <p class="text-gray-700 italic font-bold" style="font-family: 'Bradley Hand ITC'">"Volevamo creare un posto dove gli appassionati come noi potessero trovare prodotti di qualit&agrave con un tocco unico e personale."</p>
-                    <p class="text-right text-nekopeach font-bold mt-2">- Il Team NekoPop</p>
+                    <p class="text-right text-nekopeach font-bold mt-2" style="font-size: 20px">- Il Team NekoPop</p>
                 </div>
             </div>
             <div class="relative">
@@ -308,12 +319,12 @@
 
         <!-- Timeline -->
         <div class="mt-12">
-            <h3 class="text-2xl font-bold text-nekoorange mb-8 text-center">La Nostra Crescita</h3>
+            <h3 class="text-2xl font-bold text-nekoorange mb-8 text-center" style="font-size: 35px">La Nostra Crescita</h3>
             <div class="max-w-3xl mx-auto">
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="bg-nekopink/10 p-6 rounded-xl">
-                        <h4 class="text-xl font-bold text-nekoorange mb-2">2015 - Fondazione</h4>
+                        <h4 class="text-xl font-bold text-nekoorange mb-2" style="font-size: 25px">2015 - Fondazione</h4>
                         <p class="text-gray-700">Apertura del primo negozio fisico a Milano con una selezione limitata di manga e action figure.</p>
                     </div>
                 </div>
@@ -321,7 +332,7 @@
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="bg-nekopink/10 p-6 rounded-xl">
-                        <h4 class="text-xl font-bold text-nekoorange mb-2">2017 - Lancio Online</h4>
+                        <h4 class="text-xl font-bold text-nekoorange mb-2"style="font-size: 25px">2017 - Lancio Online</h4>
                         <p class="text-gray-700">Espansione con il negozio online e primi accordi con editori giapponesi per importazioni dirette.</p>
                     </div>
                 </div>
@@ -329,7 +340,7 @@
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="bg-nekopink/10 p-6 rounded-xl">
-                        <h4 class="text-xl font-bold text-nekoorange mb-2">2019 - Community</h4>
+                        <h4 class="text-xl font-bold text-nekoorange mb-2"style="font-size: 25px">2019 - Community</h4>
                         <p class="text-gray-700">Superati i 10.000 clienti e creazione del club NekoPop con eventi esclusivi per i membri.</p>
                     </div>
                 </div>
@@ -337,7 +348,7 @@
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="bg-nekopink/10 p-6 rounded-xl">
-                        <h4 class="text-xl font-bold text-nekoorange mb-2">2022 - Premium</h4>
+                        <h4 class="text-xl font-bold text-nekoorange mb-2"style="font-size: 25px">2022 - Premium</h4>
                         <p class="text-gray-700">Lancio del servizio Premium con spedizioni gratuite, sconti esclusivi e box collezionabili mensili.</p>
                     </div>
                 </div>
@@ -379,14 +390,14 @@
             <div class="flex flex-col md:flex-row items-center gap-8">
                 <div class="flex-shrink-0">
                     <div class="w-32 h-32 rounded-full bg-gradient-to-br from-nekoorange to-nekopink flex items-center justify-center">
-                        <i class="fas fa-quote-left text-white text-4xl"></i>
+                        <i class="fas fa-quote-left text-white text-lg"></i>
                     </div>
                 </div>
                 <div>
                     <blockquote class="text-xl italic text-gray-700 font-bold mb-4" style="font-family: 'Bradley Hand ITC'">
                         "Non vendiamo semplicemente prodotti, condividiamo emozioni. Ogni manga, ogni action figure racconta una storia che vogliamo far vivere ai nostri clienti."
                     </blockquote>
-                    <p class="text-right font-bold text-nekoorange">- Il Team NekoPop</p>
+                    <p class="text-right font-bold text-nekoorange" style="font-size: 20px">- Il Team NekoPop</p>
                 </div>
             </div>
         </div>
@@ -401,7 +412,7 @@
             <!-- Team Member -->
             <div class="team-card p-6 text-center relative">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekopink mb-4 overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg"
+                    <img src="${pageContext.request.contextPath}/frontend/images/mia_icona_git.png"
                          alt="Marta Rossi"
                          class="w-full h-full object-cover">
                 </div>
@@ -427,7 +438,7 @@
             <!-- Team Member -->
             <div class="team-card p-6 text-center relative">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekoorange mb-4 overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg"
+                    <img src="${pageContext.request.contextPath}/frontend/images/davide_icona_git.jpg"
                          alt="Luigi Bianchi"
                          class="w-full h-full object-cover">
                 </div>
@@ -449,7 +460,7 @@
 
             <!-- Team Member -->
             <div class="team-card p-6 text-center relative">
-                <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekoorange mb-4 overflow-hidden">
+                <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekopeach mb-4 overflow-hidden">
                     <img src="https://randomuser.me/api/portraits/men/32.jpg"
                          alt="Luigi Bianchi"
                          class="w-full h-full object-cover">

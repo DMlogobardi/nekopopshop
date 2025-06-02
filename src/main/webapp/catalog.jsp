@@ -26,6 +26,15 @@
         }
     </script>
     <style>
+        @font-face {
+            font-family: 'Milkyway';  /* Scegli un nome per il font */
+            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+            font-weight: normal;        /* Peso del font (es. 400, 700) */
+            font-style: normal;        /* normale, italic, ecc. */
+            font-display: swap;        /* Ottimizza il rendering */
+        }
+
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
@@ -151,23 +160,15 @@
         }
 
         .nekotag {
-            background: linear-gradient(90deg, #E55458, #f2d5bb);
+            background: linear-gradient(90deg, #E55458, #F29966);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             position: relative;
             font-weight: 800;
+            font-size: 45px;
         }
 
-        .nekotag::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #E55458, #f2d5bb);
-            border-radius: 10px;
-        }
+
 
         .filter-btn {
             transition: all 0.3s ease;
@@ -200,6 +201,30 @@
             color: white;
             transform: translateY(-3px);
         }
+        .text-3xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-sm{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-2xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        .fa-star, .fas, .far {
+            font-style: normal !important;
+        }
     </style>
 </head>
 <body class="relative overflow-x-hidden">
@@ -213,7 +238,7 @@
         <div class="flex items-center">
             <div class="relative">
                 <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-nekopeach z-10 flex items-center justify-center animate-pulse">
-                    <i class="fas fa-paw text-white text-xl"></i>
+                    <i class="fas fa-paw text-white text-lg"></i>
                 </div>
                 <img src="frontend/images/logo_nekopop.jpg"
                      alt="NekoPop Logo"
@@ -221,8 +246,10 @@
                      class="rounded-full border-4 border-white shadow-lg">
             </div>
             <div class="ml-4">
-                <h1 class="text-3xl font-bold mb-4"><span class="nekotag">NekoPop Shop</span></h1>
-                <p class="text-sm text-nekopeach font-bold">Manga & Action Figure</p>
+                <h1 class="text-3xl font-bold "> <span class="nekotag">NekoPop Shop</span></h1>
+                <p class= "text-sm text-nekopeach font-bold" style="font-size: 20px; background: linear-gradient(90deg, #E55458, #F29966);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;"> Manga & Action Figure</p>
             </div>
         </div>
 
@@ -247,7 +274,7 @@
         </div>
 
         <div class="text-center">
-            <h2 class="text-2xl font-bold text-white mb-2">Esplora il Nostro Catalogo</h2>
+            <h2 class= "text-2xl font-bold text-white mb-2"> Esplora il Nostro Catalogo</h2>
             <p class="text-white/90">Scopri la nostra vasta selezione di manga e volumi a prezzi incredibili</p>
         </div>
     </div>
@@ -314,12 +341,12 @@
 
     <!-- Manga Sections -->
     <!-- Manga Series Section -->
-    <div class="bg-white rounded-2xl border-2 border-nekopink p-6 mb-8">
+    <div class="bg-white rounded-2xl border-2 border-nekoorange p-6 mb-8">
         <div class="flex items-center mb-6">
-            <div class="w-10 h-10 rounded-full bg-nekopink flex items-center justify-center mr-3">
-                <i class="fas fa-layer-group text-white"></i>
+            <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
+                <i class= "fas fa-layer-group text-white"></i>
             </div>
-            <h2 class="text-2xl font-bold text-nekopeach">Serie di Manga</h2>
+            <h2 class= "text-2xl font-bold text-nekopeach"> Serie di Manga</h2>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -332,9 +359,9 @@
                 </div>
                 <div class="p-4">
                     <h3 class="font-bold text-gray-800">Attack on Titan</h3>
-                    <p class="text-gray-600 text-sm mt-2">Essere divorati vivi: per l'umanit&agrave &egrave il destino più crudele.</p>
+                    <p class="text-gray-600 text-lg mt-2">Essere divorati vivi: per l'umanit&agrave &egrave il destino pi&ugrave crudele.</p>
                     <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">€24.99</span>
+                        <span class="text-nekopeach font-bold">&#8364 24.99</span>
                         <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-eye mr-1"></i> Dettagli
                         </button>
@@ -355,7 +382,7 @@
                 </div>
                 <div class="p-4">
                     <h3 class="font-bold text-gray-800">Naruto</h3>
-                    <p class="text-gray-600 text-sm mt-2">La storia del ninja dai capelli biondi che vuole diventare Hokage.</p>
+                    <p class="text-gray-600 text-lg mt-2">La storia del ninja dai capelli biondi che vuole diventare Hokage.</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">Disponibile</span>
                         <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
@@ -378,7 +405,7 @@
                 </div>
                 <div class="p-4">
                     <h3 class="font-bold text-gray-800">One Piece</h3>
-                    <p class="text-gray-600 text-sm mt-2">La leggendaria ricerca del tesoro più grande del mondo.</p>
+                    <p class="text-gray-600 text-lg mt-2">La leggendaria ricerca del tesoro pi&ugrave grande del mondo.</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">Disponibile</span>
                         <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
@@ -414,11 +441,11 @@
                 </div>
                 <div class="p-4">
                     <h3 class="font-bold text-gray-800">Demon Slayer Vol.8</h3>
-                    <p class="text-gray-600 text-sm mt-2">La battaglia contro i demoni continua con azione mozzafiato!</p>
+                    <p class="text-gray-600 text-lg mt-2">La battaglia contro i demoni continua con azione mozzafiato!</p>
                     <div class="mt-4 flex justify-between items-center">
                         <div>
-                            <span class="text-gray-400 line-through text-sm mr-2">€7.99</span>
-                            <span class="text-nekopeach font-bold">€6.79</span>
+                            <span class="text-gray-400 line-through text-sm mr-2">&#8364 7.99</span>
+                            <span class="text-nekopeach font-bold">&#8364 6.79</span>
                         </div>
                         <button class="bg-nekopeach hover:bg-nekored text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-cart-plus mr-1"></i> Acquista
@@ -440,9 +467,9 @@
                 </div>
                 <div class="p-4">
                     <h3 class="font-bold text-gray-800">Death Note Vol.1</h3>
-                    <p class="text-gray-600 text-sm mt-2">Light Yagami trova un quaderno che può uccidere chiunque.</p>
+                    <p class="text-gray-600 text-lg mt-2">Light Yagami trova un quaderno che pu&ograve uccidere chiunque.</p>
                     <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">€7.99</span>
+                        <span class="text-nekopeach font-bold">&#8364 7.99</span>
                         <button class="bg-nekopeach hover:bg-nekored text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-cart-plus mr-1"></i> Acquista
                         </button>
@@ -464,15 +491,15 @@
                 </div>
                 <div class="p-4">
                     <h3 class="font-bold text-gray-800">My Hero Academia Vol.32</h3>
-                    <p class="text-gray-600 text-sm mt-2">La nuova sfida della Classe 1-A contro gli eroi professionisti!</p>
+                    <p class="text-gray-600 text-lg mt-2">La nuova sfida della Classe 1-A contro gli eroi professionisti!</p>
                     <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">€8.99</span>
+                        <span class="text-nekopeach font-bold">&#8364 8.99</span>
                         <button class="bg-nekopeach hover:bg-nekored text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-cart-plus mr-1"></i> Acquista
                         </button>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Novità</span>
+                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Novit&agrave</span>
                         <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Spedizione rapida</span>
                     </div>
                 </div>
@@ -512,7 +539,7 @@
                 </div>
             </div>
             <div class="text-center md:text-left">
-                <h3 class="text-2xl font-bold text-white mb-2">Offerta Speciale</h3>
+                <h3 class="text-2xl font-bold text-white mb-2"> Offerta Speciale</h3>
                 <p class="text-white/90">Ottieni il 15% di sconto sui manga completi con il codice: <span class="font-bold">NEKO15</span></p>
                 <button class="mt-4 bg-white text-nekopeach px-6 py-2 rounded-full font-bold hover:bg-pink-50 transition">
                     <i class="fas fa-tag mr-2"></i> Usa Codice
@@ -524,7 +551,7 @@
 
 <!-- Fixed chat button -->
 <div class="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-nekopink to-nekopeach rounded-full flex items-center justify-center shadow-xl z-50">
-    <i class="fas fa-comment-alt text-white text-2xl"></i>
+    <i class="fas fa-comment-alt text-white text-lg"></i>
     <div class="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></div>
 </div>
 
