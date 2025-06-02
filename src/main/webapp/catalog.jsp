@@ -133,18 +133,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        .product-card::after {
-            content: 'NekoPop';
-            position: absolute;
-            top: 10px;
-            right: -35px;
-            background: #E55458;
-            color: #f2d5bb;
-            padding: 3px 35px;
-            transform: rotate(45deg);
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
+
 
         .header-content {
             background: linear-gradient(145deg, #E55458, #f2d5bb);
