@@ -1,5 +1,6 @@
 package model.DAO;
 
+import model.Bean.ProdottoBean;
 import model.Bean.VolumeBean;
 
 import javax.sql.DataSource;
@@ -8,7 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class VolumeDAO implements GenralDAO<VolumeBean>{
+public class VolumeDAO implements GenralDAO<VolumeBean> {
     private static final String TABLE_NAME = "volume";
     private DataSource ds = null;
     private List<String> orderWhiteList = List.of("idVolume", "numVolumi", "prezzo", "Quantità", "dataPubl", "idProdotto");
@@ -25,7 +26,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
 
         String insertSQL = "INSERT INTO " + TABLE_NAME + "(numVolumi, prezzo, Quantità, dataPubl, imgVol, idProdotto)" + " VALUES (?,?,?,?,?,?)";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, bean.getNumVolumi());
@@ -33,7 +34,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
             ps.setInt(3, bean.getQuantita());
             ps.setString(4, bean.getDataPublFormatted().toString());
             ps.setBytes(5, bean.getImgVol());
-            ps.setInt(5, bean.getIdProdotto());
+            ps.setInt(6, bean.getIdProdotto());
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -57,7 +58,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
 
         String deleteSQL = "DELETE FROM " + TABLE_NAME + " WHERE idVolume = ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(deleteSQL);
             ps.setInt(1, code);
@@ -70,7 +71,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
                 if (con != null) con.close();
             }
         }
-        return(result != 0);
+        return (result != 0);
     }
 
     @Override
@@ -81,7 +82,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
 
         String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idVolume = ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
             ps.setInt(1, code);
@@ -115,7 +116,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
 
         String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idProdotto = ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
             ps.setInt(1, code);
@@ -149,10 +150,10 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
         Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
+        if (order != null && orderWhiteList.contains(order.strip())) {
             selectAllSQL += " ORDER BY " + order.strip();
         }
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
 
@@ -186,13 +187,13 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
         Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
+        if (order != null && orderWhiteList.contains(order.strip())) {
             selectAllSQL += " ORDER BY " + order.strip();
         }
-        if(limit > 0 && page > 0){
+        if (limit > 0 && page > 0) {
             selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
         }
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
 
@@ -225,16 +226,16 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
         Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if(!serch.isEmpty()){
+        if (!serch.isEmpty()) {
             selectAllSQL += "Join prodotto on prodotto.idProdotto = volume.idProdotto " + "WHERE LOWER(prodotto.nome) " + " LIKE " + "'%" + serch.toLowerCase() + "%'";
         }
-        if(order != null && orderWhiteList.contains(order.strip())){
+        if (order != null && orderWhiteList.contains(order.strip())) {
             selectAllSQL += " ORDER BY " + order.strip();
         }
-        if(limit > 0 && page > 0){
+        if (limit > 0 && page > 0) {
             selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
         }
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
 
@@ -259,5 +260,49 @@ public class VolumeDAO implements GenralDAO<VolumeBean>{
             }
         }
         return volumes;
+    }
+
+    public boolean uppdate(VolumeBean vol) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+        String updateSQL = "";
+
+        if(vol.getImgVol() != null) {
+            updateSQL = "update " + TABLE_NAME + " set numVolumi = ?, prezzo = ?, quantità = ?, dataPubl = ?, imgVol = ?, idProdotto = ? where idProdotto = ? and numVolumi = ?";
+        } else {
+            updateSQL = "update " + TABLE_NAME + " set numVolumi = ?, prezzo = ?, quantità = ?, dataPubl = ?, idProdotto = ? where idProdotto = ? and numVolumi = ?";
+        }
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            if(vol.getImgVol() != null) {
+                ps.setInt(1, vol.getNumVolumi());
+                ps.setDouble(2, vol.getPrezzo());
+                ps.setInt(3, vol.getQuantita());
+                ps.setDate(4, vol.getDataPublFormatted());
+                ps.setBytes(5, vol.getImgVol());
+                ps.setInt(6, vol.getIdProdotto());
+                ps.setInt(7, vol.getIdProdotto());
+                ps.setInt(8, vol.getNumVolumi());
+            } else {
+                ps.setInt(1, vol.getNumVolumi());
+                ps.setDouble(2, vol.getPrezzo());
+                ps.setInt(3, vol.getQuantita());
+                ps.setDate(4, vol.getDataPublFormatted());;
+                ps.setInt(5, vol.getIdProdotto());
+                ps.setInt(6, vol.getIdProdotto());
+                ps.setInt(7, vol.getNumVolumi());
+            }
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
     }
 }
