@@ -107,10 +107,7 @@
             z-index: -1;
         }
 
-        .cat-elements i {
-            color: #fbd8da;
-            animation: float 4s infinite ease-in-out;
-        }
+
 
         .cherry-blossom {
             position: absolute;
@@ -777,25 +774,12 @@
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
 
-        // Cat decorations
-        const catEmojis = ['😺', '😸', '😹', '😻', '🙀', '🐱', '🐾'];
 
-        // Generate cat emoji decorations
-        for (let i = 0; i < 15; i++) {
-            const cat = document.createElement('div');
-            cat.className = 'cat-elements absolute z-0';
-            cat.style.left = `${Math.random() * viewportWidth}px`;
-            cat.style.top = `${Math.random() * viewportHeight}px`;
-            cat.innerHTML = `<i>${catEmojis[Math.floor(Math.random() * catEmojis.length)]}</i>`;
-            cat.style.fontSize = `${12 + Math.random() * 24}px`;
-            cat.style.opacity = `0.${Math.floor(1 + Math.random() * 9)}`;
-            cat.style.animationDuration = `${4 + Math.random() * 12}s`;
-            cat.style.animationDelay = `${Math.random() * 5}s`;
-            decorationsContainer.appendChild(cat);
-        }
+
+
 
         // Generate cherry blossom decorations
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 15; i++) {
             const blossom = document.createElement('div');
             blossom.className = 'cherry-blossom';
             blossom.style.left = `${Math.random() * viewportWidth}px`;
@@ -805,6 +789,7 @@
             decorationsContainer.appendChild(blossom);
         }
     }
+
 
     // Generate decorations on page load
     document.addEventListener('DOMContentLoaded', generateDecorations);
