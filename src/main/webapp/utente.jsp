@@ -17,15 +17,22 @@
                         nekobeige: '#f2d5bb',
                         nekoorange: '#f29966',
                         nekored: '#f24535',
-                        nekopurple: '#9c6ade',
-                        kawaiblue: '#6a8cde',
-                        kawaililac: '#d8b4fe'
+
                     }
                 }
             }
         }
     </script>
     <style>
+        @font-face {
+            font-family: 'Milkyway';  /* Scegli un nome per il font */
+            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+            font-weight: normal;        /* Peso del font (es. 400, 700) */
+            font-style: normal;        /* normale, italic, ecc. */
+            font-display: swap;        /* Ottimizza il rendering */
+        }
+
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
@@ -46,9 +53,31 @@
         body {
             font-family: 'Nunito', sans-serif;
             background-color: #f0f0f0;
+
+            /* Immagine di background principale */
+            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+
+            /* Centra e copre tutto lo spazio senza ripetizioni */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            /* Altezza minima = viewport height */
             min-height: 100vh;
+
+            /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
+            background-attachment: scroll;
+
+            /* Ottimizzazione prestazioni */
+            image-rendering: smooth;
             overflow-x: hidden;
         }
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed;
+            }
+        }
+
 
         .folder-tab {
             position: relative;
@@ -266,6 +295,24 @@
             font-size: 0.7rem;
             font-weight: bold;
         }
+        .text-3xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-lg{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .fa-star, .fas, .far {
+            font-style: normal !important;
+        }
     </style>
 </head>
 <body class="relative overflow-x-hidden">
@@ -278,11 +325,11 @@
         <!-- Logo -->
         <div class="flex items-center">
             <div class="relative">
-                <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-kawaililac z-10 flex items-center justify-center animate-pulse">
+                <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-nekopeach z-10 flex items-center justify-center animate-pulse">
                     <i class="fas fa-user text-white text-2xl"></i>
                 </div>
                 <div class="w-20 h-20 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center">
-                    <i class="fas fa-user-astronaut text-3xl text-nekopeach"></i>
+                    <i class="fas fa-user-astronaut text-2xl text-nekopeach"></i>
                 </div>
             </div>
             <div class="ml-4">
@@ -322,12 +369,12 @@
                         </div>
                     </div>
 
-                    <h3 class="text-xl font-bold mt-4 text-gray-800">NekoFan123</h3>
+                    <h3 class="text-2xl font-bold mt-4 text-gray-800">NekoFan123</h3>
                     <p class="text-gray-600">Membro dal: 15/03/2022</p>
 
                     <div class="mt-4 flex justify-center space-x-2">
                         <span class="badge bg-nekopink text-nekopeach">Premium</span>
-                        <span class="badge bg-kawaiblue text-white">Verified</span>
+                        <span class="badge bg-nekopink text-nekopeach">Verified</span>
                     </div>
                 </div>
 
@@ -346,12 +393,12 @@
                             <div class="text-nekopeach font-bold text-xl">24</div>
                             <div class="text-xs text-gray-600">Ordini</div>
                         </div>
-                        <div class="stats-card bg-kawaiblue/20 p-3 rounded-lg">
-                            <div class="text-kawaiblue font-bold text-xl">128</div>
+                        <div class="stats-card bg-nekored/20 p-3 rounded-lg">
+                            <div class="text-nekopeach font-bold text-xl">128</div>
                             <div class="text-xs text-gray-600">Punti</div>
                         </div>
-                        <div class="stats-card bg-nekopurple/20 p-3 rounded-lg">
-                            <div class="text-nekopurple font-bold text-xl">8</div>
+                        <div class="stats-card bg-nekoorange/20 p-3 rounded-lg">
+                            <div class="text-nekored font-bold text-xl">8</div>
                             <div class="text-xs text-gray-600">Liste</div>
                         </div>
                     </div>
@@ -383,15 +430,15 @@
 
             <!-- Rewards Card -->
             <div class="profile-card bg-white border-2 border-nekoorange mt-6">
-                <div class="bg-gradient-to-r from-nekopink to-nekoorange p-4">
-                    <h3 class="text-lg font-bold text-white flex items-center">
-                        <i class="fas fa-trophy mr-2"></i> I tuoi premi
+                <div class="bg-gradient-to-r from-nekoorange to-nekopink p-4">
+                    <h3 class="text-lg font-bold text-white flex items-center" style="font-size: 30px">
+                        <i class= "fas fa-trophy mr-2" style="font-size: 30px" ></i> I tuoi premi
                     </h3>
                 </div>
                 <div class="p-4">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 rounded-full bg-nekopink flex items-center justify-center mr-3">
-                            <i class="fas fa-medal text-nekopeach text-xl"></i>
+                            <i class= "fas fa-medal text-nekopeach text-2xl"></i>
                         </div>
                         <div>
                             <h4 class="font-bold text-gray-800">Collezionista</h4>
@@ -399,8 +446,8 @@
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-full bg-kawaiblue/20 flex items-center justify-center mr-3">
-                            <i class="fas fa-star text-kawaiblue text-xl"></i>
+                        <div class="w-12 h-12 rounded-full bg-nekopink flex items-center justify-center mr-3">
+                            <i class="fas fa-star text-nekopeach text-2xl"></i>
                         </div>
                         <div>
                             <h4 class="font-bold text-gray-800">Fan accanito</h4>
@@ -420,9 +467,9 @@
         <div class="lg:col-span-3">
             <!-- Dashboard Tab -->
             <div class="tab-content active" id="dashboard-tab">
-                <div class="profile-card bg-white border-2 border-kawaiblue">
-                    <div class="bg-gradient-to-r from-kawaiblue to-nekopurple p-4">
-                        <h2 class="text-xl font-bold text-white flex items-center">
+                <div class="profile-card bg-white border-2 border-nekored">
+                    <div class="bg-gradient-to-r from-nekored to-nekoorange p-4">
+                        <h2 class="text-xl font-bold text-white flex items-center" style="font-size: 30px">
                             <i class="fas fa-tachometer-alt mr-3"></i> La tua dashboard
                         </h2>
                     </div>
@@ -452,7 +499,7 @@
                                             <div class="text-sm text-gray-500">+2 altri</div>
                                         </div>
                                         <div class="mt-3 flex justify-between items-center">
-                                            <span class="font-bold text-nekopeach">€42,97</span>
+                                            <span class="font-bold text-nekopeach">&#8364 42,97</span>
                                             <a href="#" class="text-sm text-kawaiblue hover:underline">Dettagli</a>
                                         </div>
                                     </div>
@@ -471,7 +518,7 @@
                                             </div>
                                         </div>
                                         <div class="mt-3 flex justify-between items-center">
-                                            <span class="font-bold text-nekopeach">€39,99</span>
+                                            <span class="font-bold text-nekopeach">&#8364 39,99</span>
                                             <a href="#" class="text-sm text-kawaiblue hover:underline">Dettagli</a>
                                         </div>
                                     </div>
@@ -481,8 +528,8 @@
                                 </div>
                             </div>
 
-                            <div class="bg-kawaiblue/10 p-6 rounded-xl">
-                                <h3 class="font-bold text-lg text-kawaiblue mb-4 flex items-center">
+                            <div class="bg-nekored/10 p-6 rounded-xl">
+                                <h3 class="font-bold text-lg text-nekopeach mb-4 flex items-center">
                                     <i class="fas fa-heart mr-2"></i> Lista desideri
                                 </h3>
                                 <div class="space-y-4">
@@ -495,7 +542,7 @@
                                             <p class="text-xs text-gray-600">Disponibile dal 15/11</p>
                                         </div>
                                         <div class="text-right">
-                                            <span class="block font-bold text-nekopeach">€14,99</span>
+                                            <span class="block font-bold text-nekopeach">&#8364 14,99</span>
                                             <button class="text-xs text-kawaiblue hover:underline">Aggiungi al carrello</button>
                                         </div>
                                     </div>
