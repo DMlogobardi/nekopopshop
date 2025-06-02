@@ -30,8 +30,16 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, bean.getqCarrello());
             ps.setInt(2, bean.getIdCarrello());
-            ps.setInt(3, bean.getIdProdotto());
-            ps.setInt(4, bean.getIdVolume());
+            if(bean.getIdProdotto() != null) {
+                ps.setInt(3, bean.getIdProdotto());
+            } else {
+                ps.setNull(3, Types.INTEGER);
+            }
+            if(bean.getIdVolume() != null) {
+                ps.setInt(4, bean.getIdVolume());
+            } else {
+                ps.setNull(4, Types.INTEGER);
+            }
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();

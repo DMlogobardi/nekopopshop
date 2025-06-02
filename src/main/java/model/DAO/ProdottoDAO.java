@@ -29,10 +29,22 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
             con = ds.getConnection();
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getNome());
-            ps.setInt(2,bean.getQuantita());
-            ps.setDouble(3,bean.getPrezzo());
+            if(bean.getQuantita() != null) {
+                ps.setInt(2, bean.getQuantita());
+            } else {
+                ps.setNull(2, Types.INTEGER);
+            }
+            if(bean.getPrezzo() != null) {
+                ps.setDouble(3, bean.getPrezzo());
+            } else {
+                ps.setNull(3, Types.DOUBLE);
+            }
             ps.setString(4,bean.getAutore());
-            ps.setBytes(5,bean.getImgProd());
+            if(bean.getImgProd() != null) {
+                ps.setBytes(5,bean.getImgProd());
+            } else {
+                ps.setNull(5, Types.BLOB);
+            }
             ps.setString(6,bean.getDescrizione());
 
             ps.executeUpdate();
@@ -227,23 +239,35 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         return prodotti;
     }
 
-    public boolean uppdate (ProdottoBean prod) throws SQLException {
+    public boolean uppdate (ProdottoBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
         int result = 0;
 
-        String updateSQL = "update " + TABLE_NAME + "set nome = ?, quantità = ?, prezzo = ?, autore = ?, imgProd = ?, descrizione = ? where idProdotto = ?";
+        String updateSQL = "update " + TABLE_NAME + " set nome = ?, quantità = ?, prezzo = ?, autore = ?, imgProd = ?, descrizione = ? where idProdotto = ?";
 
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(updateSQL);
-            ps.setString(1, prod.getNome());
-            ps.setInt(2, prod.getQuantita());
-            ps.setDouble(3, prod.getPrezzo());
-            ps.setString(4, prod.getAutore());
-            ps.setBytes(5, prod.getImgProd());
-            ps.setString(6, prod.getDescrizione());
-            ps.setInt(7, prod.getIdProdotto());
+            ps.setString(1, bean.getNome());
+            if(bean.getQuantita() != null) {
+                ps.setInt(2, bean.getQuantita());
+            } else {
+                ps.setNull(2, Types.INTEGER);
+            }
+            if(bean.getPrezzo() != null) {
+                ps.setDouble(3, bean.getPrezzo());
+            } else {
+                ps.setNull(3, Types.DOUBLE);
+            }
+            ps.setString(4,bean.getAutore());
+            if(bean.getImgProd() != null) {
+                ps.setBytes(5,bean.getImgProd());
+            } else {
+                ps.setNull(5, Types.BLOB);
+            }
+            ps.setString(6,bean.getDescrizione());
+            ps.setInt(7, bean.getIdProdotto());
 
             result = ps.executeUpdate();
         } finally {

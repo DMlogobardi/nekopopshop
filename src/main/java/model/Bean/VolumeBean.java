@@ -60,7 +60,7 @@ public class VolumeBean implements Serializable {
     }
 
     public Date getDataPublFormatted() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date =LocalDate.parse(dataPubl, format);
         return Date.valueOf(date);
     }

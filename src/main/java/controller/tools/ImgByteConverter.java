@@ -34,12 +34,17 @@ public class ImgByteConverter {
     }
 
     public final static Optional<Part> getPartByID(Collection<Part> parts, int id) {
-        Optional<Part> imgPart = parts.stream().filter(part -> {
-                    String nomeFile = part.getSubmittedFileName(); // es: "img_20.jpg"
-                    Matcher matcher = Pattern.compile(".*?(\\d+)\\.[^.]+$").matcher(nomeFile);
-                    return matcher.matches() && Integer.parseInt(matcher.group(1)) == id;
-                })
-                .findFirst();
-        return imgPart;
+        try {
+            Optional<Part> imgPart = parts.stream().filter(part -> {
+                        String nomeFile = part.getSubmittedFileName();
+                        Matcher matcher = Pattern.compile(".*?(\\d+)\\.[^.]+$").matcher(nomeFile);
+                        return matcher.matches() && Integer.parseInt(matcher.group(1)) == id;
+                    })
+                    .findFirst();
+            return imgPart;
+        } catch (Exception e) {
+            System.out.println("Exception in ImgByteConverter.getPartByID: " + e.getMessage());
+            return Optional.empty();
+        }
     }
 }

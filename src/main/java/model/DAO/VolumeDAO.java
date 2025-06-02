@@ -34,7 +34,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
             ps.setInt(3, bean.getQuantita());
             ps.setString(4, bean.getDataPublFormatted().toString());
             ps.setBytes(5, bean.getImgVol());
-            ps.setInt(5, bean.getIdProdotto());
+            ps.setInt(6, bean.getIdProdotto());
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -266,19 +266,34 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         Connection con = null;
         PreparedStatement ps = null;
         int result = 0;
+        String updateSQL = "";
 
-        String updateSQL = "update " + TABLE_NAME + "set numVolumi = ?, prezzo = ?, quantità = ?, dataPubl = ?, imgProd = ?, idProdotto = ? where idVolume = ?";
-
+        if(vol.getImgVol() != null) {
+            updateSQL = "update " + TABLE_NAME + " set numVolumi = ?, prezzo = ?, quantità = ?, dataPubl = ?, imgVol = ?, idProdotto = ? where idProdotto = ? and numVolumi = ?";
+        } else {
+            updateSQL = "update " + TABLE_NAME + " set numVolumi = ?, prezzo = ?, quantità = ?, dataPubl = ?, idProdotto = ? where idProdotto = ? and numVolumi = ?";
+        }
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(updateSQL);
-            ps.setInt(1, vol.getNumVolumi());
-            ps.setDouble(2, vol.getPrezzo());
-            ps.setInt(3, vol.getQuantita());
-            ps.setDate(4, vol.getDataPublFormatted());
-            ps.setBytes(5, vol.getImgVol());
-            ps.setInt(6, vol.getIdProdotto());
-            ps.setInt(7, vol.getIdVolume());
+            if(vol.getImgVol() != null) {
+                ps.setInt(1, vol.getNumVolumi());
+                ps.setDouble(2, vol.getPrezzo());
+                ps.setInt(3, vol.getQuantita());
+                ps.setDate(4, vol.getDataPublFormatted());
+                ps.setBytes(5, vol.getImgVol());
+                ps.setInt(6, vol.getIdProdotto());
+                ps.setInt(7, vol.getIdProdotto());
+                ps.setInt(8, vol.getNumVolumi());
+            } else {
+                ps.setInt(1, vol.getNumVolumi());
+                ps.setDouble(2, vol.getPrezzo());
+                ps.setInt(3, vol.getQuantita());
+                ps.setDate(4, vol.getDataPublFormatted());;
+                ps.setInt(5, vol.getIdProdotto());
+                ps.setInt(6, vol.getIdProdotto());
+                ps.setInt(7, vol.getNumVolumi());
+            }
 
             result = ps.executeUpdate();
         } finally {

@@ -6,10 +6,10 @@ public class ContenutoBean implements Serializable {
     private int idContenuto;
     private int qCarrello;
     private int idCarrello;
-    private int idProdotto;
-    private int idVolume;
+    private Integer idProdotto;
+    private Integer idVolume;
 
-    public ContenutoBean(int idContenuto, int qCarrello, int idCarrello, int idProdotto, int idVolume) {
+    public ContenutoBean(int idContenuto, int qCarrello, int idCarrello, Integer idProdotto, Integer idVolume) {
         this.idContenuto = idContenuto;
         this.idCarrello = idCarrello;
         this.idProdotto = idProdotto;
@@ -29,11 +29,11 @@ public class ContenutoBean implements Serializable {
             this.idCarrello = idCarrello;
     }
 
-    public int getIdProdotto() {
+    public Integer getIdProdotto() {
         return idProdotto;
     }
 
-    public void setIdProdotto(int idProdotto) {
+    public void setIdProdotto(Integer idProdotto) {
         if(idProdotto >= 0)
             this.idProdotto = idProdotto;
     }
@@ -47,11 +47,11 @@ public class ContenutoBean implements Serializable {
             this.qCarrello = qCarrello;
     }
 
-    public int getIdVolume() {
+    public Integer getIdVolume() {
         return idVolume;
     }
 
-    public void setIdVolume(int idVolume) {
+    public void setIdVolume(Integer idVolume) {
         this.idVolume = idVolume;
     }
 }
