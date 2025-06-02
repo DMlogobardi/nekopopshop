@@ -249,7 +249,7 @@
                 <a href="catalog.jsp" class="folder-tab active"><i class="fas fa-book mr-2"></i> Catalogo</a>
                 <a href="about.jsp" class="folder-tab"><i class="fas fa-info-circle mr-2"></i> Chi Siamo</a>
                 <a href="cart.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Carrello</a>
-                <a href="utente.jsp" class="folder-tab"><i class="fas fa-user mr-2"></i> Profilo</a>
+                <a href="utente.jsp" class="folder-tab"><i class="fas fa-user mr-2"></i> Utente</a>
             </div>
         </div>
     </div>
