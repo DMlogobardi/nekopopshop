@@ -233,6 +233,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                 if (con != null) con.close();
             }
         }
+        System.out.println(volumes);
         return volumes;
     }
 
@@ -295,6 +296,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                 if (con != null) con.close();
             }
         }
+
         return volumes;
     }
 
