@@ -1,5 +1,7 @@
 package model.Bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -59,6 +61,7 @@ public class VolumeBean implements Serializable {
         return dataPubl;
     }
 
+    @JsonIgnore
     public Date getDataPublFormatted() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date =LocalDate.parse(dataPubl, format);
