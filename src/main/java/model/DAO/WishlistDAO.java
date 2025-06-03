@@ -11,7 +11,7 @@ import java.util.List;
 public class WishlistDAO implements GenralDAO<WishlistBean>{
     private static final String TABLE_NAME = "wishlist";
     private DataSource ds = null;
-    private List<String> orderWhiteList = List.of("idWishList", "idProdotto", "idCliente");
+    private List<String> orderWhiteList = List.of("idWishList", "idProdotto" , "idVolume", "idCliente");
 
     public WishlistDAO(DataSource ds) {
         this.ds = ds;
@@ -23,13 +23,14 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = "insert into" + TABLE_NAME + "(idProdotto, idCliente) values (?,?)";
+        String insertSQL = "insert into" + TABLE_NAME + "(idProdotto , idCliente, idVolume) values (?,?,?)";
 
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, bean.getIdProdotto());
             ps.setInt(2, bean.getIdCliente());
+            ps.setInt(3, bean.getIdVolume());
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -87,7 +88,8 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
                 wishL = new WishlistBean(
                         rs.getInt("idWishList"),
                         rs.getInt("idProdotto"),
-                        rs.getInt("idCliente")
+                        rs.getInt("idCliente"),
+                        rs.getInt("idVolume")
                 );
             }
         } finally {
@@ -106,20 +108,23 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
         PreparedStatement ps = null;
         Collection<WishlistBean> wishLs = new LinkedList<WishlistBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idWishList");
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                WishlistBean wishL = new WishlistBean(
                        rs.getInt("idWishList"),
                        rs.getInt("idProdotto"),
-                       rs.getInt("idCliente")
+                       rs.getInt("idCliente"),
+                       rs.getInt("idVolume")
                );
                wishLs.add(wishL);
             }
@@ -139,23 +144,37 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
         PreparedStatement ps = null;
         Collection<WishlistBean> wishLs = new LinkedList<WishlistBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
-        if(limit > 0 && page > 0){
-            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ? limit ? offset ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idWishList");
+
+            if (limit > 0 && page > 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(2, 10);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, 0);
+            } else {
+                ps.setInt(2, 10);
+                ps.setInt(3, 0);
+            }
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 WishlistBean wishL = new WishlistBean(
                         rs.getInt("idWishList"),
                         rs.getInt("idProdotto"),
-                        rs.getInt("idCliente")
+                        rs.getInt("idCliente"),
+                        rs.getInt("idVolume")
                 );
                 wishLs.add(wishL);
             }

@@ -109,13 +109,16 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
         PreparedStatement ps = null;
         Collection<IndirizzoBean> indirizzi = new LinkedList<IndirizzoBean>();
 
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " ORDER BY " + order.strip();
-        }
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " ORDER BY ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idIndirizzo");
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 IndirizzoBean indirizzo = new IndirizzoBean(
@@ -143,16 +146,30 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
         PreparedStatement ps = null;
         Collection<IndirizzoBean> indirizzi = new LinkedList<IndirizzoBean>();
 
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " ORDER BY " + order.strip();
-        }
-        if(limit > 0 && page > 0){
-            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
-        }
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " ORDER BY ? LIMIT ? OFFSET ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idIndirizzo");
+
+            if (limit > 0 && page > 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(2, 10);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, 0);
+            } else {
+                ps.setInt(2, 10);
+                ps.setInt(3, 0);
+            }
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 IndirizzoBean indirizzo = new IndirizzoBean(

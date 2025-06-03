@@ -8,14 +8,14 @@ public class ReaderBean implements Serializable {
     private int idReader;
     private String dataAcquisto;
     private String dataUltimaApertura;
-    private int idProdotto;
+    private int idVolume;
     private int idCliente;
 
-    public ReaderBean(int idReader, String dataAcquisto, String dataUltimaApertura, int idProdotto,int idCliente) {
+    public ReaderBean(int idReader, String dataAcquisto, String dataUltimaApertura, int idVolume,int idCliente) {
         this.idReader = idReader;
         this.dataAcquisto = dataAcquisto;
         this.dataUltimaApertura = dataUltimaApertura;
-        this.idProdotto = idProdotto;
+        this.idVolume = idVolume;
         this.idCliente = idCliente;
     }
 
@@ -52,8 +52,8 @@ public class ReaderBean implements Serializable {
             this.dataUltimaApertura = dataUltimaApertura;
     }
 
-    public int getIdProdotto() {
-        return idProdotto;
+    public int getIdVolume() {
+        return idVolume;
     }
 
     public int getIdCliente() {
