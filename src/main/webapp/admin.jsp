@@ -1230,12 +1230,12 @@
                     <div>
                         <label class="form-label">Prezzo</label>
                         <div class="relative">
-                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">&#8364</span>
                             <input type="number" class="form-input w-full pl-8" placeholder="0.00">
                         </div>
                     </div>
                     <div>
-                        <label class="form-label">Quantità in Stock</label>
+                        <label class="form-label">Quantit&agrave in Stock</label>
                         <input type="number" class="form-input w-full" placeholder="0">
                     </div>
                 </div>
