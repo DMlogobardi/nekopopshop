@@ -52,12 +52,22 @@
     body {
       font-family: 'Nunito', sans-serif;
       background-color: #f0f0f0;
+
+      /* Immagine di background principale */
       background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+
+      /* Centra e copre tutto lo spazio senza ripetizioni */
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
+
+      /* Altezza minima = viewport height */
       min-height: 100vh;
+
+      /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
       background-attachment: scroll;
+
+      /* Ottimizzazione prestazioni */
       image-rendering: smooth;
       overflow-x: hidden;
     }
@@ -428,7 +438,7 @@
       </div>
       <div class="ml-4">
         <h1 class="text-3xl font-bold"><span class="nekotag">Aggiungi Prodotto</span></h1>
-        <p class="text-xl text-nekopeach font-bold" style="font-size: 20px; background: linear-gradient(90deg, #E55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pannello di amministrazione</p>
+        <p class="text-xl text-nekopeach font-bold" style="font-size: 25px; background: linear-gradient(90deg, #E55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pannello di amministrazione</p>
       </div>
     </div>
 
@@ -442,6 +452,7 @@
         <a href="admin_orders.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Ordini</a>
         <a href="admin_users.jsp" class="folder-tab"><i class="fas fa-users mr-2"></i> Utenti</a>
         <a href="admin_addproduct.jsp" class="folder-tab active"><i class="fas fa-plus-circle mr-2"></i> Aggiungi</a>
+        <a href="modificaprodotto.jsp" class="folder-tab"><i class="fas fa-edit mr-2"></i> Modifica</a>
         <a href="logout.jsp" class="folder-tab"><i class="fas fa-sign-out-alt mr-2"></i> Esci</a>
       </div>
     </div>
@@ -544,7 +555,7 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="product-price">Prezzo (€)*</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="product-price">Prezzo (&#8364)*</label>
                     <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-price" type="number" min="0" step="0.01" required>
                   </div>
                   <div>
@@ -561,7 +572,7 @@
                       <span class="category-tag" data-value="limited">Edizione Limitata</span>
                       <span class="category-tag" data-value="preorder">Preordine</span>
                       <span class="category-tag" data-value="exclusive">Esclusiva</span>
-                      <span class="category-tag" data-value="new">Novità</span>
+                      <span class="category-tag" data-value="new">Novit&agrave</span>
                       <span class="category-tag" data-value="sale">In Sconto</span>
                     </div>
                   </div>
@@ -584,7 +595,7 @@
         <!-- Step 3: Images & Stock -->
         <div class="step-content" id="step3-content">
           <div class="mb-6">
-            <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Immagini & Disponibilità</h3>
+            <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Immagini & Disponibilit&agrave</h3>
             <div class="grid grid-cols-1 gap-6">
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2">Immagini del prodotto*</label>
@@ -605,11 +616,11 @@
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2" for="product-stock">Quantità disponibile*</label>
+                  <label class="block text-gray-700 text-sm font-bold mb-2" for="product-stock">Quantit&agrave disponibile*</label>
                   <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-stock" type="number" min="0" required>
                 </div>
                 <div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2" for="product-availability">Disponibilità*</label>
+                  <label class="block text-gray-700 text-sm font-bold mb-2" for="product-availability">Disponibilit&agrave*</label>
                   <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-availability" required>
                     <option value="in_stock">Disponibile</option>
                     <option value="preorder">Preordine</option>
@@ -623,7 +634,7 @@
                 <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-release" type="date">
               </div>
               <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for= "product-dimensions" >Dimensioni (cm)</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Dimensioni (cm)</label>
                 <div class="grid grid-cols-3 gap-2">
                   <div>
                     <label class="block text-xs text-gray-500 mb-1">Larghezza</label>
@@ -634,7 +645,7 @@
                     <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-height" type="number" min="0" step="0.1">
                   </div>
                   <div>
-                    <label class="block text-xs text-gray-500 mb-1">Profondità</label>
+                    <label class="block text-xs text-gray-500 mb-1">Profondit&agrave</label>
                     <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-depth" type="number" min="0" step="0.1">
                   </div>
                 </div>
@@ -693,7 +704,7 @@
               </div>
               <div>
                 <p class="text-sm text-gray-600">Prezzo</p>
-                <p class="font-medium" id="confirm-price">€ 49.99</p>
+                <p class="font-medium" id="confirm-price">&#8364 49.99</p>
               </div>
               <div>
                 <p class="text-sm text-gray-600">Sconto</p>
@@ -706,19 +717,19 @@
             </div>
             <div>
               <p class="text-sm text-gray-600">Categorie</p>
-              <p class="font-medium" id="confirm-categories">Anime, Nendoroid, Novità, Edizione Limitata</p>
+              <p class="font-medium" id="confirm-categories">Anime, Nendoroid, Novit&agrave, Edizione Limitata</p>
             </div>
           </div>
 
           <div class="bg-nekopink/10 p-6 rounded-xl mb-6">
-            <h4 class="font-bold text-nekopeach mb-3">Disponibilità & Immagini</h4>
+            <h4 class="font-bold text-nekopeach mb-3">Disponibilit&agrave & Immagini</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <p class="text-sm text-gray-600">Disponibilità</p>
+                <p class="text-sm text-gray-600">Disponibilit&agrave</p>
                 <p class="font-medium" id="confirm-availability">Disponibile</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Quantità</p>
+                <p class="text-sm text-gray-600">Quantit&agrave</p>
                 <p class="font-medium" id="confirm-stock">15</p>
               </div>
               <div>
@@ -727,7 +738,7 @@
               </div>
               <div>
                 <p class="text-sm text-gray-600">Dimensioni</p>
-                <p class="font-medium" id="confirm-dimensions">10 × 15 × 8 cm</p>
+                <p class="font-medium" id="confirm-dimensions">10 &times 15 &times 8 cm</p>
               </div>
             </div>
             <div>

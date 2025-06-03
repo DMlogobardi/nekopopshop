@@ -24,12 +24,12 @@
   </script>
   <style>
     @font-face {
-      font-family: 'Milkyway';
-      src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),
+      font-family: 'Milkyway';  /* Scegli un nome per il font */
+      src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
       url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
+      font-weight: normal;        /* Peso del font (es. 400, 700) */
+      font-style: normal;        /* normale, italic, ecc. */
+      font-display: swap;        /* Ottimizza il rendering */
     }
 
     @keyframes float {
@@ -52,12 +52,22 @@
     body {
       font-family: 'Nunito', sans-serif;
       background-color: #f0f0f0;
+
+      /* Immagine di background principale */
       background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+
+      /* Centra e copre tutto lo spazio senza ripetizioni */
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
+
+      /* Altezza minima = viewport height */
       min-height: 100vh;
+
+      /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
       background-attachment: scroll;
+
+      /* Ottimizzazione prestazioni */
       image-rendering: smooth;
       overflow-x: hidden;
     }
@@ -297,24 +307,6 @@
       color: #6a8cde;
     }
 
-    .text-3xl{
-      font-family: 'Milkyway', sans-serif;
-      font-size: 2.5rem;
-      color: #333;
-    }
-    .text-xl{
-      font-family: 'Milkyway', sans-serif;
-      font-size: 2.5rem;
-      color: #333;
-    }
-    .text-lg{
-      font-family: 'Milkyway', sans-serif;
-      font-size: 2.5rem;
-      color: #333;
-    }
-    .fa-star, .fas, .far {
-      font-style: normal !important;
-    }
 
     .image-preview {
       width: 100%;
@@ -444,6 +436,26 @@
       transform: scale(1.03);
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
+
+    .text-3xl{
+      font-family: 'Milkyway', sans-serif;
+      font-size: 2.5rem;
+      color: #333;
+    }
+    .text-xl{
+      font-family: 'Milkyway', sans-serif;
+      font-size: 2.5rem;
+      color: #333;
+    }
+    .text-lg{
+      font-family: 'Milkyway', sans-serif;
+      font-size: 2.5rem;
+      color: #333;
+    }
+    .fa-star, .fas, .far {
+      font-style: normal !important;
+    }
+
   </style>
 </head>
 <body class="relative overflow-x-hidden">
@@ -464,8 +476,8 @@
         </div>
       </div>
       <div class="ml-4">
-        <h1 class="text-3xl font-bold"><span class="nekotag">Modifica Prodotto</span></h1>
-        <p class="text-xl text-nekopeach font-bold" style="font-size: 20px; background: linear-gradient(90deg, #E55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pannello di amministrazione</p>
+        <h1 class= "text-3xl font-bold"><span class= " nekotag">Modifica Prodotto</span></h1>
+        <p class="text-xl text-nekopeach font-bold" style="font-size: 25px; background: linear-gradient(90deg, #E55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pannello di amministrazione</p>
       </div>
     </div>
 
@@ -473,10 +485,10 @@
     <div class="w-full lg:w-auto">
       <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
         <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
-        <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
+        <a href= "catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
         <a href="admin_dashboard.jsp" class="folder-tab"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
-        <a href="admin_products.jsp" class="folder-tab"><i class="fas fa-boxes mr-2"></i> Prodotti</a>
-        <a href="admin_orders.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Ordini</a>
+        <a href= "admin_products.jsp" class="folder-tab"><i class="fas fa-boxes mr-2"></i> Prodotti</a>
+        <a href= "admin_orders.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Ordini</a>
         <a href="admin_users.jsp" class="folder-tab"><i class="fas fa-users mr-2"></i> Utenti</a>
         <a href="aggiungiprodotto.jsp" class="folder-tab"><i class="fas fa-plus-circle mr-2"></i> Aggiungi</a>
         <a href="modificaprodotto.jsp" class="folder-tab active"><i class="fas fa-edit mr-2"></i> Modifica</a>
@@ -490,8 +502,8 @@
     <div class="profile-card bg-white border-2 border-nekored">
       <div class="bg-gradient-to-r from-nekopeach to-nekoorange p-4">
         <h2 class="text-xl font-bold text-white flex items-center">
-          <i class="fas fa-box-open mr-3" style="font-size: 30px"></i>
-          <span style="font-size: 30px">Modifica prodotto N° 42</span>
+          <i class= "fas fa-box-open mr-3" style="font-size: 30px"></i>
+          <span style="font-size: 30px">Modifica prodotto N&deg 42</span>
         </h2>
       </div>
 
@@ -515,15 +527,15 @@
         <!-- Stats -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div class="text-center p-3 bg-nekopink/20 rounded-lg">
-            <p class="text-sm text-gray-600">Visite</p>
+            <p class= "text-sm text-gray-600">Visite</p>
             <p class="text-xl font-bold">158 <span class="text-nekopeach ml-2"><i class="fas fa-eye"></i></span></p>
           </div>
           <div class="text-center p-3 bg-nekopink/20 rounded-lg">
             <p class="text-sm text-gray-600">Ordini</p>
-            <p class="text-xl font-bold">12 <span class="text-nekopeach ml-2"><i class="fas fa-shopping-cart"></i></span></p>
+            <p class= "text-xl font-bold">12 <span class="text-nekopeach ml-2"><i class="fas fa-shopping-cart"></i></span></p>
           </div>
           <div class="text-center p-3 bg-nekopink/20 rounded-lg">
-            <p class="text-sm text-gray-600">Recensioni</p>
+            <p class= "text-sm text-gray-600">Recensioni</p>
             <p class="text-xl font-bold">5 <span class="text-nekopeach ml-2"><i class="fas fa-star-half-alt"></i></span></p>
           </div>
           <div class="text-center p-3 bg-nekopink/20 rounded-lg">
@@ -556,7 +568,7 @@
         <div class="step-content active" id="step1-content">
           <form id="product-form">
             <div class="mb-6">
-              <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Informazioni base del prodotto</h3>
+              <h3 class="font-bold text-xl text-nekopeach mb-4" style="font-size: 25px">Informazioni base del prodotto</h3>
               <div class="grid grid-cols-1 gap-4">
                 <div>
                   <label class="block text-gray-700 text-sm font-bold mb-2" for="product-name">Nome prodotto*</label>
@@ -572,9 +584,9 @@
                   <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-series" type="text" value="Hatsune Miku - Sakura">
                 </div>
                 <div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2" for="product-type">Tipo di prodotto*</label>
-                  <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-type" required>
-                    <option value="">Seleziona un tipo</option>
+                  <label class= "block text-gray-700 text-sm font-bold mb-2" for="product-type">Tipo di prodotto*</label>
+                  <select class= "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-type" required>
+                    <option  value=""> Seleziona un tipo</option>
                     <option value="action_figure" selected>Action Figure</option>
                     <option value="funko_pop">Funko Pop</option>
                     <option value="nendoroid">Nendoroid</option>
@@ -599,7 +611,7 @@
         <div class="step-content" id="step2-content">
           <form>
             <div class="mb-6">
-              <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Dettagli del prodotto</h3>
+              <h3 class= "font-bold text-xl text-nekopeach mb-4" style="font-size: 25px">Dettagli del prodotto</h3>
               <div class="grid grid-cols-1 gap-4">
                 <div>
                   <label class="block text-gray-700 text-sm font-bold mb-2" for="product-description">Descrizione*</label>
@@ -618,12 +630,12 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="relative">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="product-price">Prezzo (€)*</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="product-price">Prezzo (&#8364)*</label>
                     <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-price" type="number" min="0" step="0.01" value="49.99" required>
                     <span class="discount-badge" id="discount-badge" style="display: none;">-<span id="discount-percent">0</span>%</span>
                   </div>
                   <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="product-discount">Sconto (%)</label>
+                    <label class= "block text-gray-700 text-sm font-bold mb-2" for="product-discount">Sconto (%)</label>
                     <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-discount" type="number" min="0" max="100" value="10">
                   </div>
                 </div>
@@ -636,7 +648,7 @@
                       <span class="category-tag selected" data-value="limited">Edizione Limitata</span>
                       <span class="category-tag" data-value="preorder">Preordine</span>
                       <span class="category-tag" data-value="exclusive">Esclusiva</span>
-                      <span class="category-tag selected" data-value="new">Novità</span>
+                      <span class="category-tag selected" data-value="new">Novit&agrave</span>
                       <span class="category-tag" data-value="sale">In Sconto</span>
                     </div>
                   </div>
@@ -659,7 +671,7 @@
         <!-- Step 3: Images & Stock -->
         <div class="step-content" id="step3-content">
           <div class="mb-6">
-            <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Immagini & Disponibilità</h3>
+            <h3 class="font-bold text-xl text-nekopeach mb-4" style="font-size: 25px">Immagini & Disponibilit&agrave</h3>
             <div class="grid grid-cols-1 gap-6">
               <!-- Existing images -->
               <div>
@@ -736,11 +748,11 @@
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2" for="product-stock">Quantità disponibile*</label>
+                  <label class="block text-gray-700 text-sm font-bold mb-2" for="product-stock">Quantit&agrave disponibile*</label>
                   <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-stock" type="number" min="0" value="15" required>
                 </div>
                 <div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2" for="product-availability">Disponibilità*</label>
+                  <label class="block text-gray-700 text-sm font-bold mb-2" for="product-availability">Disponibilit&agrave*</label>
                   <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-availability" required>
                     <option value="in_stock" selected>Disponibile</option>
                     <option value="preorder">Preordine</option>
@@ -754,7 +766,7 @@
                 <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-release" type="date" value="2023-05-15">
               </div>
               <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for= "product-dimensions" >Dimensioni (cm)</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" >Dimensioni (cm)</label>
                 <div class="grid grid-cols-3 gap-2">
                   <div>
                     <label class="block text-xs text-gray-500 mb-1">Larghezza</label>
@@ -762,10 +774,10 @@
                   </div>
                   <div>
                     <label class="block text-xs text-gray-500 mb-1">Altezza</label>
-                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-height" type="number" min="0" step="0.1" value="15">
+                    <input class= "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-height" type="number" min="0" step="0.1" value="15">
                   </div>
                   <div>
-                    <label class="block text-xs text-gray-500 mb-1">Profondità</label>
+                    <label class="block text-xs text-gray-500 mb-1">Profondit&agrave</label>
                     <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-depth" type="number" min="0" step="0.1" value="8">
                   </div>
                 </div>
@@ -790,7 +802,7 @@
                     </div>
                     <div>
                       <label class="block text-gray-700 text-sm font-bold mb-2" for="product-sku">SKU interno</label>
-                      <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-sku" type="text" value="GSM-4512023">
+                      <input class= "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="product-sku" type="text" value="GSM-4512023">
                     </div>
                     <div>
                       <label class="block text-gray-700 text-sm font-bold mb-2" for="product-status">Status prodotto</label>
@@ -814,12 +826,12 @@
         </div>
 
         <!-- Step 4: Confirmation -->
-        <div class="step-content" id="step4-content">
+        <div class= "step-content" id="step4-content">
           <div class="text-center mb-6">
             <div class="w-24 h-24 mx-auto rounded-full bg-nekopink flex items-center justify-center mb-4">
               <i class="fas fa-check text-nekopeach text-2xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2" style="font-size: 25px">Conferma modifiche</h3>
+            <h3 class= "text-xl font-bold text-gray-800 mb-2" style="font-size: 25px">Conferma modifiche</h3>
             <p class="text-gray-600 mb-6">Controlla che tutte le informazioni siano corrette prima di salvare le modifiche</p>
 
             <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded">
@@ -827,7 +839,7 @@
                 <i class="fas fa-exclamation-circle mr-2"></i>
                 <span class="font-bold">Attenzione:</span>
               </div>
-              <p class="mt-2 text-sm">Stai per modificare un prodotto esistente. Queste modifiche saranno visibili immediatamente agli utenti.</p>
+              <p class= "mt-2 text-sm">Stai per modificare un prodotto esistente. Queste modifiche saranno visibili immediatamente agli utenti.</p>
               <p class="mt-2 text-sm">Per annullare le modifiche, premi il pulsante "Indietro" o esci dalla pagina senza salvare.</p>
             </div>
 
@@ -841,12 +853,12 @@
             </div>
           </div>
 
-          <div class="bg-nekopink/10 p-6 rounded-xl mb-6">
-            <h4 class="font-bold text-nekopeach mb-3">Modifiche alle informazioni base</h4>
+          <div class= "bg-nekopink/10 p-6 rounded-xl mb-6">
+            <h4 class="font-bold text-nekopeach text-xl mb-3">Modifiche alle informazioni base</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <p class="text-sm text-gray-600">Nome prodotto</p>
-                <p class="font-medium" id="confirm-name">Nendoroid Hatsune Miku: Sakura Version</p>
+                <p class= "font-medium" id="confirm-name">Nendoroid Hatsune Miku: Sakura Version</p>
               </div>
               <div>
                 <p class="text-sm text-gray-600">Marca/Produttore</p>
@@ -872,12 +884,12 @@
             </div>
           </div>
 
-          <div class="bg-nekopink/10 p-6 rounded-xl mb-6">
-            <h4 class="font-bold text-nekopeach mb-3">Modifiche ai dettagli prodotto</h4>
+          <div class= "bg-nekopink/10 p-6 rounded-xl mb-6">
+            <h4 class="font-bold text-nekopeach text-xl mb-3">Modifiche ai dettagli prodotto</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <p class="text-sm text-gray-600">Anime/Serie</p>
-                <p class="font-medium" id="confirm-anime">Vocaloid</p>
+                <p class= "text-sm text-gray-600">Anime/Serie</p>
+                <p class= "font-medium" id="confirm-anime">Vocaloid</p>
               </div>
               <div>
                 <p class="text-sm text-gray-600">Personaggio</p>
@@ -885,35 +897,35 @@
               </div>
               <div>
                 <p class="text-sm text-gray-600">Prezzo</p>
-                <p class="font-medium" id="confirm-price">€ 49.99 <span class="line-through text-gray-500 text-sm ml-2">€ 55.99</span></p>
+                <p class="font-medium" id="confirm-price">&#8364 49.99 <span class="line-through text-gray-500 text-sm ml-2">&#8364 55.99</span></p>
               </div>
               <div>
                 <p class="text-sm text-gray-600">Sconto</p>
                 <p class="font-medium" id="confirm-discount">10% <span class="text-green-500 text-sm ml-2">(Aumentato da 5%)</span></p>
               </div>
             </div>
-            <div class="mb-4">
+            <div class= "mb-4">
               <p class="text-sm text-gray-600">Descrizione</p>
               <p class="font-medium" id="confirm-description">Nendoroid Hatsune Miku nella versione Sakura, con vari accessori e basi a tema primavera...</p>
-              <p class="text-xs text-gray-500 mt-1">+34 caratteri aggiunti alla descrizione</p>
+              <p class= "text-xs text-gray-500 mt-1">+34 caratteri aggiunti alla descrizione</p>
             </div>
             <div>
-              <p class="text-sm text-gray-600">Categorie</p>
-              <p class="font-medium" id="confirm-categories">Anime, Edizione Limitata, Novità <span class="text-green-500 text-sm ml-2">(Nuovo)</span></p>
+              <p class= "text-sm text-gray-600">Categorie</p>
+              <p class="font-medium" id="confirm-categories">Anime, Edizione Limitata, Novit&agrave <span class="text-green-500 text-sm ml-2">(Nuovo)</span></p>
               <p class="text-xs text-gray-500 mt-1">Rimosso: "Vocaloid", "Collector's Edition"</p>
             </div>
           </div>
 
           <div class="bg-nekopink/10 p-6 rounded-xl mb-6">
-            <h4 class="font-bold text-nekopeach mb-3">Modifiche a disponibilità & immagini</h4>
+            <h4 class="font-bold text-nekopeach text-xl">Modifiche a disponibilit&agrave & immagini</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <p class="text-sm text-gray-600">Disponibilità</p>
+                <p class="text-sm text-gray-600">Disponibilit&agrave</p>
                 <p class="font-medium" id="confirm-availability">Disponibile</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600">Quantità</p>
-                <p class="font-medium" id="confirm-stock">15 <span class="text-green-500 text-sm ml-2">(+5 unità)</span></p>
+                <p class="text-sm text-gray-600">Quantit&agrave</p>
+                <p class="font-medium" id="confirm-stock">15 <span class="text-green-500 text-sm ml-2">(+5 unit&agrave)</span></p>
               </div>
               <div>
                 <p class="text-sm text-gray-600">Data uscita</p>
@@ -921,7 +933,7 @@
               </div>
               <div>
                 <p class="text-sm text-gray-600">Dimensioni</p>
-                <p class="font-medium" id="confirm-dimensions">10 × 15 × 8 cm</p>
+                <p class="font-medium" id="confirm-dimensions"> 10 &times 15 &times 8 cm</p>
               </div>
             </div>
             <div>
@@ -950,7 +962,7 @@
           <div class="bg-gray-100 p-4 rounded-lg mb-6">
             <h4 class="font-bold text-gray-700 mb-3">Note di modifica</h4>
             <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" rows="3" placeholder="Descrivi le modifiche apportate (facoltativo)"></textarea>
-            <p class="text-xs text-gray-500 mt-1">Questo testo sarà visibile nella cronologia delle modifiche del prodotto.</p>
+            <p class="text-xs text-gray-500 mt-1">Questo testo sar&agrave visibile nella cronologia delle modifiche del prodotto.</p>
           </div>
 
           <div class="flex justify-between">
@@ -959,7 +971,7 @@
               <button type="button" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-300 transition">
                 <i class="fas fa-file-pdf mr-2"></i> Salva PDF
               </button>
-              <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-green-600 transition flex items-center">
+              <button type= "submit" class="bg-green-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-green-600 transition flex items-center">
                 <i class="fas fa-save mr-2"></i> Salva modifiche
               </button>
             </div>
@@ -987,7 +999,7 @@
 
       <!-- Footer section -->
       <div>
-        <h4 class="font-bold text-lg mb-4 text-white">Contatti</h4>
+        <h4 class= "font-bold text-lg mb-4 text-white">Contatti</h4>
         <p class="text-pink-100 flex items-center mb-3">
           <i class="fas fa-map-marker-alt mr-3"></i>
           <span>Via dei Manga, 123<br>Milano, Italia</span>
@@ -996,7 +1008,7 @@
           <i class="fas fa-phone mr-3"></i> +39 02 1234567
         </p>
         <p class="text-pink-100 flex items-center">
-          <i class="fas fa-envelope mr-3"></i> info@nekopopshop.com
+          <i class= "fas fa-envelope mr-3"></i> info@nekopopshop.com
         </p>
       </div>
 
