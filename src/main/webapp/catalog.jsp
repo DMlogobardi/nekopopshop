@@ -297,6 +297,17 @@
             <button class="filter-btn" onclick="setFilter('nome')">
                 <i class="fas fa-sort-alpha-down mr-2"></i> Per Nome
             </button>
+            <button class="filter-btn" onclick="setFilter('autore')">
+                <i class="fa fa-pencil mr-2"></i> Per Autore
+            </button>
+            <button class="filter-btn" onclick="setFilter('autore')">
+                <i class="far fa-calendar-alt mr-2"></i> Per Anno
+            </button>
+            <button class="filter-btn" onclick="setFilter('vendite')">
+                <i class="fa fa-line-chart mr-2"></i> Per Vendite
+            </button>
+
+
         </div>
 
         <!-- Alphabet Navigation -->
