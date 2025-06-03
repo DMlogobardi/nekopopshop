@@ -113,7 +113,7 @@ public class ManageCatalog extends HttpServlet {
                         }
 
                         byte[] img = ImgByteConverter.Converter(imgPart.get());
-                        vol = new VolumeBean(0, volDTO.getNumVolume(), volDTO.getPrezzo(), volDTO.getQuantita(), volDTO.getDatapubl(), img, 0);
+                        vol = new VolumeBean(0, volDTO.getNumVolume(), volDTO.getPrezzo(), volDTO.getQuantita(), volDTO.getDatapubl(), img, volDTO.getTag(),0);
                     }
 
                     if(volDTO != null){
@@ -147,7 +147,7 @@ public class ManageCatalog extends HttpServlet {
                         }
 
                         byte[] img = ImgByteConverter.Converter(volImg.get());
-                        vol = new VolumeBean(0, volDTO.getNumVolume(), volDTO.getPrezzo(), volDTO.getQuantita(), volDTO.getDatapubl(), img, volDTO.getIdProd());
+                        vol = new VolumeBean(0, volDTO.getNumVolume(), volDTO.getPrezzo(), volDTO.getQuantita(), volDTO.getDatapubl(), img, volDTO.getTag(),volDTO.getIdProd());
                         volDB.doSave(vol);
                     }
                 }
@@ -284,6 +284,7 @@ public class ManageCatalog extends HttpServlet {
                         vol.getQuantita(),
                         vol.getDatapubl(),
                         img,
+                        vol.getTag(),
                         vol.getIdProd()
                 );
 

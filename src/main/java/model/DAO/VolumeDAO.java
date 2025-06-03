@@ -12,7 +12,7 @@ import java.util.List;
 public class VolumeDAO implements GenralDAO<VolumeBean> {
     private static final String TABLE_NAME = "volume";
     private DataSource ds = null;
-    private List<String> orderWhiteList = List.of("idVolume", "numVolumi", "prezzo", "Quantità", "dataPubl", "idProdotto");
+    private List<String> orderWhiteList = List.of("idVolume", "numVolumi", "prezzo", "Quantità", "dataPubl", "tag","idProdotto");
 
     public VolumeDAO(DataSource ds) {
         this.ds = ds;
@@ -24,7 +24,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = "INSERT INTO " + TABLE_NAME + "(numVolumi, prezzo, Quantità, dataPubl, imgVol, idProdotto)" + " VALUES (?,?,?,?,?,?)";
+        String insertSQL = "INSERT INTO " + TABLE_NAME + "(numVolumi, prezzo, Quantità, dataPubl, imgVol, tag, idProdotto)" + " VALUES (?,?,?,?,?,?,?)";
 
         try {
             con = ds.getConnection();
@@ -34,7 +34,8 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
             ps.setInt(3, bean.getQuantita());
             ps.setString(4, bean.getDataPublFormatted().toString());
             ps.setBytes(5, bean.getImgVol());
-            ps.setInt(6, bean.getIdProdotto());
+            ps.setString(6, bean.getTag());
+            ps.setInt(7, bean.getIdProdotto());
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -96,6 +97,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                         rs.getInt("quantità"),
                         rs.getString("dataPubl"),
                         rs.getBytes("imgVol"),
+                        rs.getString("tag"),
                         rs.getInt("idProdotto")
                 );
             }
@@ -130,6 +132,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                         rs.getInt("quantità"),
                         rs.getString("dataPubl"),
                         rs.getBytes("imgVol"),
+                        rs.getString("tag"),
                         rs.getInt("idProdotto")
                 );
             }
@@ -168,6 +171,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                         rs.getInt("quantità"),
                         rs.getString("dataPubl"),
                         rs.getBytes("imgVol"),
+                        rs.getString("tag"),
                         rs.getInt("idProdotto")
                 );
                 volumes.add(volume);
@@ -222,6 +226,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                         rs.getInt("quantità"),
                         rs.getString("dataPubl"),
                         rs.getBytes("imgVol"),
+                        rs.getString("tag"),
                         rs.getInt("idProdotto")
                 );
                 volumes.add(volume);
@@ -285,6 +290,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                         rs.getInt("quantità"),
                         rs.getString("dataPubl"),
                         rs.getBytes("imgVol"),
+                        rs.getString("tag"),
                         rs.getInt("idProdotto")
                 );
                 volumes.add(volume);
@@ -307,9 +313,9 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         String updateSQL = "";
 
         if(vol.getImgVol() != null) {
-            updateSQL = "update " + TABLE_NAME + " set numVolumi = ?, prezzo = ?, quantità = ?, dataPubl = ?, imgVol = ?, idProdotto = ? where idProdotto = ? and numVolumi = ?";
+            updateSQL = "update " + TABLE_NAME + " set numVolumi = ?, prezzo = ?, quantità = ?, dataPubl = ?, imgVol = ?, tag = ?, idProdotto = ? where idProdotto = ? and numVolumi = ?";
         } else {
-            updateSQL = "update " + TABLE_NAME + " set numVolumi = ?, prezzo = ?, quantità = ?, dataPubl = ?, idProdotto = ? where idProdotto = ? and numVolumi = ?";
+            updateSQL = "update " + TABLE_NAME + " set numVolumi = ?, prezzo = ?, quantità = ?, dataPubl = ?, tag = ?, idProdotto = ? where idProdotto = ? and numVolumi = ?";
         }
         try {
             con = ds.getConnection();
@@ -320,17 +326,19 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                 ps.setInt(3, vol.getQuantita());
                 ps.setDate(4, vol.getDataPublFormatted());
                 ps.setBytes(5, vol.getImgVol());
-                ps.setInt(6, vol.getIdProdotto());
+                ps.setString(6, vol.getTag());
                 ps.setInt(7, vol.getIdProdotto());
-                ps.setInt(8, vol.getNumVolumi());
+                ps.setInt(8, vol.getIdProdotto());
+                ps.setInt(9, vol.getNumVolumi());
             } else {
                 ps.setInt(1, vol.getNumVolumi());
                 ps.setDouble(2, vol.getPrezzo());
                 ps.setInt(3, vol.getQuantita());
-                ps.setDate(4, vol.getDataPublFormatted());;
-                ps.setInt(5, vol.getIdProdotto());
+                ps.setDate(4, vol.getDataPublFormatted());
+                ps.setString(5, vol.getTag());
                 ps.setInt(6, vol.getIdProdotto());
-                ps.setInt(7, vol.getNumVolumi());
+                ps.setInt(7, vol.getIdProdotto());
+                ps.setInt(8, vol.getNumVolumi());
             }
 
             result = ps.executeUpdate();
@@ -378,6 +386,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                         rs.getInt("quantità"),
                         rs.getString("dataPubl"),
                         rs.getBytes("imgVol"),
+                        rs.getString("tag"),
                         rs.getInt("idProdotto")
                 );
                 volumes.add(volume);

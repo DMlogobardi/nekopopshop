@@ -10,15 +10,37 @@ public class OrdineBean implements Serializable {
     private String dataOrdine;
     private String dataArrivos;
     private int idCliente;
+    private int idIndirizzo;
     private int idMetodoPag;
 
-    public OrdineBean(int idOrdine, double tot,  String dataOrdine, String dataArrivo ,int idCliente, int idMetodoPag) {
+    public OrdineBean(int idOrdine, double tot,  String dataOrdine, String dataArrivo ,int idCliente, int idIndirizzo, int idMetodoPag) {
         this.idOrdine = idOrdine;
         this.tot = tot;
         this.dataOrdine = dataOrdine;
         this.dataArrivos = dataArrivos;
         this.idCliente = idCliente;
+        this.idIndirizzo = idIndirizzo;
         this.idMetodoPag = idMetodoPag;
+    }
+
+    public String getDataArrivos() {
+        return dataArrivos;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public void setIdMetodoPag(int idMetodoPag) {
+        this.idMetodoPag = idMetodoPag;
+    }
+
+    public int getIdIndirizzo() {
+        return idIndirizzo;
+    }
+
+    public void setIdIndirizzo(int idIndirizzo) {
+        this.idIndirizzo = idIndirizzo;
     }
 
     public int getIdOrdine() {

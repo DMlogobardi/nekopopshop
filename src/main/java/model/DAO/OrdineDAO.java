@@ -11,7 +11,7 @@ import java.util.List;
 public class OrdineDAO implements GenralDAO<OrdineBean>{
     private static final String TABLE_NAME = "ordine";
     private DataSource ds = null;
-    private List<String> ordineWhiteList = List.of("idOrdine", "tot", "dataOrdine", "dataArrivoS", "idCliente", "idMetodoPag");
+    private List<String> ordineWhiteList = List.of("idOrdine", "tot", "dataOrdine", "dataArrivoS", "idCliente", "idIndirizzo", "idMetodoPag");
 
     public OrdineDAO(DataSource ds) {
         this.ds = ds;
@@ -23,7 +23,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = "insert into " + TABLE_NAME + "(tot, dataOrdine, dataArrivoS, idCliente, idMetodoPag)" + " values(?,?,?,?,?)";
+        String insertSQL = "insert into " + TABLE_NAME + "(tot, dataOrdine, dataArrivoS, idCliente, idIndirizzo, idMetodoPag)" + " values(?,?,?,?,?,?)";
 
         try{
           con = ds.getConnection();
@@ -32,7 +32,8 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
           ps.setString(2, bean.getDataOrdineFormatted().toString());
           ps.setString(3, bean.getDataArrivoFormatted().toString());
           ps.setInt(4, bean.getIdCliente());
-          ps.setInt(5, bean.getIdMetodoPag());
+          ps.setInt(5, bean.getIdIndirizzo());
+          ps.setInt(6, bean.getIdMetodoPag());
 
           ps.executeUpdate();
           ResultSet rs = ps.getGeneratedKeys();
@@ -93,6 +94,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                         rs.getString("dataOrdine"),
                         rs.getString("dataArrivoS"),
                         rs.getInt("idCliente"),
+                        rs.getInt("idIndirizzo"),
                         rs.getInt("idMetodoPag")
                 );
             }
@@ -130,6 +132,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                         rs.getString("dataOrdine"),
                         rs.getString("dataArrivoS"),
                         rs.getInt("idCliente"),
+                        rs.getInt("idIndirizzo"),
                         rs.getInt("idMetodoPag")
                 );
                 ordini.add(ordine);
@@ -182,6 +185,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                         rs.getString("dataOrdine"),
                         rs.getString("dataArrivoS"),
                         rs.getInt("idCliente"),
+                        rs.getInt("idIndirizzo"),
                         rs.getInt("idMetodoPag")
                 );
                 ordini.add(ordine);
