@@ -436,7 +436,7 @@
           <div class="w-32 h-32 bg-nekopink rounded-full flex items-center justify-center mx-auto mb-6">
             <i class="fas fa-shopping-basket text-4xl text-white"></i>
           </div>
-          <h3 class="text-xl font-bold text-nekopeach mb-2">Il tuo carrello è vuoto!</h3>
+          <h3 class="text-xl font-bold text-nekopeach mb-2">Il tuo carrello &egrave vuoto!</h3>
           <p class="text-gray-600 mb-6">Sfoglia il nostro catalogo e aggiungi i tuoi prodotti preferiti</p>
           <a href="catalog.html" class="bg-nekopeach hover:bg-nekopink text-white px-6 py-3 rounded-lg font-bold inline-block">
             <i class="fas fa-book mr-2"></i> Vai al Catalogo
@@ -468,7 +468,7 @@
               </div>
               <div>
                 <p class="font-bold text-green-700">Codice sconto applicato!</p>
-                <p class="text-sm text-green-600">Hai ottenuto uno sconto del 10% sul tuo ordine</p>
+                <p class="text-sm text-green-600">Hai ottenuto uno sconto del 30% sul tuo ordine</p>
               </div>
             </div>
           </div>
@@ -552,7 +552,7 @@
 
       <!-- Continue Shopping -->
       <div class="bg-white rounded-xl border-2 border-nekopeach mt-6 p-4 text-center">
-        <a href="catalog.html" class="text-nekopeach hover:text-nekopink font-bold inline-flex items-center">
+        <a href="catalog.jsp" class="text-nekopeach hover:text-nekopink font-bold inline-flex items-center">
           <i class="fas fa-arrow-left mr-2"></i> Continua lo shopping
         </a>
       </div>

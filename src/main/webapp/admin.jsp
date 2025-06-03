@@ -785,69 +785,31 @@
                         <i class="fas fa-tachometer-alt sidebar-icon mr-3 text-gray-500"></i>
                         <span>Dashboard</span>
                     </a>
-                    <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="gestioneprodotti.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
                         <i class="fas fa-box sidebar-icon mr-3 text-gray-500"></i>
                         <span>Prodotti</span>
                         <span class="notification-badge ml-auto">5</span>
                     </a>
-                    <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="gestioneutenti.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
                         <i class="fas fa-users sidebar-icon mr-3 text-gray-500"></i>
                         <span>Utenti</span>
                         <span class="text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded ml-auto">32</span>
                     </a>
-                    <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="ordini.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
                         <i class="fas fa-shopping-cart sidebar-icon mr-3 text-gray-500"></i>
                         <span>Ordini</span>
                         <span class="notification-badge ml-auto">12</span>
                     </a>
-                    <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
-                        <i class="fas fa-tags sidebar-icon mr-3 text-gray-500"></i>
-                        <span>Promozioni</span>
-                    </a>
-                    <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
-                        <i class="fas fa-chart-line sidebar-icon mr-3 text-gray-500"></i>
-                        <span>Statistiche</span>
-                    </a>
-                    <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
-                        <i class="fas fa-comment-dots sidebar-icon mr-3 text-gray-500"></i>
-                        <span>Recensioni</span>
+
                         <span class="notification-badge ml-auto">3</span>
                     </a>
-                    <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="impostazioniadmin.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
                         <i class="fas fa-cog sidebar-icon mr-3 text-gray-500"></i>
                         <span>Impostazioni</span>
                     </a>
                 </nav>
 
-                <!-- System Status -->
-                <div class="py-4 border-t border-gray-200">
-                    <h4 class="font-bold mb-3 text-gray-700 flex items-center">
-                        <i class="fas fa-server mr-2 text-gray-500"></i> Stato Sistema
-                    </h4>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Carico Server</span>
-                            <div class="flex items-center">
-                                <div class="w-24 bg-gray-200 rounded-full h-2 mr-2">
-                                    <div class="bg-green-500 h-2 rounded-full" style="width: 45%"></div>
-                                </div>
-                                <span class="text-xs text-gray-500">45%</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Database</span>
-                            <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded">Online</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Ultimo Backup</span>
-                            <span class="text-xs text-gray-500">2 ore fa</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Version</span>
-                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">v2.3.1</span>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Quick Actions -->
                 <div class="mt-4 pt-4 border-t border-gray-200">
@@ -991,40 +953,7 @@
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Sales Chart -->
-                <div class="admin-card p-5">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-2xl font-bold text-gray-800">Vendite Ultimi 7 Giorni</h3>
-                        <div class="flex">
-                            <button class="text-xs px-3 py-1 bg-gray-100 rounded-l-lg">Settimana</button>
-                            <button class="text-xs px-3 py-1 border border-gray-200">Mese</button>
-                            <button class="text-xs px-3 py-1 bg-gray-100 rounded-r-lg">Anno</button>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="salesChart" height="250"></canvas>
-                    </div>
-                </div>
 
-                <!-- Revenue Chart -->
-                <div class="admin-card p-5">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-2xl font-bold text-gray-800">Guadagni Ultimi 7 Giorni</h3>
-                        <div>
-                            <select class="form-select text-xs py-1">
-                                <option>Ultimi 7 giorni</option>
-                                <option>Ultimi 30 giorni</option>
-                                <option>Quest'anno</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="revenueChart" height="250"></canvas>
-                    </div>
-                </div>
-            </div>
 
             <!-- Recent Orders & Top Products -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1098,86 +1027,7 @@
                     </div>
                 </div>
 
-                <!-- Top Products -->
-                <div class="admin-card">
-                    <div class="p-5 border-b border-gray-200">
-                        <h3 class="text-lg font-bold text-gray-800" style="font-size: 30px">Prodotti Pi&ugrave Venduti</h3>
-                        <p class="text-sm text-gray-500">I 5 prodotti migliori di questo mese</p>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="admin-table custom-scrollbar">
-                            <thead>
-                            <tr>
-                                <th class="text-white">Prodotto</th>
-                                <th class="text-white">Vendite</th>
-                                <th class="text-white">Guadagni</th>
-                                <th class="text-white"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="flex items-center">
-                                    <img src="https://m.media-amazon.com/images/I/51xwGSNX-EL._AC_UX679_.jpg" alt="Product" class="product-img mr-3">
-                                    <span>Maglia Neko Kawaii</span>
-                                </td>
-                                <td>124</td>
-                                <td class="font-bold">&#8364 1,240</td>
-                                <td>
-                                    <i class="fas fa-ellipsis-h text-gray-400"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="flex items-center">
-                                    <img src="https://m.media-amazon.com/images/I/61I7uFbRLRL._AC_UX679_.jpg" alt="Product" class="product-img mr-3">
-                                    <span>Felpa Neko Pop</span>
-                                </td>
-                                <td>89</td>
-                                <td class="font-bold">&#8364 1,068</td>
-                                <td>
-                                    <i class="fas fa-ellipsis-h text-gray-400"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="flex items-center">
-                                    <img src="https://m.media-amazon.com/images/I/71p-M3sErhL._AC_UY879_.jpg" alt="Product" class="product-img mr-3">
-                                    <span>Portachiavi Neko</span>
-                                </td>
-                                <td>76</td>
-                                <td class="font-bold">&#8364 456</td>
-                                <td>
-                                    <i class="fas fa-ellipsis-h text-gray-400"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="flex items-center">
-                                    <img src="https://m.media-amazon.com/images/I/51oZQmOHJOL._AC_UX679_.jpg" alt="Product" class="product-img mr-3">
-                                    <span>Felpa con Coda Neko</span>
-                                </td>
-                                <td>54</td>
-                                <td class="font-bold">&#8364 756</td>
-                                <td>
-                                    <i class="fas fa-ellipsis-h text-gray-400"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="flex items-center">
-                                    <img src="https://m.media-amazon.com/images/I/61IuVLQACFL._AC_UX679_.jpg" alt="Product" class="product-img mr-3">
-                                    <span>Peluche Neko Grande</span>
-                                </td>
-                                <td>48</td>
-                                <td class="font-bold">&#8364 576</td>
-                                <td>
-                                    <i class="fas fa-ellipsis-h text-gray-400"></i>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="p-4 border-t border-gray-200 text-right">
-                        <a href="#" class="text-sm font-semibold text-nekopeach hover:underline">Vedi tutti i prodotti →</a>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- Recent Reviews & Low Stock Products -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1684,5 +1534,6 @@
         }, 1000);
     });
 </script>
+</div>
 </body>
 </html>

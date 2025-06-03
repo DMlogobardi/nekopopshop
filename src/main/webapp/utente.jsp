@@ -347,6 +347,7 @@
                 <a href="cart.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Carrello</a>
                 <a href="admin.jsp" class="folder-tab"><i class="fas fa-user-shield mr-2"></i> Admin</a>
                 <a href="utente.jsp" class="folder-tab active"><i class="fas fa-user mr-2"></i> Utente</a>
+
             </div>
         </div>
     </div>
@@ -409,17 +410,15 @@
                     <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-nekopeach font-bold border-b border-gray-200" data-tab="dashboard">
                         <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
                     </button>
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="orders">
+                    <button onclick="window.location.href='ordiniutente.jsp'"class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="orders">
                         <i class="fas fa-shopping-bag mr-3"></i> I miei ordini
 
                     </button>
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="wishlist">
+                    <button onclick="window.location.href='wishlist.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="wishlist">
                         <i class="fas fa-heart mr-3"></i> Lista desideri
                     </button>
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="addresses">
-                        <i class="fas fa-map-marker-alt mr-3"></i> Indirizzi
-                    </button>
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+
+                    <button onclick="window.location.href='impostazioniutente.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
                         <i class="fas fa-cog mr-3"></i> Impostazioni
                     </button>
                     <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="logout">
@@ -455,7 +454,7 @@
                         </div>
                     </div>
                     <div class="mt-4 text-center">
-                        <button class="bg-nekoorange hover:bg-nekopeach text-white px-4 py-2 rounded-lg text-sm font-bold transition">
+                        <button onclick="window.location.href='premi.jsp'" class="bg-nekoorange hover:bg-nekopeach text-white px-4 py-2 rounded-lg text-sm font-bold transition">
                             Scopri altri premi
                         </button>
                     </div>
@@ -524,7 +523,7 @@
                                     </div>
                                 </div>
                                 <div class="mt-4 text-center">
-                                    <a href="#" class="text-sm text-nekopeach font-bold hover:underline">Vedi tutti gli ordini</a>
+                                    <a href="ordiniutente.jsp" class="text-sm text-nekopeach font-bold hover:underline">Vedi tutti gli ordini</a>
                                 </div>
                             </div>
 

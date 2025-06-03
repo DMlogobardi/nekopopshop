@@ -447,12 +447,13 @@
       <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
         <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
         <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-        <a href="admin_dashboard.jsp" class="folder-tab"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
-        <a href="admin_products.jsp" class="folder-tab"><i class="fas fa-boxes mr-2"></i> Prodotti</a>
-        <a href="admin_orders.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Ordini</a>
-        <a href="admin_users.jsp" class="folder-tab"><i class="fas fa-users mr-2"></i> Utenti</a>
-        <a href="admin_addproduct.jsp" class="folder-tab active"><i class="fas fa-plus-circle mr-2"></i> Aggiungi</a>
+        <a href="admin.jsp" class="folder-tab"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
+        <a href="gestioneprodotti.jsp" class="folder-tab"><i class="fas fa-boxes mr-2"></i> Prodotti</a>
+        <a href="ordini.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Ordini</a>
+        <a href="gestioneutenti.jsp" class="folder-tab"><i class="fas fa-users mr-2"></i> Utenti</a>
+        <a href="aggiungiprodotto.jsp" class="folder-tab active"><i class="fas fa-plus-circle mr-2"></i> Aggiungi</a>
         <a href="modificaprodotto.jsp" class="folder-tab"><i class="fas fa-edit mr-2"></i> Modifica</a>
+        <a href="rimuoviprodotto.jsp" class="folder-tab"><i class="fas fa-minus-circle mr-2"></i> Rimuovi</a>
         <a href="logout.jsp" class="folder-tab"><i class="fas fa-sign-out-alt mr-2"></i> Esci</a>
       </div>
     </div>
