@@ -334,7 +334,7 @@
             </div>
             <div class="ml-4">
                 <h1 class="text-3xl font-bold"><span class="nekotag">Il Tuo Profilo</span></h1>
-                <p class="text-xl text-nekopeach font-bold" style="font-size: 20px; background: linear-gradient(90deg, #E55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Benvenuto nella tua area personale</p>
+                <p class="text-xl text-nekopeach font-bold" style="font-size: 25px; background: linear-gradient(90deg, #E55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Benvenuto nella tua area personale</p>
             </div>
         </div>
 

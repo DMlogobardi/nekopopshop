@@ -438,7 +438,7 @@
             </div>
             <div class="ml-4">
                 <h1 class="text-3xl font-bold"><span class="nekotag">Impostazioni Utente</span></h1>
-                <p class="text-xl text-nekopeach font-bold" style="font-size: 20px; background: linear-gradient(90deg, #E55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Gestisci il tuo account</p>
+                <p class="text-xl text-nekopeach font-bold" style="font-size: 25px; background: linear-gradient(90deg, #E55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Gestisci il tuo account</p>
             </div>
         </div>
 
@@ -504,15 +504,7 @@
                             <span class="ml-auto bg-nekopink text-nekopeach rounded-full px-2 py-1 text-xs font-bold">3</span>
                         </button>
 
-                        <button data-tab="notifications" class="settings-tab w-full text-left px-4 py-3 flex items-center text-gray-800">
-                            <i class="fas fa-bell mr-3 text-gray-600"></i>
-                            <span>Notifiche</span>
-                        </button>
 
-                        <button data-tab="privacy" class="settings-tab w-full text-left px-4 py-3 flex items-center text-gray-800">
-                            <i class="fas fa-shield-alt mr-3 text-gray-600"></i>
-                            <span>Privacy</span>
-                        </button>
                     </div>
                 </div>
 
