@@ -487,18 +487,18 @@
                             <span>Profilo</span>
                         </button>
 
-                        <button data-tab="security" class="settings-tab w-full text-left px-4 py-3 flex items-center text-gray-800">
+                        <button onclick="window.location.href='sicurezza.jsp'" data-tab="security" class="settings-tab w-full text-left px-4 py-3 flex items-center text-gray-800">
                             <i class="fas fa-lock mr-3 text-gray-600"></i>
                             <span>Sicurezza</span>
                         </button>
 
-                        <button data-tab="payments" class="settings-tab w-full text-left px-4 py-3 flex items-center text-gray-800">
+                        <button onclick="window.location.href='pagamenti.jsp'" data-tab="payments" class="settings-tab w-full text-left px-4 py-3 flex items-center text-gray-800">
                             <i class="fas fa-credit-card mr-3 text-gray-600"></i>
                             <span>Pagamenti</span>
                             <span class="ml-auto bg-nekopink text-nekopeach rounded-full px-2 py-1 text-xs font-bold">2</span>
                         </button>
 
-                        <button data-tab="addresses" class="settings-tab w-full text-left px-4 py-3 flex items-center text-gray-800">
+                        <button onclick="window.location.href='indirizzi.jsp'" data-tab="addresses" class="settings-tab w-full text-left px-4 py-3 flex items-center text-gray-800">
                             <i class="fas fa-map-marker-alt mr-3 text-gray-600"></i>
                             <span>Indirizzi</span>
                             <span class="ml-auto bg-nekopink text-nekopeach rounded-full px-2 py-1 text-xs font-bold">3</span>
