@@ -11,6 +11,7 @@ public class ContenutoBean implements Serializable {
 
     public ContenutoBean(int idContenuto, int qCarrello, int idCarrello, Integer idProdotto, Integer idVolume) {
         this.idContenuto = idContenuto;
+        this.qCarrello = qCarrello;
         this.idCarrello = idCarrello;
         this.idProdotto = idProdotto;
         this.idVolume = idVolume;

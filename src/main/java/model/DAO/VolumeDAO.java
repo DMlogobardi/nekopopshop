@@ -400,4 +400,30 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         }
         return volumes;
     }
+
+    public Double doRetrievePrezzoByKey(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        double prezzo = 0;
+
+        String selectSQL = "SELECT prezzo FROM " + TABLE_NAME + " WHERE idVolume = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                prezzo = rs.getDouble("prezzo");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return prezzo;
+    }
 }

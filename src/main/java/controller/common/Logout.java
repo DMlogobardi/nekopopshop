@@ -7,10 +7,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Bean.CarrelloBean;
+import model.DAO.CarrelloDAO;
 import model.SessionCart;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Servlet implementation class login
@@ -41,14 +44,21 @@ public class Logout extends HttpServlet {
         if(session.getAttribute("logToken") != null) {
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
             SessionCart sessionCart = (SessionCart) session.getAttribute("cart");
+
+            if(sessionCart.getCarelloRefernz() == null) {
+                CarrelloBean carrelloBean = new CarrelloBean();
+                carrelloBean.setIdCliente((Integer) session.getAttribute("logId"));
+                sessionCart.setCarelloRefernz(carrelloBean);
+            }
+
             sessionCart.push(ds);
             session.invalidate();
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("/index.jsp");
             return;
         }
 
         request.setAttribute("error", "You are not logged in");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
 }

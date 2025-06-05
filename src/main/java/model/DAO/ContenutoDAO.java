@@ -12,7 +12,7 @@ import java.util.List;
 public class ContenutoDAO implements GenralDAO<ContenutoBean>{
     private static final String TABLE_NAME = "contenuto";
     private DataSource ds = null;
-    private List<String> orderWhiteLst = List.of("idContenuto","qCarrello", "idCarrello", "idProdotto", "idVolume");
+    private List<String> orderWhiteLst = List.of("idContenuto","quantita", "idCarrello", "idProdotto", "idVolume");
 
     public ContenutoDAO(DataSource ds) {
         this.ds = ds;
@@ -23,7 +23,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
         Connection con = null;
         PreparedStatement ps = null;
         int id = 0;
-        String insertSQL = " insert into " + TABLE_NAME + "(qCarrello, idCarrello, idProdotto, idVolume) values (?,?,?,?)";
+        String insertSQL = " insert into " + TABLE_NAME + "(quantita, idCarrello, idProdotto, idVolume) values (?,?,?,?)";
 
         try{
             con = ds.getConnection();
@@ -96,7 +96,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             while (rs.next()) {
                 contenuto = new ContenutoBean(
                         rs.getInt("idContenuto"),
-                        rs.getInt("qCarrello"),
+                        rs.getInt("quantita"),
                         rs.getInt("idCarrello"),
                         rs.getInt("idProdotto"),
                         rs.getInt("idVolume")
@@ -128,7 +128,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             while (rs.next()) {
                 ContenutoBean conte = new ContenutoBean(
                         rs.getInt("idContenuto"),
-                        rs.getInt("qContenuto"),
+                        rs.getInt("quantita"),
                         rs.getInt("idCarrello"),
                         rs.getInt("idProdotto"),
                         rs.getInt("idVolume")
@@ -165,7 +165,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             while (rs.next()) {
                 ContenutoBean contenuto = new ContenutoBean(
                         rs.getInt("idContenuto"),
-                        rs.getInt("qCarrello"),
+                        rs.getInt("quantita"),
                         rs.getInt("idCarrello"),
                         rs.getInt("idProdotto"),
                         rs.getInt("idVolume")
@@ -202,7 +202,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             while (rs.next()) {
                 ContenutoBean contenuto = new ContenutoBean(
                         rs.getInt("idContenuto"),
-                        rs.getInt("qCarrello"),
+                        rs.getInt("quantita"),
                         rs.getInt("idCarrello"),
                         rs.getInt("idProdotto"),
                         rs.getInt("idVolume")
@@ -253,7 +253,7 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
             while (rs.next()) {
                 ContenutoBean contenuto = new ContenutoBean(
                         rs.getInt("idContenuto"),
-                        rs.getInt("qCarrello"),
+                        rs.getInt("quantita"),
                         rs.getInt("idCarrello"),
                         rs.getInt("idProdotto"),
                         rs.getInt("idVolume")
