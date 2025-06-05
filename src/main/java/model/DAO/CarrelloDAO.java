@@ -129,13 +129,16 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
         PreparedStatement ps = null;
         Collection<CarrelloBean> carelli = new LinkedList<CarrelloBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idCarrello");
+
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 CarrelloBean carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getInt("sconti"), rs.getInt("idCliente"));
@@ -157,16 +160,30 @@ public class CarrelloDAO implements GenralDAO<CarrelloBean>{
         PreparedStatement ps = null;
         Collection<CarrelloBean> carelli = new LinkedList<CarrelloBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
-        if(limit > 0 && page > 0){
-            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ? limit ? offset ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idCarrello");
+
+            if (limit > 0 && page > 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(2, 10);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, 0);
+            } else {
+                ps.setInt(2, 10);
+                ps.setInt(3, 0);
+            }
+
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 CarrelloBean carl = new CarrelloBean(rs.getInt("idCarrello"), rs.getDouble("tot"), rs.getDouble("speseSped"), rs.getInt("sconti"), rs.getInt("idCliente"));

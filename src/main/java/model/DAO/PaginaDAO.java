@@ -110,13 +110,15 @@ public class PaginaDAO implements GenralDAO<PaginaBean>{
         PreparedStatement ps = null;
         Collection<PaginaBean> pages = new LinkedList<PaginaBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idPagina");
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -145,16 +147,29 @@ public class PaginaDAO implements GenralDAO<PaginaBean>{
         PreparedStatement ps = null;
         Collection<PaginaBean> pages = new LinkedList<PaginaBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
-        if(limit > 0 && page > 0){
-            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ? limit ? offset ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idPagina");
+
+            if (limit > 0 && page > 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(2, 10);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, 0);
+            } else {
+                ps.setInt(2, 10);
+                ps.setInt(3, 0);
+            }
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){

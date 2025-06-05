@@ -1,5 +1,7 @@
 package model.Bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -12,16 +14,26 @@ public class VolumeBean implements Serializable {
     private int quantita;
     private String dataPubl;
     private byte[] imgVol;
+    private String tag;
     private int idProdotto;
 
-    public VolumeBean(int idVolume, int numVolumi, double prezzo, int quantita, String dataPubl, byte[] imgVol, int idProdotto) {
+    public VolumeBean(int idVolume, int numVolumi, double prezzo, int quantita, String dataPubl, byte[] imgVol, String tag, int idProdotto) {
         this.idVolume = idVolume;
         this.numVolumi = numVolumi;
         this.prezzo = prezzo;
         this.quantita = quantita;
         this.dataPubl = dataPubl;
         this.imgVol = imgVol;
+        this.tag = tag;
         this.idProdotto = idProdotto;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public int getIdVolume() {
@@ -59,6 +71,7 @@ public class VolumeBean implements Serializable {
         return dataPubl;
     }
 
+    @JsonIgnore
     public Date getDataPublFormatted() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date =LocalDate.parse(dataPubl, format);
