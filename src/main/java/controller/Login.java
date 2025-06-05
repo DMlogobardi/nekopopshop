@@ -83,21 +83,35 @@ public class Login extends HttpServlet {
                 } else {
                     request.getSession().setAttribute("logToken", "C");
                 }
-                //inserisco il carrello nella sesione
+                request.getSession().setAttribute("logId", acc.getIdCliente());
                 CarrelloDAO ca = new CarrelloDAO(ds);
                 ContenutoDAO in = new ContenutoDAO(ds);
                 CarrelloBean cart = ca.doRetrieveByAccount(acc.getIdCliente());
-                System.out.println(cart);
-                if(cart == null) {
-                    cart = new CarrelloBean(0, 0.0, 0.0, 0, acc.getIdCliente());
+
+                //inserisco il carrello nella sessione
+                if(request.getSession().getAttribute("cart") != null) {
+                    SessionCart sCart = (SessionCart) request.getSession().getAttribute("cart");
+                    if(cart == null) {
+                        cart = new CarrelloBean(0, 0.0, 0.0, 0, acc.getIdCliente());
+                    }
+                    if(!sCart.margeCart(cart, ds)){
+                        errors.add("marge cart error");
+                        request.setAttribute("error", errors);
+                        loginDispatch.forward(request, response);
+                        System.out.println("marge cart error");
+                    }
+                } else {
+                    if(cart == null) {
+                        cart = new CarrelloBean(0, 0.0, 0.0, 0, acc.getIdCliente());
+                    }
+                    SessionCart sCart = new SessionCart();
+                    sCart.setCarelloRefernz(cart);
+                    Collection<ContenutoBean> contenuti = in.doRetrieveAllproduct(cart.getIdCarello());
+                    if(!contenuti.isEmpty()) {
+                        sCart.setContenuti(contenuti);
+                    }
+                    request.getSession().setAttribute("cart", sCart);
                 }
-                SessionCart sCart = new SessionCart();
-                sCart.setCarelloRefernz(cart);
-                Collection<ContenutoBean> contenuti = in.doRetrieveAllproduct(cart.getIdCarello());
-                if(!contenuti.isEmpty()) {
-                    sCart.setContenuti(contenuti);
-                }
-                request.getSession().setAttribute("cart", sCart);
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");

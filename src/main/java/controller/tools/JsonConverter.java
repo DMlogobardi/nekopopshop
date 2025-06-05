@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.BufferedReader;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class JsonConverter<T> {
 
@@ -38,6 +41,17 @@ public class JsonConverter<T> {
     public T parse(String json) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(json, clazz);
+    }
+
+    public List<T> parseList(String json) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Crea dinamicamente il tipo T[]
+        @SuppressWarnings("unchecked")
+        Class<T[]> clazzArray = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
+
+        T[] array = mapper.readValue(json, clazzArray);
+        return Arrays.asList(array);
     }
 
     public String toJson(T obj) throws Exception {
