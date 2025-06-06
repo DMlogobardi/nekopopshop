@@ -444,7 +444,7 @@
         });
 
         // Form submission handler
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        /* document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const form = this;
@@ -478,7 +478,7 @@
                     console.error('Error:', error);
                     window.location.reload();
                 });
-        });
+        }); */
     });
 </script>
 </body>
