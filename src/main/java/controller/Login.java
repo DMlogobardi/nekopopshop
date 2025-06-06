@@ -3,6 +3,7 @@ package controller;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,7 +47,7 @@ public class Login extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getSession().getAttribute("logToken") != null) {
-            request.setAttribute("errors", "utent alredy logged in");
+            request.setAttribute("errors", "user alredy logged in");
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
@@ -118,6 +119,7 @@ public class Login extends HttpServlet {
                 String success = "{\"satus\": \"success\", \"message\": \"login successful\"}";
                 response.getWriter().write(success);
                 System.out.println("login success");
+                response.sendRedirect("index.jsp");
                 return;
             }
 

@@ -1,1 +1,5 @@
 /target/
+*.xml
+*.jar
+.gitignore
+*.iml
