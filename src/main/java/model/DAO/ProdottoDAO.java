@@ -1,6 +1,7 @@
 package model.DAO;
 
 import model.Bean.ProdottoBean;
+import model.Bean.VolumeBean;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -118,6 +119,32 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
             }
         }
         return prod;
+    }
+
+    public int doRetrieveQuantity(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String selectSQL = "SELECT quantita FROM " + TABLE_NAME + " WHERE idProdotto = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt("quantita");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return result;
     }
 
     @Override

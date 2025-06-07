@@ -119,29 +119,53 @@ public class Order extends HttpServlet {
         ContenutoDAO contenutoDB = new ContenutoDAO(ds);
         VolumeDAO volumeDB = new VolumeDAO(ds);
         ProdottoDAO prodottoDB = new ProdottoDAO(ds);
+        int quantitaDB = 0;
         for(ContenutoBean conte : sCart.getContenuti()){
-            AcquistatoBean acquistato = conte.convertirAcquistato(idOrdine);
-
+            //controllo quantità
             try {
-                contenutoDB.doDeleteByCart(sCart.getCarelloRefernz().getIdCarello());
-                acquistatoDB.doSave(acquistato);
-                if (acquistato.getIdProdotto() == null || acquistato.getIdProdotto() == 0 ){
-                    volumeDB.decrementQuantita(acquistato.getqAcquistato(), acquistato.getIdVolume());
+                if (conte.getIdProdotto() != null || conte.getIdProdotto() != 0) {
+                    quantitaDB = prodottoDB.doRetrieveQuantity(conte.getIdProdotto());
                 } else {
-                    prodottoDB.decrementQuantita(acquistato.getqAcquistato(), acquistato.getIdProdotto());
+                    quantitaDB = volumeDB.doRetrieveQuantity(conte.getIdVolume());
                 }
             } catch (SQLException e) {
+                System.out.println("order error quantita db: " + e.getMessage());
+                request.setAttribute("error", "internal error");
+                request.getRequestDispatcher("/cart.jsp").forward(request, response);
+                return;
+            }
+
+
+            if(quantitaDB > conte.getqCarrello()) {
+                AcquistatoBean acquistato = conte.convertirAcquistato(idOrdine);
+
                 try {
-                    dbOrder.doDelete(idOrdine);
-                } catch (SQLException ex) {
-                    System.out.println("order delete order error: " + e.getMessage());
+                    contenutoDB.doDeleteByCart(sCart.getCarelloRefernz().getIdCarello());
+                    acquistatoDB.doSave(acquistato);
+                    if (acquistato.getIdProdotto() == null || acquistato.getIdProdotto() == 0) {
+                        volumeDB.decrementQuantita(acquistato.getqAcquistato(), acquistato.getIdVolume());
+                    } else {
+                        prodottoDB.decrementQuantita(acquistato.getqAcquistato(), acquistato.getIdProdotto());
+                    }
+                } catch (SQLException e) {
+                    try {
+                        dbOrder.doDelete(idOrdine);
+                    } catch (SQLException ex) {
+                        System.out.println("order delete order error: " + e.getMessage());
+                        request.setAttribute("error", "internal error");
+                        request.getRequestDispatcher("/cart.jsp").forward(request, response);
+                        return;
+                    }
+                    System.out.println("order error set contenuti: " + e.getMessage());
                     request.setAttribute("error", "internal error");
                     request.getRequestDispatcher("/cart.jsp").forward(request, response);
                     return;
                 }
-                System.out.println("order error set contenuti: " + e.getMessage());
-                request.setAttribute("error", "internal error");
-                request.getRequestDispatcher("/cart.jsp").forward(request, response);
+            } else {
+                System.out.println("quantità del prodotto troppo alta");
+                request.setCharacterEncoding("UTF-8");
+                response.setContentType("text/json");
+                response.getWriter().write("{\"error\":" + (conte.getIdProdotto() == null || conte.getIdProdotto() == 0? conte.getIdVolume() : conte.getIdProdotto()) + "}");
                 return;
             }
         }

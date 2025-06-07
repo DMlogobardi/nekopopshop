@@ -111,6 +111,32 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         return volume;
     }
 
+    public int doRetrieveQuantity(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String selectSQL = "SELECT quantita FROM " + TABLE_NAME + " WHERE idVolume = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt("quantita");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return result;
+    }
+
     public VolumeBean doRetrieveByProduct(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
