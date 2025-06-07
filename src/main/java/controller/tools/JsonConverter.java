@@ -1,5 +1,6 @@
 package controller.tools;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -40,6 +41,7 @@ public class JsonConverter<T> {
 
     public T parse(String json) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
+        System.out.println("clazz: " + clazz.getName());
         return mapper.readValue(json, clazz);
     }
 

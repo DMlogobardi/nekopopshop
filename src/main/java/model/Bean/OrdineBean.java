@@ -1,6 +1,7 @@
 package model.Bean;
 
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -61,7 +62,7 @@ public class OrdineBean implements Serializable {
     }
 
     public LocalDate getDataOrdineFormatted() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date =LocalDate.parse(dataOrdine, format);
         return date;
     }
@@ -76,7 +77,7 @@ public class OrdineBean implements Serializable {
     }
 
     public LocalDate getDataArrivoFormatted() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date =LocalDate.parse(dataArrivos, format);
         return date;
     }
@@ -91,5 +92,18 @@ public class OrdineBean implements Serializable {
 
     public int getIdMetodoPag() {
         return idMetodoPag;
+    }
+
+    public static LocalDate calcolaDataConGiorniLavorativi(int giorniLavorativi) {
+        LocalDate data = LocalDate.now();
+        int aggiunti = 0;
+
+        while (aggiunti < giorniLavorativi) {
+            data = data.plusDays(1);
+            if (!(data.getDayOfWeek() == DayOfWeek.SATURDAY || data.getDayOfWeek() == DayOfWeek.SUNDAY)) {
+                aggiunti++;
+            }
+        }
+        return data;
     }
 }

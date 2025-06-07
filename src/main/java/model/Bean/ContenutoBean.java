@@ -55,4 +55,12 @@ public class ContenutoBean implements Serializable {
     public void setIdVolume(Integer idVolume) {
         this.idVolume = idVolume;
     }
+
+    public AcquistatoBean convertirAcquistato(int idOrder) {
+        if(idOrder > 0){
+            AcquistatoBean temp = new AcquistatoBean(0, qCarrello, idCarrello, idProdotto, idVolume);
+            return temp;
+        }
+        return null;
+    }
 }

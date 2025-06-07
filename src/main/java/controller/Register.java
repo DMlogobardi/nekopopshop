@@ -65,7 +65,7 @@ public class Register extends HttpServlet {
 		} catch (Exception e){
 			System.out.println("register servlet | json pars error: " + e.getMessage());
 			request.setAttribute("errors", e.getMessage());
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("register.jsp").forward(request, response);
 			return;
 		}
 

@@ -50,8 +50,7 @@ public class CarrelloBean implements Serializable {
     }
 
     public void setTot(double tot) {
-        if(tot > 0.0)
-            this.tot = tot;
+        this.tot = tot;
     }
 
     public void setSpeseSped(double speseSped) {

@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -27,7 +28,7 @@ public class UtentDateGesture extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        response.getWriter().append("Served at: ").append(request.getContextPath());
+
     }
 
     /**
@@ -35,7 +36,45 @@ public class UtentDateGesture extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        doGet(request, response);
+        HttpSession session = request.getSession();
+        if(session.getAttribute("logToken") == null){
+            request.setAttribute("error", "utent is not logged in");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+
+        String action = request.getParameter("action");
+
+        if(action == null){
+            request.setAttribute("error", "invalid action");
+            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            return;
+        }
+
+        if(action.equals("wishlist")){
+            request.getRequestDispatcher("wishlistgesture").forward(request, response);
+
+        } else if (action.equals("indirizzi")) {
+            request.getRequestDispatcher("indirizzigesture").forward(request, response);
+
+        } else if (action.equals("carte")) {
+            request.getRequestDispatcher("cartegesture").forward(request, response);
+
+        } else if (action.equals("datiUtente")) {
+            //account compreso
+            request.getRequestDispatcher("utentegesture").forward(request, response);
+
+        } else if (action.equals("ordini")) {
+            request.getRequestDispatcher("ordinigesture").forward(request, response);
+
+        } else if (action.equals("reader")) {
+            request.getRequestDispatcher("getreader").forward(request, response);
+
+        } else {
+            System.out.println("error");
+            request.setAttribute("error", "Invalid action");
+            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+        }
     }
 
 }
