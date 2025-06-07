@@ -100,7 +100,7 @@ public class CartGesture extends HttpServlet {
                     addDTO = new ArrayList<ContenutoDTO>();
                     addDTO.add(converter.parse(jsonAdd));
                 } catch (Exception e1) {
-                    System.out.println("error delete: " + e.getMessage() + "second error: " + e1.getCause());
+                    System.out.println("add delete: " + e.getMessage() + "second error: " + e1.getCause());
                     request.setAttribute("error", "server error");
                     request.getRequestDispatcher("cart.jsp").forward(request, response);
                     return;
@@ -228,7 +228,7 @@ public class CartGesture extends HttpServlet {
         } else if (action.equals("list")) {
             //get all
             String offset = request.getParameter("offset");
-            if(offset.equals("") || offset == null) {
+            if(offset == null || offset.equals("")) {
                 System.out.println("add offset parameter");
                 request.setAttribute("error", "add offset parameter");
                 request.getRequestDispatcher("cart.jsp").forward(request, response);

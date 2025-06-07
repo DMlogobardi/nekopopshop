@@ -1,5 +1,8 @@
 package model.Bean;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 public class IndirizzoBean implements Serializable {
@@ -9,12 +12,18 @@ public class IndirizzoBean implements Serializable {
     private String cap;
     private int idCliente;
 
-    public IndirizzoBean(int idIndirizzo, String via, int nCivico, String cap, int idCliente) {
+    @JsonCreator
+    public IndirizzoBean(@JsonProperty("idIndirizzo") int idIndirizzo, @JsonProperty("via") String via, @JsonProperty("nCivico") int nCivico, @JsonProperty("cap") String cap, @JsonProperty("idCliente") int idCliente) {
         this.idIndirizzo = idIndirizzo;
         this.via = via;
         this.nCivico = nCivico;
         this.cap = cap;
         this.idCliente = idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        if(idCliente > 0)
+            this.idCliente = idCliente;
     }
 
     public int getIdIndirizzo() {

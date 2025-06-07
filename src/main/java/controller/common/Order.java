@@ -1,0 +1,156 @@
+package controller.common;
+
+import controller.tools.JsonConverter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Bean.*;
+import model.DAO.*;
+import model.DTO.OrderDTO;
+import model.SessionCart;
+
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+
+@WebServlet("/common/order")
+public class Order extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Default constructor.
+     */
+    public Order() {
+        // TODO Auto-generated constructor stub
+    }
+
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+
+    }
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // non rimuovo i prodotti dal db quando li compro
+        HttpSession session = request.getSession();
+        if(session.getAttribute("logToken") == null){
+            request.setAttribute("error", "utent is not logged in");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+
+        JsonConverter<OrderDTO> converter = JsonConverter.factory(OrderDTO.class, request.getReader());
+        OrderDTO order = null;
+
+        try {
+            order = converter.parse();
+        } catch (Exception e) {
+            System.out.println("error in parsing order: " + e.getMessage());
+            request.setAttribute("error", "internal error");
+            request.getRequestDispatcher("/cart.jsp").forward(request, response);
+            return;
+        }
+
+        DataSource ds = (DataSource) session.getServletContext().getAttribute("dataSource");
+        MetodopagamentoDAO cardDB = new MetodopagamentoDAO(ds);
+        IndirizzoDAO indirizzoDB = new IndirizzoDAO(ds);
+        IndirizzoBean indirizzo = null;
+        MetodoPagamentoBean card = null;
+
+        try {
+            indirizzo = indirizzoDB.doRetrieveByKeyAndCliente(order.getIndirizzo(), (int) session.getAttribute("logId"));
+            card = cardDB.doRetrieveByKeyAndCliente(order.getCard(), (int) session.getAttribute("logId"));
+        } catch (SQLException e) {
+            System.out.println("error in order: " + e.getMessage());
+            request.setAttribute("error", "internal error");
+            request.getRequestDispatcher("/cart.jsp").forward(request, response);
+            return;
+        }
+
+        if(card == null){
+            System.out.println("error in order");
+            request.setAttribute("error", "internal error");
+            request.getRequestDispatcher("/cart.jsp").forward(request, response);
+            return;
+        }
+
+        LocalDate oggi = LocalDate.now();
+        if (card.getDataScadenzaFormatted().isBefore(oggi)) {
+            System.out.println("carta scaduta");
+            request.setAttribute("error", "card data scadenza is before oggi");
+            request.getRequestDispatcher("/cart.jsp").forward(request, response);
+            return;
+        }
+
+        SessionCart sCart = (SessionCart) session.getAttribute("cart");
+        OrdineDAO dbOrder = new OrdineDAO(ds);
+        OrdineBean ordine = new OrdineBean(
+                0,
+                sCart.getCarelloRefernz().getTot() - sCart.getCarelloRefernz().getTot() * (sCart.getCarelloRefernz().getSconti() / 100.0),
+                oggi.toString(),
+                "",
+                (int) session.getAttribute("logId"),
+                indirizzo.getIdIndirizzo(),
+                card.getIdMetodoPagamento()
+
+        );
+        ordine.setDataArrivos(OrdineBean.calcolaDataConGiorniLavorativi(3).toString());
+        int idOrdine;
+
+        try {
+            idOrdine = dbOrder.doSave(ordine);
+        } catch (SQLException e) {
+            System.out.println("order error: " + e.getMessage());
+            request.setAttribute("error", "internal error");
+            request.getRequestDispatcher("/cart.jsp").forward(request, response);
+            return;
+        }
+
+        AcquistatoDAO acquistatoDB = new AcquistatoDAO(ds);
+        ContenutoDAO contenutoDB = new ContenutoDAO(ds);
+        VolumeDAO volumeDB = new VolumeDAO(ds);
+        ProdottoDAO prodottoDB = new ProdottoDAO(ds);
+        for(ContenutoBean conte : sCart.getContenuti()){
+            AcquistatoBean acquistato = conte.convertirAcquistato(idOrdine);
+
+            try {
+                contenutoDB.doDeleteByCart(sCart.getCarelloRefernz().getIdCarello());
+                acquistatoDB.doSave(acquistato);
+                if (acquistato.getIdProdotto() == null || acquistato.getIdProdotto() == 0 ){
+                    volumeDB.decrementQuantita(acquistato.getqAcquistato(), acquistato.getIdVolume());
+                } else {
+                    prodottoDB.decrementQuantita(acquistato.getqAcquistato(), acquistato.getIdProdotto());
+                }
+            } catch (SQLException e) {
+                try {
+                    dbOrder.doDelete(idOrdine);
+                } catch (SQLException ex) {
+                    System.out.println("order delete order error: " + e.getMessage());
+                    request.setAttribute("error", "internal error");
+                    request.getRequestDispatcher("/cart.jsp").forward(request, response);
+                    return;
+                }
+                System.out.println("order error set contenuti: " + e.getMessage());
+                request.setAttribute("error", "internal error");
+                request.getRequestDispatcher("/cart.jsp").forward(request, response);
+                return;
+            }
+        }
+
+        sCart.clear();
+        sCart.push(ds);
+
+        System.out.println("success");
+        request.setAttribute("success", "success");
+        request.getRequestDispatcher("/cart.jsp").forward(request, response);
+    }
+}

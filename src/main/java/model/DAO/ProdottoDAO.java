@@ -313,6 +313,30 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         return (result != 0);
     }
 
+    public boolean decrementQuantita (int quantita, int idProd) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String updateSQL = "update " + TABLE_NAME + " set quantità = quantità - ? where idProdotto = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setInt(1, quantita);
+            ps.setInt(2, idProd);
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
+    }
+
     public Double doRetrievePrezzoByKey(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
