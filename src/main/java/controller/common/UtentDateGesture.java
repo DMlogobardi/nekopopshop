@@ -51,6 +51,8 @@ public class UtentDateGesture extends HttpServlet {
             return;
         }
 
+        session.setAttribute("gesture", "autorizato");
+
         if(action.equals("wishlist")){
             request.getRequestDispatcher("wishlistgesture").forward(request, response);
 

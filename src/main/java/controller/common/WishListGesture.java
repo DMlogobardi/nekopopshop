@@ -33,11 +33,18 @@ public class WishListGesture extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        if (session.getAttribute("logToken") == null) {
-            request.setAttribute("errors", "access denied");
+        if(session.getAttribute("logToken") == null){
+            request.setAttribute("error", "utent is not logged in");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
+
+        if(session.getAttribute("gesture") != "autorizato"){
+            request.setAttribute("error", "invalid request");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+        session.removeAttribute("gesture");
 
     }
 }

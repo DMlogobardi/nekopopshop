@@ -46,6 +46,13 @@ public class IndirizziGesture extends HttpServlet {
             return;
         }
 
+        if(session.getAttribute("gesture") != "autorizato"){
+            request.setAttribute("error", "invalid request");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+        session.removeAttribute("gesture");
+
         String action = request.getParameter("actionIndirizzo");
         if(action == null){
             request.setAttribute("error", "invalid action");
