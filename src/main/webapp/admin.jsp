@@ -781,19 +781,19 @@
 
                 <!-- Sidebar Menu -->
                 <nav class="space-y-1 mb-6">
-                    <a href="gestioneprodotti.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="#" id="productsLink" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
                         <i class="fas fa-box sidebar-icon mr-3 text-gray-500"></i>
                         <span>Prodotti</span>
                     </a>
-                    <a href="gestioneutenti.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
                         <i class="fas fa-plus sidebar-icon mr-3 text-gray-500"></i>
                         <span>Aggiungi Prodotto</span>
                     </a>
-                    <a href="ordini.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
                         <i class="fas fa-minus sidebar-icon mr-3 text-gray-500"></i>
                         <span>Rimuovi Prodotto</span>
                     </a>
-                    <a href="ordini.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
                         <i class="fas fa-edit sidebar-icon mr-3 text-gray-500"></i>
                         <span>Modifica Prodotto</span>
                     </a>
@@ -803,6 +803,190 @@
         </div>
     </div>
 </div>
+
+<!-- Main Content -->
+<div class="lg:col-span-3">
+    <!-- Products Section -->
+    <div id="productsSection" class="hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <h2 class="text-2xl font-bold text-gray-800">Gestione Prodotti</h2>
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="productSearch" placeholder="Cerca prodotto..."
+                           class="form-input w-full pl-10">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+
+            <!-- Alert placeholder (for messages) -->
+            <div id="productsMessage" class="hidden"></div>
+
+            <!-- Products Table -->
+            <div class="overflow-x-auto">
+                <table class="admin-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Prezzo</th>
+                        <th>Quantità</th>
+                        <th>Categoria</th>
+                        <th>Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                    <!-- Products will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-between items-center mt-4">
+                <button id="prevPage" class="btn-outline" disabled>
+                    <i class="fas fa-chevron-left mr-2"></i> Precedente
+                </button>
+                <span id="pageInfo" class="text-gray-600">Pagina 1 di 1</span>
+                <button id="nextPage" class="btn-outline" disabled>
+                    Successivo <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Products management
+    let currentPage = 1;
+    let totalPages = 1;
+    let allProducts = [];
+    let filteredProducts = [];
+
+    document.getElementById('productsLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        // Show products section
+        document.getElementById('productsSection').classList.remove('hidden');
+
+        // Load products
+        loadProducts();
+    });
+
+    function loadProducts(page = 1, searchTerm = '') {
+        fetch('ProductServlet?action=list&page=' + page + '&search=' + encodeURIComponent(searchTerm))
+            .then(response => response.json())
+            .then(data => {
+                if(data.error) {
+                    showMessage('error', data.error);
+                    return;
+                }
+
+                allProducts = data.products;
+                totalPages = data.totalPages;
+                currentPage = data.currentPage;
+
+                updateProductsTable(allProducts);
+                updatePagination();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('error', 'Errore durante il caricamento dei prodotti');
+            });
+    }
+
+    function updateProductsTable(products) {
+        const tbody = document.getElementById('productsTableBody');
+        tbody.innerHTML = '';
+
+        if(products.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">Nessun prodotto trovato</td></tr>';
+            return;
+        }
+
+        products.forEach(product => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+            <td>${product.id}</td>
+            <td>${product.name}</td>
+            <td>€${product.price.toFixed(2)}</td>
+            <td>${product.quantity}</td>
+            <td>${product.category}</td>
+            <td>
+                <button class="btn-secondary py-1 px-3 text-sm" onclick="editProduct(${product.id})">
+                    <i class="fas fa-edit mr-1"></i> Modifica
+                </button>
+                <button class="btn-outline py-1 px-3 text-sm ml-2" onclick="deleteProduct(${product.id})">
+                    <i class="fas fa-trash-alt mr-1"></i> Elimina
+                </button>
+            </td>
+        `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function updatePagination() {
+        document.getElementById('pageInfo').textContent = `Pagina ${currentPage} di ${totalPages}`;
+        document.getElementById('prevPage').disabled = currentPage <= 1;
+        document.getElementById('nextPage').disabled = currentPage >= totalPages;
+    }
+
+    // Pagination event listeners
+    document.getElementById('prevPage').addEventListener('click', function() {
+        if(currentPage > 1) {
+            loadProducts(currentPage - 1, document.getElementById('productSearch').value);
+        }
+    });
+
+    document.getElementById('nextPage').addEventListener('click', function() {
+        if(currentPage < totalPages) {
+            loadProducts(currentPage + 1, document.getElementById('productSearch').value);
+        }
+    });
+
+    // Search functionality
+    document.getElementById('productSearch').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        loadProducts(1, searchTerm); // Reset to page 1 when searching
+    });
+
+    function showMessage(type, message) {
+        const messageDiv = document.getElementById('productsMessage');
+        messageDiv.className = `alert alert-${type}`;
+        messageDiv.innerHTML = `
+        <i class="fas fa-${type == 'error' ? 'exclamation-circle' : 'check-circle'} alert-icon"></i>
+        ${message}
+    `;
+        messageDiv.classList.remove('hidden');
+
+        // Hide message after 5 seconds
+        setTimeout(() => {
+            messageDiv.classList.add('hidden');
+        }, 5000);
+    }
+
+    // Placeholder functions for edit/delete
+    function editProduct(id) {
+        alert('Modifica prodotto con ID: ' + id);
+        // Implement edit functionality
+    }
+
+    function deleteProduct(id) {
+        if(confirm('Sei sicuro di voler eliminare questo prodotto?')) {
+            fetch('ProductServlet?action=delete&id=' + id, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        showMessage('success', 'Prodotto eliminato con successo');
+                        loadProducts(currentPage, document.getElementById('productSearch').value);
+                    } else {
+                        showMessage('error', data.message || 'Errore durante l\'eliminazione');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showMessage('error', 'Errore durante l\'eliminazione');
+                });
+        }
+    }
+</script>
 
 <!-- Footer -->
 <footer class="mt-16 bg-gradient-to-b from-nekoorange to-nekopeach text-white pt-12 pb-8">
