@@ -48,12 +48,15 @@ public class JsonConverter<T> {
     public List<T> parseList(String json) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
-        // Crea dinamicamente il tipo T[]
-        @SuppressWarnings("unchecked")
-        Class<T[]> clazzArray = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
-
-        T[] array = mapper.readValue(json, clazzArray);
-        return Arrays.asList(array);
+        JsonNode node = mapper.readTree(json);
+        if (node.isArray()) {
+            Class<T[]> clazzArray = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
+            T[] array = mapper.readValue(json, clazzArray);
+            return Arrays.asList(array);
+        } else {
+            T single = mapper.treeToValue(node, clazz);
+            return List.of(single);
+        }
     }
 
     public String toJson(T obj) throws Exception {

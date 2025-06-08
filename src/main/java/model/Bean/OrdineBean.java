@@ -1,5 +1,7 @@
 package model.Bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -61,6 +63,7 @@ public class OrdineBean implements Serializable {
         return dataOrdine;
     }
 
+    @JsonIgnore
     public LocalDate getDataOrdineFormatted() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date =LocalDate.parse(dataOrdine, format);
@@ -76,6 +79,7 @@ public class OrdineBean implements Serializable {
         return dataArrivos;
     }
 
+    @JsonIgnore
     public LocalDate getDataArrivoFormatted() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date =LocalDate.parse(dataArrivos, format);
@@ -94,6 +98,7 @@ public class OrdineBean implements Serializable {
         return idMetodoPag;
     }
 
+    @JsonIgnore
     public static LocalDate calcolaDataConGiorniLavorativi(int giorniLavorativi) {
         LocalDate data = LocalDate.now();
         int aggiunti = 0;

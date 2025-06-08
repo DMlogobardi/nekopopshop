@@ -65,11 +65,12 @@ public class WishListGesture extends HttpServlet {
         }
 
         if(action.equals("add")){
-            JsonConverter<WishListDTO> converter = JsonConverter.factory(WishListDTO.class, request.getReader());
+            JsonConverter<WishListDTO> converter = JsonConverter.factory(WishListDTO.class, null);
+            String json = request.getParameter("json");
             Collection<WishListDTO> dto = null;
 
             try{
-                dto = converter.parseList();
+                dto = converter.parseList(json);
             } catch (Exception e) {
                 response.setStatus(500);
                 response.setContentType("text/json");
@@ -108,42 +109,97 @@ public class WishListGesture extends HttpServlet {
             response.getWriter().println("{\"success\":\"success\"}");
 
         } else if (action.equals("remove")){
-            JsonConverter<WishListDTO> converter = JsonConverter.factory(WishListDTO.class, request.getReader());
+            JsonConverter<WishListDTO> converter = JsonConverter.factory(WishListDTO.class, null);
+            String json = request.getParameter("json");
             Collection<WishListDTO> dto = null;
 
             try{
-                dto = converter.parseList();
+                dto = converter.parseList(json);
             } catch (Exception e) {
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
             }
+
+            DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
+            WishlistDAO wishlistDAO = new WishlistDAO(ds);
+            for(WishListDTO wishListDTO : dto){
+                try{
+                    wishlistDAO.doDelete(wishListDTO.getIdWishList());
+                } catch (SQLException e) {
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                }
+            }
+
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if (action.equals("update")) {
-            JsonConverter<WishListDTO> converter = JsonConverter.factory(WishListDTO.class, request.getReader());
+            JsonConverter<WishListDTO> converter = JsonConverter.factory(WishListDTO.class, null);
+            String json = request.getParameter("json");
             Collection<WishListDTO> dto = null;
 
             try{
-                dto = converter.parseList();
+                dto = converter.parseList(json);
             } catch (Exception e) {
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
             }
+
+            DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
+            WishlistDAO wishlistDAO = new WishlistDAO(ds);
+            for(WishListDTO wishListDTO : dto){
+                try{
+                    wishlistDAO.uppdate(new WishlistBean(wishListDTO.getIdWishList(), wishListDTO.getIdProdotto(), wishListDTO.getIdCliente(), wishListDTO.getIdVolume()));
+                } catch (SQLException e) {
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                }
+            }
+
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if (action.equals("list")){
-
-        } else if (action.equals("toCart")) {
-            JsonConverter<WishListDTO> converter = JsonConverter.factory(WishListDTO.class, request.getReader());
-            Collection<WishListDTO> dto = null;
+            int page = Integer.parseInt(request.getParameter("page"));
+            String order = request.getParameter("order");
+            JsonConverter<WishlistBean> converter = JsonConverter.factory(WishlistBean.class, null);
+            DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
+            WishlistDAO wishlistDAO = new WishlistDAO(ds);
+            Collection<WishlistBean> dto = null;
 
             try{
-                dto = converter.parseList();
-            } catch (Exception e) {
+                dto = wishlistDAO.doRetrieveAllLimit(order, 10, page);
+            } catch (SQLException e) {
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
             }
+
+            if(dto == null){
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"internal error\"}");
+            }
+
+            String json = null;
+            try {
+                json = converter.toJson(dto);
+            } catch (Exception e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"internal error\"}");
+            }
+
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println(json);
 
         } else {
             System.out.println("invalid action");
