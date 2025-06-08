@@ -13,13 +13,13 @@ import java.io.IOException;
  * Servlet implementation class login
  */
 @WebServlet("/common/utentdategesture")
-public class UtentDateGesture extends HttpServlet {
+public class UtentDataGesture extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor.
      */
-    public UtentDateGesture() {
+    public UtentDataGesture() {
         // TODO Auto-generated constructor stub
     }
 

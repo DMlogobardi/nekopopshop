@@ -43,5 +43,21 @@ public class OrdiniGesture extends HttpServlet {
         }
         session.removeAttribute("gesture");
 
+        String action = request.getParameter("actionOrdini");
+        if(action == null){
+            request.setAttribute("error", "invalid action");
+            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            return;
+        }
+
+        if(action.equals("annulla")){
+
+        } else if (action.equals("list")) {
+
+        } else {
+            System.out.println("invalid action");
+            request.setAttribute("error", "invalid action");
+            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+        }
     }
 }

@@ -1,6 +1,7 @@
-package controller.common;
+package controller.admin;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,13 +9,14 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-public class UtentGesture extends HttpServlet {
+@WebServlet("/admin/admindatagesture")
+public class AdminUserGesture extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor.
      */
-    public UtentGesture() {
+    public AdminUserGesture() {
         // TODO Auto-generated constructor stub
     }
 
@@ -23,7 +25,6 @@ public class UtentGesture extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-
     }
 
     /**
@@ -31,33 +32,29 @@ public class UtentGesture extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        if(session.getAttribute("logToken") == null){
-            request.setAttribute("error", "utent is not logged in");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+        if(session.getAttribute("logToken") != "A") {
+            request.setAttribute("errors", "access denied");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
 
-        if(session.getAttribute("gesture") != "autorizato"){
-            request.setAttribute("error", "invalid request");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-            return;
-        }
-        session.removeAttribute("gesture");
+        String action = request.getParameter("action");
 
-        String action = request.getParameter("actionUtent");
         if(action == null){
             request.setAttribute("error", "invalid action");
             request.getRequestDispatcher("/utente.jsp").forward(request, response);
             return;
         }
 
-        if(action.equals("list")){
+        session.setAttribute("gestureAdmin", "autorizato");
 
-        } else if (action.equals("update")) {
-
+        if(action.equals("order")){
+            request.getRequestDispatcher("manageorder").forward(request, response);
+        } else if (action.equals("cliente")) {
+            request.getRequestDispatcher("managecliente").forward(request, response);
         } else {
-            System.out.println("invalid action");
-            request.setAttribute("error", "invalid action");
+            System.out.println("error");
+            request.setAttribute("error", "Invalid action");
             request.getRequestDispatcher("/utente.jsp").forward(request, response);
         }
 

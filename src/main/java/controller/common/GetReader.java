@@ -43,6 +43,5 @@ public class GetReader extends HttpServlet {
             return;
         }
         session.removeAttribute("gesture");
-
     }
 }

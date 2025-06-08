@@ -66,6 +66,30 @@ public class JsonConverter<T> {
         return mapper.writeValueAsString(obj);
     }
 
+    public List<T> parseList() throws Exception {
+        StringBuilder jsonBuilder = new StringBuilder();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            jsonBuilder.append(line);
+        }
+
+        String json = jsonBuilder.toString();
+        ObjectMapper mapper = new ObjectMapper();
+
+        JsonNode node = mapper.readTree(json);
+        if (node.isArray()) {
+            // JSON è un array: deserializza direttamente in lista
+            Class<T[]> clazzArray = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
+            T[] array = mapper.readValue(json, clazzArray);
+            return Arrays.asList(array);
+        } else {
+            // JSON è un singolo oggetto: crea lista con un solo elemento
+            T single = mapper.treeToValue(node, clazz);
+            return List.of(single);
+        }
+    }
+
     public static final String merge (String json1, String json2) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
