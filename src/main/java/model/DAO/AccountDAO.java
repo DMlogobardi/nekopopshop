@@ -213,4 +213,33 @@ public class AccountDAO implements GenralDAO<AccountBean>{
         }
         return accounts;
     }
+    public void updatePasswordByNickname(String nickName, String newPassword) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        String updateSQL = "UPDATE " + TABLE_NAME + " SET password = ? WHERE nickName = ?";
+
+        try{
+            con = ds.getConnection();
+            con.setAutoCommit(false);
+            ps = con.prepareStatement(updateSQL);
+
+            String hashedPassword =AccountBean.hashPassword(newPassword);
+
+            ps.setString(1, hashedPassword);
+            ps.setString(2, nickName);
+
+            int rowsUpdated =ps.executeUpdate();
+            if(rowsUpdated == 0){
+                System.out.println("Nessun utente aggiornato. Controlla:");
+            }
+            con.commit();
+        } catch(SQLException e){
+            if(con != null) con.rollback();
+            throw e;
+        }finally {
+            if(ps != null) ps.close();
+            if (con != null) con.close();
+        }
+    }
 }
