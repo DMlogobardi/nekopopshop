@@ -16,18 +16,11 @@ import java.sql.SQLException;
 @WebServlet("/reset-password")
 public class ResetPasswordServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private AccountDAO accountDAO;
 
-    public void init() throws ServletException {
-        try {
-            InitialContext ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/your_datasource");
-            accountDAO = new AccountDAO(ds);
 
-        } catch (NamingException e) {
-            throw new ServletException("Errore DataSource", e);
+    public ResetPasswordServlet() {
 
-        }
+
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("reset-password.jsp").forward(request, response);
@@ -35,6 +28,8 @@ public class ResetPasswordServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nickName = request.getParameter("nickName");
         String newPassword = request.getParameter("newPassword");
+        DataSource dataSource = (DataSource) request.getServletContext().getAttribute("dataSource");
+        AccountDAO accountDAO = new AccountDAO(dataSource);
 
         try {
             accountDAO.updatePasswordByNickname(nickName, newPassword);
