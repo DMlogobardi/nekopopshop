@@ -2,6 +2,7 @@ package model.DAO;
 
 import model.Bean.ProdottoBean;
 import model.Bean.VolumeBean;
+import model.DTO.BookDTO;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -93,6 +94,40 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         ProdottoBean prod = null;
 
         String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idProdotto = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1,code);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                prod = new ProdottoBean(
+                        rs.getInt("idProdotto"),
+                        rs.getString("nome"),
+                        rs.getInt("quantità"),
+                        rs.getDouble("prezzo"),
+                        rs.getString("autore"),
+                        rs.getBytes("imgProd"),
+                        rs.getString("descrizione")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return prod;
+    }
+
+    public ProdottoBean doRetrieveByVol(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ProdottoBean prod = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idVolum = ?";
 
         try{
             con = ds.getConnection();

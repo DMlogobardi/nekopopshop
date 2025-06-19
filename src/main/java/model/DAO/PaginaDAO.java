@@ -141,6 +141,43 @@ public class PaginaDAO implements GenralDAO<PaginaBean>{
         return pages;
     }
 
+    public Collection<PaginaBean> doRetrieveAllByCapitolo(String order, int id) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<PaginaBean> pages = new LinkedList<PaginaBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME + " where idCapitolo = ?  order by ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setInt(1, id);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(2, order.strip());
+            else
+                ps.setString(2, "idPagina");
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                PaginaBean pag = new PaginaBean(
+                        rs.getInt("idPagina"),
+                        rs.getInt("numPag"),
+                        rs.getBytes("tavola"),
+                        rs.getString("dataCaricamento"),
+                        rs.getInt("idCapitolo")
+                );
+                pages.add(pag);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return pages;
+    }
+
     @Override
     public Collection<PaginaBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
         Connection con = null;

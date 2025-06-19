@@ -75,6 +75,7 @@ public class WishListGesture extends HttpServlet {
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
             }
 
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
@@ -101,6 +102,7 @@ public class WishListGesture extends HttpServlet {
                     response.setStatus(500);
                     response.setContentType("text/json");
                     response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                    return;
                 }
             }
 
@@ -119,6 +121,7 @@ public class WishListGesture extends HttpServlet {
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
             }
 
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
@@ -130,6 +133,7 @@ public class WishListGesture extends HttpServlet {
                     response.setStatus(500);
                     response.setContentType("text/json");
                     response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                    return;
                 }
             }
 
@@ -148,6 +152,7 @@ public class WishListGesture extends HttpServlet {
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
             }
 
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
@@ -159,6 +164,7 @@ public class WishListGesture extends HttpServlet {
                     response.setStatus(500);
                     response.setContentType("text/json");
                     response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                    return;
                 }
             }
 
@@ -180,12 +186,14 @@ public class WishListGesture extends HttpServlet {
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
             }
 
             if(dto == null){
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"internal error\"}");
+                return;
             }
 
             String json = null;
@@ -195,6 +203,7 @@ public class WishListGesture extends HttpServlet {
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"internal error\"}");
+                return;
             }
 
             response.setStatus(200);
@@ -203,8 +212,9 @@ public class WishListGesture extends HttpServlet {
 
         } else {
             System.out.println("invalid action");
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
         }
     }
 }

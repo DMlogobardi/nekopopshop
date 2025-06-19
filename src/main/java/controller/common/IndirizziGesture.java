@@ -205,8 +205,9 @@ public class IndirizziGesture extends HttpServlet {
 
         } else {
             System.out.println("invalid action");
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
         }
     }
 }

@@ -168,8 +168,10 @@ public class CarteGesture extends HttpServlet {
             response.getWriter().write(json);
 
         } else {
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("invalid action");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
         }
     }
 }

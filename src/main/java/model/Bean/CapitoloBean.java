@@ -1,6 +1,9 @@
 package model.Bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -29,10 +32,11 @@ public class CapitoloBean implements Serializable {
         return dataPub;
     }
 
-    public LocalDate getDataPubFormatted() {
+    @JsonIgnore
+    public Date getDataPubFormatted() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
         LocalDate date =LocalDate.parse(dataPub, format);
-        return date;
+        return Date.valueOf(date);
     }
 
     public int getIdVolume() {

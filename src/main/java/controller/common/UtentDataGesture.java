@@ -73,9 +73,10 @@ public class UtentDataGesture extends HttpServlet {
             request.getRequestDispatcher("getreader").forward(request, response);
 
         } else {
-            System.out.println("error");
-            request.setAttribute("error", "Invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("invalid action");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");;
         }
     }
 
