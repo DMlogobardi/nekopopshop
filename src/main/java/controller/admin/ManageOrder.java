@@ -52,6 +52,18 @@ public class ManageOrder extends HttpServlet {
             request.getRequestDispatcher("/admin.jsp").forward(request, response);
             return;
         }
+        
+        if(action.equals("getAll")){
+            
+        } else if (action.equals("forDate")) {
+            
+        } else if (action.equals("forUser")) {
 
+        } else {
+            System.out.println("invalid action");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
+        }
     }
 }
