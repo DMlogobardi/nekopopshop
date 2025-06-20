@@ -33,16 +33,18 @@ public class AdminUserGesture extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         if(session.getAttribute("logToken") != "A") {
-            request.setAttribute("errors", "access denied");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
 
         String action = request.getParameter("action");
 
         if(action == null){
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
 
@@ -53,9 +55,10 @@ public class AdminUserGesture extends HttpServlet {
         } else if (action.equals("cliente")) {
             request.getRequestDispatcher("managecliente").forward(request, response);
         } else {
-            System.out.println("error");
-            request.setAttribute("error", "Invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("invalid action");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
         }
 
     }

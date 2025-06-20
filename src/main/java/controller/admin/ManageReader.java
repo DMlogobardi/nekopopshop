@@ -52,6 +52,7 @@ public class ManageReader extends HttpServlet {
             response.setStatus(422);
             response.setContentType("text/json");
             response.getWriter().println("{\"error\":\"access denied\"}");
+            return;
         }
 
         String action = request.getParameter("action");
@@ -61,6 +62,7 @@ public class ManageReader extends HttpServlet {
             response.setStatus(422);
             response.setContentType("text/json");
             response.getWriter().println("{\"error\":\"invalid action\"}");
+            return;
         }
 
         DataSource ds = (DataSource) session.getServletContext().getAttribute("dataSource");
@@ -155,6 +157,14 @@ public class ManageReader extends HttpServlet {
                 String json = request.getParameter("json");
                 Collection<ReaderDTO> readers = null;
 
+                if (json == null || json.trim().isEmpty()) {
+                    System.out.println("Errore: JSON nullo o vuoto");
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\" JSON nullo o vuoto\"}");
+                    return;
+                }
+
                 try {
                     readers = converter.parseList(json);
                 } catch (Exception e) {
@@ -187,6 +197,14 @@ public class ManageReader extends HttpServlet {
                         .filter(p -> p.getSubmittedFileName() != null && p.getContentType() != null && p.getName().equals("image"))
                         .toList();
                 ReaderDTO reader = null;
+
+                if (json == null || json.trim().isEmpty()) {
+                    System.out.println("Errore: JSON nullo o vuoto");
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\" JSON nullo o vuoto\"}");
+                    return;
+                }
 
                 try {
                     reader = converter.parse(json);
@@ -238,6 +256,14 @@ public class ManageReader extends HttpServlet {
                 String json = request.getParameter("json");
                 Collection<Integer> ids = null;
 
+                if (json == null || json.trim().isEmpty()) {
+                    System.out.println("Errore: JSON nullo o vuoto");
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\" JSON nullo o vuoto\"}");
+                    return;
+                }
+
                 try {
                     ids = converter.parseList(json);
                 } catch (Exception e) {
@@ -269,6 +295,14 @@ public class ManageReader extends HttpServlet {
                 PaginaDAO paginaDAO = new PaginaDAO(ds);
                 String json = request.getParameter("json");
                 Collection<Integer> ids = null;
+
+                if (json == null || json.trim().isEmpty()) {
+                    System.out.println("Errore: JSON nullo o vuoto");
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\" JSON nullo o vuoto\"}");
+                    return;
+                }
 
                 try {
                     ids = converter.parseList(json);
