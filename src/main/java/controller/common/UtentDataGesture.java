@@ -38,16 +38,19 @@ public class UtentDataGesture extends HttpServlet {
         // TODO Auto-generated method stub
         HttpSession session = request.getSession();
         if(session.getAttribute("logToken") == null){
-            request.setAttribute("error", "utent is not logged in");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
 
         String action = request.getParameter("action");
 
         if(action == null){
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("action is null");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
             return;
         }
 
