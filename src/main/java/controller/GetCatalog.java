@@ -64,8 +64,9 @@ public class GetCatalog extends HttpServlet {
 			} else if (serch == null) {
 				System.out.println("filter: " + filter);
 				if(filter.equals("volumi")){
-					String volFilter = request.getParameter("volFilter");
-					dbVol = volDB.doRetrieveAllLimit(volFilter.strip(), 10, page);
+					String order = request.getParameter("order");
+					String volFilter = request.getParameter("tag");
+					dbVol = volDB.doRetrieveAllLimitByType(order, 10, page, volFilter);
 
 				} else {
 					dbPrd = prodDB.doRetrieveAllLimit(filter.strip(), 10, page);
