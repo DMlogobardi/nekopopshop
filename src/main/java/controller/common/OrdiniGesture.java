@@ -41,22 +41,26 @@ public class OrdiniGesture extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         if(session.getAttribute("logToken") == null){
-            request.setAttribute("error", "utent is not logged in");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
 
         if(session.getAttribute("gesture") != "autorizato"){
-            request.setAttribute("error", "invalid request");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
         session.removeAttribute("gesture");
 
         String action = request.getParameter("actionOrdini");
         if(action == null){
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("action is null");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
             return;
         }
 
