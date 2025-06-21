@@ -1,13 +1,23 @@
 package controller.admin;
 
+import controller.tools.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Bean.ClienteBean;
+import model.Bean.IndirizzoBean;
+import model.Bean.NumTelefonoBean;
+import model.DAO.ClienteDAO;
+import model.DAO.IndirizzoDAO;
+import model.DAO.NumtelefonoDAO;
 
+import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Collection;
 
 @WebServlet("/admin/managecliente")
 public class ManageCliente extends HttpServlet {
@@ -33,14 +43,16 @@ public class ManageCliente extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         if(session.getAttribute("logToken") != "A") {
-            request.setAttribute("errors", "access denied");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
 
         if(session.getAttribute("gestureAdmin") != "autorizato"){
-            request.setAttribute("error", "invalid request");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
         session.removeAttribute("gestureAdmin");
@@ -48,16 +60,122 @@ public class ManageCliente extends HttpServlet {
         String action = request.getParameter("actionCliente");
 
         if(action == null){
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/admin.jsp").forward(request, response);
+            System.out.println("action is null");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
             return;
         }
 
+        DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
+
         if (action.equals("getAll")) {
+            JsonConverter<ClienteBean> converter = JsonConverter.factory(ClienteBean.class, null);
+            ClienteDAO clienteDAO = new ClienteDAO(ds);
+            Collection<ClienteBean> clienti = null;
+            String order = request.getParameter("order");
+            Integer limit = Integer.parseInt(request.getParameter("limit"));
+            Integer page = Integer.parseInt(request.getParameter("page"));
+
+            if(limit == null || page == null){
+                response.setStatus(422);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"invalid limit and page\"}");
+                return;
+            }
+
+            try {
+                clienti = clienteDAO.doRetrieveAllLimit(order, limit, page);
+            } catch (SQLException e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
+            }
+
+            String json = "{}";
+            try {
+                json = converter.toJson(clienti);
+            } catch (Exception e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
+            }
+
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println(json);
 
         } else if (action.equals("getIndirizzo")) {
+            JsonConverter<IndirizzoBean> converter = JsonConverter.factory(IndirizzoBean.class, null);
+            IndirizzoDAO indirizzoDAO = new IndirizzoDAO(ds);
+            Collection<IndirizzoBean> indirizzi = null;
+            int id = Integer.parseInt(request.getParameter("id"));
+
+            if(id <= 0 ){
+                response.setStatus(422);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"invalid cliente\"}");
+            }
+
+            try {
+                indirizzi = indirizzoDAO.doRetrieveByCliente(id);
+            } catch (SQLException e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
+            }
+
+            String json = "{}";
+            try {
+                json = converter.toJson(indirizzi);
+            } catch (Exception e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
+            }
+
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println(json);
 
         } else if (action.equals("getTelefono")) {
+            JsonConverter<NumTelefonoBean> converter = JsonConverter.factory(NumTelefonoBean.class, null);
+            NumtelefonoDAO numtelefonoDAO= new NumtelefonoDAO(ds);
+            Collection<NumTelefonoBean> numeri = null;
+            int id = Integer.parseInt(request.getParameter("id"));
+
+            if(id <= 0 ){
+                response.setStatus(422);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"invalid cliente\"}");
+            }
+
+            try {
+                numeri = numtelefonoDAO.doRetrieveAllByClient(id);
+            } catch (SQLException e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
+            }
+
+            String json = "{}";
+            try {
+                json = converter.toJson(numeri);
+            } catch (Exception e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
+            }
+
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println(json);
 
         } else {
             System.out.println("invalid action");
