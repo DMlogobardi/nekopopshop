@@ -41,22 +41,26 @@ public class IndirizziGesture extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         if(session.getAttribute("logToken") == null){
-            request.setAttribute("error", "utent is not logged in");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
 
         if(session.getAttribute("gesture") != "autorizato"){
-            request.setAttribute("error", "invalid request");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
         session.removeAttribute("gesture");
 
         String action = request.getParameter("actionIndirizzo");
         if(action == null){
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("action is null");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
             return;
         }
 
@@ -73,8 +77,9 @@ public class IndirizziGesture extends HttpServlet {
                     indirizziDTO.add(converter.parse(json));
                 } catch (Exception e1){
                     System.out.println("error add: " + e.getMessage() + "second error: " + e1.getCause());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
@@ -89,15 +94,17 @@ public class IndirizziGesture extends HttpServlet {
                     indirizzoDAO.doSave(indirizzoBean);
                 } catch (SQLException e) {
                     System.out.println("add error: " + e.getMessage());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
 
             System.out.println("add success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");;
 
         } else if(action.equals("delete")){
             String json = request.getParameter("json");
@@ -112,8 +119,9 @@ public class IndirizziGesture extends HttpServlet {
                     indirizziDTO.add(converter.parse(json));
                 } catch (Exception e1){
                     System.out.println("error delete: " + e.getMessage() + "second error: " + e1.getCause());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
@@ -126,15 +134,17 @@ public class IndirizziGesture extends HttpServlet {
                     indirizzoDAO.doDeleteByIdAndCliente(indirizzoBean.getIdIndirizzo(), idCliente);
                 } catch (SQLException e) {
                     System.out.println("delete error: " + e.getMessage());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
 
             System.out.println("delete success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if(action.equals("update")){
             String json = request.getParameter("json");
@@ -149,8 +159,9 @@ public class IndirizziGesture extends HttpServlet {
                     indirizziDTO.add(converter.parse(json));
                 } catch (Exception e1){
                     System.out.println("error update: " + e.getMessage() + "second error: " + e1.getCause());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
@@ -162,15 +173,17 @@ public class IndirizziGesture extends HttpServlet {
                     indirizzoDAO.update(indirizzoBean);
                 } catch (SQLException e) {
                     System.out.println("update error: " + e.getMessage());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
 
             System.out.println("update success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if(action.equals("list")){
             JsonConverter<IndirizzoBean> converter = JsonConverter.factory(IndirizzoBean.class, null);
@@ -183,8 +196,9 @@ public class IndirizziGesture extends HttpServlet {
                 indirizzi = indirizzoDAO.doRetrieveByCliente(idCliente);
             } catch (SQLException e) {
                 System.out.println("list error: " + e.getMessage());
-                request.setAttribute("error", "server error");
-                request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                 return;
             }
 
@@ -193,15 +207,16 @@ public class IndirizziGesture extends HttpServlet {
                 json = converter.toJson(indirizzi);
             } catch (Exception e) {
                 System.out.println("list pars error: " + e.getMessage());
-                request.setAttribute("error", "server error");
-                request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                 return;
             }
 
             System.out.println("success");
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(json);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println(json);
 
         } else {
             System.out.println("invalid action");

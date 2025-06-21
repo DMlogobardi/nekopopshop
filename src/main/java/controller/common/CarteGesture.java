@@ -102,8 +102,9 @@ public class CarteGesture extends HttpServlet {
             }
 
             System.out.println("add success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if(action.equals("delete")){
             String json = request.getParameter("json");
@@ -141,8 +142,9 @@ public class CarteGesture extends HttpServlet {
             }
 
             System.out.println("delete success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if(action.equals("list")){
             JsonConverter<MetodoPagamentoBean> converter = JsonConverter.factory(MetodoPagamentoBean.class, null);
