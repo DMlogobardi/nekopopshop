@@ -148,7 +148,7 @@ public class ManageReader extends HttpServlet {
             response.setContentType("text/json");
             response.getWriter().println("{\"success\":\"success\"}");
 
-        } else if (action.equals("update")) {
+        } else if (action.equals("capitolo")) {
             String type = request.getParameter("type");
             JsonConverter<ReaderDTO> converter = JsonConverter.factory(ReaderDTO.class, null);
 

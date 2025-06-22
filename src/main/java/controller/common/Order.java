@@ -180,6 +180,14 @@ public class Order extends HttpServlet {
                     return;
                 }
             } else {
+                try {
+                    dbOrder.doDelete(idOrdine);
+                } catch (SQLException e) {
+                    request.setCharacterEncoding("UTF-8");
+                    response.setContentType("text/json");
+                    response.getWriter().write("{\"error\": \"internal error\"}");
+                    return;
+                }
                 System.out.println("quantità del prodotto troppo alta");
                 request.setCharacterEncoding("UTF-8");
                 response.setContentType("text/json");

@@ -1,11 +1,13 @@
 package controller.tools;
 
+import jakarta.servlet.annotation.WebListener;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 import model.SessionCart;
 
 import javax.sql.DataSource;
 
+@WebListener
 public class CartSave implements HttpSessionListener {
 
     public CartSave() {

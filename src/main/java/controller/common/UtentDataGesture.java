@@ -54,25 +54,28 @@ public class UtentDataGesture extends HttpServlet {
             return;
         }
 
-        session.setAttribute("gesture", "autorizato");
-
         if(action.equals("wishlist")){
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("wishlistgesture").forward(request, response);
 
         } else if (action.equals("indirizzi")) {
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("indirizzigesture").forward(request, response);
 
         } else if (action.equals("carte")) {
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("cartegesture").forward(request, response);
 
         } else if (action.equals("datiUtente")) {
-            //account compreso
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("utentegesture").forward(request, response);
 
         } else if (action.equals("ordini")) {
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("ordinigesture").forward(request, response);
 
         } else if (action.equals("reader")) {
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("getreader").forward(request, response);
 
         } else {

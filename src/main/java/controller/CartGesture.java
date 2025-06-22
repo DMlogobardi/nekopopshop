@@ -158,16 +158,44 @@ public class CartGesture extends HttpServlet {
             }
 
             for(ContenutoDTO dto : updateDTO) {
+                DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
+                ProdottoDAO prodottoSQL = new ProdottoDAO(ds);
+                VolumeDAO volumeSQL = new VolumeDAO(ds);
+                double dbprice = 0.0;
+
+                try {
+                    if (dto.getIdProdotto() != null && dto.getIdProdotto() != 0) {
+                        dbprice = prodottoSQL.doRetrievePrezzoByKey(dto.getIdProdotto());
+                    } else {
+                        dbprice = volumeSQL.doRetrievePrezzoByKey(dto.getIdVolume());
+                    }
+                } catch (SQLException e) {
+                    System.out.println("error update: " + e.getMessage());
+                    request.setAttribute("error", "server error");
+                    request.getRequestDispatcher("cart.jsp").forward(request, response);
+                }
+                double lastTot = sCart.getCarelloRefernz().getTot();
                 if (dto.getIdProdotto() != null && dto.getIdProdotto() != 0) {
+                    double finalDbprice = dbprice;
                     sCart.getContenuti().stream().filter(conte -> conte.getIdProdotto() == dto.getIdProdotto()).findFirst().ifPresent(conte -> {
+                        sCart.getCarelloRefernz().setTot(lastTot - (finalDbprice * conte.getqCarrello()));
                         conte.setqCarrello(dto.getqCarrello());
+                        Double tempTot = sCart.getCarelloRefernz().getTot();
+                        sCart.getCarelloRefernz().setTot( + (tempTot * dto.getqCarrello()));
                     });
                 } else {
+                    double finalDbprice = dbprice;
                     sCart.getContenuti().stream().filter(conte -> conte.getIdVolume() == dto.getIdVolume()).findFirst().ifPresent(conte -> {
+                        sCart.getCarelloRefernz().setTot(lastTot - (finalDbprice * conte.getqCarrello()));
                         conte.setqCarrello(dto.getqCarrello());
+                        Double tempTot = sCart.getCarelloRefernz().getTot();
+                        sCart.getCarelloRefernz().setTot( + (tempTot * dto.getqCarrello()));
+
                     });
                 }
             }
+
+
 
             System.out.println("update success");
             request.setAttribute("success", "success");
