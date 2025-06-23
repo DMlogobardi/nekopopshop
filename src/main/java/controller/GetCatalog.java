@@ -46,7 +46,7 @@ public class GetCatalog extends HttpServlet {
 			System.out.println("serch: " + serch);
 			String filter = request.getParameter("filter");
 			int page = request.getParameter("page") == null ? 0 : Integer.parseInt(request.getParameter("page"));
-			String dayProduct = request.getParameter("dayProduct");
+			String dayProduct = request.getParameter("dayProduct") == null ? "" : request.getParameter("dayProduct");
 			int limit = request.getParameter("limit") == null ? 10 : Integer.parseInt(request.getParameter("limit"));
 
 			if(dayProduct.equals("ok")) {

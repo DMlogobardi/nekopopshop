@@ -112,8 +112,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         .then(data => {
                             if (data.error) {
                                 mostraErrore(data.error);
-                            } else if (data.success) {
+                            } else if (data.success === "success") {
                                 window.location.href = "catalog.jsp";
+                            } else {
+                                mostraErrore("alcuni prodotti sono già nel carrello");
                             }
                         })
                         .catch(err => {
@@ -140,7 +142,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return response.json();
         })
         .then(data => {
-            console.log(data)
             const container = document.getElementById("limitedFigure");
 
             const prodotto = data[0];
@@ -155,4 +156,154 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Errore:", error);
         })
 
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("getcatalog?limit=2")
+        .then(response => {
+            if (response.status === 500) {
+                throw new Error("Errore nel caricamento del prodotto");
+            }
+            return response.json();
+        })
+        .then(data => {
+            const container = document.getElementById("weeklyFeatured");
+            container.innerHTML = "";
+
+            if (!Array.isArray(data) || data.length === 0) {
+                container.innerHTML = "<p>Nessun prodotto valido da mostrare.</p>";
+                return;
+            }
+
+            const prodotti = data.filter(item => item.idProdotto !== undefined);
+            const volumi = data.filter(item => item.idVolume !== undefined);
+
+            const prodottiFinali = [];
+            const prodottiMostrati = new Set();
+
+            volumi.forEach(volume => {
+                const prodottoAssoc = prodotti.find(p => p.idProdotto === volume.idProdotto);
+                prodottiFinali.push({
+                    tipo: 'volume',
+                    idProdotto: volume.idProdotto,
+                    idVolume: volume.idVolume,
+                    nome: volume.nome || (prodottoAssoc ? prodottoAssoc.nome : "Volume"),
+                    descrizione: volume.descrizione || "Descrizione volume non disponibile",
+                    prezzo: volume.prezzo,
+                    img: volume.imgVol || (prodottoAssoc ? prodottoAssoc.imgProd : ""),
+                    numVolumi: volume.numVolumi,
+                    badgeColor: "bg-nekopurple",
+                    borderColor: "border-kawaiblue",
+                    badgeText: "NEW!"
+                });
+                prodottiMostrati.add(volume.idProdotto);
+            });
+
+            prodotti.forEach(prodotto => {
+                if (prodotto.prezzo > 0 && !prodottiMostrati.has(prodotto.idProdotto)) {
+                    prodottiFinali.push({
+                        tipo: 'prodotto',
+                        ...prodotto,
+                        badgeColor: "bg-nekored",
+                        borderColor: "border-kawaililac",
+                        badgeText: "POP!"
+                    });
+                    prodottiMostrati.add(prodotto.idProdotto);
+                }
+            });
+
+            // Funzione per creare card prodotto/volume
+
+            function creaCard(item) {
+                let titolo = "";
+                let prezzo = item.prezzo || 0;
+                let descrizione = item.descrizione || "";
+                let imgSrc = "";
+
+                if (item.tipo === 'volume') {
+                    titolo = `${item.nome} Vol. ${item.numVolumi || ''}`;
+                    imgSrc = item.img ? (item.img.startsWith("data:") ? item.img : `data:image/jpeg;base64,${item.img}`) : "https://via.placeholder.com/400x300";
+                } else {
+                    titolo = item.nome || "Action Figure";
+                    imgSrc = item.imgProd ? (item.imgProd.startsWith("data:") ? item.imgProd : `data:image/jpeg;base64,${item.imgProd}`) : "https://via.placeholder.com/400x300";
+                }
+
+                return `
+                    <div class="product-card bg-white rounded-lg overflow-hidden border-2 ${item.borderColor} relative m-2 max-w-sm">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="${imgSrc}" alt="${titolo}" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-gray-800">${titolo}</h3>
+                            <p class="text-gray-600 text-sm mt-1">${descrizione}</p>
+                            <div class="flex justify-between items-center mt-4">
+                                <span class="text-nekored font-bold">&#8364; ${prezzo.toFixed(2)}</span>
+                                <button
+                                 data-id="${item.tipo === 'volume' ? item.idVolume : item.idProdotto}"
+                                 data-tipo="${item.tipo}"
+                                 class="bg-nekored hover:bg-nekopink text-white py-2 px-4 rounded-lg text-sm transition add-to-cart">
+                                    <i class="fas fa-cart-plus mr-1"></i> Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                        <div class="absolute top-2 left-2 ${item.badgeColor} text-white px-2 py-1 rounded-md text-xs font-bold">${item.badgeText}</div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = prodottiFinali.slice(0, 2).map(creaCard).join('');
+            document.querySelectorAll(".add-to-cart").forEach(btn => {
+                btn.addEventListener("click", function () {
+
+                    const tipo = this.dataset.tipo;
+                    const id = this.dataset.id;
+
+                    const dati = {
+                        qCarrello: 1
+                    };
+
+                    if (tipo === "volume") {
+                        dati.idVolume = id;
+                    } else {
+                        dati.idProdotto = id;
+                    }
+
+                    const params = new URLSearchParams();
+                    params.append("action", "add");
+                    params.append("json", JSON.stringify(dati));
+
+                    fetch("cartgesture", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: params.toString()
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("Errore nella risposta dal server");
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.error) {
+                                mostraErrore(data.error);
+                            } else if (data.success === "success") {
+                                window.location.href = "catalog.jsp";
+                            } else {
+                                mostraErrore("alcuni prodotti sono già nel carrello");
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Errore:", err);
+                            mostraErrore("Si è verificato un errore. Riprova più tardi.");
+                        });
+                });
+            });
+        })
+        .catch(error => {
+            console.error("Errore:", error);
+            const container = document.getElementById("weeklyFeatured");
+            container.innerHTML = "<p>Errore nel caricamento dei prodotti.</p>";
+        });
 });

@@ -119,6 +119,7 @@ public class CartGesture extends HttpServlet {
                 }
             }
 
+            Boolean prodNotAdd = false;
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
             for (ContenutoDTO dto : addDTO) {
                 if(sCart.getProdotti().stream().filter(p->p.getIdProdotto() == dto.getIdProdotto()).count() == 0) {
@@ -144,13 +145,18 @@ public class CartGesture extends HttpServlet {
                     double totRef = (carrello == null || carrello.getTot() == null) ? 0.0 : carrello.getTot();
                     sCart.getCarelloRefernz().setTot(totRef + tot);
                     sCart.addPrd(new ContenutoBean(0, dto.getqCarrello(), dto.getIdCarrello(), dto.getIdProdotto(), dto.getIdVolume()));
+                } else {
+                    prodNotAdd = true;
                 }
             }
 
             System.out.println("add success");
             response.setStatus(200);
             response.setContentType("text/json");
-            response.getWriter().println("{\"success\":\"success\"}");
+            if(prodNotAdd)
+                response.getWriter().println("{\"success\":\"many prod not add\"}");
+            else
+                response.getWriter().println("{\"success\":\"success\"}");
 
         } else if (action.equals("update")) {
             //update

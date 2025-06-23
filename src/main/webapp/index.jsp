@@ -377,7 +377,7 @@
                     </h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                <div id="weeklyFeatured" class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                     <!-- Product -->
                     <div class="product-card bg-white rounded-lg overflow-hidden border-2 border-kawaililac relative">
                         <div class="relative h-48 overflow-hidden">
