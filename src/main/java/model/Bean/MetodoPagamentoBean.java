@@ -1,5 +1,9 @@
 package model.Bean;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +17,8 @@ public class MetodoPagamentoBean implements Serializable {
     private String cognomeInt;
     private int idCliente;
 
-    public MetodoPagamentoBean(int idMetodoPagamento, String nCarta, String tipo, String dataScadenza, String nomeInte, String cognomeInt, int idCliente) {
+    @JsonCreator
+    public MetodoPagamentoBean(@JsonProperty("idMetodoPagamento") int idMetodoPagamento, @JsonProperty("nCarta") String nCarta, @JsonProperty("tipo") String tipo, @JsonProperty("dataScadenza") String dataScadenza, @JsonProperty("nomeInte") String nomeInte, @JsonProperty("cognomeInt") String cognomeInt, @JsonProperty("idCliente") int idCliente) {
         this.idMetodoPagamento = idMetodoPagamento;
         this.nCarta = nCarta;
         this.tipo = tipo;
@@ -21,6 +26,11 @@ public class MetodoPagamentoBean implements Serializable {
         this.nomeInte = nomeInte;
         this.cognomeInt = cognomeInt;
         this.idCliente = idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        if(idCliente > 0)
+            this.idCliente = idCliente;
     }
 
     public int getIdMetodoPagamento() {
@@ -49,8 +59,9 @@ public class MetodoPagamentoBean implements Serializable {
         return dataScadenza;
     }
 
+    @JsonIgnore
     public LocalDate getDataScadenzaFormatted() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date =LocalDate.parse(dataScadenza, format);
         return date;
     }

@@ -71,18 +71,43 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
         return(result != 0);
     }
 
+    public boolean doDeleteByIdAndCliente(int code, int cliente) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String deleteSQL = "DELETE FROM " + TABLE_NAME + " WHERE idIndirizzo = ? and idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(deleteSQL);
+            ps.setInt(1, code);
+            ps.setInt(2, cliente);
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return(result != 0);
+    }
+
     @Override
     public IndirizzoBean doRetrieveByKey(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
         IndirizzoBean indirizzo = null;
 
-        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE code=?";
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idIndirizzo = ?";
 
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
             ps.setInt(1, code);
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 indirizzo = new IndirizzoBean(
@@ -189,5 +214,97 @@ public class IndirizzoDAO implements GenralDAO<IndirizzoBean>{
             }
         }
         return indirizzi;
+    }
+
+    public Collection<IndirizzoBean> doRetrieveByCliente(int logId) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<IndirizzoBean> indirizzi = new LinkedList<IndirizzoBean>();
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idCliente=?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, logId);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                IndirizzoBean indirizzo = new IndirizzoBean(
+                        rs.getInt("idIndirizzo"),
+                        rs.getString("via"),
+                        rs.getInt("nCivico"),
+                        rs.getString("cap"),
+                        rs.getInt("idCliente")
+                );
+                indirizzi.add(indirizzo);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return indirizzi;
+    }
+
+    public IndirizzoBean doRetrieveByKeyAndCliente(int code, int logId) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        IndirizzoBean indirizzo = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idIndirizzo=? and idCliente=?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+            ps.setInt(2, logId);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                indirizzo = new IndirizzoBean(
+                        rs.getInt("idIndirizzo"),
+                        rs.getString("via"),
+                        rs.getInt("nCivico"),
+                        rs.getString("cap"),
+                        rs.getInt("idCliente")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return indirizzo;
+    }
+
+    public Boolean update(IndirizzoBean indirizzo) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String updateSQL = "update " + TABLE_NAME + " set via = ?, nCivico = ?, cap = ? where idIndirizzo = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setString(1, indirizzo.getVia());
+            ps.setInt(2, indirizzo.getnCivico());
+            ps.setString(3, indirizzo.getCap());
+            ps.setInt(4, indirizzo.getIdIndirizzo());
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
     }
 }

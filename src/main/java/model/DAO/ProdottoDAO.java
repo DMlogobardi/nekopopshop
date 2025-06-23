@@ -1,6 +1,8 @@
 package model.DAO;
 
 import model.Bean.ProdottoBean;
+import model.Bean.VolumeBean;
+import model.DTO.BookDTO;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -118,6 +120,66 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
             }
         }
         return prod;
+    }
+
+    public ProdottoBean doRetrieveByVol(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ProdottoBean prod = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idVolum = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1,code);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                prod = new ProdottoBean(
+                        rs.getInt("idProdotto"),
+                        rs.getString("nome"),
+                        rs.getInt("quantità"),
+                        rs.getDouble("prezzo"),
+                        rs.getString("autore"),
+                        rs.getBytes("imgProd"),
+                        rs.getString("descrizione")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return prod;
+    }
+
+    public int doRetrieveQuantity(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String selectSQL = "SELECT quantita FROM " + TABLE_NAME + " WHERE idProdotto = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt("quantita");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return result;
     }
 
     @Override
@@ -301,6 +363,30 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
             }
             ps.setString(6,bean.getDescrizione());
             ps.setInt(7, bean.getIdProdotto());
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
+    }
+
+    public boolean decrementQuantita (int quantita, int idProd) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String updateSQL = "update " + TABLE_NAME + " set quantità = quantità - ? where idProdotto = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setInt(1, quantita);
+            ps.setInt(2, idProd);
 
             result = ps.executeUpdate();
         } finally {

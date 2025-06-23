@@ -141,6 +141,43 @@ public class PaginaDAO implements GenralDAO<PaginaBean>{
         return pages;
     }
 
+    public Collection<PaginaBean> doRetrieveAllByCapitolo(String order, int id) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<PaginaBean> pages = new LinkedList<PaginaBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME + " where idCapitolo = ?  order by ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setInt(1, id);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(2, order.strip());
+            else
+                ps.setString(2, "idPagina");
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                PaginaBean pag = new PaginaBean(
+                        rs.getInt("idPagina"),
+                        rs.getInt("numPag"),
+                        rs.getBytes("tavola"),
+                        rs.getString("dataCaricamento"),
+                        rs.getInt("idCapitolo")
+                );
+                pages.add(pag);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return pages;
+    }
+
     @Override
     public Collection<PaginaBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
         Connection con = null;
@@ -190,5 +227,44 @@ public class PaginaDAO implements GenralDAO<PaginaBean>{
             }
         }
         return pages;
+    }
+
+    public boolean uppdate (PaginaBean pag) throws SQLException{
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+        String updateSQL = "";
+
+        if(pag.getTavola() != null){
+            updateSQL = "update " + TABLE_NAME + " set numPag = ?, tavola = ?, dataCaricamento = ? where numPag = ? and idCapitolo = ?";
+        } else {
+            updateSQL = "update " + TABLE_NAME + " set numPag = ?, dataCaricamento = ? where numPag = ? and idCapitolo = ?";
+        }
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            if(pag.getTavola() != null){
+                ps.setInt(1, pag.getNumPag());
+                ps.setBytes(2, pag.getTavola());
+                ps.setDate(3, pag.getDataCaricamentoFormatted());
+                ps.setInt(4, pag.getNumPag());
+                ps.setInt(5, pag.getIdCapitolo());
+            } else {
+                ps.setInt(1, pag.getNumPag());
+                ps.setDate(2, pag.getDataCaricamentoFormatted());
+                ps.setInt(3, pag.getNumPag());
+                ps.setInt(4, pag.getIdCapitolo());
+            }
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
     }
 }

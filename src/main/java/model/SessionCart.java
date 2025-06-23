@@ -114,7 +114,9 @@ public class SessionCart {
         try {
             ContenutoDAO contSQL = new ContenutoDAO(ds);
 
-            cartSQL.doDelete(this.carelloRefernz.getIdCarello());
+            if(this.carelloRefernz.getIdCarello() > 0)
+                cartSQL.doDelete(this.carelloRefernz.getIdCarello());
+
             idCart = cartSQL.doSave(this.carelloRefernz);
 
             for(ContenutoBean contenuto : this.contenuti) {
@@ -201,5 +203,16 @@ public class SessionCart {
         this.carelloRefernz.setIdCliente(dbCart.getIdCliente());
 
         return true;
+    }
+
+    public void clear() {
+
+        this.contenuti.clear();
+
+        if (this.carelloRefernz != null) {
+            this.carelloRefernz.setTot(0.0);
+            this.carelloRefernz.setSpeseSped(0);
+            this.carelloRefernz.setSconti(0);
+        }
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
     private static final String TABLE_NAME = "acquistato";
     private DataSource ds = null;
-    private List<String> orderWhiteList = List.of("idOrdine", "idProdotto");
+    private List<String> orderWhiteList = List.of("quantita", "idOrdine", "idProdotto", "idVolume");
 
     public AcquistatoDAO(DataSource ds) {
         this.ds = ds;
@@ -23,13 +23,21 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = "INSERT INTO" + TABLE_NAME + " (idOrdine, idProdotto) VALUES (?, ?)";
+        String insertSQL = "INSERT INTO " + TABLE_NAME + " (quantita, idOrdine, idProdotto, idVolume) VALUES (?,?,?,?)";
 
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, bean.getIdOrdine());
-            ps.setInt(2, bean.getIdProdotto());
+            ps.setInt(1, bean.getqAcquistato());
+            ps.setInt(2, bean.getIdOrdine());
+            if(bean.getIdProdotto() != null)
+                ps.setInt(3, bean.getIdProdotto());
+            else
+                ps.setNull(3, Types.INTEGER);
+            if(bean.getIdVolume() != null)
+                ps.setInt(4, bean.getIdVolume());
+            else
+                ps.setNull(4, Types.INTEGER);
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -84,7 +92,13 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                ac = new AcquistatoBean(rs.getInt("idAcquistato"), rs.getInt("idOrdine"), rs.getInt("idProdotto"));
+                ac = new AcquistatoBean(
+                        rs.getInt("idAcquistato"),
+                        rs.getInt("quantita"),
+                        rs.getInt("idOrdine"),
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume")
+                );
             }
         } finally {
             try {
@@ -114,7 +128,13 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                AcquistatoBean ac = new AcquistatoBean(rs.getInt("idAcquistato"), rs.getInt("idOrdine"), rs.getInt("idProdotto"));
+                AcquistatoBean ac = new AcquistatoBean(
+                        rs.getInt("idAcquistato"),
+                        rs.getInt("quantita"),
+                        rs.getInt("idOrdine"),
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume")
+                );
                 acList.add(ac);
             }
         } finally {
@@ -159,7 +179,12 @@ public class AcquistatoDAO implements GenralDAO<AcquistatoBean>{
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                AcquistatoBean ac = new AcquistatoBean(rs.getInt("idAcquistato"), rs.getInt("idOrdine"), rs.getInt("idProdotto"));
+                AcquistatoBean ac = new AcquistatoBean(rs.getInt("idAcquistato"),
+                        rs.getInt("quantita"),
+                        rs.getInt("idOrdine"),
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume")
+                );
                 acList.add(ac);
             }
         } finally {

@@ -1,5 +1,7 @@
 package model.Bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -25,6 +27,7 @@ public class ClienteBean implements Serializable {
         this.cF = cF;
     }
 
+    @JsonIgnore
     public static ClienteBean getByCheckEmail(int idCliente, String nome, String cognome, String dataNascita, String email, String cF) {
         ClienteBean cliente = null;
         if(mailSyntaxCheck(email)) {
@@ -33,6 +36,7 @@ public class ClienteBean implements Serializable {
         return cliente;
     }
 
+    @JsonIgnore
     private static boolean mailSyntaxCheck(String email)
     {
         // Create the Pattern using the regex
@@ -85,6 +89,7 @@ public class ClienteBean implements Serializable {
         return dataNascita;
     }
 
+    @JsonIgnore
     public Date getDataNascitaFormatted() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate formDate =LocalDate.parse(dataNascita, format);

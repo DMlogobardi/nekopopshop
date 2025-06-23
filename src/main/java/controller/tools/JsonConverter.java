@@ -1,5 +1,6 @@
 package controller.tools;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -40,18 +41,22 @@ public class JsonConverter<T> {
 
     public T parse(String json) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
+        System.out.println("clazz: " + clazz.getName());
         return mapper.readValue(json, clazz);
     }
 
     public List<T> parseList(String json) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
-        // Crea dinamicamente il tipo T[]
-        @SuppressWarnings("unchecked")
-        Class<T[]> clazzArray = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
-
-        T[] array = mapper.readValue(json, clazzArray);
-        return Arrays.asList(array);
+        JsonNode node = mapper.readTree(json);
+        if (node.isArray()) {
+            Class<T[]> clazzArray = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
+            T[] array = mapper.readValue(json, clazzArray);
+            return Arrays.asList(array);
+        } else {
+            T single = mapper.treeToValue(node, clazz);
+            return List.of(single);
+        }
     }
 
     public String toJson(T obj) throws Exception {
@@ -62,6 +67,30 @@ public class JsonConverter<T> {
     public String toJson(Collection<T> obj) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(obj);
+    }
+
+    public List<T> parseList() throws Exception {
+        StringBuilder jsonBuilder = new StringBuilder();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            jsonBuilder.append(line);
+        }
+
+        String json = jsonBuilder.toString();
+        ObjectMapper mapper = new ObjectMapper();
+
+        JsonNode node = mapper.readTree(json);
+        if (node.isArray()) {
+            // JSON è un array: deserializza direttamente in lista
+            Class<T[]> clazzArray = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
+            T[] array = mapper.readValue(json, clazzArray);
+            return Arrays.asList(array);
+        } else {
+            // JSON è un singolo oggetto: crea lista con un solo elemento
+            T single = mapper.treeToValue(node, clazz);
+            return List.of(single);
+        }
     }
 
     public static final String merge (String json1, String json2) throws Exception {

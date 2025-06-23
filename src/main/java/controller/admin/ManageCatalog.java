@@ -61,7 +61,7 @@ public class ManageCatalog extends HttpServlet {
         if(action == null) {
             System.out.println("action is null");
             request.setAttribute("errors", "access denied");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin.jsp").forward(request, response);
             return;
         }
 
@@ -79,7 +79,7 @@ public class ManageCatalog extends HttpServlet {
                 if (json == null || json.trim().isEmpty()) {
                     System.out.println("Errore: JSON nullo o vuoto");
                     request.setAttribute("errors", "json error");
-                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
                     return;
                 }
 
@@ -100,7 +100,7 @@ public class ManageCatalog extends HttpServlet {
                         volDTO = dati.getVolumi().stream().filter(v -> v.getIdProd() == prod.getIdTempVolume()).findFirst().orElse(null);
                         if (volDTO == null) {
                             request.setAttribute("errors", "volume not found");
-                            request.getRequestDispatcher("/index.jsp").forward(request, response);
+                            request.getRequestDispatcher("/admin.jsp").forward(request, response);
                             return;
                         }
 
@@ -108,7 +108,7 @@ public class ManageCatalog extends HttpServlet {
 
                         if(imgPart.isEmpty()) {
                             request.setAttribute("errors", "image not found");
-                            request.getRequestDispatcher("/index.jsp").forward(request, response);
+                            request.getRequestDispatcher("/admin.jsp").forward(request, response);
                             return;
                         }
 
@@ -127,7 +127,7 @@ public class ManageCatalog extends HttpServlet {
                         Optional<Part> prodImg = ImgByteConverter.getPartByID(images, prod.getIdImg());
                         if(prodImg.isEmpty()) {
                             request.setAttribute("errors", "image not found");
-                            request.getRequestDispatcher("/index.jsp").forward(request, response);
+                            request.getRequestDispatcher("/admin.jsp").forward(request, response);
                             return;
                         }
 
@@ -142,7 +142,7 @@ public class ManageCatalog extends HttpServlet {
                         Optional<Part> volImg = ImgByteConverter.getPartByID(images, volDTO.getIdImg());
                         if (volImg.isEmpty()) {
                             request.setAttribute("errors", "image not found");
-                            request.getRequestDispatcher("/index.jsp").forward(request, response);
+                            request.getRequestDispatcher("/admin.jsp").forward(request, response);
                             return;
                         }
 
@@ -154,13 +154,13 @@ public class ManageCatalog extends HttpServlet {
 
                 System.out.println("ManageCatalog servlet insert success");
                 request.setAttribute("success", "success");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
                 return;
                 
             } catch (Exception e) {
                 System.out.println("ManageCatalog servlet DTO pars error: " + e.getMessage());
                 request.setAttribute("errors", "internal error");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
                 return;
             }
             
@@ -175,7 +175,7 @@ public class ManageCatalog extends HttpServlet {
             } catch (Exception e) {
                 System.out.println("ManageCatalog servlet DTO pars error: " + e.getMessage());
                 request.setAttribute("errors", "internal error");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
                 return;
             }
 
@@ -197,14 +197,14 @@ public class ManageCatalog extends HttpServlet {
             if(!sqlErrors.isEmpty()){
                 System.out.println("ManageCatalog servlet sql delete error: " + sqlErrors.toString());
                 request.setAttribute("errors", sqlErrors);
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
                 return;
             }
 
             System.out.println("ManageCatalog servlet delete success");
             request.setAttribute("success", "success");
             request.setAttribute("quary_result", result);
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin.jsp").forward(request, response);
 
         } else if (action.equals("edit")) {
             //qui usiamo idTempVolume come id per il prodotto, !SOLO QUI!
@@ -222,7 +222,7 @@ public class ManageCatalog extends HttpServlet {
                 } catch (Exception e) {
                     System.out.println("ManageCatalog servlet DTO parse error (Prodotto): " + e.getMessage());
                     request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
                     return;
                 }
 
@@ -247,13 +247,13 @@ public class ManageCatalog extends HttpServlet {
                 } catch (SQLException e) {
                     System.out.println("ManageCatalog servlet SQL update error (Prodotto): " + e.getMessage());
                     request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
                     return;
                 }
 
                 System.out.println("ManageCatalog servlet update success");
                 request.setAttribute("success", "success");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
             }
 
             if(update.equals("volume")) {
@@ -267,7 +267,7 @@ public class ManageCatalog extends HttpServlet {
                 } catch (Exception e) {
                     System.out.println("ManageCatalog servlet DTO parse error (Volume): " + e.getMessage());
                     request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
                     return;
                 }
 
@@ -293,20 +293,20 @@ public class ManageCatalog extends HttpServlet {
                 } catch (SQLException e) {
                     System.out.println("ManageCatalog servlet SQL update error (Volume): " + e.getMessage());
                     request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
                     return;
                 }
 
                 System.out.println("ManageCatalog servlet update success");
                 request.setAttribute("success", "success");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
             }
 
 
         } else {
             System.out.println("ManageCatalog wrong action");
             request.setAttribute("errors", "internal error");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin.jsp").forward(request, response);
         }
 
     }

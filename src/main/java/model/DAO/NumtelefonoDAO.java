@@ -102,6 +102,38 @@ public class NumtelefonoDAO implements GenralDAO<NumTelefonoBean>{
         return tel;
     }
 
+    public Collection<NumTelefonoBean> doRetrieveAllByClient(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<NumTelefonoBean> tels = new LinkedList<NumTelefonoBean>();
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " where idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                NumTelefonoBean tel = new NumTelefonoBean(
+                        rs.getInt("idTelefono"),
+                        rs.getString("prefisso"),
+                        rs.getString("numero"),
+                        rs.getInt("idCliente")
+                );
+                tels.add(tel);
+            }
+        }  finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return tels;
+    }
+
     @Override
     public Collection<NumTelefonoBean> doRetrieveAll(String order) throws SQLException {
        Connection con = null;
