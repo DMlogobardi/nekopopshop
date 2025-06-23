@@ -531,10 +531,9 @@
                                 </select>
                                 <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
                                     <option>Ordina per</option>
-                                    <option>Più recenti</option>
-                                    <option>Più venduti</option>
-                                    <option>Prezzo crescente</option>
-                                    <option>Prezzo decrescente</option>
+                                    <option>Data</option>
+                                    <option>Cliente</option>
+
                                 </select>
                             </div>
                             <div class="flex items-center">
