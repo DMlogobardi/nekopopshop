@@ -122,6 +122,39 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         return prod;
     }
 
+    public ProdottoBean doRetrieveFigure() throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ProdottoBean prod = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE prezzo IS NOT NULL AND prezzo > 0.0 limit 1";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                prod = new ProdottoBean(
+                        rs.getInt("idProdotto"),
+                        rs.getString("nome"),
+                        rs.getInt("quantità"),
+                        rs.getDouble("prezzo"),
+                        rs.getString("autore"),
+                        rs.getBytes("imgProd"),
+                        rs.getString("descrizione")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return prod;
+    }
+
     public ProdottoBean doRetrieveByVol(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;

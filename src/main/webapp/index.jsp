@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="frontend/Scripts/index_Dainamic.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -228,7 +229,7 @@
     <!-- Sponsor Section -->
     <div class="flex flex-wrap gap-4 mb-8">
         <!-- Sponsor Banner -->
-        <div class="header-content p-6 w-full md:w-2/3 relative">
+        <div id="dayOffer" class="header-content p-6 w-full md:w-2/3 relative">
             <div class="absolute -top-2 right-4 flex gap-2">
                 <div class="w-3 h-3 rounded-full bg-nekopink"></div>
                 <div class="w-3 h-3 rounded-full bg-nekopurple"></div>
@@ -269,7 +270,7 @@
 
             <div class="mt-4 flex justify-between items-center">
                 <p class="text-white text-sm">Offerta valida fino al 31/12/2023</p>
-                <button class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                <button id="addCartOfferta" class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
                     <i class="fas fa-gift mr-2"></i> Approfitta ora
                 </button>
             </div>
@@ -654,7 +655,7 @@
                     <div class="absolute top-0 right-0 -mt-6 -mr-6 w-12 h-12 rounded-full bg-yellow-400 flex items-center justify-center">
                         <i class="fas fa-certificate text-white"></i>
                     </div>
-                    <div class="w-64 h-64 rounded-2xl overflow-hidden border-4 border-white shadow-2xl">
+                    <div id="limitedFigure" class="w-64 h-64 rounded-2xl overflow-hidden border-4 border-white shadow-2xl">
                         <img src="https://images.unsplash.com/photo-1598885154377-4d1dacdd0d5c?q=80&w=1000"
                              alt="Limited Edition Figure"
                              class="w-full h-full object-cover">
