@@ -307,3 +307,131 @@ document.addEventListener("DOMContentLoaded", function () {
             container.innerHTML = "<p>Errore nel caricamento dei prodotti.</p>";
         });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("getcatalog?limit=10") // possiamo prendere 10 per sicurezza, visualizziamo solo i primi 3 validi
+        .then(response => {
+            if (!response.ok) throw new Error("Errore nel caricamento");
+            return response.json();
+        })
+        .then(data => {
+            const container = document.getElementById("moreBuy");
+            container.innerHTML = "";
+
+            const prodotti = data.filter(i => i.idProdotto !== undefined);
+            const volumi = data.filter(i => i.idVolume !== undefined);
+
+            const prodottiFinali = [];
+            const prodottiEsclusi = new Set(); // per escludere i prodotti doppi
+
+            // Prima aggiungiamo i volumi associati a prodotti (escludendo i prodotti)
+            volumi.forEach(volume => {
+                const prodotto = prodotti.find(p => p.idProdotto === volume.idProdotto);
+                if (prodotto && !prodottiEsclusi.has(prodotto.idProdotto)) {
+                    prodottiEsclusi.add(prodotto.idProdotto);
+                    prodottiFinali.push({
+                        tipo: "volume",
+                        nome: prodotto.nome,
+                        descrizione: prodotto.descrizione || "Descrizione volume non disponibile",
+                        prezzo: volume.prezzo,
+                        img: volume.imgVol || prodotto.imgProd,
+                        rating: volume.rating || 4.5,
+                        numVolumi: volume.numVolumi,
+                        borderColor: "border-nekopink"
+                    });
+                }
+            });
+
+            // Poi aggiungiamo solo i prodotti non usati nei volumi
+            prodotti.forEach(prodotto => {
+                if (!prodottiEsclusi.has(prodotto.idProdotto) && prodotto.prezzo > 0) {
+                    prodottiFinali.push({
+                        tipo: "prodotto",
+                        nome: prodotto.nome,
+                        descrizione: prodotto.descrizione || "Descrizione non disponibile",
+                        prezzo: prodotto.prezzo,
+                        img: prodotto.imgProd,
+                        rating: prodotto.rating || 4.5,
+                        borderColor: "border-kawaililac"
+                    });
+                }
+            });
+
+            // Completiamo a 3 con placeholder
+            while (prodottiFinali.length < 3) {
+                prodottiFinali.push({
+                    tipo: "placeholder",
+                    nome: "Prodotto non disponibile",
+                    descrizione: "Nessun prodotto da mostrare",
+                    prezzo: 0,
+                    img: null,
+                    rating: 0,
+                    borderColor: "border-gray-300"
+                });
+            }
+
+            const colors = ["bg-nekopink", "bg-kawaiblue", "bg-nekopurple"];
+
+            const blocchi = prodottiFinali.slice(0, 3).map((item, index) => {
+                const titolo = item.tipo === "volume"
+                    ? `${item.nome} Vol.${item.numVolumi || ""}`
+                    : item.nome;
+
+                const imgSrc = item.img
+                    ? (item.img.startsWith("data:") ? item.img : `data:image/jpeg;base64,${item.img}`)
+                    : "https://placehold.co/100x100?text=N/A";
+
+                const prezzoHTML = item.prezzo > 0
+                    ? `<span class="text-nekoorange font-bold">&#8364; ${item.prezzo.toFixed(2)}</span>`
+                    : `<span class="text-gray-400 italic text-sm">Non disponibile</span>`;
+
+                const ratingHTML = item.rating > 0
+                    ? `<i class="fas fa-star text-yellow-400 text-sm"></i><span class="ml-1 text-xs text-gray-600">${item.rating.toFixed(1)}</span>`
+                    : "";
+
+                return `
+                    <div class="product-card bg-white rounded-lg overflow-hidden border-2 ${item.borderColor} relative">
+                        <div class="p-4 flex">
+                            <div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
+                                <img src="${imgSrc}" alt="${titolo}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="ml-4 flex flex-col justify-center">
+                                <h3 class="font-bold text-gray-800">${titolo}</h3>
+                                <p class="text-gray-600 text-xs mt-1">${item.descrizione}</p>
+                                <div class="mt-2 flex justify-between items-center">
+                                    ${prezzoHTML}
+                                    <div class="flex items-center">${ratingHTML}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 w-12 h-12 rounded-full ${colors[index]} text-white flex items-center justify-center text-xl">
+                            <i class="fas fa-${index + 1}"></i>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            container.innerHTML = `
+                <div class="bg-white rounded-xl border-2 border-nekoorange overflow-hidden h-full">
+                    <div class="bg-gradient-to-r from-nekopink to-nekoorange p-4">
+                        <h2 class="text-xl font-bold text-nekopeach flex items-center">
+                            <i class="fas fa-fire mr-3" style="font-size: 30px"></i> Pi&#249 Acquistati
+                        </h2>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        ${blocchi}
+                        <a href="classifica.jsp" class="block mt-4 bg-nekoorange hover:bg-nekopink text-white text-center py-3 rounded-lg font-bold transition">
+                            <i class="fas fa-arrow-right mr-2"></i> Vedi l'intera classifica
+                        </a>
+                    </div>
+                </div>
+            `;
+        })
+        .catch(err => {
+            console.error("Errore:", err);
+            const container = document.getElementById("moreBuy");
+            container.innerHTML = "<p>Errore nel caricamento dei prodotti.</p>";
+        });
+});
+
+

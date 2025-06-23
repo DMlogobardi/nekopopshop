@@ -422,7 +422,7 @@
         </div>
 
         <!-- Featured Manga -->
-        <div class="lg:col-span-1">
+        <div id="moreBuy" class="lg:col-span-1">
             <div class="bg-white rounded-xl border-2 border-nekoorange overflow-hidden h-full">
                 <div class="bg-gradient-to-r from-nekopink to-nekoorange p-4">
                     <h2 class="text-xl font-bold text-nekopeach flex items-center">
