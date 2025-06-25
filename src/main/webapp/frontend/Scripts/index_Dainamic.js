@@ -3,7 +3,8 @@ function mostraErrore(msg) {
     erroreBox.textContent = msg;
     erroreBox.classList.remove("hidden");
 
-    // Puoi anche farlo scomparire dopo qualche secondo se vuoi:
+    erroreBox.scrollIntoView({ behavior: "smooth", block: "center" });
+
     setTimeout(() => {
         erroreBox.classList.add("hidden");
     }, 5000);

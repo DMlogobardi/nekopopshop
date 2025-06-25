@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="frontend/Scripts/Carrello_Dainamic.js" defer></script>
   <script>
     tailwind.config = {
       theme: {
@@ -298,15 +299,17 @@
     </div>
   </div>
 
+  <jsp:include page="error.jsp" />
+
   <!-- Cart Content -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- Cart Items -->
-    <div class="lg:col-span-2">
+    <div id="cartElement" class="lg:col-span-2">
       <div class="bg-white rounded-xl border-2 border-nekopeach overflow-hidden">
         <div class="bg-gradient-to-r from-nekopeach to-nekoorange p-4 flex items-center">
           <i class="fas fa-shopping-basket text-white text-2xl mr-3"></i>
           <h2 class="text-xl font-bold text-white" style="font-size: 30px">I Tuoi Prodotti</h2>
-          <div class="ml-auto flex items-center">
+          <div id="numElement" class="ml-auto flex items-center">
             <span class="bg-white text-nekopeach px-3 py-1 rounded-full text-sm font-bold" id="item-count">3 articoli</span>
           </div>
         </div>
@@ -438,10 +441,27 @@
           </div>
           <h3 class="text-xl font-bold text-nekopeach mb-2">Il tuo carrello &egrave vuoto!</h3>
           <p class="text-gray-600 mb-6">Sfoglia il nostro catalogo e aggiungi i tuoi prodotti preferiti</p>
-          <a href="catalog.html" class="bg-nekopeach hover:bg-nekopink text-white px-6 py-3 rounded-lg font-bold inline-block">
+          <a href="catalog.jsp" class="bg-nekopeach hover:bg-nekopink text-white px-6 py-3 rounded-lg font-bold inline-block">
             <i class="fas fa-book mr-2"></i> Vai al Catalogo
           </a>
         </div>
+      </div>
+
+      <!-- Pagination -->
+      <div id="pagination" class="w-full flex justify-center my-8">
+        <button class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+          <i class="fas fa-arrow-left mr-2"></i> Precedente
+        </button>
+        <div class="flex items-center gap-2">
+          <a href="#" class="w-10 h-10 bg-nekopeach text-white rounded-full flex items-center justify-center font-bold">1</a>
+          <a href="#" class="w-10 h-10 bg-white text-nekopeach rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">2</a>
+          <a href="#" class="w-10 h-10 bg-white text-nekopeach rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">3</a>
+          <span class="text-nekopeach">...</span>
+          <a href="#" class="w-10 h-10 bg-white text-nekopeach rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">10</a>
+        </div>
+        <button class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+          Successivo <i class="fas fa-arrow-right ml-2"></i>
+        </button>
       </div>
 
       <!-- Coupon Section -->
@@ -454,9 +474,9 @@
 
         <div class="p-4">
           <div class="flex">
-            <input type="text" placeholder="Inserisci codice sconto"
+            <input type="text" id="codiceSconto" placeholder="Inserisci codice sconto"
                    class="flex-1 border-2 border-nekopeach rounded-l-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-nekopeach">
-            <button class="bg-nekopeach hover:bg-nekopink text-white px-6 rounded-r-lg font-bold transition">
+            <button onclick="setSconti()" class="bg-nekopeach hover:bg-nekopink text-white px-6 rounded-r-lg font-bold transition">
               Applica
             </button>
           </div>
@@ -485,13 +505,13 @@
           </h2>
         </div>
 
-        <div class="p-4">
+        <div id="costo" class="p-4">
           <div class="space-y-3 mb-4">
-            <div class="flex justify-between">
+            <div id="Subtotale" class="flex justify-between">
               <span class="text-gray-600">Subtotale</span>
               <span class="font-bold" id="subtotal">&#8364 68,57</span>
             </div>
-            <div class="flex justify-between">
+            <div id="Spedizione" class="flex justify-between">
               <span class="text-gray-600">Spedizione</span>
               <span class="font-bold" id="shipping">&#8364 4,99</span>
             </div>
@@ -743,52 +763,10 @@
       });
     });
 
-    // Coupon application
-    const couponInput = document.querySelector('input[type="text"][placeholder="Inserisci codice sconto"]');
-    const applyCouponBtn = couponInput.nextElementSibling;
-
-    applyCouponBtn.addEventListener('click', function() {
-      if (couponInput.value.trim() === 'NEKO10') {
-        document.getElementById('coupon-success').classList.remove('hidden');
-        document.getElementById('discount-row').classList.remove('hidden');
-        updateCartTotals();
-      } else {
-        alert('Codice sconto non valido! Prova con "NEKO10"');
-      }
-    });
-
     // Checkout button
     document.querySelector('.checkout-btn').addEventListener('click', function() {
       alert('Grazie per il tuo ordine! Verrai reindirizzato alla pagina di pagamento.');
     });
-  }
-
-  // Update cart totals
-  function updateCartTotals() {
-    const items = document.querySelectorAll('#cart-items-container .product-card');
-    let subtotal = 0;
-
-    items.forEach(item => {
-      const priceText = item.querySelector('.text-nekopink').textContent;
-      const price = parseFloat(priceText.replace('€', '').replace(',', '.'));
-      const quantity = parseInt(item.querySelector('.quantity-input').value);
-      subtotal += price * quantity;
-    });
-
-    const shipping = 4.99;
-    let discount = 0;
-
-    if (!document.getElementById('discount-row').classList.contains('hidden')) {
-      discount = subtotal * 0.1; // 10% discount
-    }
-
-    const total = subtotal + shipping - discount;
-
-    document.getElementById('subtotal').textContent = `€${subtotal.toFixed(2).replace('.', ',')}`;
-    document.getElementById('shipping').textContent = `€${shipping.toFixed(2).replace('.', ',')}`;
-    document.getElementById('discount').textContent = `-€${discount.toFixed(2).replace('.', ',')}`;
-    document.getElementById('total').textContent = `€${total.toFixed(2).replace('.', ',')}`;
-    document.getElementById('item-count').textContent = `${items.length} articol${items.length != 1 ? 'i' : 'o'}`;
   }
 
   // Check if cart is empty

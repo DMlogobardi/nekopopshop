@@ -291,7 +291,7 @@ public class CartGesture extends HttpServlet {
                 request.getRequestDispatcher("cart.jsp").forward(request, response);
                 return;
             }
-            Collection<ContenutoBean> contuti = sCart.getProdottiByLimit(10, Integer.parseInt(offset));
+            Collection<ContenutoBean> contuti = sCart.getProdottiByLimit(3, Integer.parseInt(offset));
 
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
             VolumeDAO volDAO = new VolumeDAO(ds);
@@ -385,9 +385,10 @@ public class CartGesture extends HttpServlet {
 
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(code);
+                int valoreCoupon = 0;
 
                 if (matcher.find()) {
-                    int valoreCoupon = Integer.parseInt(matcher.group(1));
+                    valoreCoupon = Integer.parseInt(matcher.group(1));
                     if(valoreCoupon > 0 && valoreCoupon <= 50) {
                         sCart.getCarelloRefernz().setSconti(valoreCoupon);
                     } else {
@@ -408,7 +409,8 @@ public class CartGesture extends HttpServlet {
                 System.out.println("Codice valido");
                 response.setStatus(200);
                 response.setContentType("text/json");
-                response.getWriter().println("{\"success\":\"success\"}");
+                response.getWriter().println("{\"success\":"+ valoreCoupon + "}");
+                return;
             }
             System.out.println("error setSconto");
             response.setStatus(422);

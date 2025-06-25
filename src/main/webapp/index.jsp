@@ -226,6 +226,8 @@
         </div>
     </div>
 
+    <jsp:include page="error.jsp" />
+
     <!-- Sponsor Section -->
     <div class="flex flex-wrap gap-4 mb-8">
         <!-- Sponsor Banner -->
@@ -645,7 +647,7 @@
             <div class="text-center md:text-left mb-6 md:mb-0">
                 <h3 class="text-2xl md: text-3xl font-bold text-white">Action Figure Limited Edition!</h3>
                 <p class="text-white mt-2 max-w-md">Collezione esclusiva di figure da collezione con effetti luminosi e dettagli premium!</p>
-                <button class="mt-4 bg-white text-nekopeach px-6 py-3 rounded-full font-bold hover:bg-pink-50 transition">
+                <button class="mt-4 bg-white text-nekopeach px-6 py-3 rounded-full font-bold hover:bg-pink-50 transition to_catalog">
                     <i class="fas fa-gifts mr-2"></i> Scopri le offerte
                 </button>
             </div>
