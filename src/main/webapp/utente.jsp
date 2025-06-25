@@ -617,12 +617,7 @@
 
             <!-- Footer section -->
             <div>
-                <h4 class="font-bold text-lg text-white mb-4">Iscriviti alla Newsletter</h4>
-                <div class="flex mt-2">
-                    <input type="email" placeholder="Tua email" class="bg-white/20 border border-pink-300 text-white rounded-l-lg px-4 py-3 w-full placeholder-pink-200 focus:outline-none">
-                    <button class="bg-white text-nekopink font-bold px-4 rounded-r-lg">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
+
                 </div>
 
                 <div class="mt-4">
