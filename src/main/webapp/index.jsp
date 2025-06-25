@@ -214,16 +214,7 @@
         </div>
 
         <!-- Navigation -->
-        <div class="w-full lg:w-auto">
-            <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
-                <a href="index.jsp" class="folder-tab active"><i class="fas fa-home mr-2"></i> Home</a>
-                <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-                <a href="about.jsp" class="folder-tab"><i class="fas fa-info-circle mr-2"></i> Chi Siamo</a>
-                <a href="cart.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Carrello</a>
-                <a href="admin.jsp" class="folder-tab"><i class="fas fa-user-shield mr-2"></i> Admin</a>
-                <a href="utente.jsp" class="folder-tab"><i class="fas fa-user mr-2"></i> Utente</a>
-            </div>
-        </div>
+        <jsp:include page="navBar.jsp" />
     </div>
 
     <jsp:include page="error.jsp" />
@@ -769,41 +760,5 @@
     <i class="fas fa-comment-alt text-white text-2xl"></i>
     <div class="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></div>
 </div>
-
-<script>
-    // Generate floating cherry blossoms and cat decorations
-    function generateDecorations() {
-        const decorationsContainer = document.getElementById('decorations');
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-
-
-
-
-
-        // Generate cherry blossom decorations
-        for (let i = 0; i < 15; i++) {
-            const blossom = document.createElement('div');
-            blossom.className = 'cherry-blossom';
-            blossom.style.left = `${Math.random() * viewportWidth}px`;
-            blossom.style.animationDelay = `${Math.random() * 15}s`;
-            blossom.style.opacity = `0.${Math.floor(2 + Math.random() * 7)}`;
-            blossom.style.transform = `scale(${0.5 + Math.random()})`;
-            decorationsContainer.appendChild(blossom);
-        }
-    }
-
-
-    // Generate decorations on page load
-    document.addEventListener('DOMContentLoaded', generateDecorations);
-
-    // Folder tab interaction
-    document.querySelectorAll('.folder-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.folder-tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-</script>
 </body>
 </html>

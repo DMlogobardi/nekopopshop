@@ -285,20 +285,8 @@
         <p class="text-xl text-nekopeach font-bold" style="font-size: 20px; background: linear-gradient(90deg, #E55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Manga & Action Figure</p>
       </div>
     </div>
-
-    <!-- Navigation -->
-    <div class="w-full lg:w-auto">
-      <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
-        <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
-        <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-        <a href="about.jsp" class="folder-tab"><i class="fas fa-info-circle mr-2"></i> Chi Siamo</a>
-        <a href="cart.jsp" class="folder-tab active"><i class="fas fa-shopping-cart mr-2"></i> Carrello</a>
-        <a href="admin.jsp" class="folder-tab"><i class="fas fa-user-shield mr-2"></i> Admin</a>
-        <a href="utente.jsp" class="folder-tab"><i class="fas fa-user mr-2"></i> Utente</a>
-      </div>
-    </div>
+    <jsp:include page="navBar.jsp" />
   </div>
-
   <jsp:include page="error.jsp" />
 
   <!-- Cart Content -->
@@ -310,128 +298,12 @@
           <i class="fas fa-shopping-basket text-white text-2xl mr-3"></i>
           <h2 class="text-xl font-bold text-white" style="font-size: 30px">I Tuoi Prodotti</h2>
           <div id="numElement" class="ml-auto flex items-center">
-            <span class="bg-white text-nekopeach px-3 py-1 rounded-full text-sm font-bold" id="item-count">3 articoli</span>
+            <span class="bg-white text-nekopeach px-3 py-1 rounded-full text-sm font-bold" id="item-count">articoli</span>
           </div>
         </div>
 
         <div class="p-4" id="cart-items-container">
-          <!-- Cart Item 1 -->
-          <div class="product-card bg-white rounded-lg overflow-hidden border-2 border-nekoorange mb-4 relative">
-            <div class="p-4 flex flex-col md:flex-row">
-              <div class="w-full md:w-1/4 h-40 rounded-xl overflow-hidden flex-shrink-0">
-                <img src="https://images.unsplash.com/photo-1622372738946-e62b40262c90?q=80&w=1000"
-                     alt="Chainsaw Man"
-                     class="w-full h-full object-cover">
 
-              </div>
-
-              <div class="md:ml-4 mt-4 md:mt-0 flex-1">
-                <div class="flex justify-between">
-                  <h3 class= "font-bold text-gray-800 text-lg" style="font-size: 20px" >Chainsaw Man Vol.1</h3>
-                  <div class="discount-badge">-20%</div>
-                  <button class="remove-btn text-xl">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                </div>
-                <p class="text-gray-600 text-sm mt-1">Denji &egrave un ragazzo semplice con un sogno semplice...</p>
-
-                <div class="mt-4 flex flex-col md:flex-row md:items-center justify-between">
-                  <div class= "flex items-center mb-3 md:mb-0">
-                    <span class= "text-gray-500 line-through mr-2">&#8364 16,99</span>
-                    <span class="text-2xl font-bold text-nekored">&#8364 13,59</span>
-
-                  </div>
-
-                  <div class="quantity-selector">
-                    <button class="quantity-btn decrement">
-                      <i class="fas fa-minus"></i>
-                    </button>
-                    <input type="number" value="1" min="1" class="quantity-input">
-                    <button class="quantity-btn increment">
-                      <i class="fas fa-plus"></i>
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          <!-- Cart Item 2 -->
-          <div class="product-card bg-white rounded-lg overflow-hidden border-2 border-nekoorange mb-4 relative">
-            <div class="p-4 flex flex-col md:flex-row">
-              <div class="w-full md:w-1/4 h-40 rounded-xl overflow-hidden flex-shrink-0">
-                <img src="https://images.unsplash.com/photo-1558494948-4ece8de63a5f?q=80&w=1000"
-                     alt="Berserk"
-                     class="w-full h-full object-cover">
-              </div>
-
-              <div class="md:ml-4 mt-4 md:mt-0 flex-1">
-                <div class="flex justify-between">
-                  <h3 class="font-bold text-gray-800 text-lg" style="font-size: 20px">Berserk Vol.2</h3>
-                  <button class="remove-btn text-xl">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                </div>
-                <p class="text-gray-600 text-sm mt-1">L'epico dark fantasy che ha ispirato una generazione...</p>
-
-                <div class="mt-4 flex flex-col md:flex-row md:items-center justify-between">
-                  <div class="flex items-center mb-3 md:mb-0">
-                    <span class="text-2xl font-bold text-nekored">&#8364 14,99</span>
-                  </div>
-
-                  <div class="quantity-selector">
-                    <button class="quantity-btn decrement">
-                      <i class="fas fa-minus"></i>
-                    </button>
-                    <input type="number" value="1" min="1" class="quantity-input">
-                    <button class="quantity-btn increment">
-                      <i class="fas fa-plus"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cart Item 3 -->
-          <div class="product-card bg-white rounded-lg overflow-hidden border-2 border-nekoorange relative">
-            <div class="p-4 flex flex-col md:flex-row">
-              <div class="w-full md:w-1/4 h-40 rounded-xl overflow-hidden flex-shrink-0">
-                <img src="https://images.unsplash.com/photo-1598885154377-4d1dacdd0d5c?q=80&w=1000"
-                     alt="Action Figure"
-                     class="w-full h-full object-cover">
-                <div class="discount-badge">Limited</div>
-              </div>
-
-              <div class="md:ml-4 mt-4 md:mt-0 flex-1">
-                <div class="flex justify-between">
-                  <h3 class= "font-bold text-gray-800 text-lg" style="font-size: 20px" >Naruto Uzumaki Figure</h3>
-                  <button class="remove-btn text-xl">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                </div>
-                <p class="text-gray-600 text-sm mt-1">Action figure da collezione alta 25cm con base e accessori</p>
-
-                <div class="mt-4 flex flex-col md:flex-row md:items-center justify-between">
-                  <div class="flex items-center mb-3 md:mb-0">
-                    <span class="text-gray-500 line-through mr-2">&#8364 49,99</span>
-                    <span class="text-2xl font-bold text-nekored">&#8364 39,99</span>
-                  </div>
-
-                  <div class="quantity-selector">
-                    <button class="quantity-btn decrement">
-                      <i class="fas fa-minus"></i>
-                    </button>
-                    <input type="number" value="1" min="1" class="quantity-input">
-                    <button class="quantity-btn increment">
-                      <i class="fas fa-plus"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <!-- Empty Cart State (hidden by default) -->
@@ -678,111 +550,5 @@
   <i class="fas fa-comment-alt text-white text-2xl"></i>
   <div class="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></div>
 </div>
-
-<script>
-  // Generate floating cherry blossoms and cat decorations
-  function generateDecorations() {
-    const decorationsContainer = document.getElementById('decorations');
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    // Cat decorations
-    const catEmojis = ['😺', '😸', '😹', '😻', '🙀', '🐱', '🐾'];
-
-    // Generate cat emoji decorations
-    for (let i = 0; i < 10; i++) {
-      const cat = document.createElement('div');
-      cat.className = 'cat-elements absolute z-0';
-      cat.style.left = `${Math.random() * viewportWidth}px`;
-      cat.style.top = `${Math.random() * viewportHeight}px`;
-      cat.innerHTML = `<i>${catEmojis[Math.floor(Math.random() * catEmojis.length)]}</i>`;
-      cat.style.fontSize = `${12 + Math.random() * 24}px`;
-      cat.style.opacity = `0.${Math.floor(1 + Math.random() * 9)}`;
-      cat.style.animationDuration = `${4 + Math.random() * 12}s`;
-      cat.style.animationDelay = `${Math.random() * 5}s`;
-      decorationsContainer.appendChild(cat);
-    }
-
-    // Generate cherry blossom decorations
-    for (let i = 0; i < 15; i++) {
-      const blossom = document.createElement('div');
-      blossom.className = 'cherry-blossom';
-      blossom.style.left = `${Math.random() * viewportWidth}px`;
-      blossom.style.animationDelay = `${Math.random() * 15}s`;
-      blossom.style.opacity = `0.${Math.floor(2 + Math.random() * 7)}`;
-      blossom.style.transform = `scale(${0.5 + Math.random()})`;
-      decorationsContainer.appendChild(blossom);
-    }
-  }
-
-  // Cart functionality
-  function setupCart() {
-    // Quantity selectors
-    document.querySelectorAll('.quantity-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const input = this.parentElement.querySelector('.quantity-input');
-        let value = parseInt(input.value);
-
-        if (this.classList.contains('increment')) {
-          value++;
-        } else if (this.classList.contains('decrement') && value > 1) {
-          value--;
-        }
-
-        input.value = value;
-        updateCartTotals();
-      });
-    });
-
-    // Quantity input validation
-    document.querySelectorAll('.quantity-input').forEach(input => {
-      input.addEventListener('change', function() {
-        if (this.value < 1) this.value = 1;
-        updateCartTotals();
-      });
-    });
-
-    // Remove buttons
-    document.querySelectorAll('.remove-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const item = this.closest('.product-card');
-        item.style.animation = 'fadeOut 0.3s ease';
-        setTimeout(() => {
-          item.remove();
-          updateCartTotals();
-          checkEmptyCart();
-        }, 300);
-      });
-    });
-
-    // Payment method selection
-    document.querySelectorAll('.payment-method').forEach(method => {
-      method.addEventListener('click', function() {
-        document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
-        this.classList.add('selected');
-      });
-    });
-
-    // Checkout button
-    document.querySelector('.checkout-btn').addEventListener('click', function() {
-      alert('Grazie per il tuo ordine! Verrai reindirizzato alla pagina di pagamento.');
-    });
-  }
-
-  // Check if cart is empty
-  function checkEmptyCart() {
-    const items = document.querySelectorAll('#cart-items-container .product-card');
-    if (items.length === 0) {
-      document.getElementById('cart-items-container').classList.add('hidden');
-      document.getElementById('empty-cart').classList.remove('hidden');
-    }
-  }
-
-  // Initialize
-  document.addEventListener('DOMContentLoaded', function() {
-    generateDecorations();
-    setupCart();
-  });
-</script>
 </body>
 </html>

@@ -417,6 +417,18 @@ public class CartGesture extends HttpServlet {
             response.setContentType("text/json");
             response.getWriter().println("{\"error\":\"invalid code\"}");
             return;
+        } else if (action.equals("element")) {
+            response.setContentType("text/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(200);
+            response.getWriter().write("{\"success\":"+ sCart.getContenuti().size() + "}");
+        } else if (action.equals("cartTotals")) {
+            CarrelloBean cart = sCart.getCarelloRefernz();
+            String json = "{\"tot\":" + cart.getTot() + ",\"speseSped\":" + cart.getSpeseSped() + ",\"sconti\":" + cart.getSconti() + "}";
+            response.setContentType("text/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(200);
+            response.getWriter().write(json);
         } else {
             System.out.println("error");
             response.setStatus(422);

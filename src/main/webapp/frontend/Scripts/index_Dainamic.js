@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (data.error) {
                                 mostraErrore(data.error);
                             } else if (data.success === "success") {
-                                window.location.href = "catalog.jsp";
+                                window.location.href = "cart.jsp";
                             } else {
                                 mostraErrore("alcuni prodotti sono già nel carrello");
                             }
@@ -290,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (data.error) {
                                 mostraErrore(data.error);
                             } else if (data.success === "success") {
-                                window.location.href = "catalog.jsp";
+                                window.location.href = "cart.jsp";
                             } else {
                                 mostraErrore("alcuni prodotti sono già nel carrello");
                             }
@@ -435,4 +435,31 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
+function generateDecorations() {
+    const decorationsContainer = document.getElementById('decorations');
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
 
+    // Generate cherry blossom decorations
+    for (let i = 0; i < 15; i++) {
+        const blossom = document.createElement('div');
+        blossom.className = 'cherry-blossom';
+        blossom.style.left = `${Math.random() * viewportWidth}px`;
+        blossom.style.animationDelay = `${Math.random() * 15}s`;
+        blossom.style.opacity = `0.${Math.floor(2 + Math.random() * 7)}`;
+        blossom.style.transform = `scale(${0.5 + Math.random()})`;
+        decorationsContainer.appendChild(blossom);
+    }
+}
+
+
+// Generate decorations on page load
+document.addEventListener('DOMContentLoaded', generateDecorations);
+
+// Folder tab interaction
+document.querySelectorAll('.folder-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        document.querySelectorAll('.folder-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
