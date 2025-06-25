@@ -11,7 +11,7 @@ import java.util.List;
 public class ReaderDAO implements GenralDAO<ReaderBean>{
     private static final String TABLE_NAME = "reader";
     private DataSource ds = null;
-    private List<String> orderWhiteList = List.of("idReader", "dataAcquisto", "dataUltimaApertura", "idProdotto", "idCliente");
+    private List<String> orderWhiteList = List.of("idReader", "dataAcquisto", "dataUltimaApertura", "idVolume", "idCliente");
 
     public ReaderDAO(DataSource ds) {
         this.ds = ds;
@@ -23,14 +23,14 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = " insert into " + TABLE_NAME + "(dataAcquisto, dataUltimaApertura, idProdotto, idCliente)" + "values(?,?,?,?)";
+        String insertSQL = " insert into " + TABLE_NAME + "(dataAcquisto, dataUltimaApertura, idVolume, idCliente)" + "values(?,?,?,?)";
 
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getDataAcquistoFormatted().toString());
             ps.setString(2, bean.getDataUltimaAperturaFormatted().toString());
-            ps.setInt(3, bean.getIdProdotto());
+            ps.setInt(3, bean.getIdVolume());
             ps.setInt(4, bean.getIdCliente());
 
             ps.executeUpdate();
@@ -90,7 +90,7 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
                         rs.getInt("idReader"),
                         rs.getString("dataAcquisto"),
                         rs.getString("dataUltimaApertura"),
-                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume"),
                         rs.getInt("idCliente")
                 );
             }
@@ -110,13 +110,15 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
         PreparedStatement ps = null;
         Collection<ReaderBean> readers = new LinkedList<ReaderBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idReader");
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -124,7 +126,7 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
                         rs.getInt("idReader"),
                         rs.getString("dataAcquisto"),
                         rs.getString("dataUltimaApertura"),
-                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume"),
                         rs.getInt("idCliente")
                 );
             }
@@ -144,16 +146,29 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
         PreparedStatement ps = null;
         Collection<ReaderBean> readers = new LinkedList<ReaderBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
-        if(limit > 0 && page > 0){
-            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ? limit ? offset ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idReader");
+
+            if (limit > 0 && page > 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(2, 10);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, 0);
+            } else {
+                ps.setInt(2, 10);
+                ps.setInt(3, 0);
+            }
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -161,7 +176,7 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
                         rs.getInt("idReader"),
                         rs.getString("dataAcquisto"),
                         rs.getString("dataUltimaApertura"),
-                        rs.getInt("idProdotto"),
+                        rs.getInt("idVolume"),
                         rs.getInt("idCliente")
                 );
             }

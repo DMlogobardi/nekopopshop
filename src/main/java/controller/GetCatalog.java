@@ -1,5 +1,6 @@
 package controller;
 
+import controller.tools.JsonConverter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -42,53 +43,103 @@ public class GetCatalog extends HttpServlet {
 			Collection<ProdottoBean> dbPrd = null;
 			Collection<VolumeBean> dbVol = new LinkedList<VolumeBean>();
 			String serch = request.getParameter("serch");
-			String filter = request.getParameter("filter") == null ? "" : request.getParameter("filter").toLowerCase();
+			System.out.println("serch: " + serch);
+			String filter = request.getParameter("filter");
 			int page = request.getParameter("page") == null ? 0 : Integer.parseInt(request.getParameter("page"));
 
-			if(serch==null && filter.isEmpty()) {
+			//logica di filtri
+			if(serch==null && filter == null) {
+
 				dbPrd = prodDB.doRetrieveAllLimit("idProdotto", 10, page);
-			} else if(serch!=null && filter.isEmpty()) {
+
+			} else if(serch!=null && filter == null) {
+
 				dbPrd = prodDB.doRetrieveAllLimitLike("nome", 10, page, serch.toLowerCase());
+				for(ProdottoBean pb : dbPrd) {
+					if (pb.getPrezzo() == 0.0) {
+						dbVol.addAll(volDB.doRetrieveAllByProduct(pb.getIdProdotto(), serch));
+					}
+				}
+
 			} else if (serch == null) {
+				System.out.println("filter: " + filter);
 				if(filter.equals("volumi")){
-					dbVol = volDB.doRetrieveAllLimit("idVolume", 10, page);
+					String volFilter = request.getParameter("volFilter");
+					dbVol = volDB.doRetrieveAllLimit(volFilter.strip(), 10, page);
+
 				} else {
 					dbPrd = prodDB.doRetrieveAllLimit(filter.strip(), 10, page);
 				}
 			} else {
+				System.out.println("filter + serch");
 				if(filter.equals("volumi")){
-					dbVol = volDB.doRetrieveAllLimit("idVolume", 10, page, serch.toLowerCase());
+					String volFilter = request.getParameter("volFilter");
+					dbVol = volDB.doRetrieveAllLimit(volFilter.strip(), 10, page, serch.toLowerCase());
+
 				} else {
 					dbPrd = prodDB.doRetrieveAllLimitLike(filter.strip(), 10, page, serch.toLowerCase());
 				}
 			}
+
+			// invio dei json
 			if(dbVol.isEmpty() && dbPrd != null && !dbPrd.isEmpty()) {
 				for (ProdottoBean pb : dbPrd) {
-					if (pb.getPrezzo() == null) {
+					if (pb.getPrezzo() == 0.0) {
 						dbVol.add(volDB.doRetrieveByProduct(pb.getIdProdotto()));
 					}
 				}
-				request.setAttribute("prodotti", dbPrd);
-				if(!dbVol.isEmpty())
-					request.setAttribute("volumi", dbVol);
-				request.getRequestDispatcher("getcatalog.jsp").forward(request, response);
-				return;
-			}
-			if(!dbVol.isEmpty() && dbPrd != null && !dbPrd.isEmpty()){
-				request.setAttribute("prodotti", dbPrd);
-				request.setAttribute("volumi", dbVol);
-				request.getRequestDispatcher("getcatalog.jsp").forward(request, response);
-				return;
-			}
-			request.setAttribute("error", "404 Not Found");
-			request.getRequestDispatcher("getcatalog.jsp").forward(request, response);
+				JsonConverter<ProdottoBean> prodConverter = JsonConverter.factory(ProdottoBean.class, null);
+				String jsonProd = prodConverter.toJson(dbPrd);
+				String jsonSend = null;
+				if(!dbVol.isEmpty()) {
+					JsonConverter<VolumeBean> volConverter = JsonConverter.factory(VolumeBean.class, null);
+					String jsonVol = volConverter.toJson(dbVol);
+					jsonSend = JsonConverter.merge(jsonProd, jsonVol);
+				}
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				if(jsonSend != null) {
+					System.out.println("if JsonSend: " + jsonSend);
+					response.getWriter().write(jsonSend);
+				} else {
+					System.out.println("if JsonProd: " + jsonProd);
+					response.getWriter().write(jsonProd);
+				}
+			} else if (dbPrd == null || dbPrd.isEmpty()) {
+				JsonConverter<VolumeBean> volConverter = JsonConverter.factory(VolumeBean.class, null);
+				String jsonVol = volConverter.toJson(dbVol);
+				System.out.println("else JsonVol: " + jsonVol);
 
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(jsonVol);
+
+			} else {
+				JsonConverter<ProdottoBean> prodConverter = JsonConverter.factory(ProdottoBean.class, null);
+				String jsonProd = prodConverter.toJson(dbPrd);
+				System.out.println("else JsonProd: " + jsonProd);
+				JsonConverter<VolumeBean> volConverter = JsonConverter.factory(VolumeBean.class, null);
+				String jsonVol = volConverter.toJson(dbVol);
+				System.out.println("else JsonVol: " + jsonVol);
+
+				String jsonSend = JsonConverter.merge(jsonProd, jsonVol);
+				System.out.println("else: " + jsonSend);
+
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(jsonSend);
+
+			}
 		} catch (SQLException e){
 			System.out.println("getCatalog servlet error: " + e.getMessage());
 			request.setAttribute("error", "internal server error");
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-		}
-	}
+			request.getRequestDispatcher("catalog.jsp").forward(request, response);
+		} catch (Exception e) {
+			System.out.println("getCatalog servlet parse error: " + e.getMessage());
+			request.setAttribute("error", "internal server error");
+			request.getRequestDispatcher("catalog.jsp").forward(request, response);
+        }
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

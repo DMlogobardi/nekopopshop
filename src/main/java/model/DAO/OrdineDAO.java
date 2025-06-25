@@ -11,7 +11,7 @@ import java.util.List;
 public class OrdineDAO implements GenralDAO<OrdineBean>{
     private static final String TABLE_NAME = "ordine";
     private DataSource ds = null;
-    private List<String> ordineWhiteList = List.of("idOrdine", "tot", "dataOrdine", "dataArrivoS", "idCliente", "idMetodoPag");
+    private List<String> ordineWhiteList = List.of("idOrdine", "tot", "dataOrdine", "dataArrivoS", "idCliente", "idIndirizzo", "idMetodoPag");
 
     public OrdineDAO(DataSource ds) {
         this.ds = ds;
@@ -23,7 +23,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = "insert into " + TABLE_NAME + "(tot, dataOrdine, dataArrivoS, idCliente, idMetodoPag)" + " values(?,?,?,?,?)";
+        String insertSQL = "insert into " + TABLE_NAME + "(tot, dataOrdine, dataArrivoS, idCliente, idIndirizzo, idMetodoPag)" + " values(?,?,?,?,?,?)";
 
         try{
           con = ds.getConnection();
@@ -32,7 +32,8 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
           ps.setString(2, bean.getDataOrdineFormatted().toString());
           ps.setString(3, bean.getDataArrivoFormatted().toString());
           ps.setInt(4, bean.getIdCliente());
-          ps.setInt(5, bean.getIdMetodoPag());
+          ps.setInt(5, bean.getIdIndirizzo());
+          ps.setInt(6, bean.getIdMetodoPag());
 
           ps.executeUpdate();
           ResultSet rs = ps.getGeneratedKeys();
@@ -93,6 +94,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                         rs.getString("dataOrdine"),
                         rs.getString("dataArrivoS"),
                         rs.getInt("idCliente"),
+                        rs.getInt("idIndirizzo"),
                         rs.getInt("idMetodoPag")
                 );
             }
@@ -112,13 +114,15 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
         PreparedStatement ps = null;
         Collection<OrdineBean> ordini = new LinkedList<OrdineBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && ordineWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ?";
+
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && ordineWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idOrdine");
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -128,6 +132,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                         rs.getString("dataOrdine"),
                         rs.getString("dataArrivoS"),
                         rs.getInt("idCliente"),
+                        rs.getInt("idIndirizzo"),
                         rs.getInt("idMetodoPag")
                 );
                 ordini.add(ordine);
@@ -148,16 +153,29 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
         PreparedStatement ps = null;
         Collection<OrdineBean> ordini = new LinkedList<OrdineBean>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME;
-        if(order != null && ordineWhiteList.contains(order.strip())){
-            selectAllSQL += " order by " + order.strip();
-        }
-        if(limit > 0 && page > 0){
-            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
-        }
+        String selectAllSQL = "select * from " + TABLE_NAME + " order by ? limit ? offset ?";
+
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && ordineWhiteList.contains(order.strip()))
+                ps.setString(1, order.strip());
+            else
+                ps.setString(1, "idOrdine");
+
+            if (limit > 0 && page > 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(2, 10);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, 0);
+            } else {
+                ps.setInt(2, 10);
+                ps.setInt(3, 0);
+            }
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -167,6 +185,7 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                         rs.getString("dataOrdine"),
                         rs.getString("dataArrivoS"),
                         rs.getInt("idCliente"),
+                        rs.getInt("idIndirizzo"),
                         rs.getInt("idMetodoPag")
                 );
                 ordini.add(ordine);

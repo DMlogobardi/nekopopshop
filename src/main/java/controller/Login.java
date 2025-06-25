@@ -3,6 +3,7 @@ package controller;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,7 +47,7 @@ public class Login extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getSession().getAttribute("logToken") != null) {
-            request.setAttribute("errors", "utent alredy logged in");
+            request.setAttribute("errors", "user alredy logged in");
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
@@ -83,27 +84,42 @@ public class Login extends HttpServlet {
                 } else {
                     request.getSession().setAttribute("logToken", "C");
                 }
-                //inserisco il carrello nella sesione
+                request.getSession().setAttribute("logId", acc.getIdCliente());
                 CarrelloDAO ca = new CarrelloDAO(ds);
                 ContenutoDAO in = new ContenutoDAO(ds);
                 CarrelloBean cart = ca.doRetrieveByAccount(acc.getIdCliente());
-                System.out.println(cart);
-                if(cart == null) {
-                    cart = new CarrelloBean(0, 0.0, 0.0, 0, acc.getIdCliente());
+
+                //inserisco il carrello nella sessione
+                if(request.getSession().getAttribute("cart") != null) {
+                    SessionCart sCart = (SessionCart) request.getSession().getAttribute("cart");
+                    if(cart == null) {
+                        cart = new CarrelloBean(0, 0.0, 0.0, 0, acc.getIdCliente());
+                    }
+                    if(!sCart.margeCart(cart, ds)){
+                        errors.add("marge cart error");
+                        request.setAttribute("error", errors);
+                        loginDispatch.forward(request, response);
+                        System.out.println("marge cart error");
+                    }
+                } else {
+                    if(cart == null) {
+                        cart = new CarrelloBean(0, 0.0, 0.0, 0, acc.getIdCliente());
+                    }
+                    SessionCart sCart = new SessionCart();
+                    sCart.setCarelloRefernz(cart);
+                    Collection<ContenutoBean> contenuti = in.doRetrieveAllproduct(cart.getIdCarello());
+                    if(!contenuti.isEmpty()) {
+                        sCart.setContenuti(contenuti);
+                    }
+                    request.getSession().setAttribute("cart", sCart);
                 }
-                SessionCart sCart = new SessionCart();
-                sCart.setCarelloRefernz(cart);
-                Collection<ContenutoBean> contenuti = in.doRetrieveAllproduct(cart.getIdCarello());
-                if(!contenuti.isEmpty()) {
-                    sCart.setContenuti(contenuti);
-                }
-                request.getSession().setAttribute("cart", sCart);
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 String success = "{\"satus\": \"success\", \"message\": \"login successful\"}";
                 response.getWriter().write(success);
                 System.out.println("login success");
+                response.sendRedirect("index.jsp");
                 return;
             }
 
