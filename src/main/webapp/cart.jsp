@@ -50,6 +50,7 @@
     </div>
     <jsp:include page="navBar.jsp" />
   </div>
+
   <jsp:include page="error.jsp" />
 
   <!-- Cart Content -->
