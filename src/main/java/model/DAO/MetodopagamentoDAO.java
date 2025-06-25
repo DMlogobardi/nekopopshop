@@ -23,7 +23,7 @@ public class MetodopagamentoDAO implements GenralDAO<MetodoPagamentoBean>{
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = "insert into" + TABLE_NAME + "(nCarte, tipo, dataScadenza, nomeInte, cognomeInt, idCliente) values (?,?,?,?,?,?)";
+        String insertSQL = "insert into " + TABLE_NAME + "(nCarta, tipo, dataScadenza, nomeInte, cognomeInt, idCliente) values (?,?,?,?,?,?)";
 
         try{
             con = ds.getConnection();
@@ -32,7 +32,8 @@ public class MetodopagamentoDAO implements GenralDAO<MetodoPagamentoBean>{
             ps.setString(2, bean.getTipo());
             ps.setString(3, bean.getDataScadenzaFormatted().toString());
             ps.setString(4, bean.getNomeInte());
-            ps.setInt(5, bean.getIdCliente());
+            ps.setString(5, bean.getCognomeInt());
+            ps.setInt(6, bean.getIdCliente());
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -60,6 +61,30 @@ public class MetodopagamentoDAO implements GenralDAO<MetodoPagamentoBean>{
             con = ds.getConnection();
             ps = con.prepareStatement(deleteSQL);
             ps.setInt(1, code);
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return(result != 0);
+    }
+
+    public boolean doDeleteByIdAndCliente(int code, int cliente) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String deleteSQL = "delete from " + TABLE_NAME + " where idMetodoPag = ? and idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(deleteSQL);
+            ps.setInt(1, code);
+            ps.setInt(2, cliente);
 
             result = ps.executeUpdate();
         } finally {
@@ -107,6 +132,41 @@ public class MetodopagamentoDAO implements GenralDAO<MetodoPagamentoBean>{
         return mPag;
     }
 
+    public MetodoPagamentoBean doRetrieveByKeyAndCliente(int code, int cliente) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        MetodoPagamentoBean mPag = null;
+
+        String selectSQL = "select * from " + TABLE_NAME + " where idMetodoPag = ? and idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+            ps.setInt(2, cliente);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                mPag = new MetodoPagamentoBean(
+                        rs.getInt("idMetodoPag"),
+                        rs.getString("nCarta"),
+                        rs.getString("tipo"),
+                        rs.getString("dataScadenza"),
+                        rs.getString("nomeInte"),
+                        rs.getString("cognomeInt"),
+                        rs.getInt("idCliente")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return mPag;
+    }
+
     @Override
     public Collection<MetodoPagamentoBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;
@@ -122,6 +182,41 @@ public class MetodopagamentoDAO implements GenralDAO<MetodoPagamentoBean>{
                 ps.setString(1, order.strip());
             else
                 ps.setString(1, "idMetodoPag");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                MetodoPagamentoBean mPag = new MetodoPagamentoBean(
+                        rs.getInt("idMetodoPag"),
+                        rs.getString("nCarta"),
+                        rs.getString("tipo"),
+                        rs.getString("dataScadenza"),
+                        rs.getString("nomeInte"),
+                        rs.getString("cognomeInt"),
+                        rs.getInt("idCliente")
+                );
+                mpagList.add(mPag);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return mpagList;
+    }
+
+    public Collection<MetodoPagamentoBean> doRetrieveByCliente(int cliente) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<MetodoPagamentoBean> mpagList = new LinkedHashSet<MetodoPagamentoBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME + " where idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setInt(1, cliente);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

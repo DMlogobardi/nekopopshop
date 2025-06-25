@@ -1,6 +1,7 @@
 package model.Bean;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -45,10 +46,10 @@ public class PaginaBean implements Serializable {
         return dataCaricamento;
     }
 
-    public LocalDate getDataCaricamentoFormatted() {
+    public Date getDataCaricamentoFormatted() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
         LocalDate date =LocalDate.parse(dataCaricamento, format);
-        return date;
+        return Date.valueOf(date);
     }
 
     public void setDataCaricamento(String dataCaricamento) {

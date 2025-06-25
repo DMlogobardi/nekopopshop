@@ -1,6 +1,7 @@
 package model.DAO;
 
 import model.Bean.ClienteBean;
+import model.Bean.VolumeBean;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -193,5 +194,33 @@ public class ClienteDAO implements GenralDAO<ClienteBean>{
             }
         }
         return clienti;
+    }
+
+    public boolean uppdate(ClienteBean cliente) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String updateSQL = "update " + TABLE_NAME + " set nomw = ?, cognome = ?, dataNascita = ?, email = ?, cF = ? where idCliente = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setString(1, cliente.getNome());
+            ps.setString(2, cliente.getCognome());
+            ps.setDate(3, cliente.getDataNascitaFormatted());
+            ps.setString(4, cliente.getEmail());
+            ps.setString(5, cliente.getcF());
+            ps.setInt(6, cliente.getIdCliente());
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
     }
 }

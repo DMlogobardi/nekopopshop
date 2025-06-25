@@ -79,6 +79,29 @@ public class ContenutoDAO implements GenralDAO<ContenutoBean>{
         return(result != 0);
     }
 
+    public boolean doDeleteByCart(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String deleteSQL = "delete from " + TABLE_NAME + " where idCarrello = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(deleteSQL);
+            ps.setInt(1, code);
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return(result != 0);
+    }
+
     @Override
     public ContenutoBean doRetrieveByKey(int code) throws SQLException {
         Connection con = null;

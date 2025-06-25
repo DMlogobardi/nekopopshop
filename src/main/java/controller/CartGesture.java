@@ -56,8 +56,10 @@ public class CartGesture extends HttpServlet {
 
         String action = request.getParameter("action");
         if (action == null) {
-            request.setAttribute("error", "Invalid action");
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            System.out.println("action is null");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
             return;
         }
 
@@ -74,8 +76,10 @@ public class CartGesture extends HttpServlet {
                 sCart.setCarelloRefernz(DAOcart.doRetrieveByAccount(id));
             } catch (SQLException e) {
                 System.out.println("error cart referencise: " + e.getMessage());
-                request.setAttribute("error", "server error");
-                request.getRequestDispatcher("cart.jsp").forward(request, response);
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
             }
 
 
@@ -92,6 +96,13 @@ public class CartGesture extends HttpServlet {
             JsonConverter<ContenutoDTO> converter = JsonConverter.factory(ContenutoDTO.class, null);
             Collection<ContenutoDTO> addDTO = null;
 
+            System.out.println("jsonAdd: " + jsonAdd);
+            if (jsonAdd == null || jsonAdd.isEmpty()) {
+                response.setStatus(400);
+                response.getWriter().println("{\"error\":\"Parametro 'prodotto' mancante o vuoto\"}");
+                return;
+            }
+
             try {
                 addDTO = (Collection<ContenutoDTO>) converter.parseList(jsonAdd);
 
@@ -100,13 +111,15 @@ public class CartGesture extends HttpServlet {
                     addDTO = new ArrayList<ContenutoDTO>();
                     addDTO.add(converter.parse(jsonAdd));
                 } catch (Exception e1) {
-                    System.out.println("error delete: " + e.getMessage() + "second error: " + e1.getCause());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("cart.jsp").forward(request, response);
+                    System.out.println("add delete: " + e.getMessage() + " second error: " + e1.getCause());
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
 
+            Boolean prodNotAdd = false;
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
             for (ContenutoDTO dto : addDTO) {
                 if(sCart.getProdotti().stream().filter(p->p.getIdProdotto() == dto.getIdProdotto()).count() == 0) {
@@ -121,21 +134,29 @@ public class CartGesture extends HttpServlet {
                             tot += volumeSQL.doRetrievePrezzoByKey(dto.getIdVolume())*dto.getqCarrello();
                         }
                     } catch (SQLException e) {
-                        System.out.println("error delete: " + e.getMessage());
-                        request.setAttribute("error", "server error");
-                        request.getRequestDispatcher("cart.jsp").forward(request, response);
+                        System.out.println("error add: " + e.getMessage());
+                        response.setStatus(500);
+                        response.setContentType("text/json");
+                        response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                        return;
                     }
 
                     CarrelloBean carrello = sCart.getCarelloRefernz();
                     double totRef = (carrello == null || carrello.getTot() == null) ? 0.0 : carrello.getTot();
                     sCart.getCarelloRefernz().setTot(totRef + tot);
                     sCart.addPrd(new ContenutoBean(0, dto.getqCarrello(), dto.getIdCarrello(), dto.getIdProdotto(), dto.getIdVolume()));
+                } else {
+                    prodNotAdd = true;
                 }
             }
 
             System.out.println("add success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            if(prodNotAdd)
+                response.getWriter().println("{\"success\":\"many prod not add\"}");
+            else
+                response.getWriter().println("{\"success\":\"success\"}");
 
         } else if (action.equals("update")) {
             //update
@@ -151,27 +172,59 @@ public class CartGesture extends HttpServlet {
                     updateDTO.add(converter.parse(jsonAdd));
                 } catch (Exception e1) {
                     System.out.println("error delete: " + e.getMessage() + "second error: " + e1.getCause());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("cart.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
 
             for(ContenutoDTO dto : updateDTO) {
+                DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
+                ProdottoDAO prodottoSQL = new ProdottoDAO(ds);
+                VolumeDAO volumeSQL = new VolumeDAO(ds);
+                double dbprice = 0.0;
+
+                try {
+                    if (dto.getIdProdotto() != null && dto.getIdProdotto() != 0) {
+                        dbprice = prodottoSQL.doRetrievePrezzoByKey(dto.getIdProdotto());
+                    } else {
+                        dbprice = volumeSQL.doRetrievePrezzoByKey(dto.getIdVolume());
+                    }
+                } catch (SQLException e) {
+                    System.out.println("error update: " + e.getMessage());
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                    return;
+                }
+                double lastTot = sCart.getCarelloRefernz().getTot();
                 if (dto.getIdProdotto() != null && dto.getIdProdotto() != 0) {
+                    double finalDbprice = dbprice;
                     sCart.getContenuti().stream().filter(conte -> conte.getIdProdotto() == dto.getIdProdotto()).findFirst().ifPresent(conte -> {
+                        sCart.getCarelloRefernz().setTot(lastTot - (finalDbprice * conte.getqCarrello()));
                         conte.setqCarrello(dto.getqCarrello());
+                        Double tempTot = sCart.getCarelloRefernz().getTot();
+                        sCart.getCarelloRefernz().setTot( + (tempTot * dto.getqCarrello()));
                     });
                 } else {
+                    double finalDbprice = dbprice;
                     sCart.getContenuti().stream().filter(conte -> conte.getIdVolume() == dto.getIdVolume()).findFirst().ifPresent(conte -> {
+                        sCart.getCarelloRefernz().setTot(lastTot - (finalDbprice * conte.getqCarrello()));
                         conte.setqCarrello(dto.getqCarrello());
+                        Double tempTot = sCart.getCarelloRefernz().getTot();
+                        sCart.getCarelloRefernz().setTot( + (tempTot * dto.getqCarrello()));
+
                     });
                 }
             }
 
+
+
             System.out.println("update success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if (action.equals("delete")) {
             //delete
@@ -187,8 +240,9 @@ public class CartGesture extends HttpServlet {
                     removeDTO.add(converter.parse(jsonRemove));
                 } catch (Exception e1) {
                     System.out.println("error delete: " + e.getMessage() + "second error: " + e1.getCause());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("cart.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
@@ -208,8 +262,10 @@ public class CartGesture extends HttpServlet {
                     }
                 } catch (SQLException e) {
                     System.out.println("error delete: " + e.getMessage());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("cart.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                    return;
                 }
 
                 double totRef = sCart.getCarelloRefernz().getTot();
@@ -222,19 +278,20 @@ public class CartGesture extends HttpServlet {
             }
 
             System.out.println("remove success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if (action.equals("list")) {
             //get all
             String offset = request.getParameter("offset");
-            if(offset.equals("") || offset == null) {
+            if(offset == null || offset.equals("")) {
                 System.out.println("add offset parameter");
                 request.setAttribute("error", "add offset parameter");
                 request.getRequestDispatcher("cart.jsp").forward(request, response);
                 return;
             }
-            Collection<ContenutoBean> contuti = sCart.getProdottiByLimit(10, Integer.parseInt(offset));
+            Collection<ContenutoBean> contuti = sCart.getProdottiByLimit(3, Integer.parseInt(offset));
 
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
             VolumeDAO volDAO = new VolumeDAO(ds);
@@ -252,8 +309,10 @@ public class CartGesture extends HttpServlet {
                         proDB.add(temp);
                     } catch (SQLException e) {
                         System.out.println("error list prod: " + e.getMessage());
-                        request.setAttribute("error", "server error");
-                        request.getRequestDispatcher("cart.jsp").forward(request, response);
+                        response.setStatus(500);
+                        response.setContentType("text/json");
+                        response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                        return;
                     }
                 } else {
                     try {
@@ -266,8 +325,10 @@ public class CartGesture extends HttpServlet {
                         volDB.add(temp);
                     } catch (SQLException e) {
                         System.out.println("error list vol: " + e.getMessage());
-                        request.setAttribute("error", "server error");
-                        request.getRequestDispatcher("cart.jsp").forward(request, response);
+                        response.setStatus(500);
+                        response.setContentType("text/json");
+                        response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                        return;
                     }
                 }
             }
@@ -285,8 +346,10 @@ public class CartGesture extends HttpServlet {
                 System.out.println();
             } catch (Exception e) {
                 System.out.println("error list: " + e.getMessage());
-                request.setAttribute("error", "server error");
-                request.getRequestDispatcher("cart.jsp").forward(request, response);
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
             }
 
             if(!jsonProd.equals("[]") && !jsonVol.equals("[]")) {
@@ -294,8 +357,10 @@ public class CartGesture extends HttpServlet {
                     jsonSend = JsonConverter.merge(jsonProd, jsonVol);
                 } catch (Exception e) {
                     System.out.println("error list marge: " + e.getMessage());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("cart.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                    return;
                 }
             } else if(jsonProd.equals("[]") && !jsonVol.equals("[]")) {
                 jsonSend = jsonVol;
@@ -320,33 +385,43 @@ public class CartGesture extends HttpServlet {
 
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(code);
+                int valoreCoupon = 0;
 
                 if (matcher.find()) {
-                    int valoreCoupon = Integer.parseInt(matcher.group(1));
+                    valoreCoupon = Integer.parseInt(matcher.group(1));
                     if(valoreCoupon > 0 && valoreCoupon <= 50) {
                         sCart.getCarelloRefernz().setSconti(valoreCoupon);
                     } else {
                         System.out.println("Codice non valido");
-                        request.setAttribute("error", "Invalid code");
-                        request.getRequestDispatcher("cart.jsp").forward(request, response);
+                        response.setStatus(422);
+                        response.setContentType("text/json");
+                        response.getWriter().println("{\"error\":\"invalid code\"}");
+                        return;
                     }
 
                 } else {
                     System.out.println("Codice non valido");
-                    request.setAttribute("error", "Invalid code");
-                    request.getRequestDispatcher("cart.jsp").forward(request, response);
+                    response.setStatus(422);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"invalid code\"}");
+                    return;
                 }
                 System.out.println("Codice valido");
-                request.setAttribute("success", "success");
-                request.getRequestDispatcher("cart.jsp").forward(request, response);
+                response.setStatus(200);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"success\":"+ valoreCoupon + "}");
+                return;
             }
             System.out.println("error setSconto");
-            request.setAttribute("error", "Invalid code");
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid code\"}");
+            return;
         } else {
             System.out.println("error");
-            request.setAttribute("error", "Invalid action");
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
         }
     }
 }

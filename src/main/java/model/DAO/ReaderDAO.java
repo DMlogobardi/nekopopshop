@@ -28,8 +28,11 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, bean.getDataAcquistoFormatted().toString());
-            ps.setString(2, bean.getDataUltimaAperturaFormatted().toString());
+            ps.setDate(1, bean.getDataAcquistoFormatted());
+            if(bean.getDataUltimaApertura() != null)
+                ps.setDate(2, bean.getDataUltimaAperturaFormatted());
+            else
+                ps.setNull(2, java.sql.Types.DATE);
             ps.setInt(3, bean.getIdVolume());
             ps.setInt(4, bean.getIdCliente());
 
@@ -104,6 +107,39 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
         return reader;
     }
 
+    public ReaderBean doRetrieveByVolAndUtent(int code, int utent) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ReaderBean reader = null;
+
+        String selectSQL = "select * from " + TABLE_NAME + " where idVolume=? and idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+            ps.setInt(2, utent);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                reader = new ReaderBean(
+                        rs.getInt("idReader"),
+                        rs.getString("dataAcquisto"),
+                        rs.getString("dataUltimaApertura"),
+                        rs.getInt("idVolume"),
+                        rs.getInt("idCliente")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return reader;
+    }
+
     @Override
     public Collection<ReaderBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;
@@ -129,6 +165,44 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
                         rs.getInt("idVolume"),
                         rs.getInt("idCliente")
                 );
+                readers.add(reader);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return readers;
+    }
+
+    public Collection<ReaderBean> doRetrieveAllByUtent(String order, int cliente) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<ReaderBean> readers = new LinkedList<ReaderBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME + " where idCliente = ? order by ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setInt(1, cliente);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(2, order.strip());
+            else
+                ps.setString(2, "idReader");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ReaderBean reader = new ReaderBean(
+                        rs.getInt("idReader"),
+                        rs.getString("dataAcquisto"),
+                        rs.getString("dataUltimaApertura"),
+                        rs.getInt("idVolume"),
+                        rs.getInt("idCliente")
+                );
+                readers.add(reader);
             }
         } finally {
             try {
@@ -179,6 +253,7 @@ public class ReaderDAO implements GenralDAO<ReaderBean>{
                         rs.getInt("idVolume"),
                         rs.getInt("idCliente")
                 );
+                readers.add(reader);
             }
         } finally {
             try {

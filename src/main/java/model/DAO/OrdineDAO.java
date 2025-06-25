@@ -108,6 +108,45 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
         return ordine;
     }
 
+    public Collection<OrdineBean> doRetrieveByUser(String order, int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<OrdineBean> ordini = new LinkedList<OrdineBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME + " where idCliente = ? order by ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setInt(1, code);
+            if(order != null && ordineWhiteList.contains(order.strip()))
+                ps.setString(2, order.strip());
+            else
+                ps.setString(2, "idOrdine");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrdineBean ordine = new OrdineBean(
+                        rs.getInt("idOrdine"),
+                        rs.getDouble("tot"),
+                        rs.getString("dataOrdine"),
+                        rs.getString("dataArrivoS"),
+                        rs.getInt("idCliente"),
+                        rs.getInt("idIndirizzo"),
+                        rs.getInt("idMetodoPag")
+                );
+                ordini.add(ordine);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return ordini;
+    }
+
     @Override
     public Collection<OrdineBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;
@@ -123,6 +162,53 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                 ps.setString(1, order.strip());
             else
                 ps.setString(1, "idOrdine");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrdineBean ordine = new OrdineBean(
+                        rs.getInt("idOrdine"),
+                        rs.getDouble("tot"),
+                        rs.getString("dataOrdine"),
+                        rs.getString("dataArrivoS"),
+                        rs.getInt("idCliente"),
+                        rs.getInt("idIndirizzo"),
+                        rs.getInt("idMetodoPag")
+                );
+                ordini.add(ordine);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return ordini;
+    }
+
+    public Collection<OrdineBean> doRetrieveAllByDateRange(String order, Date start, Date end) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<OrdineBean> ordini = new LinkedList<OrdineBean>();
+
+        if (start == null && end == null) {
+            return null;
+        }
+        if (start.after(end)) {
+            return null;
+        }
+
+        String selectAllSQL = "select * from " + TABLE_NAME + " where dataOrdine between ? and ? order by ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setDate(1, start);
+            ps.setDate(2, end);
+            if(order != null && ordineWhiteList.contains(order.strip()))
+                ps.setString(3, order.strip());
+            else
+                ps.setString(3, "idOrdine");
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

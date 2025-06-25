@@ -111,6 +111,32 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         return volume;
     }
 
+    public int doRetrieveQuantity(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String selectSQL = "SELECT quantita FROM " + TABLE_NAME + " WHERE idVolume = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt("quantita");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return result;
+    }
+
     public VolumeBean doRetrieveByProduct(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
@@ -242,6 +268,62 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         return volumes;
     }
 
+    public Collection<VolumeBean> doRetrieveAllLimitByType(String order, int limit, int page, String type) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " where tag = ? ORDER BY ? limit ? offset ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setString(1, type);
+            if (order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(2, order.strip());
+            else
+                ps.setString(2, "idVolume");
+
+            if (limit > 0 && page > 0) {
+                ps.setInt(3, limit);
+                ps.setInt(4, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(3, 10);
+                ps.setInt(4, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(3, limit);
+                ps.setInt(4, 0);
+            } else {
+                ps.setInt(3, 10);
+                ps.setInt(4, 0);
+            }
+
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                VolumeBean volume = new VolumeBean(
+                        rs.getInt("idVolume"),
+                        rs.getInt("numVolumi"),
+                        rs.getDouble("prezzo"),
+                        rs.getInt("quantità"),
+                        rs.getString("dataPubl"),
+                        rs.getBytes("imgVol"),
+                        rs.getString("tag"),
+                        rs.getInt("idProdotto")
+                );
+                volumes.add(volume);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        System.out.println(volumes);
+        return volumes;
+    }
+
     public Collection<VolumeBean> doRetrieveAllLimit(String order, int limit, int page, String serch) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
@@ -340,6 +422,30 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                 ps.setInt(7, vol.getIdProdotto());
                 ps.setInt(8, vol.getNumVolumi());
             }
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
+    }
+
+    public boolean decrementQuantita(int quantita, int idVol) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String updateSQL = "update " + TABLE_NAME + " set quantità = quantità - ? where idVolume = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setInt(1, quantita);
+            ps.setInt(2, idVol);
 
             result = ps.executeUpdate();
         } finally {
