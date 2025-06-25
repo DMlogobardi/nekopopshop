@@ -219,14 +219,17 @@ function caricaProdotti(page){
                             <span class="text-2xl font-bold text-nekored">&#8364; ${prezzoFormattato}</span>
                         </div>
                         <div class="quantity-selector">
-                            <button class="quantity-btn decrement">
+                            <button data-tipo="decrement" class="quantity-btn decrement">
                                 <i class="fas fa-minus"></i>
                             </button>
-                            <input type="number" value="${item.quantita || 1}" min="1" class="quantity-input">
-                            <button class="quantity-btn increment">
+                            <p class="quantity-input"> ${item.quantita || 1} </p>
+                            <button data-tipo="increment" class="quantity-btn increment">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
+                        <button onclick="updateCart()" class="bg-nekopeach hover:bg-nekopink text-white px-6 rounded-r-lg font-bold transition hidden applyBtn" data-id="${item.tipo === 'volume' ? item.idVolume : item.idProdotto}" data-tipo="${item.tipo}">
+                            Applica
+                        </button>
                     </div>
                 </div>
             </div>
@@ -235,11 +238,40 @@ function caricaProdotti(page){
         }
         aggiornaRiepilogoCarrello();
         container.innerHTML = prodottiFinali.map(creaCardCarrello).join('');
+
+        const cards = container.querySelectorAll('.product-card');
+
+        cards.forEach(card => {
+            const decrementBtn = card.querySelector('.quantity-btn.decrement');
+            const incrementBtn = card.querySelector('.quantity-btn.increment');
+            const quantityDisplay = card.querySelector('.quantity-input');
+            const applly = card.querySelector('.applyBtn')
+
+            let quantity = parseInt(quantityDisplay.textContent) || 1;
+
+            decrementBtn.addEventListener('click', () => {
+                if (quantity > 1) {
+                    quantity--;
+                    quantityDisplay.textContent = quantity;
+                    // TODO: invia aggiornamento al server se necessario
+                }
+            });
+
+            incrementBtn.addEventListener('click', () => {
+                quantity++;
+                quantityDisplay.textContent = quantity;
+                // TODO: invia aggiornamento al server se necessario
+            });
+        });
     }).catch(error => {
         console.error("Errore:", error);
         document.getElementById("empty-cart").classList.remove('hidden');
         mostraErrore("Si è verificato un errore durante il caricamento del carrello. Ci scusiamo per il disagio.");
     });
+}
+
+function updateCart(){
+
 }
 
 document.addEventListener("DOMContentLoaded", function () {
