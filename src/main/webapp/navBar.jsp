@@ -7,6 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <!-- Navigation -->
+<div id="navbar"></div>
+
     <div class="w-full lg:w-auto">
         <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
             <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>

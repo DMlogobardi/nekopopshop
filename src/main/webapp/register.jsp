@@ -7,6 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="frontend/Scripts/Register.js"defer></script>
+    <script src="frontend/Scripts/MultiStepForm.js"defer></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -328,6 +331,16 @@
             font-style: normal !important;
         }
 
+        .step.completed {
+            border-color: #a3e635; /* verde chiaro */
+        }
+
+        .step.completed .step-number {
+            background-color: #a3e635;
+            color: white;
+        }
+
+
     </style>
 </head>
 <body class="relative overflow-x-hidden">
@@ -400,12 +413,12 @@
                             <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Informazioni personali</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="first-name">Nome*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="first-name" type="text" required>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Nome*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="name" placeholder="Nome" type="text" required>
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="last-name">Cognome*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="last-name" type="text" required>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="cognome">Cognome*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="cognome" placeholder="Cognome" type="text" required>
                                 </div>
                             </div>
                         </div>
@@ -413,24 +426,15 @@
                         <div class="mb-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="birthdate">Data di nascita*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="birthdate" type="date" required>
+                                    <label class=" cancel-step block text-gray-700 text-sm font-bold mb-2" for="nascita">Data di nascita*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="nascita" placeholder="Data di nascita" type="date" required>
                                 </div>
-                                <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">Genere</label>
-                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="gender">
-                                        <option value="">Seleziona</option>
-                                        <option value="male">Maschio</option>
-                                        <option value="female">Femmina</option>
-                                        <option value="other">Altro</option>
-                                        <option value="prefer-not-to-say">Preferisco non specificare</option>
-                                    </select>
-                                </div>
+
                             </div>
                         </div>
 
                         <div class="flex justify-end">
-                            <button type="button" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-300 transition mr-3">Annulla</button>
+                            <button type="button" class=" cancel-step bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-300 transition mr-3">Annulla</button>
                             <button type="button" class="bg-nekopeach text-white px-4 py-2 rounded-lg font-bold hover:bg-nekoorange transition next-step" data-next="step2">Avanti</button>
                         </div>
                     </form>
@@ -443,17 +447,38 @@
                             <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Dettagli account</h3>
                             <div class="grid grid-cols-1 gap-4">
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="username" type="text" required>
-                                    <p class="text-xs text-gray-500 mt-1">Scegli un nome utente unico (min. 4 caratteri)</p>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="email" placeholder="Email" type="email" required>
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="email" type="email" required>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="cf">Codice Fiscale*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="cf" placeholder="Codice Fiscale" type="email" required>
                                 </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="via">Via*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="via" placeholder="Via" type="email" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="civico">Civico*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="civico" placeholder="Civico" type="email" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="cap">CAP*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="cap" placeholder="CAP" type="email" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="prefisso">Prefisso*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="prefisso" placeholder="Prefisso" type="email" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="numero">Numero*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="numero" placeholder="Numero" type="email" required>
+                                </div>
+
+
                                 <div class="relative">
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="password" type="password" required>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="password" placeholder="Password" type="password" required>
                                     <i class="fas fa-eye password-toggle" id="togglePassword"></i>
                                     <div class="mt-2">
                                         <div class="flex items-center mb-1">
@@ -475,16 +500,18 @@
                                     <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="confirm-password" type="password" required>
                                     <i class="fas fa-eye password-toggle" id="toggleConfirmPassword"></i>
                                 </div>
+                                <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="nick">Nickname*</label>
+                                <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="nick" placeholder="Nickname" type="text" required>
+                                <p class="text-xs text-gray-500 mt-1">Scegli un nome utente unico (min. 4 caratteri)</p>
+                            </div>
                             </div>
                         </div>
 
                         <div class="mb-6">
                             <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Preferenze</h3>
                             <div class="grid grid-cols-1 gap-4">
-                                <div class="flex items-center">
-                                    <input id="newsletter" type="checkbox" class="w-4 h-4 text-nekopeach rounded focus:ring-nekopeach" checked>
-                                    <label for="newsletter" class="ml-2 text-sm text-gray-700">Ricevi newsletter e offerte speciali</label>
-                                </div>
+
                                 <div class="flex items-center">
                                     <input id="terms" type="checkbox" class="w-4 h-4 text-nekopeach rounded focus:ring-nekopeach" required>
                                     <label for="terms" class="ml-2 text-sm text-gray-700">Accetto i <a href="#" class="text-kawaiblue hover:underline">Termini e condizioni</a> e l'<a href="#" class="text-kawaiblue hover:underline">Informativa sulla privacy</a>*</label>
@@ -502,7 +529,7 @@
                 <!-- Step 3: Confirmation -->
                 <div class="step-content" id="step3-content">
                     <div class="text-center mb-6">
-                        <div class="w-24 h-24 mx-auto rounded-full bg-nekopink flex items-center justify-center mb-4">
+                        <div class="w-32 h-32 mx-auto rounded-full bg-nekopink flex items-center justify-center mb-4">
                             <i class="fas fa-check text-nekopeach text-2xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-gray-800 mb-2" style="font-size: 25px">Conferma i tuoi dati</h3>
@@ -514,41 +541,55 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <p class="text-sm text-gray-600">Nome e cognome</p>
-                                <p class="font-medium" id="confirm-name">Mario Rossi</p>
+                                <p class="font-medium" id="confirm-name"></p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-600">Data di nascita</p>
-                                <p class="font-medium" id="confirm-birthdate">15/05/1990</p>
+                                <p class="font-medium" id="confirm-birthdate"></p>
                             </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Genere</p>
-                                <p class="font-medium" id="confirm-gender">Maschio</p>
-                            </div>
+
                         </div>
                     </div>
 
                     <div class="bg-kawaiblue/10 p-6 rounded-xl mb-6">
                         <h4 class="font-bold text-kawaiblue mb-3">Dettagli account</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <p class="text-sm text-gray-600">Codice Fiscale</p>
+                            <p class="font-medium" id="confirm-cf"></p>
                             <div>
-                                <p class="text-sm text-gray-600">Username</p>
-                                <p class="font-medium" id="confirm-username">nekofan123</p>
+                                <p class="text-sm text-gray-600">Indirizzo</p>
+                                <p class="font-medium" id="confirm-address"></p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Email</p>
-                                <p class="font-medium" id="confirm-email">mario.rossi@example.com</p>
+                                <p class="text-sm text-gray-600">Telefono</p>
+                                <p class="font-medium" id="confirm-phone"></p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Newsletter</p>
-                                <p class="font-medium" id="confirm-newsletter">Attiva</p>
+                                <p class="text-sm text-gray-600">Nickname</p>
+                                <p class="font-medium" id="confirm-username"></p>
                             </div>
+                            <div>
+
+                                <div>
+                                    <p class="text-sm text-gray-600">Email</p>
+                                    <p class="font-medium" id="confirm-email"></p>
+
+                                </div>
                         </div>
+
+                    </div>
+
                     </div>
 
                     <div class="flex justify-between">
                         <button type="button" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-300 transition prev-step" data-prev="step2">Indietro</button>
-                        <button type="submit" class="bg-nekopeach text-white px-4 py-2 rounded-lg font-bold hover:bg-nekoorange transition">Completa registrazione</button>
+                        <button id="conferma" type="button"  class="bg-nekopeach text-white px-4 py-2 rounded-lg font-bold hover:bg-nekoorange transition">Completa registrazione</button>
                     </div>
+
+
+
+
+
                 </div>
             </div>
         </div>
@@ -837,5 +878,8 @@
         window.location.href = 'profile.html';
     });
 </script>
+<div id="registration-message" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-200 text-green-900 font-bold px-6 py-3 rounded-lg shadow-lg z-50 transition duration-300 ease-in-out">
+    Registrazione completata con successo! ✨
+</div>
 </body>
 </html>

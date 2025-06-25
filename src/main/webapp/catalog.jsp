@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="frontend/Scripts/Catalogo.js"defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -252,8 +253,9 @@
                 <a href="utente.jsp" class="folder-tab"><i class="fas fa-user mr-2"></i> Utente</a>
             </div>
         </div>
-    </div>
 
+    </div>
+    <jsp:include page="error.jsp" />
     <!-- Catalog Header -->
     <div class="header-content p-6 mb-8 relative">
         <div class="absolute -top-2 right-4 flex gap-2">
@@ -615,17 +617,19 @@
         <div class="relative z-10 flex flex-col md:flex-row items-center gap-6">
             <div class="flex-shrink-0">
                 <div class="w-32 h-32 rounded-xl overflow-hidden border-4 border-white">
-                    <img src="https://images.unsplash.com/photo-1608889825103-eb5c0e8dc9d9?q=80&w=1000"
+                    <img src="${pageContext.request.contextPath}/frontend/images/sailormoon.jpg"
                          alt="Special Offer"
                          class="w-full h-full object-cover">
                 </div>
             </div>
             <div class="text-center md:text-left">
                 <h3 class="text-2xl font-bold text-white mb-2"> Offerta Speciale</h3>
-                <p class="text-white/90">Ottieni il 15% di sconto sui manga completi con il codice: <span class="font-bold">NEKO15</span></p>
-                <button class="mt-4 bg-white text-nekopeach px-6 py-2 rounded-full font-bold hover:bg-pink-50 transition">
-                    <i class="fas fa-tag mr-2"></i> Usa Codice
-                </button>
+                <p class="text-white/90">Ottieni il 15% di sconto sui manga completi con il codice: <span class="font-bold">NeKo_15_PoP_ShoP</span></p>
+                <a href="cart.jsp?discount=NeKo_15_PoP_ShoP">
+                    <button class="mt-4 bg-white text-nekopeach px-6 py-2 rounded-full font-bold hover:bg-pink-50 transition">
+                        <i class="fas fa-tag mr-2"></i> Usa Codice
+                    </button>
+                </a>
             </div>
         </div>
     </div>
