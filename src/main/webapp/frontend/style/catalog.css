@@ -1,0 +1,193 @@
+@font-face {
+    font-family: 'Milkyway';
+    src: url('../fonts/Milkyway_DEMO.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Milkyway';  /* Scegli un nome per il font */
+    src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+    url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+    font-weight: normal;        /* Peso del font (es. 400, 700) */
+    font-style: normal;        /* normale, italic, ecc. */
+    font-display: swap;        /* Ottimizza il rendering */
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes blossom-fall {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #f0f0f0;
+
+    /* Immagine di background principale */
+    background-image: url('../images/sfondo.png');
+
+
+    /* Centra e copre tutto lo spazio senza ripetizioni */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    /* Altezza minima = viewport height */
+    min-height: 100vh;
+
+    /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
+    background-attachment: scroll;
+
+    /* Ottimizzazione prestazioni */
+    image-rendering: smooth;
+    overflow-x: hidden;
+}
+@media (min-width: 768px) {
+    body {
+        background-attachment: fixed;
+    }
+}
+
+.folder-tab {
+    position: relative;
+    background-color: #f2d5bb;
+    padding: 15px 25px;
+    border-radius: 15px 15px 0 0;
+    border: 2px solid #E55458;
+    border-bottom: none;
+    box-shadow: 0 -3px 8px #E55458;
+    margin-right: -10px;
+    z-index: 1;
+    transition: all 0.3s ease;
+    color: #E55458;
+}
+
+.folder-tab.active, .folder-tab:hover {
+    background-color: #E55458;
+    color: white;
+    transform: translateY(-0px);
+    z-index: 2;
+}
+
+.folder-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxNXB4IiB2aWV3Qm94PSIwIDAgMTAwIDUiPiAgPHBhdGggZmlsbD0iI2ZmZDJlNSIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
+    background-size: 100% 15px;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.cherry-blossom {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMj000MC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDKgOSA5IDAgMCAxLTE4IDB6Ii8+PHBhdGggZD0iTTYwIDYwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDAgMTggMiAyIDAgMCAwIDIgMiA5IDkgMCAwIDEgMC0xOHoiLz48L2c+PC9zdmc+');
+    background-size: cover;
+    animation: blossom-fall 15s linear infinite;
+}
+
+.product-card {
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    background: white;
+    border-radius: 15px;
+    border: 2px solid #fbd8da;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+
+
+.header-content {
+    background: linear-gradient(145deg, #E55458, #f2d5bb);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(233, 87, 110, 0.3);
+    border: 2px solid #ffd1e3;
+}
+
+.sakura-divider {
+    height: 3px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSI1cHgiIHZpZXdCb3g9IjAgMCAxMDAgNSI+PHBhdGggZmlsbD0iI2ZmN2ViOCIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
+    background-size: cover;
+}
+
+.nekotag {
+    background: linear-gradient(90deg, #E55458, #F29966);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    font-weight: 800;
+    font-size: 45px;
+}
+
+
+
+.filter-btn {
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: #f2d5bb;
+    color: #E55458;
+    font-weight: 600;
+}
+
+.filter-btn.active {
+    background: #E55458;
+    color: white;
+}
+
+.alphabet-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-weight: 700;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.alphabet-link.active, .alphabet-link:hover {
+    background: #E55458;
+    color: white;
+    transform: translateY(-3px);
+}
+.text-3xl{
+    font-family: 'Milkyway', sans-serif;
+    font-size: 2.5rem;
+    color: #333;
+}
+.text-xl{
+    font-family: 'Milkyway', sans-serif;
+    font-size: 2.5rem;
+    color: #333;
+}
+.text-sm{
+    font-family: 'Milkyway', sans-serif;
+    font-size: 2.5rem;
+    color: #333;
+}
+.text-2xl{
+    font-family: 'Milkyway', sans-serif;
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.fa-star, .fas, .far {
+    font-style: normal !important;
+}
