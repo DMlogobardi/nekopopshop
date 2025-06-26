@@ -7,7 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function mostraSolo(stepId) {
         allSteps.forEach(step => {
-            step.style.display = step.id === stepId ? "block" : "none";
+            step.classList.remove("active");
+            if (step.id === stepId) {
+                step.classList.add("active");
+            }
         });
     }
 
@@ -22,17 +25,46 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function validaPassoCorrente() {
+        const passoCorrente = document.querySelector(".step-content.active");
+        if (!passoCorrente) return true;
+
+        const inputsObbligatori = passoCorrente.querySelectorAll("[required]");
+        let valido = true;
+
+        inputsObbligatori.forEach(input => {
+            if (!input.value) {
+                input.classList.add("border-red-500");
+                valido = false;
+            } else {
+                input.classList.remove("border-red-500");
+            }
+        });
+
+        return valido;
+    }
+
     nextButtons.forEach(button => {
         button.addEventListener("click", () => {
+            if (!validaPassoCorrente()) {
+                alert("Compila tutti i campi obbligatori");
+                return;
+            }
+
             const nextStepId = button.dataset.next + "-content";
             const nextIndex = parseInt(button.dataset.next.replace("step", "")) - 1;
+
+            const nextStepContent = document.getElementById(nextStepId);
+            if (nextStepContent) {
+                nextStepContent.classList.remove("hidden");
+            }
+
             mostraSolo(nextStepId);
             aggiornaIndicatori(nextIndex);
 
             if (button.dataset.next === "step3") {
                 aggiornaStep3Conferma();
             }
-
         });
     });
 
@@ -61,35 +93,32 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Mostra solo il primo step all'avvio
+    // Inizializzazione
     mostraSolo("step1-content");
     aggiornaIndicatori(0);
 });
 
 function aggiornaStep3Conferma() {
-    const nome = document.getElementById("name")?.value.trim() || "";
-    const cognome = document.getElementById("cognome")?.value.trim() || "";
-    const nascita = document.getElementById("nascita")?.value || "";
-    const email = document.getElementById("email")?.value.trim() || "";
-    const cf = document.getElementById("cf")?.value.trim() || "";
-    const via = document.getElementById("via")?.value.trim() || "";
-    const civico = document.getElementById("civico")?.value.trim() || "";
-    const cap = document.getElementById("cap")?.value.trim() || "";
-    const prefisso = document.getElementById("prefisso")?.value.trim() || "";
-    const numero = document.getElementById("numero")?.value.trim() || "";
-    const nick = document.getElementById("nick")?.value.trim() || "";
+    const getValue = (id) => {
+        const element = document.getElementById(id);
+        return element ? element.value : "";
+    };
 
-    // Format data se serve
-    const indirizzo = `${via}, ${civico} - ${cap}`;
-    const telefono = `${prefisso}${numero}`;
-    const dataIT = nascita ? new Date(nascita).toLocaleDateString("it-IT", { day: "2-digit", month: "long", year: "numeric" }) : "";
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        const options = { day: '2-digit', month: 'long', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('it-IT', options);
+    };
 
-    // Popola il riepilogo
-    document.getElementById("confirm-name").innerText = `${nome} ${cognome}`;
-    document.getElementById("confirm-birthdate").innerText = dataIT;
-    document.getElementById("confirm-cf").innerText = cf;
-    document.getElementById("confirm-address").innerText = indirizzo;
-    document.getElementById("confirm-phone").innerText = telefono;
-    document.getElementById("confirm-username").innerText = nick;
-    document.getElementById("confirm-email").innerText = email;
+    // Aggiorna i campi di conferma
+    document.getElementById("confirm-name").textContent = getValue("name");
+    document.getElementById("confirm-cognome").textContent = getValue("cognome");
+    document.getElementById("confirm-nascita").textContent = formatDate(getValue("nascita"));
+    document.getElementById("confirm-email").textContent = getValue("email");
+    document.getElementById("confirm-cf").textContent = getValue("cf");
+    document.getElementById("confirm-indirizzo").textContent =
+        `${getValue("via")}, ${getValue("civico")} - ${getValue("cap")}`;
+    document.getElementById("confirm-telefono").textContent =
+        `${getValue("prefisso")} ${getValue("numero")}`;
+    document.getElementById("confirm-nick").textContent = getValue("nick");
 }
