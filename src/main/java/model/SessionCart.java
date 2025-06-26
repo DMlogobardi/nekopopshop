@@ -41,13 +41,13 @@ public class SessionCart {
     }
 
     public int removeProdByProd(int idCont) {
-        if(contenuti.removeIf(cont -> cont.getIdProdotto() == idCont))
+        if(contenuti.removeIf(cont -> cont.getIdProdotto() != null && cont.getIdProdotto() == idCont))
             return 1;
         return 0;
     }
 
     public int removeProdByVol(int idCont) {
-        if(contenuti.removeIf(cont -> cont.getIdVolume() == idCont))
+        if(contenuti.removeIf(cont -> cont.getIdVolume() != null &&  cont.getIdVolume() == idCont))
             return 1;
         return 0;
     }
@@ -76,6 +76,10 @@ public class SessionCart {
 
     public CarrelloBean getCarelloRefernz() {
         return carelloRefernz;
+    }
+
+    public void setCarrelloRefernzTot(Double tot){
+        this.carelloRefernz.setTot(tot);
     }
 
     public void setCarelloRefernz(CarrelloBean carelloRefernz) {
