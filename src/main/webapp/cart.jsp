@@ -524,7 +524,7 @@
 
     // Checkout button
     document.querySelector('.checkout-btn').addEventListener('click', function() {
-      alert('Grazie per il tuo ordine! Verrai reindirizzato alla pagina di pagamento.');
+      window.location.href='checkout.jsp';
     });
   }
 

@@ -1,17 +1,14 @@
 
 
 
-@font-face {
-    font-family: 'Milkyway';
-    src: url('../fonts/Milkyway_DEMO.ttf') format('truetype');
-}
+
 @font-face {
     font-family: 'Milkyway';  /* Scegli un nome per il font */
-    src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
-    url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+    src: url('../fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+    url('../frontend/fonts/Milkyway_DEMO.ttf') format('woff');
     font-weight: normal;        /* Peso del font (es. 400, 700) */
     font-style: normal;        /* normale, italic, ecc. */
-    font-display: swap;        /* Ottimizza il rendering */
+    font-display: swap;
 }
 
 
@@ -229,17 +226,17 @@ body {
 .text-3xl{
     font-family: 'Milkyway', sans-serif;
     font-size: 2.5rem;
-    color: #333;
+    color: #E55458;
 }
 .text-xl{
     font-family: 'Milkyway', sans-serif;
     font-size: 2.5rem;
-    color: #333;
+    color: #E55458;
 }
 .text-lg{
-    font-family: 'Milkyway', sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-size: 2.5rem;
-    color: #333;
+    color: #E55458;
 }
 .fa-star, .fas, .far {
     font-style: normal !important;
