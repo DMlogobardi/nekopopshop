@@ -421,6 +421,14 @@ document.addEventListener("DOMContentLoaded", function () {
         aggiornaPaginazione(total, 1, prodottiPerPagina, caricaProdotti);
         setItemCount(total);
     });
+    const params = new URLSearchParams(window.location.search);
+    const codiceCoupon = params.get("codice");
+
+    if (codiceCoupon) {
+        console.log("Codice ricevuto:", codiceCoupon);
+        // Ad esempio: inseriscilo in un campo o usalo in JS
+        document.getElementById("codiceSconto").value = codiceCoupon;
+    }
 });
 
 function setItemCount(tot){

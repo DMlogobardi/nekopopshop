@@ -382,8 +382,8 @@
             </div>
             <div class="text-center md:text-left">
                 <h3 class="text-2xl font-bold text-white mb-2"> Offerta Speciale</h3>
-                <p class="text-white/90">Ottieni il 15% di sconto sui manga completi con il codice: <span class="font-bold">NEKO15</span></p>
-                <button class="mt-4 bg-white text-nekopeach px-6 py-2 rounded-full font-bold hover:bg-pink-50 transition">
+                <p class="text-white/90">Ottieni il 15% di sconto sui manga completi con il codice: <span id="code" class="font-bold">NeKo_15_PoP_ShoP</span></p>
+                <button id="code_Button" class="mt-4 bg-white text-nekopeach px-6 py-2 rounded-full font-bold hover:bg-pink-50 transition">
                     <i class="fas fa-tag mr-2"></i> Usa Codice
                 </button>
             </div>

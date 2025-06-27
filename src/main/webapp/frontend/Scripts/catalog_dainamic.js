@@ -287,4 +287,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const prodottiPerPagina = 6;
         aggiornaPaginazione(total, 1, prodottiPerPagina, caricaProdotti);
     });
+
+    document.getElementById("code_Button").addEventListener("click", function () {
+        const codice = document.getElementById("code").innerText;
+
+        // Reindirizza alla pagina di destinazione con codice come parametro
+        window.location.href = "cart.jsp?codice=" + encodeURIComponent(codice);
+    });
 });
