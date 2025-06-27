@@ -10,7 +10,7 @@
 <div id="navbar"></div>
 
     <div class="w-full lg:w-auto">
-        <div id="navBar" class="flex flex-wrap justify-center lg:justify-start -mb-1">
+        <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
             <a id = "index" href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
             <a id = "catalog"  href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
             <a id = "about"  href="about.jsp" class="folder-tab"><i class="fas fa-info-circle mr-2"></i> Chi Siamo</a>

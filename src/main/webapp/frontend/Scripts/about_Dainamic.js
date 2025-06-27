@@ -6,15 +6,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const davide = document.getElementById("davide");
     const alessia = document.getElementById("alessia");
 
-    ila.addEventListener("keypress", function (){
+    ila.addEventListener("click", function (){
         window.open("https://github.com/DMlogobardi", "_blank");
     })
 
-    davide.addEventListener("keypress", function (){
+    davide.addEventListener("click", function (){
         window.open("https://github.com/ilary2204", "_blank");
     })
 
-    alessia.addEventListener("keypress", function (){
+    alessia.addEventListener("click", function (){
         window.open("https://github.com/AlessiaPalmigiano", "_blank");
     })
 })

@@ -375,7 +375,7 @@
         <div class="relative z-10 flex flex-col md:flex-row items-center gap-6">
             <div class="flex-shrink-0">
                 <div class="w-32 h-32 rounded-xl overflow-hidden border-4 border-white">
-                    <img src="https://images.unsplash.com/photo-1608889825103-eb5c0e8dc9d9?q=80&w=1000"
+                    <img src="${pageContext.request.contextPath}/frontend/images/sailormoon.jpg"
                          alt="Special Offer"
                          class="w-full h-full object-cover">
                 </div>

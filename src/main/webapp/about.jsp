@@ -400,7 +400,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- Team Member -->
-            <div id="Ilaria" class="team-card p-6 text-center relative">
+            <div id="Ilaria" class="team-card p-6 text-center relative cursor-pointer z-10">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekopink mb-4 overflow-hidden">
                     <img src="${pageContext.request.contextPath}/frontend/images/mia_icona_git.png"
                          alt="Marta Rossi"
@@ -426,7 +426,7 @@
             </div>
 
             <!-- Team Member -->
-            <div id="davide" class="team-card p-6 text-center relative">
+            <div id="davide" class="team-card p-6 text-center relative cursor-pointer z-10">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekoorange mb-4 overflow-hidden">
                     <img src="${pageContext.request.contextPath}/frontend/images/davide_icona_git.jpg"
                          alt="Luigi Bianchi"
@@ -449,7 +449,7 @@
             </div>
 
             <!-- Team Member -->
-            <div id="alessia" class="team-card p-6 text-center relative">
+            <div id="alessia" class="team-card p-6 text-center relative cursor-pointer z-10">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekopeach mb-4 overflow-hidden">
                     <img src="${pageContext.request.contextPath}/frontend/images/alessiagit.png"
                          alt="Luigi Bianchi"

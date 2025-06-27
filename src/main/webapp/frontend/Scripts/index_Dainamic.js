@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    fetch("getcatalog?limit=2")
+    fetch("getcatalog?limit=3")
         .then(response => {
             if (response.status === 500) {
                 throw new Error("Errore nel caricamento del prodotto");
