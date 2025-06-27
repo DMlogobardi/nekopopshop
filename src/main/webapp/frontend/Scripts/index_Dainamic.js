@@ -453,8 +453,12 @@ function generateDecorations() {
 }
 
 
-// Generate decorations on page load
-document.addEventListener('DOMContentLoaded', generateDecorations);
+document.addEventListener('DOMContentLoaded', function () {
+
+    generateDecorations;
+    document.getElementById("index").classList.add("active");
+
+})
 
 // Folder tab interaction
 document.querySelectorAll('.folder-tab').forEach(tab => {

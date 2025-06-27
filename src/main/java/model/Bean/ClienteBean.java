@@ -91,9 +91,7 @@ public class ClienteBean implements Serializable {
 
     @JsonIgnore
     public Date getDataNascitaFormatted() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate formDate =LocalDate.parse(dataNascita, format);
-        return Date.valueOf(formDate);
+        return Date.valueOf(dataNascita);
     }
 
     public void setDataNascita(String dataNascita) {

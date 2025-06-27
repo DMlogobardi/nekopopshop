@@ -31,7 +31,7 @@ public class ClienteDAO implements GenralDAO<ClienteBean>{
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getNome());
             ps.setString(2, bean.getCognome());
-            ps.setString(3, bean.getDataNascitaFormatted().toString());
+            ps.setDate(3, bean.getDataNascitaFormatted());
             ps.setString(4, bean.getEmail());
             ps.setString(5, bean.getcF());
 

@@ -122,6 +122,32 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         return prod;
     }
 
+    public int doRetrieveTot() throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        int result = 0;
+
+        String selectSQL = "SELECT COUNT(*) FROM " + TABLE_NAME;
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                result = rs.getInt("COUNT(*)");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return result;
+    }
+
     public ProdottoBean doRetrieveFigure() throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;

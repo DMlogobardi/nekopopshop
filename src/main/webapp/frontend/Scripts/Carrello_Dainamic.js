@@ -411,14 +411,14 @@ async function updateCart(id, tipo, quantita) {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("cart").classList.add("active");
     generateDecorations();
     setupCart();
     caricaProdotti(1);
     aggiornaRiepilogoCarrello();
     fetchTotaleProdotti().then(total => {
         const prodottiPerPagina = 3;
-        const totalePagine = Math.ceil(total / prodottiPerPagina);
-        aggiornaPaginazione(totalePagine, 1, prodottiPerPagina);
+        aggiornaPaginazione(total, 1, prodottiPerPagina, caricaProdotti);
         setItemCount(total);
     });
 });
@@ -453,19 +453,72 @@ function fetchTotaleProdotti() {
         });
 }
 
-function aggiornaPaginazione(totalCount, currentPage, perPage) {
+function aggiornaPaginazione(totalCount, currentPage, perPage, onPageChange) {
     const totalPages = Math.ceil(totalCount / perPage);
-    const pagination = document.querySelector('#pagination .flex.items-center.gap-2');
+    const pagination = document.getElementById('pagination');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
 
     pagination.innerHTML = '';
-    for (let i = 1; i <= totalPages; i++) {
-        pagination.innerHTML += `
-            <a href="#" data-page="${i}" 
-               class="w-10 h-10 ${i === currentPage ? 'bg-nekopeach text-white' : 'bg-white text-nekopeach'}
-               rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">
-               ${i}
-            </a>`;
+
+    function createPageButton(label, page, isActive = false, isEllipsis = false) {
+        const el = document.createElement(isEllipsis ? 'span' : 'a');
+        el.className = isEllipsis
+            ? 'text-nekopeach px-2'
+            : `w-10 h-10 ${isActive ? 'bg-nekopeach text-white' : 'bg-white text-nekopeach'} rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition`;
+
+        if (isEllipsis) {
+            el.textContent = '...';
+        } else {
+            el.href = '#';
+            el.textContent = label;
+            el.dataset.page = page;
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (page !== currentPage) onPageChange(page);
+            });
+        }
+
+        pagination.appendChild(el);
     }
+
+    // Mostra al massimo 5 pagine + prima/ultima + ellipsis
+    const maxVisible = 5;
+    const pages = [];
+
+    if (totalPages <= maxVisible + 2) {
+        for (let i = 1; i <= totalPages; i++) {
+            pages.push(i);
+        }
+    } else {
+        if (currentPage <= 3) {
+            pages.push(1, 2, 3, 4, '...', totalPages);
+        } else if (currentPage >= totalPages - 2) {
+            pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+        } else {
+            pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+        }
+    }
+
+    pages.forEach(p => {
+        if (p === '...') {
+            createPageButton('...', null, false, true);
+        } else {
+            createPageButton(p, p, p === currentPage);
+        }
+    });
+
+    // Gestione pulsanti Prev / Next
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+
+    prevBtn.onclick = () => {
+        if (currentPage > 1) onPageChange(currentPage - 1);
+    };
+
+    nextBtn.onclick = () => {
+        if (currentPage < totalPages) onPageChange(currentPage + 1);
+    };
 }
 
 document.getElementById("pagination").addEventListener("click", e => {
@@ -520,19 +573,6 @@ function generateDecorations() {
 
 // Cart functionality
 function setupCart() {
-
-    /*// Remove buttons
-    document.querySelectorAll('.remove-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const item = this.closest('.product-card');
-            item.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => {
-                item.remove();
-                updateCartTotals();
-                checkEmptyCart();
-            }, 300);
-        });
-    });*/
 
     // Payment method selection
     document.querySelectorAll('.payment-method').forEach(method => {
