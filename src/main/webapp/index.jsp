@@ -12,6 +12,7 @@
     <script src="frontend/Scripts/Nav_Bar.js" defer></script>
 
 
+
     <script>
         tailwind.config = {
             theme: {
