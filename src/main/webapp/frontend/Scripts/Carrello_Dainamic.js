@@ -411,6 +411,7 @@ async function updateCart(id, tipo, quantita) {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("cart").classList.add("active");
     generateDecorations();
     setupCart();
     caricaProdotti(1);
