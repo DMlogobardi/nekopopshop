@@ -1,32 +1,33 @@
 // Funzione per mostrare il banner di successo
 function mostraBannerRegistrazioneSuccesso() {
-    const msg = document.getElementById("registration-message");
+    const msg = document.getElementById('registration-message');
     if (!msg) {
-        // Se il banner non esiste, reindirizza direttamente
-        window.location.href = "login.jsp";
+        // Fallback se il banner non esiste
+        alert('Registrazione completata! Sarai reindirizzato alla pagina di login.');
+        window.location.href = 'login.jsp';
         return;
     }
 
-    // Mostra il banner
-    msg.classList.remove("hidden");
-    msg.classList.add("block", "animate-fade-in");
+    // Mostra il banner con animazione
+    msg.classList.remove('hidden');
+    msg.classList.add('block', 'animate-fade-in');
 
-    // Nasconde il messaggio dopo 3 secondi e reindirizza al login
+    // Nascondi dopo 3 secondi e reindirizza
     setTimeout(() => {
-        msg.classList.remove("block", "animate-fade-in");
-        msg.classList.add("hidden");
-        window.location.href = "login.jsp";
+        msg.classList.remove('block', 'animate-fade-in');
+        msg.classList.add('hidden');
+        window.location.href = 'login.jsp';
     }, 3000);
 }
 
 // Funzione per completare la registrazione
 async function completaRegistrazione() {
-    // Validazione finale
-    const password = document.getElementById("password")?.value;
-    const confirmPassword = document.getElementById("confirm-password")?.value;
-    const terms = document.getElementById("terms")?.checked;
+    // 1. Validazione finale
+    const password = document.getElementById('password')?.value;
+    const confirmPassword = document.getElementById('confirm-password')?.value;
+    const terms = document.getElementById('terms')?.checked;
 
-    if (!password || !confirmPassword || password !== confirmPassword) {
+    if (password !== confirmPassword) {
         alert("Le password non coincidono");
         return;
     }
@@ -36,50 +37,55 @@ async function completaRegistrazione() {
         return;
     }
 
+    // 2. Preparazione dati
     const dto = {
-        name: document.getElementById("name").value,
-        cognome: document.getElementById("cognome").value,
-        nascita: document.getElementById("nascita").value,
-        email: document.getElementById("email").value,
-        cf: document.getElementById("cf").value,
-        via: document.getElementById("via").value,
-        civico: parseInt(document.getElementById("civico").value),
-        cap: document.getElementById("cap").value,
-        prefisso: document.getElementById("prefisso").value,
-        numero: document.getElementById("numero").value,
+        name: document.getElementById('name').value,
+        cognome: document.getElementById('cognome').value,
+        nascita: document.getElementById('nascita').value,
+        email: document.getElementById('email').value,
+        cf: document.getElementById('cf').value,
+        via: document.getElementById('via').value,
+        civico: parseInt(document.getElementById('civico').value),
+        cap: document.getElementById('cap').value,
+        prefisso: document.getElementById('prefisso').value,
+        numero: document.getElementById('numero').value,
         password: password,
-        nick: document.getElementById("nick").value
+        nick: document.getElementById('nick').value
     };
 
     try {
-        const response = await fetch("register", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
+        // 3. Invio dati al server
+        const response = await fetch('register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(dto)
         });
 
-        if (!response.ok) {
-            throw new Error('HTTP error! status: ${response.status}');
-        }
+        if (!response.ok) throw new Error('Errore nella richiesta');
 
         const data = await response.json();
 
-        if (data.status === "success") {
+        // 4. Gestione risposta
+        if (data.status === 'success') {
             mostraBannerRegistrazioneSuccesso();
         } else {
             alert("Registrazione fallita: " + (data.message || "Errore generico"));
         }
     } catch (error) {
-        console.error("Errore durante la registrazione:", error);
-        alert("Si è verificato un errore durante la registrazione. Riprova più tardi.");
+        console.error("Errore:", error);
+        alert("Errore durante la registrazione. Riprova.");
     }
 }
 
 // Inizializzazione quando il DOM è pronto
-document.addEventListener("DOMContentLoaded", function() {
-    // Aggiungi event listener al pulsante di conferma
-    const confirmButton = document.getElementById("conferma");
+document.addEventListener('DOMContentLoaded', function() {
+    const confirmButton = document.getElementById('conferma');
     if (confirmButton) {
-        confirmButton.addEventListener("click", completaRegistrazione);
+        confirmButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            completaRegistrazione();
+        });
     }
 });
+
+

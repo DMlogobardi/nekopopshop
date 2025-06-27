@@ -329,17 +329,6 @@
         }
     </style>
     <style>
-        /* Animazione per il banner di successo */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        /* Stile per il banner di successo */
         #registration-message {
             display: none;
             position: fixed;
@@ -352,11 +341,19 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             z-index: 1000;
-            text-align: center;
         }
 
         #registration-message.block {
             display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
         }
     </style>
 </head>
@@ -712,11 +709,11 @@
         const delay = Math.random() * 5;
         const size = 20 + Math.random() * 20;
 
-        blossom.style.left = '${startX}px';
-        blossom.style.width = '${size}px';
-        blossom.style.height = '${size}px';
-        blossom.style.animationDuration = '${duration}s';
-        blossom.style.animationDelay = '${delay}s';
+        blossom.style.left = `${startX}px`;
+        blossom.style.width = `${size}px`;
+        blossom.style.height = `${size}px`;
+        blossom.style.animationDuration = `${duration}s`;
+        blossom.style.animationDelay = `${delay}s`;
 
         document.getElementById('decorations').appendChild(blossom);
 
@@ -796,12 +793,114 @@
         });
     }
 
+    // Funzione per aggiornare i dati di conferma
+    function aggiornaStep3Conferma() {
+        const getValue = (id) => {
+            const element = document.getElementById(id);
+            return element ? element.value : "";
+        };
+
+        const formatDate = (dateString) => {
+            if (!dateString) return "";
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('it-IT', options);
+        };
+
+        // Aggiorna i campi di conferma
+        document.getElementById("confirm-name").textContent = getValue("name");
+        document.getElementById("confirm-cognome").textContent = getValue("cognome");
+        document.getElementById("confirm-nascita").textContent = formatDate(getValue("nascita"));
+        document.getElementById("confirm-email").textContent = getValue("email");
+        document.getElementById("confirm-cf").textContent = getValue("cf");
+        document.getElementById("confirm-indirizzo").textContent =
+            `${getValue("via")}, ${getValue("civico")} - ${getValue("cap")}`;
+        document.getElementById("confirm-telefono").textContent =
+            `${getValue("prefisso")} ${getValue("numero")}`;
+        document.getElementById("confirm-nick").textContent = getValue("nick");
+    }
+
+    // Funzione per mostrare il banner di successo
+    function mostraBannerRegistrazioneSuccesso() {
+        const msg = document.getElementById("registration-message");
+        if (!msg) {
+            // Se il banner non esiste, reindirizza direttamente
+            window.location.href = "login.jsp";
+            return;
+        }
+
+        // Mostra il banner
+        msg.classList.remove("hidden");
+        msg.classList.add("block", "animate-fade-in");
+
+        // Nasconde il messaggio dopo 3 secondi e reindirizza al login
+        setTimeout(() => {
+            msg.classList.remove("block", "animate-fade-in");
+            msg.classList.add("hidden");
+            window.location.href = "login.jsp";
+        }, 3000);
+    }
+
+    // Funzione per completare la registrazione
+    async function completaRegistrazione() {
+        // Validazione finale
+        const password = document.getElementById("password")?.value;
+        const confirmPassword = document.getElementById("confirm-password")?.value;
+        const terms = document.getElementById("terms")?.checked;
+
+        if (!password || !confirmPassword || password !== confirmPassword) {
+            alert("Le password non coincidono");
+            return;
+        }
+
+        if (!terms) {
+            alert("Devi accettare i termini e condizioni");
+            return;
+        }
+
+        const dto = {
+            name: document.getElementById("name").value,
+            cognome: document.getElementById("cognome").value,
+            nascita: document.getElementById("nascita").value,
+            email: document.getElementById("email").value,
+            cf: document.getElementById("cf").value,
+            via: document.getElementById("via").value,
+            civico: parseInt(document.getElementById("civico").value),
+            cap: document.getElementById("cap").value,
+            prefisso: document.getElementById("prefisso").value,
+            numero: document.getElementById("numero").value,
+            password: password,
+            nick: document.getElementById("nick").value
+        };
+
+        try {
+            const response = await fetch("register", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(dto)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.status === "success") {
+                mostraBannerRegistrazioneSuccesso();
+            } else {
+                alert("Registrazione fallita: " + (data.message || "Errore generico"));
+            }
+        } catch (error) {
+            console.error("Errore durante la registrazione:", error);
+            alert("Si è verificato un errore durante la registrazione. Riprova più tardi.");
+        }
+    }
+
     // Step navigation
     document.querySelectorAll('.next-step').forEach(button => {
         button.addEventListener('click', function() {
             const nextStep = this.getAttribute('data-next');
             const currentStep = document.querySelector('.step-content.active');
-            // Correzione: usa backtick per l'interpolazione di stringhe
             const nextStepContent = document.getElementById(`${nextStep}-content`);
 
             if (!nextStepContent) {
@@ -825,9 +924,6 @@
 
                 // Special validation for password match
                 if (nextStep === 'step3') {
-                    const password = document.getElementById('password');
-                    const confirmPassword = document.getElementById('confirm-password');
-
                     if (password && confirmPassword && password.value !== confirmPassword.value) {
                         isValid = false;
                         confirmPassword.classList.add('border-red-500');
@@ -855,28 +951,7 @@
                 // Se siamo passati al passo 3, aggiorna i dati di conferma
                 if (nextStep === 'step3') {
                     aggiornaStep3Conferma();
-
-
-                // Update confirmation data
-                if (nextStep === 'step3') {
-                    document.getElementById('confirm-name').textContent =
-                        document.getElementById('name').value;
-                    document.getElementById('confirm-cognome').textContent =
-                        document.getElementById('cognome').value;
-                    document.getElementById('confirm-nascita').textContent =
-                        document.getElementById('nascita').value;
-                    document.getElementById('confirm-nick').textContent =
-                        document.getElementById('nick').value;
-                    document.getElementById('confirm-email').textContent =
-                        document.getElementById('email').value;
-                    document.getElementById('confirm-cf').textContent =
-                        document.getElementById('cf').value;
-                    document.getElementById('confirm-indirizzo').textContent =
-                        '${document.getElementById('via').value}, ${document.getElementById('civico').value}, ${document.getElementById('cap').value}';
-                    document.getElementById('confirm-telefono').textContent =
-                        '${document.getElementById('prefisso').value} ${document.getElementById('numero').value}';
                 }
-            }
             }
         });
     });
@@ -885,7 +960,12 @@
         button.addEventListener('click', function() {
             const prevStep = this.getAttribute('data-prev');
             const currentStep = document.querySelector('.step-content.active');
-            const prevStepContent = document.getElementById('${prevStep}-content');
+            const prevStepContent = document.getElementById(`${prevStep}-content`);
+
+            if (!prevStepContent) {
+                console.error(`Elemento con ID ${prevStep}-content non trovato`);
+                return;
+            }
 
             // Update steps
             document.querySelectorAll('.step').forEach(step => {
@@ -901,6 +981,16 @@
             prevStepContent.classList.add('active');
         });
     });
+
+    // Aggiungi event listener al pulsante di conferma
+    const confirmButton = document.getElementById('conferma');
+    if (confirmButton) {
+        confirmButton.addEventListener('click', completaRegistrazione);
+    }
+
+    // Inizializzazione
+    document.querySelector('.step-content.active').classList.add('active');
+    document.querySelector('.step').classList.add('active');
 </script>
 
 <div id="registration-message" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-200 text-green-900 font-bold px-6 py-3 rounded-lg shadow-lg z-50 transition duration-300 ease-in-out">

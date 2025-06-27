@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<script src="frontend/Scripts/Nav_Bar.js" defer></script>
+
     <!-- Navigation -->
 <div id="navbar"></div>
 
