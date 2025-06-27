@@ -10,6 +10,7 @@
     <script src="frontend/Scripts/index_Dainamic.js" defer></script>
     <script src="frontend/Scripts/Nav_Bar.js"></script>
 
+
     <script>
         tailwind.config = {
             theme: {
