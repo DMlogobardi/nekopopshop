@@ -387,4 +387,11 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = "cart.jsp?codice=" + encodeURIComponent(codice);
         })
     });
+
+    document.getElementById("code_Button").addEventListener("click", function () {
+        const codice = document.getElementById("code").innerText;
+
+        // Reindirizza alla pagina di destinazione con codice come parametro
+        window.location.href = "cart.jsp?codice=" + encodeURIComponent(codice);
+    });
 });
