@@ -390,8 +390,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById("code_Button").addEventListener("click", function () {
         const codice = document.getElementById("code").innerText;
+        const btn = document.getElementById("code_Button");
 
-        // Reindirizza alla pagina di destinazione con codice come parametro
-        window.location.href = "cart.jsp?codice=" + encodeURIComponent(codice);
+        btn.addEventListener("click", function () {
+            window.location.href = "cart.jsp?codice=" + encodeURIComponent(codice);
+        })
     });
 });
