@@ -217,6 +217,7 @@
         </div>
 
         <!-- Navigation -->
+        <div id="navbar"></div>
         <jsp:include page="navBar.jsp" />
     </div>
 

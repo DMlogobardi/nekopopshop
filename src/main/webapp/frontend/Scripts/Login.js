@@ -1,23 +1,44 @@
-fetch("login", {
-    method: "POST",
-    body: new FormData(document.getElementById("loginForm"))
-})
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === "success") {
-            localStorage.setItem("access", data.access);
-            localStorage.setItem("role", data.role); // salva il ruolo
+document.getElementById("loginForm")?.addEventListener("submit", function (e) {
+    e.preventDefault(); // Previeni invio classico del form
 
-            creaNavbar(data.role);
-
-            if (data.role === "admin") {
-                window.location.href = "admin/index.jsp";
-            } else if (data.role === "user") {
-                window.location.href = "user/index.jsp";
-            } else {
-                alert("Ruolo non riconosciuto");
+    fetch("login", {
+        method: "POST",
+        body: new FormData(this)
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Errore nella risposta del server");
             }
-        } else {
-            alert("Credenziali non valide");
-        }
-    });
+            return res.json();
+        })
+        .then(data => {
+            if (data.status === "success") {
+                // Salva il ruolo correttamente (uso solo "access")
+                const role = data.role || data.access || "user";
+                localStorage.setItem("access", role);
+
+                // Aggiorna subito la navbar (se rimani nella stessa pagina)
+                creaNavbar();
+
+                // Redirect in base al ruolo
+                const redirects = {
+                    "admin": "admin/index.jsp",
+                    "user": "user/index.jsp"
+                };
+
+                const redirectUrl = redirects[role];
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                } else {
+                    console.warn("Ruolo sconosciuto:", role);
+                    window.location.href = "index.jsp"; // fallback
+                }
+            } else {
+                alert(data.message || "Credenziali non valide");
+            }
+        })
+        .catch(error => {
+            console.error("Errore durante il login:", error);
+            alert("Errore durante il login. Riprova più tardi.");
+        });
+});

@@ -1,6 +1,12 @@
-function creaNavbar(access) {
+function creaNavbar() {
     const navbar = document.getElementById("navbar");
-    if (!navbar) return;
+    if (!navbar) {
+        console.error("ERRORE: Elemento #navbar non trovato!");
+        return;
+    }
+
+    const access = localStorage.getItem("access") || "guest"; // Default: guest
+    console.log("[DEBUG] Stato accesso:", access);
 
     let html = `
     <div class="w-full lg:w-auto">
@@ -9,34 +15,42 @@ function creaNavbar(access) {
         <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
         <a href="about.jsp" class="folder-tab"><i class="fas fa-info-circle mr-2"></i> Chi Siamo</a>
         <a href="cart.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Carrello</a>
-       
-  `;
+    `;
 
     if (access === "admin") {
         html += `<a href="admin.jsp" class="folder-tab"><i class="fas fa-user-shield mr-2"></i> Admin</a>`;
-        html += `<a href="#" onclick="logout()" class="folder-tab"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>`;
     } else if (access === "user") {
         html += `<a href="utente.jsp" class="folder-tab"><i class="fas fa-user mr-2"></i> Utente</a>`;
-        html += `<a href="#" onclick="logout()" class="folder-tab"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>`;
     } else {
         html += `
-    <a href="login.jsp" class="folder-tab"><i class="fas fa-sign-in-alt mr-2"></i> Login</a>
-    <a href="register.jsp" class="folder-tab"><i class="fas fa-user-plus mr-2"></i> Register</a>
-    `;
+        <a href="login.jsp" class="folder-tab"><i class="fas fa-sign-in-alt mr-2"></i> Login</a>
+        <a href="register.jsp" class="folder-tab"><i class="fas fa-user-plus mr-2"></i> Registrati</a>
+        `;
+    }
+
+    // Aggiungi sempre il tasto Logout se loggato
+    if (access === "admin" || access === "user") {
+        html += `<a href="#" onclick="logout()" class="folder-tab"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>`;
     }
 
     html += `</div></div>`;
     navbar.innerHTML = html;
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-    const access = localStorage.getItem("access");
-    creaNavbar(access);
-});
+// Aggiorna la navbar al load e al cambio di stato
+window.addEventListener("DOMContentLoaded", creaNavbar);
+window.addEventListener("storage", creaNavbar); // Se cambi login da un'altra scheda
 
+// Funzione per il logout
 function logout() {
     localStorage.removeItem("access");
-    localStorage.removeItem("role"); // nel caso tu salvi anche il ruolo
-    window.location.href = "index.jsp"; // oppure login.jsp, se preferisci
+    localStorage.removeItem("role");
+    window.location.href = "index.jsp"; // Ricarica la pagina
 }
 
+// Funzione da chiamare dopo un login riuscito (usala in login.jsp)
+function loginSuccess(accessLevel) {
+    localStorage.setItem("access", accessLevel);
+    creaNavbar(); // Aggiorna subito la navbar
+    window.location.href = "index.jsp"; // Ricarica
+}

@@ -7,6 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src ="frontend/Scripts/OrdiniUtente.js"></script>
+    <script src ="frontend/Scripts/WishlistUtente.js"></script>
+    <script src ="frontend/Scripts/ImpostazioniUtente.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -410,17 +413,29 @@
                     <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-nekopeach font-bold border-b border-gray-200" data-tab="dashboard">
                         <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
                     </button>
-                    <button onclick="window.location.href='ordiniutente.jsp'"class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="orders">
+                    <button id="orders-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="orders">
                         <i class="fas fa-shopping-bag mr-3"></i> I miei ordini
-
                     </button>
-                    <button onclick="window.location.href='wishlist.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="wishlist">
+                    <button id="wishlist-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="wishlist">
                         <i class="fas fa-heart mr-3"></i> Lista desideri
                     </button>
 
-                    <button onclick="window.location.href='impostazioniutente.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+                    <button id="settings-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
                         <i class="fas fa-cog mr-3"></i> Impostazioni
                     </button>
+
+                    <button onclick="window.location.href='sicurezza.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+                        <i class="fas fa-lock mr-3"></i> Sicurezza
+                    </button>
+
+                    <button onclick="window.location.href='pagamenti.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+                        <i class="fas fa-credit-card mr-3"></i> Pagamenti
+                    </button>
+
+                    <button onclick="window.location.href='indirizzi.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+                        <i class="fas fa-map-marker-alt mr-3"></i> Indirizzi
+                    </button>
+
                     <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="logout">
                         <i class="fas fa-sign-out-alt mr-3"></i> Esci
                     </button>
@@ -653,6 +668,7 @@
         </div>
     </div>
 </footer>
+
 
 </body>
 </html>

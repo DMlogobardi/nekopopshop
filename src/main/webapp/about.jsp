@@ -263,15 +263,7 @@
 
 
         <!-- Navigation -->
-        <div class="w-full lg:w-auto">
-            <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
-                <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
-                <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-                <a href="about.jsp" class="folder-tab active"><i class="fas fa-info-circle mr-2"></i> Chi Siamo</a>
-                <a href="cart.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Carrello</a>
-                <a href="utente.jsp" class="folder-tab"><i class="fas fa-user mr-2"></i> Utente</a>
-            </div>
-        </div>
+        <jsp:include page="navBar.jsp" />
     </div>
 
     <!-- Hero Section -->
@@ -308,7 +300,7 @@
                 </div>
             </div>
             <div class="relative">
-                <img src="https://images.unsplash.com/photo-1608889825103-eb5c0e8dc9d9?q=80&w=1000"
+                <img src="${pageContext.request.contextPath}/frontend/images/about.jpeg"
                      alt="NekoPop Store"
                      class="w-full h-auto rounded-lg shadow-lg border-4 border-white">
                 <div class="absolute -bottom-4 -right-4 bg-nekoorange text-white px-4 py-2 rounded-lg font-bold">
