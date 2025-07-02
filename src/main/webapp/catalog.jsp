@@ -177,9 +177,11 @@
                     <p class="text-gray-600 text-lg mt-2">Essere divorati vivi: per l'umanit&agrave &egrave il destino pi&ugrave crudele.</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">&#8364 24.99</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+
+                        <a href="${pageContext.request.contextPath}/specificheprodotto.jsp?id=1"
+                           class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
+                        </a>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Completo</span>
@@ -200,9 +202,10 @@
                     <p class="text-gray-600 text-lg mt-2">La storia del ninja dai capelli biondi che vuole diventare Hokage.</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">Disponibile</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                        <a href="${pageContext.request.contextPath}/specificheprodotto.jsp?id=1"
+                           class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
+                        </a>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">72 volumi</span>
@@ -223,9 +226,10 @@
                     <p class="text-gray-600 text-lg mt-2">La leggendaria ricerca del tesoro pi&ugrave grande del mondo.</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">Disponibile</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                        <a href="${pageContext.request.contextPath}/specificheprodotto.jsp?id=1"
+                           class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
+                        </a>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">103+ volumi</span>
@@ -258,9 +262,10 @@
                     <p class="text-gray-600 text-lg mt-2">Action figure in PVC delle due protagonoste pi&ugrave amate dei racconti di Ai Yazawa.</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">&#8364 24.99</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                        <a href="${pageContext.request.contextPath}/specificheprodotto.jsp?id=1"
+                           class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
+                        </a>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Completo</span>
@@ -281,9 +286,10 @@
                     <p class="text-gray-600 text-lg mt-2">La storia del ninja dai capelli biondi che vuole diventare Hokage, ora reso action figure da collezionare.</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">Disponibile</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                        <a href="${pageContext.request.contextPath}/specificheprodotto.jsp?id=1"
+                           class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
+                        </a>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Disponibili</span>
@@ -303,9 +309,10 @@
                     <p class="text-gray-600 text-lg mt-2">Il mitico Luffy alla leggendaria ricerca del tesoro pi&ugrave ambito dai pirati ora disponibile in action figure nella sua versione Taro dalla omonima saga.</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">Disponibile</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                        <a href="${pageContext.request.contextPath}/specificheprodotto.jsp?id=1"
+                           class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
                             <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
+                        </a>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Ultimi pezzi</span>
@@ -341,9 +348,10 @@
                             <span class="text-gray-400 line-through text-sm mr-2">&#8364 7.99</span>
                             <span class="text-nekopeach font-bold">&#8364 6.79</span>
                         </div>
-                        <button class="bg-nekopeach hover:bg-nekored text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-cart-plus mr-1"></i> Acquista
-                        </button>
+                        <a href="${pageContext.request.contextPath}/specificheprodotto.jsp?id=1"
+                           class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                            <i class="fas fa-eye mr-1"></i> Dettagli
+                        </a>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Disponibile</span>
@@ -364,9 +372,10 @@
                     <p class="text-gray-600 text-lg mt-2">Light Yagami trova un quaderno che pu&ograve uccidere chiunque.</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">&#8364 7.99</span>
-                        <button class="bg-nekopeach hover:bg-nekored text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-cart-plus mr-1"></i> Acquista
-                        </button>
+                        <a href="${pageContext.request.contextPath}/specificheprodotto.jsp?id=1"
+                           class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                            <i class="fas fa-eye mr-1"></i> Dettagli
+                        </a>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">12+</span>
@@ -388,9 +397,10 @@
                     <p class="text-gray-600 text-lg mt-2">La nuova sfida della Classe 1-A contro gli eroi professionisti!</p>
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-nekopeach font-bold">&#8364 8.99</span>
-                        <button class="bg-nekopeach hover:bg-nekored text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-cart-plus mr-1"></i> Acquista
-                        </button>
+                        <a href="${pageContext.request.contextPath}/specificheprodotto.jsp?id=1"
+                           class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
+                            <i class="fas fa-eye mr-1"></i> Dettagli
+                        </a>
                     </div>
                     <div class="mt-2 flex items-center text-xs">
                         <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Novit&agrave</span>
@@ -510,6 +520,13 @@
             }
         });
     });
+        document.querySelectorAll('.details-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            window.location.href = `specificheprodotto.jsp?id=${productId}`;
+        });
+    });
+
 </script>
 </body>
 </html>
