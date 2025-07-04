@@ -298,7 +298,7 @@
                 </div>
             </div>
             <div class="relative">
-                <img src="https://images.unsplash.com/photo-1608889825103-eb5c0e8dc9d9?q=80&w=1000"
+                <img src="${pageContext.request.contextPath}/frontend/images/about.jpeg"
                      alt="NekoPop Store"
                      class="w-full h-auto rounded-lg shadow-lg border-4 border-white">
                 <div class="absolute -bottom-4 -right-4 bg-nekoorange text-white px-4 py-2 rounded-lg font-bold">
