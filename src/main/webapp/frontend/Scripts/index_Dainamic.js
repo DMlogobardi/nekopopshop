@@ -456,7 +456,6 @@ function generateDecorations() {
 document.addEventListener('DOMContentLoaded', function () {
 
     generateDecorations;
-    document.getElementById("index").classList.add("active");
 
 })
 

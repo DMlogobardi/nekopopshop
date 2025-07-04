@@ -53,12 +53,15 @@ public class Logout extends HttpServlet {
 
             sessionCart.push(ds);
             session.invalidate();
-            response.sendRedirect("/index.jsp");
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
             return;
         }
 
-        request.setAttribute("error", "You are not logged in");
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
+        response.setStatus(422);
+        response.setContentType("text/json");
+        response.getWriter().println("{\"error\":\"you are not logged in\"}");
     }
 
 }
