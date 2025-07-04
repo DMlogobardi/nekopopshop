@@ -285,7 +285,7 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         PreparedStatement ps = null;
         Collection<ProdottoBean> prodotti = new LinkedList<ProdottoBean>();
 
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " ORDER BY ? limit ? offset ?" ;
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " where prezzo is not null or prezzo > 0 ORDER BY ? limit ? offset ?" ;
 
         try{
             con = ds.getConnection();
@@ -340,7 +340,7 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
         if (!serch.isEmpty()) {
-            selectAllSQL += " WHERE LOWER(nome) LIKE ?  ORDER BY ? ";
+            selectAllSQL += " WHERE prezzo is not null or prezzo > 0 LOWER(nome) LIKE ?  ORDER BY ? ";
         }
         selectAllSQL += " LIMIT ? OFFSET ?";
 

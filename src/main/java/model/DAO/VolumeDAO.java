@@ -111,6 +111,32 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         return volume;
     }
 
+    public int doRetrieveTot() throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        int result = 0;
+
+        String selectSQL = "SELECT COUNT(*) FROM " + TABLE_NAME;
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                result = rs.getInt("COUNT(*)");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return result;
+    }
+
     public int doRetrieveQuantity(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
@@ -321,6 +347,71 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
             }
         }
         System.out.println(volumes);
+        return volumes;
+    }
+
+    public Collection<VolumeBean> doRetrieveAllLimitByType(String order, int limit, int page, String serch, String type) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
+
+        String selectAllSQL =
+                "SELECT * FROM " + TABLE_NAME + " " +
+                        "JOIN prodotto ON prodotto.idProdotto = volume.idProdotto " +
+                        "WHERE volume.idProdotto = prodotto.idProdotto and where tag = ?";
+
+        if (serch != null && !serch.isEmpty()) {
+            selectAllSQL += "AND LOWER(CONCAT(prodotto.nome, CAST(volume.numVolumi AS CHAR))) LIKE ? ";
+        }
+        selectAllSQL += " ORDER BY ? limit ? offset ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setString(1, type);
+            ps.setString(2,  "%" + serch.toLowerCase() + "%");
+            if (order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(3, order.strip());
+            else
+                ps.setString(3, "idVolume");
+
+            if (limit > 0 && page > 0) {
+                ps.setInt(4, limit);
+                ps.setInt(5, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(4, 10);
+                ps.setInt(5, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(4, limit);
+                ps.setInt(5, 0);
+            } else {
+                ps.setInt(4, 10);
+                ps.setInt(5, 0);
+            }
+
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                VolumeBean volume = new VolumeBean(
+                        rs.getInt("idVolume"),
+                        rs.getInt("numVolumi"),
+                        rs.getDouble("prezzo"),
+                        rs.getInt("quantità"),
+                        rs.getString("dataPubl"),
+                        rs.getBytes("imgVol"),
+                        rs.getString("tag"),
+                        rs.getInt("idProdotto")
+                );
+                volumes.add(volume);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+
         return volumes;
     }
 

@@ -50,21 +50,35 @@ public class GetCatalog extends HttpServlet {
 			String dayProduct = request.getParameter("dayProduct") == null ? "" : request.getParameter("dayProduct");
 			int limit = request.getParameter("limit") == null ? 10 : Integer.parseInt(request.getParameter("limit"));
 			String tot = request.getParameter("tot") == null ? "" : request.getParameter("tot");
+			String productType = request.getParameter("productType") == null ? "" : request.getParameter("productType");
 
 			if(tot.equals("tot")){
-				int totale = prodDB.doRetrieveTot();
-				System.out.println("totale: " + totale);
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write("{ \"totale\": " + totale + "}");
-				return;
+				if(productType.equals("prod")) {
+					int totale = prodDB.doRetrieveTot();
+					System.out.println("totale: " + totale);
+					response.setContentType("text/json");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write("{ \"totale\": " + totale + "}");
+					return;
+				} else {
+					int totale = volDB.doRetrieveTot();
+					System.out.println("totale: " + totale);
+					response.setContentType("text/json");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write("{ \"totale\": " + totale + "}");
+					return;
+				}
 			}
 
 			if(dayProduct.equals("ok")) {
-				VolumeBean vol = volDB.doRetrieveByKey(1);
-				dbPrd = new LinkedList<>();
-				dbPrd.add(prodDB.doRetrieveByKey(vol.getIdProdotto()));
-				dbVol.add(vol);
+				if(productType.equals("vol")) {
+					VolumeBean vol = volDB.doRetrieveByKey(1);
+					dbPrd = new LinkedList<>();
+					dbPrd.add(prodDB.doRetrieveByKey(vol.getIdProdotto()));
+					dbVol.add(vol);
+				} else {
+					dbPrd = prodDB.doRetrieveAllLimit(null, 1, 1);
+				}
 
 			} else if (dayProduct.equals("figure")){
 				dbPrd = new LinkedList<>();
@@ -72,42 +86,28 @@ public class GetCatalog extends HttpServlet {
 			} else {
 				//logica di filtri
 				if (serch == null && filter == null) {
-					List<ProdottoBean> tuttiProdotti = (List<ProdottoBean>) prodDB.doRetrieveAllLimit("idProdotto", limit * 2, page); // overfetch per sicurezza
-					dbPrd = new LinkedList<>();
-					for (ProdottoBean pb : tuttiProdotti) {
-						if (pb.getPrezzo() == 0.0) {
-							dbPrd.add(pb);
-							VolumeBean volume = volDB.doRetrieveByProduct(pb.getIdProdotto());
-							if (volume != null) dbVol.add(volume); // è un volume associato
-						} else {
-							dbPrd.add(pb); // action figure
-						}
-						if (dbPrd.size() + dbVol.size() >= limit) break; // abbiamo abbastanza elementi da mostrare
+					if(productType.equals("prod")) {
+						dbPrd = prodDB.doRetrieveAllLimit(null, limit, page);
+					} else {
+						dbVol = volDB.doRetrieveAllLimit(null, limit, page);
 					}
 				} else if (serch != null && filter == null) {
 
-					dbPrd = prodDB.doRetrieveAllLimitLike("nome", limit, page, serch.toLowerCase());
-					for (ProdottoBean pb : dbPrd) {
-						if (pb.getPrezzo() == 0.0) {
-							dbVol.addAll(volDB.doRetrieveAllByProduct(pb.getIdProdotto(), serch));
-						}
-					}
+					dbPrd = prodDB.doRetrieveAllLimitLike(null, limit, page, serch.strip());
+					dbVol = volDB.doRetrieveAllLimit(null, limit, page, serch.strip());
 
 				} else if (serch == null) {
-					System.out.println("filter: " + filter);
-					if (filter.equals("volumi")) {
-						String order = request.getParameter("order");
-						String volFilter = request.getParameter("tag");
-						dbVol = volDB.doRetrieveAllLimitByType(order, limit, page, volFilter);
-
+					if (productType.equals("vol")) {
+						String categoria = request.getParameter("categoria") == null ? "shonen" : request.getParameter("categoria");
+						dbVol = volDB.doRetrieveAllLimitByType(filter, limit, page, categoria);
 					} else {
 						dbPrd = prodDB.doRetrieveAllLimit(filter.strip(), limit, page);
 					}
 				} else {
 					System.out.println("filter + serch");
-					if (filter.equals("volumi")) {
-						String volFilter = request.getParameter("volFilter");
-						dbVol = volDB.doRetrieveAllLimit(volFilter.strip(), limit, page, serch.toLowerCase());
+					if (productType.equals("vol")) {
+						String categoria = request.getParameter("categoria") == null ? "shonen" : request.getParameter("categoria");
+						dbVol = volDB.doRetrieveAllLimitByType(filter, limit, page, serch.toLowerCase(), categoria);
 
 					} else {
 						dbPrd = prodDB.doRetrieveAllLimitLike(filter.strip(), limit, page, serch.toLowerCase());
@@ -117,36 +117,35 @@ public class GetCatalog extends HttpServlet {
 
 			// invio dei json
 			if(dbVol.isEmpty() && dbPrd != null && !dbPrd.isEmpty()) {
-				for (ProdottoBean pb : dbPrd) {
-					if (pb.getPrezzo() == 0.0) {
-						dbVol.add(volDB.doRetrieveByProduct(pb.getIdProdotto()));
-					}
-				}
 				JsonConverter<ProdottoBean> prodConverter = JsonConverter.factory(ProdottoBean.class, null);
 				String jsonProd = prodConverter.toJson(dbPrd);
-				String jsonSend = null;
-				if(!dbVol.isEmpty()) {
-					JsonConverter<VolumeBean> volConverter = JsonConverter.factory(VolumeBean.class, null);
-					String jsonVol = volConverter.toJson(dbVol);
-					jsonSend = JsonConverter.merge(jsonProd, jsonVol);
-				}
 				response.setContentType("text/json");
 				response.setCharacterEncoding("UTF-8");
-				if(jsonSend != null) {
-					System.out.println("if JsonSend: " + jsonSend);
-					response.getWriter().write(jsonSend);
-				} else {
-					System.out.println("if JsonProd: " + jsonProd);
-					response.getWriter().write(jsonProd);
-				}
+				System.out.println("if JsonProd: " + jsonProd);
+				response.getWriter().write(jsonProd);
+
 			} else if (dbPrd == null || dbPrd.isEmpty()) {
+				int curentid = 0;
+				dbPrd = new LinkedList<>();
+				for(VolumeBean vol : dbVol) {
+					if(vol.getIdProdotto() != curentid) {
+						dbPrd.add(prodDB.doRetrieveByKey(vol.getIdProdotto()));
+					}
+				}
+
+				JsonConverter<ProdottoBean> prodConverter = JsonConverter.factory(ProdottoBean.class, null);
+				String jsonProd = prodConverter.toJson(dbPrd);
+				System.out.println("else JsonProd: " + jsonProd);
 				JsonConverter<VolumeBean> volConverter = JsonConverter.factory(VolumeBean.class, null);
 				String jsonVol = volConverter.toJson(dbVol);
 				System.out.println("else JsonVol: " + jsonVol);
 
+				String jsonSend = JsonConverter.merge(jsonProd, jsonVol);
+				System.out.println("else: " + jsonSend);
+
 				response.setContentType("text/json");
 				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(jsonVol);
+				response.getWriter().write(jsonSend);
 
 			} else {
 				JsonConverter<ProdottoBean> prodConverter = JsonConverter.factory(ProdottoBean.class, null);

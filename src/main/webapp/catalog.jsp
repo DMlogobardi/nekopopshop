@@ -270,7 +270,7 @@
                 <input type="text"
                        class="w-full p-4 pl-12 pr-6 rounded-full border-2 border-nekopink focus:border-nekopeach focus:outline-none"
                        name="serch"
-                       placeholder="Cerca manga per nome...">
+                       placeholder="Cerca nel catalogo...">
                 <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-nekopeach"></i>
                 <input type="hidden" name="filter" id="filterInput" value="">
                 <input type="hidden" name="page" id="pageInput" value="0">
@@ -279,14 +279,8 @@
 
         <!-- Filter Section -->
         <div class="filter-section flex flex-wrap gap-2 mb-6">
-            <button class="filter-btn active" onclick="setFilter('')">
+            <button class="filter-btn active" onclick="setFilter('delete')">
                 <i class="fas fa-layer-group mr-2"></i> Tutti
-            </button>
-            <button class="filter-btn" onclick="setFilter('volumi')">
-                <i class="fas fa-book-open mr-2"></i> Volumi
-            </button>
-            <button class="filter-btn" onclick="setFilter('action figure')">
-                <i class="fas fa-dragon mr-2"></i> Action Figure
             </button>
             <button class="filter-btn" onclick="setFilter('nome')">
                 <i class="fas fa-sort-alpha-down mr-2"></i> Per Nome
@@ -294,13 +288,9 @@
             <button class="filter-btn" onclick="setFilter('autore')">
                 <i class="fa fa-pencil mr-2"></i> Per Autore
             </button>
-            <button class="filter-btn" onclick="setFilter('autore')">
+            <button class="filter-btn" onclick="setFilter('anno')">
                 <i class="far fa-calendar-alt mr-2"></i> Per Anno
             </button>
-            <button class="filter-btn" onclick="setFilter('vendite')">
-                <i class="fa fa-line-chart mr-2"></i> Per Vendite
-            </button>
-
 
         </div>
 
@@ -343,25 +333,54 @@
             <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
                 <i class= "fas fa-layer-group text-white"></i>
             </div>
-            <h2 class= "text-2xl font-bold text-nekopeach"> I nostri magnifici prodotti</h2>
+            <h2 class= "text-2xl font-bold text-nekopeach"> I nostri magnifici manga</h2>
         </div>
 
-        <div id = "catalogo" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id = "catalogo1" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-center gap-4 mb-8">
+        <button id="prev-btn1" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+            <i class="fas fa-arrow-left mr-2"></i> Precedente
+        </button>
+
+        <div id="pagination1" class="flex items-center gap-2">
+            <!-- Pagine generate dinamicamente -->
+        </div>
+
+        <button id="next-btn1" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+            Successivo <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+    </div>
+
+    <!-- action figure Series Section -->
+    <div class="bg-white rounded-2xl border-2 border-nekoorange p-6 mb-8">
+        <div class="flex items-center mb-6">
+            <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
+                <i class= "fas fa-layer-group text-white"></i>
+            </div>
+            <h2 class= "text-2xl font-bold text-nekopeach"> Le nostre magnifiche action figure</h2>
+        </div>
+
+        <div id = "catalogo2" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
         </div>
     </div>
 
     <!-- Pagination -->
     <div class="flex justify-center gap-4">
-        <button id="prev-btn" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+        <button id="prev-btn2" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
             <i class="fas fa-arrow-left mr-2"></i> Precedente
         </button>
 
-        <div id="pagination" class="flex items-center gap-2">
+        <div id="pagination2" class="flex items-center gap-2">
             <!-- Pagine generate dinamicamente -->
         </div>
 
-        <button id="next-btn" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+        <button id="next-btn2" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
             Successivo <i class="fas fa-arrow-right ml-2"></i>
         </button>
     </div>

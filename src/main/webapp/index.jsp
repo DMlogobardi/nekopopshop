@@ -275,7 +275,7 @@
 
 
         <!-- Sponsor Banner -->
-        <div class="header-content p-6 w-full md:w-2/3 relative">
+        <div id="dayOfferProd" class="header-content p-6 w-full md:w-2/3 relative">
             <div class="absolute -top-2 right-4 flex gap-2">
                 <div class="w-3 h-3 rounded-full bg-nekopink"></div>
                 <div class="w-3 h-3 rounded-full bg-nekopurple"></div>
