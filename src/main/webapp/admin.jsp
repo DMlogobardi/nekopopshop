@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NekoPopShop - Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -28,10 +29,35 @@
             }
         }
     </script>
+    <style>
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #e55458;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 
 </head>
 <body class="relative overflow-x-hidden bg-gray-50">
-<!-- Decorative elements -->
+<div id="decorations"></div>
+
+<div class="container mx-auto px-4 py-6">
+
+</div>
+
+<script>
+    function caricaContenuto(pagina) {
+        $("#contenuto").load(pagina);
+    }
+</script>
 <div id="decorations"></div>
 
 <div class="container mx-auto px-4 py-6">
@@ -85,29 +111,26 @@
 
                 <!-- Sidebar Menu -->
                 <nav class="space-y-1 mb-6">
-                    <a href="#" class="sidebar-item active flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="#" class="sidebar-item active flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach" onclick="loadContent('dashboard')">
                         <i class="fas fa-tachometer-alt sidebar-icon mr-3 text-gray-500"></i>
                         <span>Dashboard</span>
                     </a>
-                    <a href="gestioneprodotti.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="#" onclick="loadContent('products')" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
                         <i class="fas fa-box sidebar-icon mr-3 text-gray-500"></i>
                         <span>Prodotti</span>
                         <span class="notification-badge ml-auto">5</span>
                     </a>
-                    <a href="gestioneutenti.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach" onclick="loadContent('users')">
                         <i class="fas fa-users sidebar-icon mr-3 text-gray-500"></i>
                         <span>Utenti</span>
                         <span class="text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded ml-auto">32</span>
                     </a>
-                    <a href="ordini.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="#" onclick="loadContent('orders')" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach" onclick="loadContent('orders')">
                         <i class="fas fa-shopping-cart sidebar-icon mr-3 text-gray-500"></i>
                         <span>Ordini</span>
                         <span class="notification-badge ml-auto">12</span>
                     </a>
-
-                        <span class="notification-badge ml-auto">3</span>
-                    </a>
-                    <a href="impostazioniadmin.jsp" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+                    <a href="#" onclick="loadContent('settings')" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach" onclick="loadContent('settings')">
                         <i class="fas fa-cog sidebar-icon mr-3 text-gray-500"></i>
                         <span>Impostazioni</span>
                     </a>
@@ -140,18 +163,20 @@
 
         <!-- Main Content -->
         <div class="lg:col-span-3 space-y-6">
+            <!-- Contenitore dinamico -->
+            <div id="dynamic-content">
             <!-- Welcome Banner -->
-            <div class="admin-card p-6 bg-white rounded-xl">
-                <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-800 mb-2">Benvenuto, <span class="text-admin-gradient">Admin Master</span> 👋</h2>
-                        <p class="text-gray-600">Ecco una panoramica dello stato del tuo negozio. Hai <span class="font-bold text-nekopeach">12 nuovi ordini</span> e <span class="font-bold text-nekopeach">5 prodotti</span> con scorte basse.</p>
+                <div class="admin-card p-6 bg-white rounded-xl">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800 mb-2">Benvenuto, <span class="text-admin-gradient">Admin Master</span> 👋</h2>
+                            <p class="text-gray-600">Ecco una panoramica dello stato del tuo negozio. Hai <span class="font-bold text-nekopeach">12 nuovi ordini</span> e <span class="font-bold text-nekopeach">5 prodotti</span> con scorte basse.</p>
+                        </div>
+                        <button class="btn-primary mt-4 md:mt-0 flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Crea Report
+                        </button>
                     </div>
-                    <button class="btn-primary mt-4 md:mt-0 flex items-center">
-                        <i class="fas fa-plus mr-2"></i> Crea Report
-                    </button>
                 </div>
-            </div>
 
             <!-- Alert -->
             <div class="alert alert-warning">
@@ -574,102 +599,67 @@
 
 </div>
 
-<!-- Footer -->
-<footer class="mt-16 bg-gradient-to-b from-nekoorange to-nekopeach text-white pt-12 pb-8">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <!-- Footer section -->
-            <div>
-                <div class="flex items-center mb-4">
-                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
-                        <i class="fas fa-paw text-nekopink text-2xl"></i>
-                    </div>
-                    <h4 class="font-bold text-xl ml-3 text-white">NekoPop Shop</h4>
-                </div>
-                <p class="text-pink-100">Il tuo negozio preferito per manga e action figure, fornito da appassionati per appassionati!</p>
-            </div>
 
-            <!-- Footer section -->
-            <div>
-                <h4 class="font-bold text-lg mb-4 text-white">Contatti</h4>
-                <p class="text-pink-100 flex items-center mb-3">
-                    <i class="fas fa-map-marker-alt mr-3"></i>
-                    <span>Via dei Manga, 123<br>Milano, Italia</span>
-                </p>
-                <p class="text-pink-100 flex items-center mb-3">
-                    <i class="fas fa-phone mr-3"></i> +39 02 1234567
-                </p>
-                <p class="text-pink-100 flex items-center">
-                    <i class="fas fa-envelope mr-3"></i> info@nekopopshop.com
-                </p>
-            </div>
-
-            <!-- Footer section -->
-            <div>
-                <h4 class="font-bold text-lg text-white mb-4">Link Utili</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
-                        <i class="fas fa-caret-right mr-2"></i> Assistenza Clienti
-                    </a></li>
-                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
-                        <i class="fas fa-caret-right mr-2"></i> FAQ
-                    </a></li>
-                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
-                        <i class="fas fa-caret-right mr-2"></i> Spedizioni
-                    </a></li>
-                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
-                        <i class="fas fa-caret-right mr-2"></i> Termini e Condizioni
-                    </a></li>
-                </ul>
-            </div>
-
-            <!-- Footer section -->
-            <div>
-                <h4 class="font-bold text-lg text-white mb-4">Iscriviti alla Newsletter</h4>
-                <div class="flex mt-2">
-                    <input type="email" placeholder="Tua email" class="bg-white/20 border border-pink-300 text-white rounded-l-lg px-4 py-3 w-full placeholder-pink-200 focus:outline-none">
-                    <button class="bg-white text-nekopink font-bold px-4 rounded-r-lg">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-
-                <div class="mt-4">
-                    <h5 class="font-bold mb-3">Seguici</h5>
-                    <div class="flex space-x-4">
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-discord"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="border-t border-pink-300/30 mt-8 pt-6 text-center text-pink-100">
-            <p>&copy; 2023 NekoPopShop. Tutti i diritti riservati.</p>
-            <div class="flex justify-center mt-4">
-                <div class="flex items-center gap-4">
-                    <i class="fab fa-cc-visa text-2xl"></i>
-                    <i class="fab fa-cc-mastercard text-2xl"></i>
-                    <i class="fab fa-cc-paypal text-2xl"></i>
-                    <i class="fab fa-cc-apple-pay text-2xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Funzione per caricare il contenuto via AJAX
+    function loadContent(section) {
+        // Mostra loader
+        $('#dynamic-content').html('<div class="loader"></div>');
+
+        // Rimuovi active da tutti gli item della sidebar
+        $('.sidebar-item').removeClass('active');
+        // Aggiungi active all'item cliccato
+        $(event.target).closest('.sidebar-item').addClass('active');
+
+        // Mappa delle sezioni con i loro URL
+        const sections = {
+            'dashboard': 'dashboard-content.jsp',
+            'products': 'gestioneprodotti.jsp',
+            'users': 'gestioneutenti.jsp',
+            'orders': 'ordini.jsp',
+            'settings': 'impostazioniadmin.jsp'
+        };
+
+        // Effettua la chiamata AJAX
+        $.ajax({
+            url: sections[section],
+            type: 'GET',
+            success: function(data) {
+                $('#dynamic-content').html(data);
+
+                // Se abbiamo caricato la dashboard, inizializza i grafici
+                if(section === 'dashboard') {
+                    initCharts();
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#dynamic-content').html(`
+                    <div class="admin-card p-6 bg-white rounded-xl text-center text-red-500">
+                        <i class="fas fa-exclamation-triangle text-3xl mb-3"></i>
+                        <p>Errore nel caricamento del contenuto</p>
+                        <button onclick="loadContent('dashboard')" class="btn-primary mt-3">
+                            Torna alla Dashboard
+                        </button>
+                    </div>
+                `);
+            }
+        });
+    }
+
+    // Inizializzazione della pagina
+    $(document).ready(function() {
+        createFloatingElements();
+        initCharts();
+
+        // Gestione click sui link della sidebar
+        $('.sidebar-item').click(function(e) {
+            e.preventDefault();
+            // La funzione loadContent viene chiamata dall'onclick
+        });
+
     // Create floating elements
     function createFloatingElements() {
         const decorations = document.getElementById('decorations');
@@ -838,6 +828,38 @@
         }, 1000);
     });
 </script>
+        <script>
+            // Mappa i pulsanti ai contenuti
+            const contentMap = {
+                'products': 'gestioneprodotti.jsp',
+                'users': 'gestioneutenti.jsp',
+                'dashboard': 'dashboard.jsp',
+                'orders' : 'ordini.jsp',
+                'settings' : 'impostazioniadmin.jsp'
+            };
+
+            function loadContent(section) {
+                const loader = `<div class="loader mt-8"> </div>`;
+                $('#dynamic-content').html(loader).load(contentMap[section], function(response, status) {
+                    if (status === "error") {
+                        $('#dynamic-content').html(`<div class="alert alert-error">Errore nel caricamento</div>`);
+                    }
+                });
+            }
+
+            // Inizializzazione
+            $(document).ready(function() {
+                // Attiva il primo tab
+                loadContent('dashboard');
+
+                // Gestione click menu
+                $('.sidebar-item').click(function(e) {
+                    e.preventDefault();
+                    const section = $(this).data('section');
+                    loadContent(section);
+                });
+            });
+        </script>
 </div>
 </body>
 </html>

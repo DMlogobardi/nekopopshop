@@ -245,23 +245,23 @@ body {
 .text-3xl{
     font-family: 'Milkyway', sans-serif;
     font-size: 2.5rem;
-    color: #333;
 }
 
 .text-xl{
     font-family: 'Milkyway', sans-serif;
     font-size: 2.5rem;
-    color: #333;
+    color: white;
 }
 
 .text-lg{
     font-family: 'Milkyway', sans-serif;
     font-size: 2.5rem;
-    color: #333;
+    color:white !important
 }
 
 .fa-star, .fas, .far {
     font-style: normal !important;
+    color: white !important
 }
 
 /* Custom styles for admin panel */

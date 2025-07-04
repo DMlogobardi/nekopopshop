@@ -32,34 +32,8 @@
 <div class="container mx-auto px-4 md:px-8 py-6">
     <!-- Top Bar with Logo and Navigation -->
     <div class="flex flex-col lg:flex-row items-center justify-between gap-6 mb-8">
-        <!-- Logo -->
-        <div class="flex items-center">
-            <div class="relative">
-                <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-nekored z-10 flex items-center justify-center animate-pulse">
-                    <i class="fas fa-shield-alt text-white text-2xl"></i>
-                </div>
-                <div class="w-20 h-20 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center">
-                    <i class="fas fa-user-shield text-2xl text-nekored"></i>
-                </div>
-            </div>
-            <div class="ml-4">
-                <h1 class="text-3xl font-bold"><span class="nekotag">Impostazioni Admin</span></h1>
-                <p class="text-xl text-nekored font-bold" style="font-size: 20px; background: linear-gradient(90deg, #f24535, #E55458); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Gestisci il sistema</p>
-            </div>
-        </div>
 
-        <!-- Navigation -->
-        <div class="w-full lg:w-auto">
-            <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
-                <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
-                <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-                <a href="admin.jsp" class="folder-tab"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
-                <a href="gestioneprodotti.jsp" class="folder-tab"><i class="fas fa-boxes mr-2"></i> Prodotti</a>
-                <a href="ordini.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Ordini</a>
-                <a href="gestioneutenti.jsp" class="folder-tab"><i class="fas fa-users mr-2"></i> Utenti</a>
-                <a href="impostazioniadmin.jsp" class="folder-tab active"><i class="fas fa-cog mr-2"></i> Impostazioni</a>
-            </div>
-        </div>
+
     </div>
 
     <!-- Settings Content -->

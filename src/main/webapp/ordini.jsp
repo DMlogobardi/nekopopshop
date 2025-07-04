@@ -35,31 +35,13 @@
         <!-- Logo -->
         <div class="flex items-center">
             <div class="relative">
-                <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-nekoblue z-10 flex items-center justify-center animate-pulse">
-                    <i class="fas fa-truck text-white text-2xl"></i>
-                </div>
-                <div class="w-20 h-20 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center">
-                    <i class="fas fa-shopping-bag text-2xl text-nekopeach"></i>
-                </div>
+
             </div>
-            <div class="ml-4">
-                <h1 class="text-3xl font-bold"><span class="nekotag">Gestione Ordini</span></h1>
-                <p class="text-xl text-nekoblue font-bold" style="font-size: 25px; background: linear-gradient(90deg, #e55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pannello di amministrazione</p>
-            </div>
+
         </div>
 
         <!-- Navigation -->
-        <div class="w-full lg:w-auto">
-            <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
-                <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
-                <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-                <a href="admin.jsp" class="folder-tab"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
-                <a href="gestioneprodotti.jsp" class="folder-tab"><i class="fas fa-boxes mr-2"></i> Prodotti</a>
-                <a href="ordini.jsp" class="folder-tab active"><i class="fas fa-shopping-cart mr-2"></i> Ordini</a>
-                <a href="gestioneutenti.jsp" class="folder-tab"><i class="fas fa-users mr-2"></i> Utenti</a>
-                <a href="logout.jsp" class="folder-tab"><i class="fas fa-sign-out-alt mr-2"></i> Esci</a>
-            </div>
-        </div>
+
     </div>
 
     <!-- Search and Filter Section -->
@@ -328,5 +310,97 @@
         </div>
     </div>
 </div>
+<!-- Footer -->
+<footer class="mt-16 bg-gradient-to-b from-nekoorange to-nekopeach text-white pt-12 pb-8">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Footer section -->
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+                        <i class="fas fa-paw text-nekopink text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-xl ml-3 text-white">NekoPop Shop</h4>
+                </div>
+                <p class="text-pink-100">Il tuo negozio preferito per manga e action figure, fornito da appassionati per appassionati!</p>
+            </div>
+
+            <!-- Footer section -->
+            <div>
+                <h4 class="font-bold text-lg mb-4 text-white">Contatti</h4>
+                <p class="text-pink-100 flex items-center mb-3">
+                    <i class="fas fa-map-marker-alt mr-3"></i>
+                    <span>Via dei Manga, 123<br>Milano, Italia</span>
+                </p>
+                <p class="text-pink-100 flex items-center mb-3">
+                    <i class="fas fa-phone mr-3"></i> +39 02 1234567
+                </p>
+                <p class="text-pink-100 flex items-center">
+                    <i class="fas fa-envelope mr-3"></i> info@nekopopshop.com
+                </p>
+            </div>
+
+            <!-- Footer section -->
+            <div>
+                <h4 class="font-bold text-lg text-white mb-4">Link Utili</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
+                        <i class="fas fa-caret-right mr-2"></i> Assistenza Clienti
+                    </a></li>
+                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
+                        <i class="fas fa-caret-right mr-2"></i> FAQ
+                    </a></li>
+                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
+                        <i class="fas fa-caret-right mr-2"></i> Spedizioni
+                    </a></li>
+                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
+                        <i class="fas fa-caret-right mr-2"></i> Termini e Condizioni
+                    </a></li>
+                </ul>
+            </div>
+
+            <!-- Footer section -->
+            <div>
+                <h4 class="font-bold text-lg text-white mb-4">Iscriviti alla Newsletter</h4>
+                <div class="flex mt-2">
+                    <input type="email" placeholder="Tua email" class="bg-white/20 border border-pink-300 text-white rounded-l-lg px-4 py-3 w-full placeholder-pink-200 focus:outline-none">
+                    <button class="bg-white text-nekopink font-bold px-4 rounded-r-lg">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+
+                <div class="mt-4">
+                    <h5 class="font-bold mb-3">Seguici</h5>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-pink-300/30 mt-8 pt-6 text-center text-pink-100">
+            <p>&copy; 2023 NekoPopShop. Tutti i diritti riservati.</p>
+            <div class="flex justify-center mt-4">
+                <div class="flex items-center gap-4">
+                    <i class="fab fa-cc-visa text-2xl"></i>
+                    <i class="fab fa-cc-mastercard text-2xl"></i>
+                    <i class="fab fa-cc-paypal text-2xl"></i>
+                    <i class="fab fa-cc-apple-pay text-2xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

@@ -37,32 +37,11 @@
     <div class="flex flex-col lg:flex-row items-center justify-between gap-6 mb-8">
         <!-- Logo -->
         <div class="flex items-center">
-            <div class="relative">
-                <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-nekoblue z-10 flex items-center justify-center animate-pulse">
-                    <i class="fas fa-user-shield text-white text-2xl"></i>
-                </div>
-                <div class="w-20 h-20 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center">
-                    <i class="fas fa-user-cog text-2xl text-nekopeach"></i>
-                </div>
-            </div>
-            <div class="ml-4">
-                <h1 class="text-3xl font-bold"><span class="nekotag">Admin Dashboard</span></h1>
-                <p class="text-xl text-nekoblue font-bold" style="font-size: 25px; background: linear-gradient(90deg, #e55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Gestione Utenti</p>
-            </div>
+
+
         </div>
 
-        <!-- Navigation -->
-        <div class="w-full lg:w-auto">
-            <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
-                <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
-                <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-                <a href="gestioneutenti.jsp" class="folder-tab active"><i class="fas fa-users mr-2"></i> Utenti</a>
-                <a href="ordini.jsp" class="folder-tab"><i class="fas fa-shopping-bag mr-2"></i> Ordini</a>
-                <a href="gestioneprodotti.jsp" class="folder-tab"><i class="fas fa-boxes mr-2"></i> Prodotti</a>
-                <a href="impostazioniadmin.jsp" class="folder-tab"><i class="fas fa-cog mr-2"></i> Impostazioni</a>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Admin Content -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -90,55 +69,14 @@
                     </div>
                 </div>
 
-                <!-- Stats -->
-                <div class="px-6 pb-6">
-                    <div class="grid grid-cols-3 gap-2 text-center">
-                        <div class="stats-card bg-blue-100/20 p-3 rounded-lg">
-                            <div class="text-nekoblue font-bold text-xl">3.2K</div>
-                            <div class="text-xs text-gray-600">Utenti</div>
-                        </div>
-                        <div class="stats-card bg-green-100/20 p-3 rounded-lg">
-                            <div class="text-nekogreen font-bold text-xl">1.5K</div>
-                            <div class="text-xs text-gray-600">Attivi</div>
-                        </div>
-                        <div class="stats-card bg-purple-100/20 p-3 rounded-lg">
-                            <div class="text-nekopurple font-bold text-xl">24</div>
-                            <div class="text-xs text-gray-600">Staff</div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Navigation -->
-                <div class="border-t border-gray-200">
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="dashboard">
-                        <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
-                    </button>
-                    <button onclick="window.location.href='admin-users.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-nekoblue font-bold border-l-4 border-nekoblue" data-tab="users">
-                        <i class="fas fa-users mr-3"></i> Gestione Utenti
-                    </button>
-                    <button onclick="window.location.href='admin-orders.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="orders">
-                        <i class="fas fa-shopping-bag mr-3"></i> Gestione Ordini
-                    </button>
-                    <button onclick="window.location.href='admin-products.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="products">
-                        <i class="fas fa-boxes mr-3"></i> Gestione Prodotti
-                    </button>
-                    <button onclick="window.location.href='admin-reports.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="reports">
-                        <i class="fas fa-chart-bar mr-3"></i> Report e Statistiche
-                    </button>
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="settings">
-                        <i class="fas fa-cog mr-3"></i> Impostazioni
-                    </button>
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="logout">
-                        <i class="fas fa-sign-out-alt mr-3"></i> Esci
-                    </button>
-                </div>
             </div>
 
             <!-- Quick Actions Card -->
             <div class="profile-card bg-white border-2 border-nekogreen mt-6">
                 <div class="bg-gradient-to-r from-nekogreen to-nekoblue p-4">
                     <h3 class="text-lg font-bold text-white flex items-center" style="font-size: 30px">
-                        <i class="fas fa-bolt mr-2" style="font-size: 30px"></i> Azioni Rapide
+                        <i class="fas fa-bolt mr-2" style="font-size: 30px"></i> Azioni
                     </h3>
                 </div>
                 <div class="p-4 space-y-3">
