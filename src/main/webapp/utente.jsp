@@ -10,6 +10,11 @@
     <script src ="frontend/Scripts/OrdiniUtente.js"></script>
     <script src ="frontend/Scripts/WishlistUtente.js"></script>
     <script src ="frontend/Scripts/ImpostazioniUtente.js"></script>
+    <script src ="frontend/Scripts/Sicurezza.js"></script>
+    <script src ="frontend/Scripts/Pagamenti.js"></script>
+    <script src ="frontend/Scripts/Indirizzi.js"></script>
+    <script src ="frontend/Scripts/Logout.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -424,21 +429,26 @@
                         <i class="fas fa-cog mr-3"></i> Impostazioni
                     </button>
 
-                    <button onclick="window.location.href='sicurezza.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+                    <button id="security-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="security">
                         <i class="fas fa-lock mr-3"></i> Sicurezza
                     </button>
 
-                    <button onclick="window.location.href='pagamenti.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+                    <button id="payments-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="payments">
                         <i class="fas fa-credit-card mr-3"></i> Pagamenti
                     </button>
 
-                    <button onclick="window.location.href='indirizzi.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+                    <button id="addresses-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="addresses">
                         <i class="fas fa-map-marker-alt mr-3"></i> Indirizzi
                     </button>
 
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="logout">
+
+                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition"
+                            data-tab="logout"
+                            type="button"> <!-- Aggiunto type="button" -->
                         <i class="fas fa-sign-out-alt mr-3"></i> Esci
                     </button>
+
+
                 </div>
             </div>
 
