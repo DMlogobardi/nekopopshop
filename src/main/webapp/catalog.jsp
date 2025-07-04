@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="frontend/Scripts/Catalogo.js"defer></script>
+    <script src="frontend/Scripts/catalog_dainamic.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -245,9 +245,9 @@
 
         <!-- Navigation -->
         <jsp:include page="navBar.jsp" />
-
     </div>
     <jsp:include page="error.jsp" />
+
     <!-- Catalog Header -->
     <div class="header-content p-6 mb-8 relative">
         <div class="absolute -top-2 right-4 flex gap-2">
@@ -343,259 +343,25 @@
             <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
                 <i class= "fas fa-layer-group text-white"></i>
             </div>
-            <h2 class= "text-2xl font-bold text-nekopeach"> Serie di Manga</h2>
+            <h2 class= "text-2xl font-bold text-nekopeach"> I nostri magnifici prodotti</h2>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Manga Item 1 -->
-            <div class="product-card">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://m.media-amazon.com/images/I/71FQ9+Y2KRL._AC_UF1000,1000_QL80_.jpg"
-                         alt="Attack on Titan"
-                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800">Attack on Titan</h3>
-                    <p class="text-gray-600 text-lg mt-2">Essere divorati vivi: per l'umanit&agrave &egrave il destino pi&ugrave crudele.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">&#8364 24.99</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
-                    </div>
-                    <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Completo</span>
-                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">34 volumi</span>
-                    </div>
-                </div>
-            </div>
+        <div id = "catalogo" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            <!-- Manga Item 2 -->
-            <div class="product-card">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://m.media-amazon.com/images/I/91QYVKf0K6L._AC_UF1000,1000_QL80_.jpg"
-                         alt="Naruto"
-                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800">Naruto</h3>
-                    <p class="text-gray-600 text-lg mt-2">La storia del ninja dai capelli biondi che vuole diventare Hokage.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">Disponibile</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
-                    </div>
-                    <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">72 volumi</span>
-                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Disponibili</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Manga Item 3 -->
-            <div class="product-card">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://m.media-amazon.com/images/I/91LiEf8M9kL._AC_UF1000,1000_QL80_.jpg"
-                         alt="One Piece"
-                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800">One Piece</h3>
-                    <p class="text-gray-600 text-lg mt-2">La leggendaria ricerca del tesoro pi&ugrave grande del mondo.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">Disponibile</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
-                    </div>
-                    <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">103+ volumi</span>
-                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">In corso</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="bg-white rounded-2xl border-2 border-nekoorange p-6 mb-8">
-        <div class="flex items-center mb-6">
-            <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
-                <i class= "fas fa-dragon text-white"></i>
-            </div>
-            <h2 class= "text-2xl font-bold text-nekopeach"> Le nostre Action Figure</h2>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Action Figure Item 1 -->
-            <div class="product-card">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://m.media-amazon.com/images/I/71FQ9+Y2KRL._AC_UF1000,1000_QL80_.jpg"
-                         alt="Nana"
-                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800">Komatsu Nana & Osaki Nana Action Girl Figure</h3>
-                    <p class="text-gray-600 text-lg mt-2">Action figure in PVC delle due protagonoste pi&ugrave amate dei racconti di Ai Yazawa.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">&#8364 24.99</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
-                    </div>
-                    <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Completo</span>
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- Action Figure Item 2 -->
-            <div class="product-card">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://m.media-amazon.com/images/I/91QYVKf0K6L._AC_UF1000,1000_QL80_.jpg"
-                         alt="Naruto"
-                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800">Naruto Shippuden naruto Uzumaki</h3>
-                    <p class="text-gray-600 text-lg mt-2">La storia del ninja dai capelli biondi che vuole diventare Hokage, ora reso action figure da collezionare.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">Disponibile</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
-                    </div>
-                    <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Disponibili</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Action Figure Item 3 -->
-            <div class="product-card">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://m.media-amazon.com/images/I/91LiEf8M9kL._AC_UF1000,1000_QL80_.jpg"
-                         alt="One Piece"
-                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800"> Megahouse One Piece Luffy Taro VAH</h3>
-                    <p class="text-gray-600 text-lg mt-2">Il mitico Luffy alla leggendaria ricerca del tesoro pi&ugrave ambito dai pirati ora disponibile in action figure nella sua versione Taro dalla omonima saga.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">Disponibile</span>
-                        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-eye mr-1"></i> Dettagli
-                        </button>
-                    </div>
-                    <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Ultimi pezzi</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Volumes Section -->
-    <div class="bg-white rounded-2xl border-2 border-nekopeach p-6 mb-8">
-        <div class="flex items-center mb-6">
-            <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
-                <i class="fas fa-book-open text-white"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-nekopeach">Volumi disponibili</h2>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Volume Item 1 -->
-            <div class="product-card">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://m.media-amazon.com/images/I/71k9Z7gVzGL._AC_UF1000,1000_QL80_.jpg"
-                         alt="Demon Slayer"
-                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-                    <div class="absolute top-2 right-2 bg-nekopink text-white px-2 py-1 rounded-md text-xs font-bold">-15%</div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800">Demon Slayer Vol.8</h3>
-                    <p class="text-gray-600 text-lg mt-2">La battaglia contro i demoni continua con azione mozzafiato!</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div>
-                            <span class="text-gray-400 line-through text-sm mr-2">&#8364 7.99</span>
-                            <span class="text-nekopeach font-bold">&#8364 6.79</span>
-                        </div>
-                        <button class="bg-nekopeach hover:bg-nekored text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-cart-plus mr-1"></i> Acquista
-                        </button>
-                    </div>
-                    <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Disponibile</span>
-                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Spedizione rapida</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Volume Item 2 -->
-            <div class="product-card">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://m.media-amazon.com/images/I/81nP5-xT7EL._AC_UF1000,1000_QL80_.jpg"
-                         alt="Death Note"
-                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800">Death Note Vol.1</h3>
-                    <p class="text-gray-600 text-lg mt-2">Light Yagami trova un quaderno che pu&ograve uccidere chiunque.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">&#8364 7.99</span>
-                        <button class="bg-nekopeach hover:bg-nekored text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-cart-plus mr-1"></i> Acquista
-                        </button>
-                    </div>
-                    <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">12+</span>
-                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Spedizione rapida</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Volume Item 3 -->
-            <div class="product-card">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="https://m.media-amazon.com/images/I/91BYoDpJ4kL._AC_UF1000,1000_QL80_.jpg"
-                         alt="My Hero Academia"
-                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-                    <div class="absolute top-2 right-2 bg-nekopink text-white px-2 py-1 rounded-md text-xs font-bold">NEW!</div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800">My Hero Academia Vol.32</h3>
-                    <p class="text-gray-600 text-lg mt-2">La nuova sfida della Classe 1-A contro gli eroi professionisti!</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-nekopeach font-bold">&#8364 8.99</span>
-                        <button class="bg-nekopeach hover:bg-nekored text-white px-4 py-2 rounded-md transition">
-                            <i class="fas fa-cart-plus mr-1"></i> Acquista
-                        </button>
-                    </div>
-                    <div class="mt-2 flex items-center text-xs">
-                        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">Novit&agrave</span>
-                        <span class="bg-nekopeach text-white px-2 py-1 rounded-md">Spedizione rapida</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
     <!-- Pagination -->
     <div class="flex justify-center gap-4">
-        <button class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+        <button id="prev-btn" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
             <i class="fas fa-arrow-left mr-2"></i> Precedente
         </button>
-        <div class="flex items-center gap-2">
-            <a href="#" class="w-10 h-10 bg-nekopeach text-white rounded-full flex items-center justify-center font-bold">1</a>
-            <a href="#" class="w-10 h-10 bg-white text-nekopeach rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">2</a>
-            <a href="#" class="w-10 h-10 bg-white text-nekopeach rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">3</a>
-            <span class="text-nekopeach">...</span>
-            <a href="#" class="w-10 h-10 bg-white text-nekopeach rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">10</a>
+
+        <div id="pagination" class="flex items-center gap-2">
+            <!-- Pagine generate dinamicamente -->
         </div>
-        <button class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+
+        <button id="next-btn" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
             Successivo <i class="fas fa-arrow-right ml-2"></i>
         </button>
     </div>
@@ -616,12 +382,10 @@
             </div>
             <div class="text-center md:text-left">
                 <h3 class="text-2xl font-bold text-white mb-2"> Offerta Speciale</h3>
-                <p class="text-white/90">Ottieni il 15% di sconto sui manga completi con il codice: <span class="font-bold">NeKo_15_PoP_ShoP</span></p>
-                <a href="cart.jsp?discount=NeKo_15_PoP_ShoP">
-                    <button class="mt-4 bg-white text-nekopeach px-6 py-2 rounded-full font-bold hover:bg-pink-50 transition">
-                        <i class="fas fa-tag mr-2"></i> Usa Codice
-                    </button>
-                </a>
+                <p class="text-white/90">Ottieni il 15% di sconto sui manga completi con il codice: <span id="code" class="font-bold">NeKo_15_PoP_ShoP</span></p>
+                <button id="code_Button" class="mt-4 bg-white text-nekopeach px-6 py-2 rounded-full font-bold hover:bg-pink-50 transition">
+                    <i class="fas fa-tag mr-2"></i> Usa Codice
+                </button>
             </div>
         </div>
     </div>
@@ -720,68 +484,5 @@
         </div>
     </div>
 </footer>
-
-<script>
-    // Funzione per impostare il filtro e inviare il form
-    function setFilter(filter) {
-        document.getElementById('filterInput').value = filter;
-        document.getElementById('pageInput').value = 0;
-        document.getElementById('searchForm').submit();
-
-        // Update active state for filter buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        event.target.classList.add('active');
-    }
-
-    // Generate floating cherry blossoms and cat decorations
-    function generateDecorations() {
-        const decorationsContainer = document.getElementById('decorations');
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-
-        // Generate cherry blossom decorations
-        for (let i = 0; i < 25; i++) {
-            const blossom = document.createElement('div');
-            blossom.className = 'cherry-blossom';
-            blossom.style.left = `${Math.random() * viewportWidth}px`;
-            blossom.style.animationDelay = `${Math.random() * 15}s`;
-            blossom.style.opacity = `0.${Math.floor(2 + Math.random() * 7)}`;
-            blossom.style.transform = `scale(${0.5 + Math.random()})`;
-            decorationsContainer.appendChild(blossom);
-        }
-    }
-
-    // Initialize when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        generateDecorations();
-
-        // Filter button active state
-        document.querySelectorAll('.folder-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.folder-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // Alphabet navigation active state
-        document.querySelectorAll('.alphabet-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.alphabet-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // Search form submission
-        document.querySelector('.search-bar').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('pageInput').value = 0;
-                document.getElementById('searchForm').submit();
-            }
-        });
-    });
-</script>
 </body>
 </html>

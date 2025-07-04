@@ -1,3 +1,21 @@
+function mostraErrore(msg) {
+    const erroreBox = document.getElementById("messaggioErrore");
+    erroreBox.textContent = msg;
+    erroreBox.classList.remove("hidden");
+
+    erroreBox.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    setTimeout(() => {
+        erroreBox.classList.add("hidden");
+    }, 5000);
+}
+
+function getCookie(name) {
+    const value = document.cookie.split("; ")
+        .find(row => row.startsWith(name + "="));
+    return value ? value.split("=")[1] : null;
+}
+
 function creaNavbar() {
     const navbar = document.getElementById("navbar");
     if (!navbar) {
@@ -5,7 +23,7 @@ function creaNavbar() {
         return;
     }
 
-    const access = localStorage.getItem("access") || "guest"; // Default: guest
+    const access = getCookie("access") || "guest"; // Default: guest
     console.log("[DEBUG] Stato accesso:", access);
 
     let html = `
@@ -43,14 +61,15 @@ window.addEventListener("storage", creaNavbar); // Se cambi login da un'altra sc
 
 // Funzione per il logout
 function logout() {
-    localStorage.removeItem("access");
-    localStorage.removeItem("role");
-    window.location.href = "index.jsp"; // Ricarica la pagina
-}
-
-// Funzione da chiamare dopo un login riuscito (usala in login.jsp)
-function loginSuccess(accessLevel) {
-    localStorage.setItem("access", accessLevel);
-    creaNavbar(); // Aggiorna subito la navbar
-    window.location.href = "index.jsp"; // Ricarica
+    const contextPath = '${pageContext.request.contextPath}';
+    fetch(`/nekopopshop/common/logout`, { method: 'POST' })
+        .then(res => res.json())
+        .then(data =>{
+            if(data.error !== undefined){
+                mostraErrore("logout inlegale")
+            } else {
+                document.cookie = "access=; path=/; max-age=0";
+                window.location.href = "index.jsp";
+            }
+        })
 }

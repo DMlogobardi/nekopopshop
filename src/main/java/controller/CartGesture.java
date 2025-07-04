@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -198,23 +199,23 @@ public class CartGesture extends HttpServlet {
                     response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
-                double lastTot = sCart.getCarelloRefernz().getTot();
                 if (dto.getIdProdotto() != null && dto.getIdProdotto() != 0) {
                     double finalDbprice = dbprice;
                     sCart.getContenuti().stream().filter(conte -> conte.getIdProdotto() == dto.getIdProdotto()).findFirst().ifPresent(conte -> {
-                        sCart.getCarelloRefernz().setTot(lastTot - (finalDbprice * conte.getqCarrello()));
+                        Double tot = sCart.getCarelloRefernz().getTot();
+                        tot = tot - (conte.getqCarrello() * finalDbprice);
                         conte.setqCarrello(dto.getqCarrello());
-                        Double tempTot = sCart.getCarelloRefernz().getTot();
-                        sCart.getCarelloRefernz().setTot( + (tempTot * dto.getqCarrello()));
+                        Double newToto = tot + (dto.getqCarrello() * finalDbprice);
+                        sCart.setCarrelloRefernzTot(Math.round(newToto * 100.0) / 100.0);
                     });
                 } else {
                     double finalDbprice = dbprice;
                     sCart.getContenuti().stream().filter(conte -> conte.getIdVolume() == dto.getIdVolume()).findFirst().ifPresent(conte -> {
-                        sCart.getCarelloRefernz().setTot(lastTot - (finalDbprice * conte.getqCarrello()));
+                        Double tot = sCart.getCarelloRefernz().getTot();
+                        tot = tot - (conte.getqCarrello() * finalDbprice);
                         conte.setqCarrello(dto.getqCarrello());
-                        Double tempTot = sCart.getCarelloRefernz().getTot();
-                        sCart.getCarelloRefernz().setTot( + (tempTot * dto.getqCarrello()));
-
+                        Double newToto = tot + (dto.getqCarrello() * finalDbprice);
+                        sCart.setCarrelloRefernzTot(Math.round(newToto * 100.0) / 100.0);
                     });
                 }
             }
@@ -231,6 +232,7 @@ public class CartGesture extends HttpServlet {
             String jsonRemove = request.getParameter("json");
             JsonConverter<ContenutoDTO> converter = JsonConverter.factory(ContenutoDTO.class, null);
             Collection<ContenutoDTO> removeDTO = null;
+            System.out.println(jsonRemove);
 
             try {
                 removeDTO  = (Collection<ContenutoDTO>) converter.parseList(jsonRemove);
@@ -252,13 +254,11 @@ public class CartGesture extends HttpServlet {
                 ProdottoDAO prodottoSQL = new ProdottoDAO(ds);
                 VolumeDAO volumeSQL = new VolumeDAO(ds);
                 double tot = 0.0;
-                Boolean prodFlag = false;
                 try {
                     if (dto.getIdProdotto() != null && dto.getIdProdotto() != 0) {
-                        prodFlag = true;
-                        tot += prodottoSQL.doRetrievePrezzoByKey(dto.getIdProdotto())*dto.getqCarrello();
+                        tot += prodottoSQL.doRetrievePrezzoByKey(dto.getIdProdotto());
                     } else {
-                        tot += volumeSQL.doRetrievePrezzoByKey(dto.getIdVolume())*dto.getqCarrello();
+                        tot += volumeSQL.doRetrievePrezzoByKey(dto.getIdVolume());
                     }
                 } catch (SQLException e) {
                     System.out.println("error delete: " + e.getMessage());
@@ -268,14 +268,25 @@ public class CartGesture extends HttpServlet {
                     return;
                 }
 
-                double totRef = sCart.getCarelloRefernz().getTot();
-                sCart.getCarelloRefernz().setTot(totRef - tot);
-                if(prodFlag) {
-                    sCart.removeProdByProd(dto.getIdProdotto());
+                if (dto.getIdProdotto() != null && dto.getIdProdotto() != 0) {
+                    double finalTot = tot;
+                    sCart.getContenuti().stream().filter(conte -> Objects.equals(conte.getIdProdotto(), dto.getIdProdotto())).findFirst().ifPresent(conte -> {
+                        double totRef = sCart.getCarelloRefernz().getTot();
+                        double newTot = totRef - (finalTot*conte.getqCarrello());
+                        sCart.setCarrelloRefernzTot(Math.round(newTot * 100.0) / 100.0);
+                        sCart.removeProdByProd(dto.getIdProdotto());
+                    });
                 } else {
-                    sCart.removeProdByVol(dto.getIdVolume());
+                    double finalTot = tot;
+                    sCart.getContenuti().stream().filter(conte -> conte.getIdVolume() == dto.getIdVolume()).findFirst().ifPresent(conte -> {
+                        double totRef = sCart.getCarelloRefernz().getTot();
+                        double newTot = totRef - (finalTot*conte.getqCarrello());
+                        sCart.setCarrelloRefernzTot(Math.round(newTot * 100.0) / 100.0);
+                        sCart.removeProdByVol(dto.getIdVolume());
+                    });
                 }
             }
+
 
             System.out.println("remove success");
             response.setStatus(200);

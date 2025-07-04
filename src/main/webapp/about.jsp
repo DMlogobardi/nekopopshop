@@ -260,8 +260,6 @@
             </div>
         </div>
 
-
-
         <!-- Navigation -->
         <jsp:include page="navBar.jsp" />
     </div>
@@ -402,7 +400,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- Team Member -->
-            <div class="team-card p-6 text-center relative">
+            <div id="Ilaria" class="team-card p-6 text-center relative cursor-pointer z-10">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekopink mb-4 overflow-hidden">
                     <img src="${pageContext.request.contextPath}/frontend/images/mia_icona_git.png"
                          alt="Marta Rossi"
@@ -428,7 +426,7 @@
             </div>
 
             <!-- Team Member -->
-            <div class="team-card p-6 text-center relative">
+            <div id="davide" class="team-card p-6 text-center relative cursor-pointer z-10">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekoorange mb-4 overflow-hidden">
                     <img src="${pageContext.request.contextPath}/frontend/images/davide_icona_git.jpg"
                          alt="Luigi Bianchi"
@@ -451,7 +449,7 @@
             </div>
 
             <!-- Team Member -->
-            <div class="team-card p-6 text-center relative">
+            <div id="alessia" class="team-card p-6 text-center relative cursor-pointer z-10">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekopeach mb-4 overflow-hidden">
                     <img src="${pageContext.request.contextPath}/frontend/images/alessiagit.png"
                          alt="Luigi Bianchi"
@@ -459,12 +457,15 @@
                 </div>
                 <h3 class="text-xl font-bold text-nekoorange mb-1">Alessia Palmigiano</h3>
                 <p class="text-nekopeach font-medium mb-3">Collaboratrice Shop</p>
-                <p class="text-gray-600 text-sm mb-4">Si assicura che il lavoro sia efficiente e che la manutenzione del sito sia attuata.</p>
+                <p class="text-gray-600 text-sm mb-4">Si assicura che il lavoro sia efficiente e che la manutenzione del
+                    sito sia attuata.</p>
                 <div class="flex justify-center space-x-3">
-                    <a href="#" class="w-8 h-8 rounded-full bg-nekoorange text-white flex items-center justify-center hover:bg-nekopurple transition">
+                    <a href="#"
+                       class="w-8 h-8 rounded-full bg-nekoorange text-white flex items-center justify-center hover:bg-nekopurple transition">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="#" class="w-8 h-8 rounded-full bg-nekoorange text-white flex items-center justify-center hover:bg-nekopurple transition">
+                    <a href="#"
+                       class="w-8 h-8 rounded-full bg-nekoorange text-white flex items-center justify-center hover:bg-nekopurple transition">
                         <i class="fab fa-instagram"></i>
                     </a>
                 </div>
@@ -473,7 +474,7 @@
                 </div>
 
 
-</div>
+            </div>
         </div>
 
     </div>

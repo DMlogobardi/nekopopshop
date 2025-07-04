@@ -13,26 +13,19 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
         })
         .then(data => {
             if (data.status === "success") {
-                // Salva il ruolo correttamente (uso solo "access")
-                const role = data.role || data.access || "user";
-                localStorage.setItem("access", role);
-
-                // Aggiorna subito la navbar (se rimani nella stessa pagina)
-                creaNavbar();
-
-                // Redirect in base al ruolo
-                const redirects = {
-                    "admin": "admin/index.jsp",
-                    "user": "user/index.jsp"
-                };
-
-                const redirectUrl = redirects[role];
-                if (redirectUrl) {
-                    window.location.href = redirectUrl;
-                } else {
-                    console.warn("Ruolo sconosciuto:", role);
-                    window.location.href = "index.jsp"; // fallback
-                }
+                setTimeout(() => {
+                    const redirects = {
+                        "admin": "admin/index.jsp",
+                        "user": "user/index.jsp"
+                    };
+                    const redirectUrl = redirects[role];
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    } else {
+                        console.warn("Ruolo sconosciuto:", role);
+                        window.location.href = "index.jsp";
+                    }
+                }, 100);
             } else {
                 alert(data.message || "Credenziali non valide");
             }

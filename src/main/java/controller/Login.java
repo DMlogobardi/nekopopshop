@@ -117,11 +117,16 @@ public class Login extends HttpServlet {
                     request.getSession().setAttribute("cart", sCart);
                 }
 
+                Cookie accessCookie = new Cookie("access", access);
+                accessCookie.setMaxAge(86400); // 1 giorno
+                accessCookie.setPath("/");
+                response.addCookie(accessCookie);
+
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 String success = "{\"satus\": \"success\", \"message\": \"login successful\", \"access\": " + access + "}";
                 response.getWriter().write(success);
-                System.out.println("login success");
+                System.out.println("login success: " + access);
                 response.sendRedirect("index.jsp");
                 return;
             }

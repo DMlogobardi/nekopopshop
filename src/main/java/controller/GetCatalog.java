@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +49,16 @@ public class GetCatalog extends HttpServlet {
 			int page = request.getParameter("page") == null ? 0 : Integer.parseInt(request.getParameter("page"));
 			String dayProduct = request.getParameter("dayProduct") == null ? "" : request.getParameter("dayProduct");
 			int limit = request.getParameter("limit") == null ? 10 : Integer.parseInt(request.getParameter("limit"));
+			String tot = request.getParameter("tot") == null ? "" : request.getParameter("tot");
+
+			if(tot.equals("tot")){
+				int totale = prodDB.doRetrieveTot();
+				System.out.println("totale: " + totale);
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write("{ \"totale\": " + totale + "}");
+				return;
+			}
 
 			if(dayProduct.equals("ok")) {
 				VolumeBean vol = volDB.doRetrieveByKey(1);
@@ -61,9 +72,18 @@ public class GetCatalog extends HttpServlet {
 			} else {
 				//logica di filtri
 				if (serch == null && filter == null) {
-
-					dbPrd = prodDB.doRetrieveAllLimit("idProdotto", limit, page);
-
+					List<ProdottoBean> tuttiProdotti = (List<ProdottoBean>) prodDB.doRetrieveAllLimit("idProdotto", limit * 2, page); // overfetch per sicurezza
+					dbPrd = new LinkedList<>();
+					for (ProdottoBean pb : tuttiProdotti) {
+						if (pb.getPrezzo() == 0.0) {
+							dbPrd.add(pb);
+							VolumeBean volume = volDB.doRetrieveByProduct(pb.getIdProdotto());
+							if (volume != null) dbVol.add(volume); // è un volume associato
+						} else {
+							dbPrd.add(pb); // action figure
+						}
+						if (dbPrd.size() + dbVol.size() >= limit) break; // abbiamo abbastanza elementi da mostrare
+					}
 				} else if (serch != null && filter == null) {
 
 					dbPrd = prodDB.doRetrieveAllLimitLike("nome", limit, page, serch.toLowerCase());

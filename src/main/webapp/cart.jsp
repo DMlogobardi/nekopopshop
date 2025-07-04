@@ -321,18 +321,16 @@
       </div>
 
       <!-- Pagination -->
-      <div id="pagination" class="w-full flex justify-center my-8">
-        <button class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+      <div class="w-full flex justify-center my-8 items-center gap-4">
+        <button id="prev-btn" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
           <i class="fas fa-arrow-left mr-2"></i> Precedente
         </button>
-        <div class="flex items-center gap-2">
-          <a href="#" class="w-10 h-10 bg-nekopeach text-white rounded-full flex items-center justify-center font-bold">1</a>
-          <a href="#" class="w-10 h-10 bg-white text-nekopeach rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">2</a>
-          <a href="#" class="w-10 h-10 bg-white text-nekopeach rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">3</a>
-          <span class="text-nekopeach">...</span>
-          <a href="#" class="w-10 h-10 bg-white text-nekopeach rounded-full flex items-center justify-center font-bold hover:bg-nekopink hover:text-white transition">10</a>
+
+        <div id="pagination" class="flex items-center gap-2">
+          <!-- Bottoni dinamici verranno generati qui -->
         </div>
-        <button class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+
+        <button id="next-btn" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
           Successivo <i class="fas fa-arrow-right ml-2"></i>
         </button>
       </div>

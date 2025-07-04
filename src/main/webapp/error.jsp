@@ -9,3 +9,7 @@
 <div id="messaggioErrore"
      class="hidden bg-nekopeach text-white font-bold px-4 py-2 rounded-xl shadow-lg max-w-md mx-auto mt-4 text-center transition-opacity duration-300 w-full flex justify-center my-8">
 </div>
+
+<div id="messaggioCortesia"
+     class="hidden bg-nekopeach text-white font-bold px-4 py-2 rounded-xl shadow-lg max-w-md mx-auto mt-4 text-center transition-opacity duration-300 w-full flex justify-center my-8">
+</div>
