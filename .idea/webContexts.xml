@@ -4,16 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/about.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/aggiungiprodotto.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/cart.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/gestioneprodotti.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/login.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/modificaprodotto.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/ordini.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/register.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/rimuoviprodotto.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/utente.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
       </map>
     </option>
   </component>
