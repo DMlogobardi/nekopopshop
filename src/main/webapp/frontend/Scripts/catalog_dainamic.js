@@ -21,17 +21,6 @@ function fetchTotProd(){
         })
 }
 
-function fetchTotProd(){
-    return fetch("getcatalog?tot=tot&productType=prod").then(res => res.json())
-        .then(data =>{
-            if (data.totale !== undefined) {
-                return parseInt(data.totale);
-            } else {
-                throw new Error("Totale non disponibile");
-            }
-        })
-}
-
 function fetchTotVol(){
     return fetch("getcatalog?tot=tot&productType=Vol").then(res => res.json())
         .then(data =>{
@@ -211,7 +200,7 @@ function setFilter(filter) {
 }
 
 function caricaVolumi(pag = 0) {
-    fetch(`getcatalog?page=${pag}&limit=6&productType=vol`)
+    fetch(`getcatalog?page=${pag}&limit=3&productType=vol`)
         .then(res => res.json())
         .then(data => {
             const prodotti = data.filter(item => item.idVolume === undefined);  // prodotti
@@ -261,7 +250,7 @@ function caricaVolumi(pag = 0) {
 }
 
 function caricaProdotti(pag = 0) {
-    fetch(`getcatalog?page=${pag}&limit=6&productType=prod`)
+    fetch(`getcatalog?page=${pag}&limit=3&productType=prod`)
         .then(res => res.json())
         .then(data => {
             const prodotti = data.filter(item => item.idVolume === undefined);  // prodotti

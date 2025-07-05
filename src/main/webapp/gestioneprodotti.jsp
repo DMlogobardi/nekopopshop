@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/gestioneprodotti.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="frontend/Scripts/gestioneprodotti_DInamic.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -37,106 +39,23 @@
     <div class="flex flex-col lg:flex-row items-center justify-between gap-6 mb-8">
         <!-- Logo -->
         <div class="flex items-center">
-            <div class="relative">
-                <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-nekoblue z-10 flex items-center justify-center animate-pulse">
-                    <i class="fas fa-user-shield text-white text-2xl"></i>
-                </div>
-                <div class="w-20 h-20 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center">
-                    <i class="fas fa-user-cog text-2xl text-nekopeach"></i>
-                </div>
-            </div>
-            <div class="ml-4">
-                <h1 class="text-3xl font-bold"><span class="nekotag">Admin Dashboard</span></h1>
-                <p class="text-xl text-nekopeach font-bold" style="font-size: 25px; background: linear-gradient(90deg, #e55458, #F29966); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Gestione Prodotti</p>
-            </div>
+
+
         </div>
 
         <!-- Navigation -->
-        <div class="w-full lg:w-auto">
-            <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
-                <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
-                <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-                <a href="gestioneutenti.jsp" class="folder-tab"><i class="fas fa-users mr-2"></i> Utenti</a>
-                <a href="ordini.jsp" class="folder-tab"><i class="fas fa-shopping-bag mr-2"></i> Ordini</a>
-                <a href="gestioneprodotti.jsp" class="folder-tab active"><i class="fas fa-boxes mr-2"></i> Prodotti</a>
-                <a href="impostazioniadmin.jsp" class="folder-tab"><i class="fas fa-cog mr-2"></i> Impostazioni</a>
-            </div>
-        </div>
+
     </div>
 
     <!-- Admin Content -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Left Sidebar - Admin Menu -->
         <div class="lg:col-span-1">
-            <div class="profile-card bg-white border-2 border-nekoblue">
-                <!-- Avatar Section -->
-                <div class="p-6 text-center">
-                    <div class="avatar-upload">
-                        <div class="avatar-preview">
-                            <div id="imagePreview" style="background-image: url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=400');">
-                            </div>
-                        </div>
-                        <div class="avatar-edit">
-                            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
-                            <label for="imageUpload"><i class="fas fa-camera"></i></label>
-                        </div>
-                    </div>
-
-                    <h3 class="text-2xl font-bold mt-4 text-gray-800">AdminNeko</h3>
-                    <p class="text-gray-600">Amministratore</p>
-
-                    <div class="mt-4 flex justify-center space-x-2">
-                        <span class="badge bg-blue-100 text-nekoblue">Super Admin</span>
-                    </div>
-                </div>
-
-                <!-- Stats -->
-                <div class="px-6 pb-6">
-                    <div class="grid grid-cols-3 gap-2 text-center">
-                        <div class="stats-card bg-blue-100/20 p-3 rounded-lg">
-                            <div class="text-nekoblue font-bold text-xl">1.2K</div>
-                            <div class="text-xs text-gray-600">Prodotti</div>
-                        </div>
-                        <div class="stats-card bg-green-100/20 p-3 rounded-lg">
-                            <div class="text-nekogreen font-bold text-xl">5.8K</div>
-                            <div class="text-xs text-gray-600">Ordini</div>
-                        </div>
-                        <div class="stats-card bg-purple-100/20 p-3 rounded-lg">
-                            <div class="text-nekopurple font-bold text-xl">3.2K</div>
-                            <div class="text-xs text-gray-600">Utenti</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Navigation -->
-                <div class="border-t border-gray-200">
-                    <button onclick="window.location.href='admin.jsp'"  class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="dashboard">
-                        <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
-                    </button>
-                    <button onclick="window.location.href='gestioneutenti.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="users">
-                        <i class="fas fa-users mr-3"></i> Gestione Utenti
-                    </button>
-                    <button onclick="window.location.href='ordini.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="orders">
-                        <i class="fas fa-shopping-bag mr-3"></i> Gestione Ordini
-                    </button>
-                    <button onclick="window.location.href='gestioneprodotti.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-nekoblue font-bold border-l-4 border-nekoblue" data-tab="products">
-                        <i class="fas fa-boxes mr-3"></i> Gestione Prodotti
-                    </button>
-
-                    <button onclick="window.location.href='impostazioniadmin.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="settings">
-                        <i class="fas fa-cog mr-3"></i> Impostazioni
-                    </button>
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekoblue transition" data-tab="logout">
-                        <i class="fas fa-sign-out-alt mr-3"></i> Esci
-                    </button>
-                </div>
-            </div>
-
             <!-- Quick Actions Card -->
             <div class="profile-card bg-white border-2 border-nekogreen mt-6">
                 <div class="bg-gradient-to-r from-nekogreen to-nekoblue p-4">
                     <h3 class="text-lg font-bold text-white flex items-center" style="font-size: 30px">
-                        <i class="fas fa-bolt mr-2" style="font-size: 30px"></i> Azioni Rapide
+                        <i class="fas fa-bolt mr-2" style="font-size: 30px"></i> Azioni
                     </h3>
                 </div>
                 <div class="p-4 space-y-3">
@@ -699,152 +618,5 @@
         </div>
     </div>
 </div>
-
-
-
-<!-- Footer -->
-<footer class="mt-16 bg-gradient-to-b from-nekoorange to-nekopeach text-white pt-12 pb-8">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <!-- Footer section -->
-            <div>
-                <div class="flex items-center mb-4">
-                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
-                        <i class="fas fa-paw text-nekopink text-2xl"></i>
-                    </div>
-                    <h4 class="font-bold text-xl ml-3 text-white">NekoPop Shop</h4>
-                </div>
-                <p class="text-pink-100">Il tuo negozio preferito per manga e action figure, fornito da appassionati per appassionati!</p>
-            </div>
-
-            <!-- Footer section -->
-            <div>
-                <h4 class="font-bold text-lg mb-4 text-white">Contatti</h4>
-                <p class="text-pink-100 flex items-center mb-3">
-                    <i class="fas fa-map-marker-alt mr-3"></i>
-                    <span>Via dei Manga, 123<br>Milano, Italia</span>
-                </p>
-                <p class="text-pink-100 flex items-center mb-3">
-                    <i class="fas fa-phone mr-3"></i> +39 02 1234567
-                </p>
-                <p class="text-pink-100 flex items-center">
-                    <i class="fas fa-envelope mr-3"></i> info@nekopopshop.com
-                </p>
-            </div>
-
-            <!-- Footer section -->
-            <div>
-                <h4 class="font-bold text-lg text-white mb-4">Link Utili</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
-                        <i class="fas fa-caret-right mr-2"></i> Assistenza Clienti
-                    </a></li>
-                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
-                        <i class="fas fa-caret-right mr-2"></i> FAQ
-                    </a></li>
-                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
-                        <i class="fas fa-caret-right mr-2"></i> Spedizioni
-                    </a></li>
-                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
-                        <i class="fas fa-caret-right mr-2"></i> Termini e Condizioni
-                    </a></li>
-                </ul>
-            </div>
-
-            <!-- Footer section -->
-            <div>
-
-                </div>
-
-                <div class="mt-4">
-                    <h5 class="font-bold mb-3">Seguici</h5>
-                    <div class="flex space-x-4">
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-discord"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="border-t border-pink-300/30 mt-8 pt-6 text-center text-pink-100">
-            <p>&copy; 2023 NekoPopShop. Tutti i diritti riservati.</p>
-            <div class="flex justify-center mt-4">
-                <div class="flex items-center gap-4">
-                    <i class="fab fa-cc-visa text-2xl"></i>
-                    <i class="fab fa-cc-mastercard text-2xl"></i>
-                    <i class="fab fa-cc-paypal text-2xl"></i>
-                    <i class="fab fa-cc-apple-pay text-2xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<script>
-    // Modal functionality
-    const addProductBtn = document.getElementById('addProductBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const cancelModalBtn = document.getElementById('cancelModalBtn');
-    const modal = document.getElementById('addProductModal');
-
-    addProductBtn.addEventListener('click', () => {
-        modal.classList.add('active');
-        modal.classList.remove('opacity-0', 'invisible');
-    });
-
-    const closeModal = () => {
-        modal.classList.remove('active');
-        modal.classList.add('opacity-0', 'invisible');
-    };
-
-    closeModalBtn.addEventListener('click', closeModal);
-    cancelModalBtn.addEventListener('click', closeModal);
-
-    // Close modal when clicking outside
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
-
-    // Generate cherry blossoms
-    function createCherryBlossoms() {
-        const decorations = document.getElementById('decorations');
-        for (let i = 0; i < 15; i++) {
-            const blossom = document.createElement('div');
-            blossom.className = 'cherry-blossom';
-
-            // Random position
-            const left = Math.random() * 100;
-            blossom.style.left = `${left}vw`;
-
-            // Random delay
-            const delay = Math.random() * 15;
-            blossom.style.animationDelay = `${delay}s`;
-
-            // Random size
-            const size = 15 + Math.random() * 15;
-            blossom.style.width = `${size}px`;
-            blossom.style.height = `${size}px`;
-
-            decorations.appendChild(blossom);
-        }
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-        createCherryBlossoms();
-    });
-</script>
 </body>
 </html>
