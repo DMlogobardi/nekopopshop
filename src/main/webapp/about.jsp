@@ -54,6 +54,7 @@
         <jsp:include page="navBar.jsp" />
     </div>
 
+    <jsp:include page="error.jsp" />
     <!-- Hero Section -->
     <div class="bg-gradient-to-r from-nekoorange to-nekopeach rounded-2xl p-8 md:p-12 mb-12 relative overflow-hidden">
         <div class="absolute top-0 left-0 right-0 bottom-0 opacity-10">

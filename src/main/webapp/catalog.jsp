@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="frontend/Scripts/catalog_dainamic.js" defer></script>
+    <script src="frontend/Scripts/catalogFilter.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -77,8 +78,8 @@
     <div class="bg-white rounded-2xl border-2 border-nekopink p-6 mb-8">
         <!-- Search Section -->
         <div class="search-section mb-6 relative">
-            <form id="searchForm" method="GET" action="getcatalog" class="relative">
-                <input type="text"
+            <form id="searchForm" class="relative" onsubmit="handleSearch(event)">
+                <input id="search" type="text"
                        class="w-full p-4 pl-12 pr-6 rounded-full border-2 border-nekopink focus:border-nekopeach focus:outline-none"
                        name="serch"
                        placeholder="Cerca nel catalogo...">
@@ -87,19 +88,18 @@
                 <input type="hidden" name="page" id="pageInput" value="0">
             </form>
         </div>
-
         <!-- Filter Section -->
         <div class="filter-section flex flex-wrap gap-2 mb-6">
-            <button class="filter-btn active" onclick="setFilter('delete')">
+            <button class="filter-btn active" onclick="loadALL()">
                 <i class="fas fa-layer-group mr-2"></i> Tutti
             </button>
-            <button class="filter-btn" onclick="setFilter('nome')">
+            <button class="filter-btn" onclick="filter('nome')">
                 <i class="fas fa-sort-alpha-down mr-2"></i> Per Nome
             </button>
-            <button class="filter-btn" onclick="setFilter('autore')">
+            <button class="filter-btn" onclick="filter('autore')">
                 <i class="fa fa-pencil mr-2"></i> Per Autore
             </button>
-            <button class="filter-btn" onclick="setFilter('anno')">
+            <button class="filter-btn" onclick="filter('dataPubl')">
                 <i class="far fa-calendar-alt mr-2"></i> Per Anno
             </button>
 
@@ -107,33 +107,33 @@
 
         <!-- Alphabet Navigation -->
         <div class="alphabet-nav flex flex-wrap gap-2">
-            <a href="#" class="alphabet-link active">Tutti</a>
-            <a href="#" class="alphabet-link">A</a>
-            <a href="#" class="alphabet-link">B</a>
-            <a href="#" class="alphabet-link">C</a>
-            <a href="#" class="alphabet-link">D</a>
-            <a href="#" class="alphabet-link">E</a>
-            <a href="#" class="alphabet-link">F</a>
-            <a href="#" class="alphabet-link">G</a>
-            <a href="#" class="alphabet-link">H</a>
-            <a href="#" class="alphabet-link">I</a>
-            <a href="#" class="alphabet-link">J</a>
-            <a href="#" class="alphabet-link">K</a>
-            <a href="#" class="alphabet-link">L</a>
-            <a href="#" class="alphabet-link">M</a>
-            <a href="#" class="alphabet-link">N</a>
-            <a href="#" class="alphabet-link">O</a>
-            <a href="#" class="alphabet-link">P</a>
-            <a href="#" class="alphabet-link">Q</a>
-            <a href="#" class="alphabet-link">R</a>
-            <a href="#" class="alphabet-link">S</a>
-            <a href="#" class="alphabet-link">T</a>
-            <a href="#" class="alphabet-link">U</a>
-            <a href="#" class="alphabet-link">V</a>
-            <a href="#" class="alphabet-link">W</a>
-            <a href="#" class="alphabet-link">X</a>
-            <a href="#" class="alphabet-link">Y</a>
-            <a href="#" class="alphabet-link">Z</a>
+            <a onclick="loadALL()" href="#" class="alphabet-link active">Tutti</a>
+            <a onclick="serch('A')" href="#" class="alphabet-link">A</a>
+            <a onclick="serch('B')" href="#" class="alphabet-link">B</a>
+            <a onclick="serch('C')" href="#" class="alphabet-link">C</a>
+            <a onclick="serch('D')" href="#" class="alphabet-link">D</a>
+            <a onclick="serch('E')" href="#" class="alphabet-link">E</a>
+            <a onclick="serch('F')" href="#" class="alphabet-link">F</a>
+            <a onclick="serch('G')" href="#" class="alphabet-link">G</a>
+            <a onclick="serch('H')" href="#" class="alphabet-link">H</a>
+            <a onclick="serch('I')" href="#" class="alphabet-link">I</a>
+            <a onclick="serch('J')" href="#" class="alphabet-link">J</a>
+            <a onclick="serch('K')" href="#" class="alphabet-link">K</a>
+            <a onclick="serch('L')" href="#" class="alphabet-link">L</a>
+            <a onclick="serch('M')" href="#" class="alphabet-link">M</a>
+            <a onclick="serch('N')" href="#" class="alphabet-link">N</a>
+            <a onclick="serch('O')" href="#" class="alphabet-link">O</a>
+            <a onclick="serch('P')" href="#" class="alphabet-link">P</a>
+            <a onclick="serch('Q')" href="#" class="alphabet-link">Q</a>
+            <a onclick="serch('R')" href="#" class="alphabet-link">R</a>
+            <a onclick="serch('S')" href="#" class="alphabet-link">S</a>
+            <a onclick="serch('T')" href="#" class="alphabet-link">T</a>
+            <a onclick="serch('U')" href="#" class="alphabet-link">U</a>
+            <a onclick="serch('V')" href="#" class="alphabet-link">V</a>
+            <a onclick="serch('W')" href="#" class="alphabet-link">W</a>
+            <a onclick="serch('X')" href="#" class="alphabet-link">X</a>
+            <a onclick="serch('Y')" href="#" class="alphabet-link">Y</a>
+            <a onclick="serch('Z')" href="#" class="alphabet-link">Z</a>
         </div>
     </div>
 

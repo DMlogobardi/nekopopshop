@@ -47,6 +47,7 @@ public class GetCatalog extends HttpServlet {
 			System.out.println("serch: " + serch);
 			String filter = request.getParameter("filter");
 			int page = request.getParameter("page") == null ? 0 : Integer.parseInt(request.getParameter("page"));
+			int id = request.getParameter("id") == null ? 0 : Integer.parseInt(request.getParameter("id"));
 			String dayProduct = request.getParameter("dayProduct") == null ? "" : request.getParameter("dayProduct");
 			int limit = request.getParameter("limit") == null ? 10 : Integer.parseInt(request.getParameter("limit"));
 			String tot = request.getParameter("tot") == null ? "" : request.getParameter("tot");
@@ -55,14 +56,32 @@ public class GetCatalog extends HttpServlet {
 			if(tot.equals("tot")){
 				if(productType.equals("prod")) {
 					int totale = prodDB.doRetrieveTot();
-					System.out.println("totale: " + totale);
+					System.out.println("totale 1: " + totale);
 					response.setContentType("text/json");
 					response.setCharacterEncoding("UTF-8");
 					response.getWriter().write("{ \"totale\": " + totale + "}");
 					return;
 				} else {
 					int totale = volDB.doRetrieveTot();
-					System.out.println("totale: " + totale);
+					System.out.println("totale 2: " + totale);
+					response.setContentType("text/json");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write("{ \"totale\": " + totale + "}");
+					return;
+				}
+			} else if (tot.equals("serch")){
+				if(productType.equals("prod")) {
+					System.out.println("serch");
+					int totale = prodDB.doRetrieveAllLimitLikeTot(serch.strip());
+					System.out.println("totale serch: " + totale);
+					response.setContentType("text/json");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write("{ \"totale\": " + totale + "}");
+					return;
+				} else {
+					System.out.println("serch");
+					int totale = volDB.doRetrieveAllLimitTot(serch.strip());
+					System.out.println("totale serch: " + totale);
 					response.setContentType("text/json");
 					response.setCharacterEncoding("UTF-8");
 					response.getWriter().write("{ \"totale\": " + totale + "}");
@@ -70,7 +89,14 @@ public class GetCatalog extends HttpServlet {
 				}
 			}
 
-			if(dayProduct.equals("ok")) {
+			if(id > 0){
+				if(productType.equals("prod")) {
+					dbPrd = new LinkedList<ProdottoBean>();
+					dbPrd.add(prodDB.doRetrieveByKey(id));
+				} else {
+					dbVol.add(volDB.doRetrieveByKey(id));
+				}
+			} else if (dayProduct.equals("ok")) {
 				if(productType.equals("vol")) {
 					VolumeBean vol = volDB.doRetrieveByKey(1);
 					dbPrd = new LinkedList<>();
@@ -92,14 +118,19 @@ public class GetCatalog extends HttpServlet {
 						dbVol = volDB.doRetrieveAllLimit(null, limit, page);
 					}
 				} else if (serch != null && filter == null) {
-
-					dbPrd = prodDB.doRetrieveAllLimitLike(null, limit, page, serch.strip());
-					dbVol = volDB.doRetrieveAllLimit(null, limit, page, serch.strip());
-
+					if(productType.equals("prod")) {
+						dbPrd = prodDB.doRetrieveAllLimitLike(null, limit, page, serch.strip());
+					} else {
+						dbVol = volDB.doRetrieveAllLimit(null, limit, page, serch.strip());
+					}
 				} else if (serch == null) {
 					if (productType.equals("vol")) {
-						String categoria = request.getParameter("categoria") == null ? "shonen" : request.getParameter("categoria");
-						dbVol = volDB.doRetrieveAllLimitByType(filter, limit, page, categoria);
+						String categoria = request.getParameter("categoria") == null ? "" : request.getParameter("categoria");
+						if(categoria.equals("")){
+							dbVol = volDB.doRetrieveAllLimit(filter, limit, page);
+						} else {
+							dbVol = volDB.doRetrieveAllLimitByType(filter, limit, page, categoria);
+						}
 					} else {
 						dbPrd = prodDB.doRetrieveAllLimit(filter.strip(), limit, page);
 					}

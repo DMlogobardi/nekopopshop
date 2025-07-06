@@ -222,29 +222,36 @@ function caricaVolumi(pag = 0) {
 // Funzione per creare DOM card volume
     function creaCardVolume(vol, prod) {
         const div = document.createElement("div");
-        div.className = "product-card";
+        div.className = "product-card cursor-pointer";
 
         const imgSrc = vol.imgVol ? `data:image/jpeg;base64,${vol.imgVol}` : "default-image.jpg";
 
         div.innerHTML = `
-    <div class="relative h-64 overflow-hidden">
-      <img src="${imgSrc}" alt="${prod.nome} ${vol.numVolumi}" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
-    </div>
-    <div class="p-4">
-      <h3 class="font-bold text-gray-800">${prod.nome} ${vol.numVolumi}</h3>
-      <p class="text-gray-600 text-lg mt-2">${prod.descrizione}</p>
-      <div class="mt-4 flex justify-between items-center">
-        <span class="text-nekopeach font-bold">&#8364; ${vol.prezzo.toFixed(2)}</span>
-        <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition" 
-                onclick="addToCart(${vol.idVolume}, 'volume')">
-          <i class="fas fa-cart-plus mr-1"></i> Aggiungi al carrello
-        </button>
-      </div>
-      <div class="mt-2 flex items-center text-xs">
-        <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">${vol.tag}</span>
-      </div>
-    </div>
-  `;
+            <div class="relative h-64 overflow-hidden">
+              <img src="${imgSrc}" alt="${prod.nome} ${vol.numVolumi}" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+            </div>
+            <div class="p-4">
+              <h3 class="font-bold text-gray-800">${prod.nome} ${vol.numVolumi}</h3>
+              <p class="text-gray-600 text-lg mt-2">${prod.descrizione}</p>
+              <div class="mt-4 flex justify-between items-center">
+                <span class="text-nekopeach font-bold">&#8364; ${vol.prezzo.toFixed(2)}</span>
+                <button class="bg-nekopink hover:bg-nekopeach text-white px-4 py-2 rounded-md transition" 
+                        onclick="addToCart(${vol.idVolume}, 'volume')">
+                  <i class="fas fa-cart-plus mr-1"></i> Aggiungi al carrello
+                </button>
+              </div>
+              <div class="mt-2 flex items-center text-xs">
+                <span class="bg-nekopink text-white px-2 py-1 rounded-md mr-2">${vol.tag}</span>
+              </div>
+            </div>
+          `;
+
+        div.addEventListener("click", (e) => {
+            if (e.target.closest("button[data-no-propagation]")) return;
+
+            window.location.href = `specificheprodotto.jsp?id=${vol.idVolume}&type=vol`;
+        });
+
         return div;
     }
 }
@@ -269,7 +276,7 @@ function caricaProdotti(pag = 0) {
 // Funzione per creare DOM card prodotto (action figure)
     function creaCardProdotto(prod) {
         const div = document.createElement("div");
-        div.className = "product-card";
+        div.className = "product-card cursor-pointer";
 
         const imgSrc = prod.imgProd ? `data:image/jpeg;base64,${prod.imgProd}` : "default-image.jpg";
 
@@ -292,6 +299,13 @@ function caricaProdotti(pag = 0) {
       </div>
     </div>
   `;
+
+        div.addEventListener("click", (e) => {
+            if (e.target.closest("button[data-no-propagation]")) return;
+
+            window.location.href = `specificheprodotto.jsp?id=${prod.idProdotto}&type=prod`;
+        });
+
         return div;
     }
 }
@@ -339,6 +353,21 @@ function addToCart(id, tipo ,quantita = 1) {
         });
 }
 
+function loadALL(){
+    caricaVolumi();
+    caricaProdotti();
+
+    fetchTotProd().then(total => {
+        const prodottiPerPagina = 3;
+        aggiornaPaginazioneProd(total, 1, prodottiPerPagina, caricaProdotti);
+    });
+
+    fetchTotVol().then(total => {
+        const prodottiPerPagina = 3;
+        aggiornaPaginazioneVol(total, 1, prodottiPerPagina, caricaVolumi);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     generateDecorations();
     caricaVolumi();
@@ -361,22 +390,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Search form submission
-    /*document.querySelector('.search-bar').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            document.getElementById('pageInput').value = 0;
-            document.getElementById('searchForm').submit();
-        }
-    });*/
-
     fetchTotProd().then(total => {
-        const prodottiPerPagina = 6;
+        const prodottiPerPagina = 3;
         aggiornaPaginazioneProd(total, 1, prodottiPerPagina, caricaProdotti);
     });
 
     fetchTotVol().then(total => {
-        const prodottiPerPagina = 6;
-        aggiornaPaginazioneVol(total, 1, prodottiPerPagina, caricaProdotti);
+        const prodottiPerPagina = 3;
+        aggiornaPaginazioneVol(total, 1, prodottiPerPagina, caricaVolumi);
     });
 
     document.getElementById("code_Button").addEventListener("click", function () {
@@ -386,5 +407,15 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener("click", function () {
             window.location.href = "cart.jsp?codice=" + encodeURIComponent(codice);
         })
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            // Rimuove "active" da tutti
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+
+            // Aggiunge "active" solo a quello cliccato
+            this.classList.add('active');
+        });
     });
 });

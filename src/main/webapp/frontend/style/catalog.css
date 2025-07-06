@@ -4,8 +4,8 @@
 }
 @font-face {
     font-family: 'Milkyway';
-    src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
-    url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+    src: url('../fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+    url('../fonts/Milkyway_DEMO.ttf') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;

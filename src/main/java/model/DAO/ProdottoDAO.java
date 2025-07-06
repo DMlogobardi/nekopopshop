@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ProdottoDAO implements GenralDAO<ProdottoBean>{
+public class ProdottoDAO implements GenralDAO<ProdottoBean> {
     private static final String TABLE_NAME = "prodotto";
     private DataSource ds = null;
     private List<String> orderWhiteList = List.of("idProdotto", "nome", "quantità", "prezzo", "autore", "descrizione");
@@ -25,29 +25,29 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = "INSERT INTO " + TABLE_NAME + "(nome, quantità, prezzo, autore, imgProd, descrizione)" +" VALUES (?,?,?,?,?,?)";
+        String insertSQL = "INSERT INTO " + TABLE_NAME + "(nome, quantità, prezzo, autore, imgProd, descrizione)" + " VALUES (?,?,?,?,?,?)";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getNome());
-            if(bean.getQuantita() != null) {
+            if (bean.getQuantita() != null) {
                 ps.setInt(2, bean.getQuantita());
             } else {
                 ps.setNull(2, Types.INTEGER);
             }
-            if(bean.getPrezzo() != null) {
+            if (bean.getPrezzo() != null) {
                 ps.setDouble(3, bean.getPrezzo());
             } else {
                 ps.setNull(3, Types.DOUBLE);
             }
-            ps.setString(4,bean.getAutore());
-            if(bean.getImgProd() != null) {
-                ps.setBytes(5,bean.getImgProd());
+            ps.setString(4, bean.getAutore());
+            if (bean.getImgProd() != null) {
+                ps.setBytes(5, bean.getImgProd());
             } else {
                 ps.setNull(5, Types.BLOB);
             }
-            ps.setString(6,bean.getDescrizione());
+            ps.setString(6, bean.getDescrizione());
 
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -71,10 +71,10 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
 
         String deleteSQL = "DELETE FROM " + TABLE_NAME + " WHERE idProdotto = ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(deleteSQL);
-            ps.setInt(1,code);
+            ps.setInt(1, code);
 
             result = ps.executeUpdate();
         } finally {
@@ -84,7 +84,7 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
                 if (con != null) con.close();
             }
         }
-        return(result != 0);
+        return (result != 0);
     }
 
     @Override
@@ -95,13 +95,13 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
 
         String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idProdotto = ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
-            ps.setInt(1,code);
+            ps.setInt(1, code);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 prod = new ProdottoBean(
                         rs.getInt("idProdotto"),
                         rs.getString("nome"),
@@ -130,12 +130,12 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
 
         String selectSQL = "SELECT COUNT(*) FROM " + TABLE_NAME;
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 result = rs.getInt("COUNT(*)");
             }
         } finally {
@@ -155,12 +155,12 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
 
         String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE prezzo IS NOT NULL AND prezzo > 0.0 limit 1";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 prod = new ProdottoBean(
                         rs.getInt("idProdotto"),
                         rs.getString("nome"),
@@ -188,13 +188,13 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
 
         String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idVolum = ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
-            ps.setInt(1,code);
+            ps.setInt(1, code);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 prod = new ProdottoBean(
                         rs.getInt("idProdotto"),
                         rs.getString("nome"),
@@ -249,15 +249,15 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " ORDER BY ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
-            if(order != null && orderWhiteList.contains(order.strip())){
+            if (order != null && orderWhiteList.contains(order.strip())) {
                 ps.setString(1, order.strip());
             }
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean(
                         rs.getInt("idProdotto"),
                         rs.getString("nome"),
@@ -283,35 +283,30 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
     public Collection<ProdottoBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<ProdottoBean> prodotti = new LinkedList<ProdottoBean>();
+        Collection<ProdottoBean> prodotti = new LinkedList<>();
 
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " where prezzo is not null or prezzo > 0 ORDER BY ? limit ? offset ?" ;
+        String orderByColumn = "idProdotto";
+        if (order != null && orderWhiteList.contains(order.strip())) {
+            orderByColumn = order.strip();
+        }
 
-        try{
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME +
+                " WHERE prezzo IS NOT NULL AND prezzo > 0 " +
+                "ORDER BY " + orderByColumn + " LIMIT ? OFFSET ?";
+
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
-            if(order != null && orderWhiteList.contains(order.strip())){
-                ps.setString(1, order.strip());
-            } else {
-                ps.setString(1, "idProdotto");
-            }
-            if (limit > 0 && page > 0) {
-                ps.setInt(2, limit);
-                ps.setInt(3, (page - 1) * limit);
-            } else if (page > 0 && limit <= 0) {
-                ps.setInt(2, 10);
-                ps.setInt(3, (page - 1) * limit);
-            } else if (limit > 0 && page <= 0) {
-                ps.setInt(2, limit);
-                ps.setInt(3, 0);
-            } else {
-                ps.setInt(2, 10);
-                ps.setInt(3, 0);
-            }
 
+            // Gestione paginazione
+            int safeLimit = limit > 0 ? limit : 10;
+            int safeOffset = page > 0 ? (page - 1) * safeLimit : 0;
+
+            ps.setInt(1, safeLimit);
+            ps.setInt(2, safeOffset);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean(
                         rs.getInt("idProdotto"),
                         rs.getString("nome"),
@@ -330,48 +325,48 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
                 if (con != null) con.close();
             }
         }
+
         return prodotti;
     }
 
     public Collection<ProdottoBean> doRetrieveAllLimitLike(String order, int limit, int page, String serch) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<ProdottoBean> prodotti = new LinkedList<ProdottoBean>();
+        Collection<ProdottoBean> prodotti = new LinkedList<>();
 
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if (!serch.isEmpty()) {
-            selectAllSQL += " WHERE prezzo is not null or prezzo > 0 LOWER(nome) LIKE ?  ORDER BY ? ";
+        StringBuilder query = new StringBuilder("SELECT * FROM " + TABLE_NAME + " WHERE prezzo IS NOT NULL AND prezzo > 0");
+
+        boolean hasSearch = serch != null && !serch.isEmpty();
+        if (hasSearch) {
+            query.append(" AND LOWER(nome) LIKE ?");
         }
-        selectAllSQL += " LIMIT ? OFFSET ?";
 
+        // Sanitize order
+        String safeOrder = "idProdotto"; // default
+        if (order != null && orderWhiteList.contains(order.strip())) {
+            safeOrder = order.strip();
+        }
+        query.append(" ORDER BY ").append(safeOrder);
+        query.append(" LIMIT ? OFFSET ?");
 
-        try{
+        try {
             con = ds.getConnection();
-            ps = con.prepareStatement(selectAllSQL);
+            ps = con.prepareStatement(query.toString());
 
-            ps.setString(1, "%" + serch.toLowerCase() + "%");
+            int paramIndex = 1;
 
-            if (order != null && orderWhiteList.contains(order.strip())) {
-                ps.setString(2, order.strip());
-            } else {
-                ps.setString(2, "idProdotto");
+            if (hasSearch) {
+                ps.setString(paramIndex++, "%" + serch.toLowerCase() + "%");
             }
-            if (limit > 0 && page > 0) {
-                ps.setInt(3, limit);
-                ps.setInt(4, (page - 1) * limit);
-            } else if (page > 0 && limit <= 0) {
-                ps.setInt(3, 10);
-                ps.setInt(4, (page - 1) * limit);
-            } else if (limit > 0 && page <= 0) {
-                ps.setInt(3, limit);
-                ps.setInt(4, 0);
-            } else {
-                ps.setInt(3, 10);
-                ps.setInt(4, 0);
-            }
+
+            int safeLimit = limit > 0 ? limit : 10;
+            int offset = page > 0 ? (page - 1) * safeLimit : 0;
+
+            ps.setInt(paramIndex++, safeLimit);
+            ps.setInt(paramIndex, offset);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean(
                         rs.getInt("idProdotto"),
                         rs.getString("nome"),
@@ -384,43 +379,42 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
                 prodotti.add(prod);
             }
         } finally {
-            try {
-                if (ps != null) ps.close();
-            } finally {
-                if (con != null) con.close();
-            }
+            if (ps != null) ps.close();
+            if (con != null) con.close();
         }
+
         return prodotti;
     }
 
-    public boolean uppdate (ProdottoBean bean) throws SQLException {
+
+    public boolean uppdate(ProdottoBean bean) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
         int result = 0;
 
         String updateSQL = "update " + TABLE_NAME + " set nome = ?, quantità = ?, prezzo = ?, autore = ?, imgProd = ?, descrizione = ? where idProdotto = ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(updateSQL);
             ps.setString(1, bean.getNome());
-            if(bean.getQuantita() != null) {
+            if (bean.getQuantita() != null) {
                 ps.setInt(2, bean.getQuantita());
             } else {
                 ps.setNull(2, Types.INTEGER);
             }
-            if(bean.getPrezzo() != null) {
+            if (bean.getPrezzo() != null) {
                 ps.setDouble(3, bean.getPrezzo());
             } else {
                 ps.setNull(3, Types.DOUBLE);
             }
-            ps.setString(4,bean.getAutore());
-            if(bean.getImgProd() != null) {
-                ps.setBytes(5,bean.getImgProd());
+            ps.setString(4, bean.getAutore());
+            if (bean.getImgProd() != null) {
+                ps.setBytes(5, bean.getImgProd());
             } else {
                 ps.setNull(5, Types.BLOB);
             }
-            ps.setString(6,bean.getDescrizione());
+            ps.setString(6, bean.getDescrizione());
             ps.setInt(7, bean.getIdProdotto());
 
             result = ps.executeUpdate();
@@ -434,14 +428,14 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         return (result != 0);
     }
 
-    public boolean decrementQuantita (int quantita, int idProd) throws SQLException {
+    public boolean decrementQuantita(int quantita, int idProd) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
         int result = 0;
 
         String updateSQL = "update " + TABLE_NAME + " set quantità = quantità - ? where idProdotto = ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(updateSQL);
             ps.setInt(1, quantita);
@@ -465,13 +459,13 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
 
         String selectSQL = "SELECT prezzo FROM " + TABLE_NAME + " WHERE idProdotto = ?";
 
-        try{
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
-            ps.setInt(1,code);
+            ps.setInt(1, code);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 prezzo = rs.getDouble("prezzo");
             }
         } finally {
@@ -483,5 +477,36 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         }
         return prezzo;
     }
-}
 
+    public int doRetrieveAllLimitLikeTot(String serch) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) AS total FROM " + TABLE_NAME + " WHERE prezzo IS NOT NULL AND prezzo > 0");
+
+        boolean hasSearch = serch != null && !serch.isEmpty();
+        if (hasSearch) {
+            query.append(" AND LOWER(nome) LIKE ?");
+        }
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(query.toString());
+
+            if (hasSearch) {
+                ps.setString(1, "%" + serch.toLowerCase() + "%");
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt("total");
+            }
+        } finally {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        }
+
+        return result;
+    }
+}

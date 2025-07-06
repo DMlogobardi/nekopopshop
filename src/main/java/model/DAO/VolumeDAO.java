@@ -242,32 +242,27 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
     public Collection<VolumeBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
+        Collection<VolumeBean> volumes = new LinkedList<>();
 
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " ORDER BY ? limit ? offset ?";
+        // Sanitizza l'ordine in anticipo (non usarlo come parametro)
+        String orderByColumn = "idVolume"; // default
+        if (order != null && orderWhiteList.contains(order.strip())) {
+            orderByColumn = order.strip();
+        }
+
+        // Costruisci la query con l'ORDER BY diretto (non ?)
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + orderByColumn + " LIMIT ? OFFSET ?";
 
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
-            if (order != null && orderWhiteList.contains(order.strip()))
-                ps.setString(1, order.strip());
-            else
-                ps.setString(1, "idVolume");
 
-            if (limit > 0 && page > 0) {
-                ps.setInt(2, limit);
-                ps.setInt(3, (page - 1) * limit);
-            } else if (page > 0 && limit <= 0) {
-                ps.setInt(2, 10);
-                ps.setInt(3, (page - 1) * limit);
-            } else if (limit > 0 && page <= 0) {
-                ps.setInt(2, limit);
-                ps.setInt(3, 0);
-            } else {
-                ps.setInt(2, 10);
-                ps.setInt(3, 0);
-            }
+            // Imposta LIMIT e OFFSET
+            int safeLimit = limit > 0 ? limit : 10;
+            int safeOffset = page > 0 ? (page - 1) * safeLimit : 0;
 
+            ps.setInt(1, safeLimit);
+            ps.setInt(2, safeOffset);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -290,40 +285,38 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                 if (con != null) con.close();
             }
         }
+
         System.out.println(volumes);
         return volumes;
     }
+
 
     public Collection<VolumeBean> doRetrieveAllLimitByType(String order, int limit, int page, String type) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
+        Collection<VolumeBean> volumes = new LinkedList<>();
 
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " where tag = ? ORDER BY ? limit ? offset ?";
+        // Valida l'ordine
+        String orderByColumn = "idVolume";
+        if (order != null && orderWhiteList.contains(order.strip())) {
+            orderByColumn = order.strip();
+        }
+
+        // Query costruita dinamicamente con il nome della colonna (valida e sicura se whiteList è corretta)
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " WHERE tag = ? ORDER BY " + orderByColumn + " LIMIT ? OFFSET ?";
 
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+
             ps.setString(1, type);
-            if (order != null && orderWhiteList.contains(order.strip()))
-                ps.setString(2, order.strip());
-            else
-                ps.setString(2, "idVolume");
 
-            if (limit > 0 && page > 0) {
-                ps.setInt(3, limit);
-                ps.setInt(4, (page - 1) * limit);
-            } else if (page > 0 && limit <= 0) {
-                ps.setInt(3, 10);
-                ps.setInt(4, (page - 1) * limit);
-            } else if (limit > 0 && page <= 0) {
-                ps.setInt(3, limit);
-                ps.setInt(4, 0);
-            } else {
-                ps.setInt(3, 10);
-                ps.setInt(4, 0);
-            }
+            // Gestione di LIMIT e OFFSET con fallback
+            int safeLimit = limit > 0 ? limit : 10;
+            int safeOffset = page > 0 ? (page - 1) * safeLimit : 0;
 
+            ps.setInt(2, safeLimit);
+            ps.setInt(3, safeOffset);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -346,9 +339,10 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                 if (con != null) con.close();
             }
         }
-        System.out.println(volumes);
+
         return volumes;
     }
+
 
     public Collection<VolumeBean> doRetrieveAllLimitByType(String order, int limit, int page, String serch, String type) throws SQLException {
         Connection con = null;
@@ -418,41 +412,43 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
     public Collection<VolumeBean> doRetrieveAllLimit(String order, int limit, int page, String serch) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<VolumeBean> volumes = new LinkedList<VolumeBean>();
+        Collection<VolumeBean> volumes = new LinkedList<>();
 
-        String selectAllSQL =
+        StringBuilder query = new StringBuilder(
                 "SELECT * FROM " + TABLE_NAME + " " +
                         "JOIN prodotto ON prodotto.idProdotto = volume.idProdotto " +
-                        "WHERE volume.idProdotto = prodotto.idProdotto ";
+                        "WHERE volume.idProdotto = prodotto.idProdotto"
+        );
 
-        if (serch != null && !serch.isEmpty()) {
-            selectAllSQL += "AND LOWER(CONCAT(prodotto.nome, CAST(volume.numVolumi AS CHAR))) LIKE ? ";
+        boolean hasSearch = serch != null && !serch.isEmpty();
+        if (hasSearch) {
+            query.append(" AND LOWER(CONCAT(prodotto.nome, CAST(volume.numVolumi AS CHAR))) LIKE ?");
         }
-        selectAllSQL += " ORDER BY ? limit ? offset ?";
+
+        // Sanitize and append ORDER BY (no parameter binding)
+        String safeOrder = "idVolume"; // default
+        if (order != null && orderWhiteList.contains(order.strip())) {
+            safeOrder = order.strip();
+        }
+        query.append(" ORDER BY ").append(safeOrder);
+        query.append(" LIMIT ? OFFSET ?");
 
         try {
             con = ds.getConnection();
-            ps = con.prepareStatement(selectAllSQL);
-            ps.setString(1,  "%" + serch.toLowerCase() + "%");
-            if (order != null && orderWhiteList.contains(order.strip()))
-                ps.setString(2, order.strip());
-            else
-                ps.setString(2, "idVolume");
+            ps = con.prepareStatement(query.toString());
 
-            if (limit > 0 && page > 0) {
-                ps.setInt(3, limit);
-                ps.setInt(4, (page - 1) * limit);
-            } else if (page > 0 && limit <= 0) {
-                ps.setInt(3, 10);
-                ps.setInt(4, (page - 1) * limit);
-            } else if (limit > 0 && page <= 0) {
-                ps.setInt(3, limit);
-                ps.setInt(4, 0);
-            } else {
-                ps.setInt(3, 10);
-                ps.setInt(4, 0);
+            int paramIndex = 1;
+
+            if (hasSearch) {
+                ps.setString(paramIndex++, "%" + serch.toLowerCase() + "%");
             }
 
+            // LIMIT and OFFSET
+            int safeLimit = limit > 0 ? limit : 10;
+            int offset = page > 0 ? (page - 1) * safeLimit : 0;
+
+            ps.setInt(paramIndex++, safeLimit);
+            ps.setInt(paramIndex, offset);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -469,14 +465,48 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                 volumes.add(volume);
             }
         } finally {
-            try {
-                if (ps != null) ps.close();
-            } finally {
-                if (con != null) con.close();
-            }
+            if (ps != null) ps.close();
+            if (con != null) con.close();
         }
 
         return volumes;
+    }
+
+
+    public int doRetrieveAllLimitTot(String serch) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = -1;
+
+        StringBuilder selectAllSQL = new StringBuilder(
+                "SELECT COUNT(*) AS total FROM " + TABLE_NAME + " " +
+                        "JOIN prodotto ON prodotto.idProdotto = volume.idProdotto " +
+                        "WHERE volume.idProdotto = prodotto.idProdotto "
+        );
+
+        boolean hasSearch = serch != null && !serch.isEmpty();
+        if (hasSearch) {
+            selectAllSQL.append(" AND LOWER(CONCAT(prodotto.nome, CAST(volume.numVolumi AS CHAR))) LIKE ? ");
+        }
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL.toString());
+
+            if (hasSearch) {
+                ps.setString(1, "%" + serch.toLowerCase() + "%");
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt("total");
+            }
+        } finally {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        }
+
+        return result;
     }
 
     public boolean uppdate(VolumeBean vol) throws SQLException {

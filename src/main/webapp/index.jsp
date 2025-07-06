@@ -616,13 +616,7 @@
                 </div>
             </div>
         </div>
-    </div>
 </footer>
 
-<!-- Fixed chat button -->
-<div class="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-nekopink to-nekopurple rounded-full flex items-center justify-center shadow-xl z-50">
-    <i class="fas fa-comment-alt text-white text-2xl"></i>
-    <div class="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></div>
-</div>
 </body>
 </html>

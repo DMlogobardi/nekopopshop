@@ -78,7 +78,7 @@
         <jsp:include page="navBar.jsp" />
 
     </div>
-
+    <jsp:include page="error.jsp" />
     <!-- Admin Dashboard Content -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Sidebar -->

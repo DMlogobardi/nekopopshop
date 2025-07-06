@@ -24,7 +24,7 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
         PreparedStatement ps = null;
         int id = 0;
 
-        String insertSQL = "insert into" + TABLE_NAME + "(idProdotto , idCliente, idVolume) values (?,?,?)";
+        String insertSQL = "insert into " + TABLE_NAME + " (idProdotto , idCliente, idVolume) values (?,?,?)";
 
         try{
             con = ds.getConnection();
@@ -83,6 +83,70 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
             ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                wishL = new WishlistBean(
+                        rs.getInt("idWishList"),
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idCliente"),
+                        rs.getInt("idVolume")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return wishL;
+    }
+
+    public WishlistBean doRetrieveByProd(int code, int id) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        WishlistBean wishL = null;
+
+        String selectSQL = "select * from " + TABLE_NAME + " where idProdotto = ? and idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+            ps.setInt(2, id);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                wishL = new WishlistBean(
+                        rs.getInt("idWishList"),
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idCliente"),
+                        rs.getInt("idVolume")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return wishL;
+    }
+
+    public WishlistBean doRetrieveByVol(int code, int id) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        WishlistBean wishL = null;
+
+        String selectSQL = "select * from " + TABLE_NAME + " where idVolume = ? and idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+            ps.setInt(2, id);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
