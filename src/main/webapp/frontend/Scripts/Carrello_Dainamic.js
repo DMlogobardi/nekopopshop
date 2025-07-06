@@ -591,6 +591,22 @@ function setupCart() {
 
     // Checkout button
     document.querySelector('.checkout-btn').addEventListener('click', function() {
-        alert('Grazie per il tuo ordine! Verrai reindirizzato alla pagina di pagamento.');
+        let cookie = getCookie('access');
+        fetchTotaleProdotti().then(res=>{
+            if(res<=0){
+                mostraErrore("Aggiungi qualcosa al carrello prima di procedere");
+                setTimeout(()=>{window.location.href = 'catalog.jsp';},5000);
+                return;
+            }
+        });
+        if (cookie==="" || cookie === null) {
+            mostraErrore("Effettua il login prima di procedere");
+            setTimeout(()=>{window.location.href = 'login.jsp';},5000);
+
+        }
+        else{
+            window.location.href ='checkout.jsp';
+        }
+
     });
 }
