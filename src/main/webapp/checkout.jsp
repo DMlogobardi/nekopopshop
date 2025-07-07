@@ -232,64 +232,34 @@
 
                     <!-- Order Items -->
                     <div class="space-y-4 mb-4" id="items">
-                        <div class="flex justify-between">
-                            <div class="flex">
-                                <div class="w-16 h-16 rounded-md overflow-hidden mr-3">
-                                    <img src="https://images.unsplash.com/photo-1622372738946-e62b40262c90?q=80&w=1000"
-                                         alt="Chainsaw Man" class="w-full h-full object-cover">
-                                </div>
-                                <div>
-                                    <h3 class="font-medium">Chainsaw Man Vol.1</h3>
-                                    <p class="text-sm text-gray-600">Quantità: 1</p>
-                                </div>
-                            </div>
-                            <p class="font-medium">€13,59</p>
-                        </div>
 
-                        <div class="flex justify-between">
-                            <div class="flex">
-                                <div class="w-16 h-16 rounded-md overflow-hidden mr-3">
-                                    <img src="https://images.unsplash.com/photo-1558494948-4ece8de63a5f?q=80&w=1000"
-                                         alt="Berserk" class="w-full h-full object-cover">
-                                </div>
-                                <div>
-                                    <h3 class="font-medium">Berserk Vol.2</h3>
-                                    <p class="text-sm text-gray-600">Quantità: 2</p>
-                                </div>
-                            </div>
-                            <p class="font-medium">€29,98</p>
-                        </div>
                     </div>
 
                     <!-- Order Summary -->
-                    <div class="border-t border-gray-200 pt-3 space-y-2 mb-4">
+                    <div class="border-t border-gray-200 pt-3 space-y- mb-4" >
                         <div class="flex justify-between">
                             <span class="text-gray-600">Subtotale</span>
-                            <span class="font-medium">€43,57</span>
+                            <span class="font-medium" id="subtotale"></span>
                         </div>
+
                         <div class="flex justify-between">
                             <span class="text-gray-600">Spedizione</span>
-                            <span class="font-medium">€4,99</span>
+                            <span class="font-medium" id="spedizione"></span>
+                        </div>
+                        <div class="flex justify-between" id="containerSconto" hidden="true">
+                            <span class="text-gray-600">Sconto</span>
+                            <span class="font-medium" id="sconto"></span>
                         </div>
                         <div class="flex justify-between text-lg font-bold pt-2">
                             <span>Totale</span>
-                            <span class="text-nekopeach">€48,56</span>
+                            <span class="text-nekopeach" id="totale"></span>
                         </div>
                     </div>
 
-                    <!-- Promo Code -->
-                    <div class="mb-6">
-                        <label for="promo-code" class="block text-sm font-medium text-gray-700 mb-1">Codice promozionale</label>
-                        <div class="flex">
-                            <input type="text" id="promo-code" class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-nekopeach focus:border-nekopeach">
-                            <button class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-r-lg font-medium">
-                                Applica
-                            </button>
-                        </div>
-                    </div>
+
 
                     <!-- Checkout Button -->
-                    <button id="complete-order" class="w-full bg-nekopeach hover:bg-nekopink text-white py-3 rounded-lg font-bold text-lg shadow-md hover:shadow-lg transition">
+                    <button type="button" id="complete-order" class="w-full bg-nekopeach hover:bg-nekopink text-white py-3 rounded-lg font-bold text-lg shadow-md hover:shadow-lg transition" onclick="completaOrdine()">
                         Completa ordine
                     </button>
 
@@ -364,26 +334,7 @@
             document.getElementById('add-new-card-btn').classList.remove('hidden');
         });
 
-        // Complete order
-        document.getElementById('complete-order').addEventListener('click', function() {
-            // Validate selections
-            const addressSelected = document.querySelector('.address-option.selected-address');
-            const paymentSelected = document.querySelector('.payment-option.selected-payment');
 
-            if(!addressSelected) {
-                alert('Per favore seleziona un indirizzo di spedizione');
-                return;
-            }
-
-            if(!paymentSelected || paymentSelected.id === 'add-new-card-btn') {
-                alert('Per favore seleziona un metodo di pagamento valido');
-                return;
-            }
-
-            // In a real app, you would submit the form to the server
-            alert('Ordine completato con successo! Grazie per il tuo acquisto.');
-            // window.location.href = 'order-confirmation.jsp';
-        });
     </script>
 </body>
 </html>

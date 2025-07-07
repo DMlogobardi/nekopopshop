@@ -170,24 +170,7 @@
             <p>Spedizione stimata: 2-4 giorni lavorativi</p>
           </div>
 
-          <!-- Payment Methods -->
-          <div class="mt-6">
-            <h3 class= "font-bold mb-3">Metodi di pagamento</h3>
-            <div class="grid grid-cols-4 gap-2">
-              <div class="payment-method p-2 flex items-center justify-center cursor-pointer">
-                <i class="fab fa-cc-visa text-2xl text-blue-800"></i>
-              </div>
-              <div class="payment-method p-2 flex items-center justify-center cursor-pointer">
-                <i class= "fab fa-cc-mastercard text-2xl text-red-800"></i>
-              </div>
-              <div class="payment-method p-2 flex items-center justify-center cursor-pointer">
-                <i class="fab fa-cc-paypal text-2xl text-blue-500"></i>
-              </div>
-              <div class="payment-method p-2 flex items-center justify-center cursor-pointer selected">
-                <i class="fas fa-money-bill-wave text-2xl text-green-600"></i>
-              </div>
-            </div>
-          </div>
+
 
           <!-- Secure Payment Info -->
           <div class="mt-6 bg-nekopink/10 rounded-lg p-3">
