@@ -87,6 +87,14 @@ public class GetCatalog extends HttpServlet {
 					response.getWriter().write("{ \"totale\": " + totale + "}");
 					return;
 				}
+			} else if (tot.equals("categoria")) {
+				String categoria = request.getParameter("categoria") == null ? "" : request.getParameter("categoria");
+				int totale = volDB.countByType(categoria);
+				System.out.println("totale serch: " + totale);
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write("{ \"totale\": " + totale + "}");
+				return;
 			}
 
 			if(id > 0){

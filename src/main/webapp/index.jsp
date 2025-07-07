@@ -387,7 +387,7 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('shonen')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-user-ninja text-2xl text-nekopurple"></i>
                 </div>
@@ -401,7 +401,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('shojo')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-heart text-2xl text-pink-500"></i>
                 </div>
@@ -415,7 +415,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('seinen')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-brain text-2xl text-blue-500"></i>
                 </div>
@@ -429,7 +429,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('kemono')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-paw text-2xl text-green-500"></i>
                 </div>
@@ -443,7 +443,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('kodomo')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fab fa-fort-awesome text-2xl text-red-500"></i>
                 </div>
@@ -457,7 +457,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('josei')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-venus-double text-2xl text-fuchsia-600"></i>
                 </div>
@@ -471,7 +471,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('sci-Fi')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-syringe text-2xl text-blue-600"></i>
                 </div>
@@ -485,7 +485,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('horror')"  href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-spider text-2xl text-black-600"></i>
                 </div>

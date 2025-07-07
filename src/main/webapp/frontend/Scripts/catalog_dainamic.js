@@ -368,10 +368,40 @@ function loadALL(){
     });
 }
 
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     generateDecorations();
-    caricaVolumi();
     caricaProdotti();
+    const tag = getQueryParam("tag");
+
+    fetchTotProd().then(total => {
+        const prodottiPerPagina = 3;
+        aggiornaPaginazioneProd(total, 1, prodottiPerPagina, caricaProdotti);
+    });
+
+    if(tag){
+        mostraErrore("mostrando volumi di categoria: " + tag);
+
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        caricaVolumiTag(1, tag.toString());
+
+        fetchTotVolFilter("categoria").then(total => {
+            const prodottiPerPagina = 3;
+            aggiornaPaginazioneVolTag(total, 1, prodottiPerPagina, caricaVolumiTag, tag.toString())
+        })
+    } else {
+        caricaVolumi();
+
+        fetchTotVol().then(total => {
+            const prodottiPerPagina = 3;
+            aggiornaPaginazioneVol(total, 1, prodottiPerPagina, caricaVolumi);
+        });
+    }
 
     // Filter button active state
     document.querySelectorAll('.folder-tab').forEach(tab => {
@@ -388,16 +418,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.alphabet-link').forEach(l => l.classList.remove('active'));
             this.classList.add('active');
         });
-    });
-
-    fetchTotProd().then(total => {
-        const prodottiPerPagina = 3;
-        aggiornaPaginazioneProd(total, 1, prodottiPerPagina, caricaProdotti);
-    });
-
-    fetchTotVol().then(total => {
-        const prodottiPerPagina = 3;
-        aggiornaPaginazioneVol(total, 1, prodottiPerPagina, caricaVolumi);
     });
 
     document.getElementById("code_Button").addEventListener("click", function () {

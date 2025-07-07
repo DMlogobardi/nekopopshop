@@ -10,6 +10,15 @@ function mostraErrore(msg) {
     }, 5000);
 }
 
+window.category = function(tag){
+    if(tag === undefined){
+        mostraErrore("categoria sbagliata");
+        return;
+    }
+
+    window.location.href = "catalog.jsp?tag=" + encodeURIComponent(tag);
+};
+
 document.addEventListener("DOMContentLoaded", function () {
 
     fetch("getcatalog?dayProduct=ok&productType=vol")

@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 public class SessionCart {
     private Collection<ContenutoBean> contenuti;
@@ -118,8 +119,10 @@ public class SessionCart {
         try {
             ContenutoDAO contSQL = new ContenutoDAO(ds);
 
-            if(this.carelloRefernz.getIdCarello() > 0)
+            if(this.carelloRefernz.getIdCarello() > 0) {
+                contSQL.doDeleteByCart(this.carelloRefernz.getIdCarello());
                 cartSQL.doDelete(this.carelloRefernz.getIdCarello());
+            }
 
             idCart = cartSQL.doSave(this.carelloRefernz);
 
@@ -138,70 +141,51 @@ public class SessionCart {
     }
 
     public Boolean margeCart(CarrelloBean dbCart, DataSource ds) throws SQLException {
-        if(dbCart == null || ds == null) {
+        if (dbCart == null || ds == null) {
             return false;
         }
 
         ContenutoDAO contenutoSQL = new ContenutoDAO(ds);
         Collection<ContenutoBean> dbContenuto = contenutoSQL.doRetrieveAllproduct(dbCart.getIdCarello());
-        
-        for(ContenutoBean contenutoDB : dbContenuto){
-            boolean isNotPresent = this.contenuti.stream().noneMatch(conte ->
-                    Objects.equals(conte.getIdProdotto(), contenutoDB.getIdProdotto()) &&
-                            Objects.equals(conte.getIdVolume(), contenutoDB.getIdVolume())
-            );
-            boolean existsWithPluss = this.contenuti.stream().anyMatch(conte ->
-                    (Objects.equals(conte.getIdProdotto(), contenutoDB.getIdProdotto()) ||
-                            Objects.equals(conte.getIdVolume(), contenutoDB.getIdVolume())) &&
-                            conte.getqCarrello() < contenutoDB.getqCarrello()
-            );
 
-            if(isNotPresent){
+        for (ContenutoBean contenutoDB : dbContenuto) {
+            Optional<ContenutoBean> match = this.contenuti.stream()
+                    .filter(conte ->
+                            Objects.equals(conte.getIdProdotto(), contenutoDB.getIdProdotto()) &&
+                                    Objects.equals(conte.getIdVolume(), contenutoDB.getIdVolume()))
+                    .findFirst();
+
+            if (match.isPresent()) {
+                ContenutoBean sessionConte = match.get();
+                int nuovaQuantita = sessionConte.getqCarrello() + contenutoDB.getqCarrello();
+
+                double prezzoUnitario;
                 if (contenutoDB.getIdProdotto() != 0) {
                     ProdottoDAO prodottoSQL = new ProdottoDAO(ds);
-                    double prodPrezzo = prodottoSQL.doRetrievePrezzoByKey(contenutoDB.getIdProdotto());
-                    this.contenuti.add(contenutoDB);
-                    this.carelloRefernz.setTot(this.carelloRefernz.getTot() + (prodPrezzo * contenutoDB.getqCarrello()));
+                    prezzoUnitario = prodottoSQL.doRetrievePrezzoByKey(contenutoDB.getIdProdotto());
                 } else {
                     VolumeDAO volumeSQL = new VolumeDAO(ds);
-                    double prodPrezzo = volumeSQL.doRetrievePrezzoByKey(contenutoDB.getIdVolume());
-                    this.contenuti.add(contenutoDB);
-                    this.carelloRefernz.setTot(this.carelloRefernz.getTot() + (prodPrezzo * contenutoDB.getqCarrello()));
+                    prezzoUnitario = volumeSQL.doRetrievePrezzoByKey(contenutoDB.getIdVolume());
                 }
-            } else if (existsWithPluss) {
+
+                sessionConte.setqCarrello(nuovaQuantita);
+                this.carelloRefernz.setTot(this.carelloRefernz.getTot() + (prezzoUnitario * contenutoDB.getqCarrello()));
+            } else {
+                this.contenuti.add(contenutoDB);
+
+                double prezzoUnitario;
                 if (contenutoDB.getIdProdotto() != 0) {
                     ProdottoDAO prodottoSQL = new ProdottoDAO(ds);
-                    double prodPrezzo = prodottoSQL.doRetrievePrezzoByKey(contenutoDB.getIdProdotto());
-                    int[] tot = new int[1];
-
-                    this.contenuti.stream()
-                            .filter(conte -> Objects.equals(conte.getIdProdotto(), contenutoDB.getIdProdotto()))
-                            .findFirst()
-                            .ifPresent(conte -> {
-                                int vecchiaQuantita = conte.getqCarrello();
-                                conte.setqCarrello(contenutoDB.getqCarrello());
-                                tot[0] = contenutoDB.getqCarrello() - vecchiaQuantita;
-                            });
-                    this.carelloRefernz.setTot(this.carelloRefernz.getTot() + (prodPrezzo * tot[0]));
-
+                    prezzoUnitario = prodottoSQL.doRetrievePrezzoByKey(contenutoDB.getIdProdotto());
                 } else {
                     VolumeDAO volumeSQL = new VolumeDAO(ds);
-                    double prodPrezzo = volumeSQL.doRetrievePrezzoByKey(contenutoDB.getIdVolume());
-                    this.contenuti.stream().filter(conte -> conte.getIdProdotto() == contenutoDB.getIdProdotto());
-                    int[] tot = new int[1];
-
-                    this.contenuti.stream()
-                            .filter(conte -> Objects.equals(conte.getIdVolume(), contenutoDB.getIdVolume()))
-                            .findFirst()
-                            .ifPresent(conte -> {
-                                int vecchiaQuantita = conte.getqCarrello();
-                                conte.setqCarrello(contenutoDB.getqCarrello());
-                                tot[0] = contenutoDB.getqCarrello() - vecchiaQuantita;
-                            });
-                    this.carelloRefernz.setTot(this.carelloRefernz.getTot() + (prodPrezzo * tot[0]));
+                    prezzoUnitario = volumeSQL.doRetrievePrezzoByKey(contenutoDB.getIdVolume());
                 }
+
+                this.carelloRefernz.setTot(this.carelloRefernz.getTot() + (prezzoUnitario * contenutoDB.getqCarrello()));
             }
         }
+
         this.carelloRefernz.setIdCarello(dbCart.getIdCarello());
         this.carelloRefernz.setSconti(Math.max(dbCart.getSconti(), this.carelloRefernz.getSconti()));
         this.carelloRefernz.setIdCliente(dbCart.getIdCliente());

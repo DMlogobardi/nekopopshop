@@ -296,22 +296,20 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         PreparedStatement ps = null;
         Collection<VolumeBean> volumes = new LinkedList<>();
 
-        // Valida l'ordine
+        // Colonna di ordinamento sicura
         String orderByColumn = "idVolume";
         if (order != null && orderWhiteList.contains(order.strip())) {
             orderByColumn = order.strip();
         }
 
-        // Query costruita dinamicamente con il nome della colonna (valida e sicura se whiteList è corretta)
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " WHERE tag = ? ORDER BY " + orderByColumn + " LIMIT ? OFFSET ?";
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE tag = ? ORDER BY " + orderByColumn + " LIMIT ? OFFSET ?";
 
         try {
             con = ds.getConnection();
-            ps = con.prepareStatement(selectAllSQL);
+            ps = con.prepareStatement(query);
 
             ps.setString(1, type);
 
-            // Gestione di LIMIT e OFFSET con fallback
             int safeLimit = limit > 0 ? limit : 10;
             int safeOffset = page > 0 ? (page - 1) * safeLimit : 0;
 
@@ -341,6 +339,33 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         }
 
         return volumes;
+    }
+
+    public int countByType(String type) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int totalCount = 0;
+
+        String query = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE tag = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setString(1, type);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                totalCount = rs.getInt(1);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+
+        return totalCount;
     }
 
 
