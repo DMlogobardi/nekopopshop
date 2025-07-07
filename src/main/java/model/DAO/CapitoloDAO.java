@@ -1,6 +1,7 @@
 package model.DAO;
 
 import model.Bean.CapitoloBean;
+import model.Bean.VolumeBean;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -130,6 +131,37 @@ public class CapitoloDAO implements GenralDAO<CapitoloBean>{
         return capitoli;
     }
 
+    public Collection<CapitoloBean> doRetrieveAllByVol(String order, int vol) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<CapitoloBean> capitoli = new LinkedList<CapitoloBean>();
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " where idVolume = ? ORDER BY ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setInt(1, vol);
+            if( order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(2, order.strip());
+            else
+                ps.setString(2, "idCapitolo");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CapitoloBean cap = new CapitoloBean(rs.getInt("idCapitolo"), rs.getFloat("numCapitolo"), rs.getDate("dataPub").toString(), rs.getInt("idVolume"));
+                capitoli.add(cap);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return capitoli;
+    }
+
     @Override
     public Collection<CapitoloBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
         Connection con = null;
@@ -173,5 +205,77 @@ public class CapitoloDAO implements GenralDAO<CapitoloBean>{
             }
         }
         return capitoli;
+    }
+
+    public Collection<CapitoloBean> doRetrieveAllLimitByVol(String order, int limit, int page, int idVol) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<CapitoloBean> capitoli = new LinkedList<CapitoloBean>();
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " where idVolume = ?  ORDER BY ? LIMIT ? OFFSET ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setInt(1, idVol);
+            if( order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(2, order.strip());
+            else
+                ps.setString(2, "idCapitolo");
+
+            if (limit > 0 && page > 0) {
+                ps.setInt(3, limit);
+                ps.setInt(4, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(3, 10);
+                ps.setInt(4, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(3, limit);
+                ps.setInt(4, 0);
+            } else {
+                ps.setInt(3, 10);
+                ps.setInt(4, 0);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CapitoloBean cap = new CapitoloBean(rs.getInt("idCapitolo"), rs.getFloat("numCapitolo"), rs.getDate("dataPub").toString(), rs.getInt("idVolume"));
+                capitoli.add(cap);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return capitoli;
+    }
+
+    public boolean uppdate(CapitoloBean cap) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String updateSQL = "update " + TABLE_NAME + " set numCapitolo = ?, dataPub = ?, idVolume = ? where idVolume = ? and numCapitolo = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setFloat(1, cap.getNumCapitolo());
+            ps.setDate(2, cap.getDataPubFormatted());
+            ps.setInt(3, cap.getIdVolume());
+            ps.setInt(4, cap.getIdVolume());
+            ps.setFloat(5, cap.getNumCapitolo());
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
     }
 }

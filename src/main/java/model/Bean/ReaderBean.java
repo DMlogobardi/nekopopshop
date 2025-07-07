@@ -1,8 +1,12 @@
 package model.Bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class ReaderBean implements Serializable {
     private int idReader;
@@ -27,10 +31,11 @@ public class ReaderBean implements Serializable {
         return dataAcquisto;
     }
 
-    public LocalDate getDataAcquistoFormatted() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+    @JsonIgnore
+    public Date getDataAcquistoFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date =LocalDate.parse(dataAcquisto, format);
-        return date;
+        return Date.valueOf(date);
     }
 
     public void setDataAcquisto(String dataAcquisto) {
@@ -42,10 +47,11 @@ public class ReaderBean implements Serializable {
         return dataUltimaApertura;
     }
 
-    public LocalDate getDataUltimaAperturaFormatted() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+    @JsonIgnore
+    public Date getDataUltimaAperturaFormatted() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ITALIAN);
         LocalDate date =LocalDate.parse(dataUltimaApertura, format);
-        return date;
+        return Date.valueOf(date);
     }
     public void setDataUltimaApertura(String dataUltimaApertura) {
         if(!dataUltimaApertura.isBlank() || dataUltimaApertura == null) {}

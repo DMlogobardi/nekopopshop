@@ -41,22 +41,26 @@ public class CarteGesture extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         if(session.getAttribute("logToken") == null){
-            request.setAttribute("error", "utent is not logged in");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
 
         if(session.getAttribute("gesture") != "autorizato"){
-            request.setAttribute("error", "invalid request");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
         session.removeAttribute("gesture");
 
         String action = request.getParameter("actionCard");
         if(action == null){
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("action is null");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
             return;
         }
 
@@ -73,8 +77,9 @@ public class CarteGesture extends HttpServlet {
                     card.add(converter.parse(json));
                 } catch (Exception e1){
                     System.out.println("error add: " + e.getMessage() + "second error: " + e1.getCause());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
@@ -89,15 +94,17 @@ public class CarteGesture extends HttpServlet {
                     metodopagamentoDAO.doSave(carta);
                 } catch (SQLException e) {
                     System.out.println("error add: " + e.getMessage());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
 
             System.out.println("add success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if(action.equals("delete")){
             String json = request.getParameter("json");
@@ -112,8 +119,9 @@ public class CarteGesture extends HttpServlet {
                     card.add(converter.parse(json));
                 } catch (Exception e1){
                     System.out.println("error delete: " + e.getMessage() + "second error: " + e1.getCause());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
@@ -126,15 +134,17 @@ public class CarteGesture extends HttpServlet {
                     metodopagamentoDAO.doDeleteByIdAndCliente(carta.getIdMetodoPagamento(), idCliente);
                 } catch (SQLException e) {
                     System.out.println("error delete: " + e.getMessage());
-                    request.setAttribute("error", "server error");
-                    request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
             }
 
             System.out.println("delete success");
-            request.setAttribute("success", "success");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if(action.equals("list")){
             JsonConverter<MetodoPagamentoBean> converter = JsonConverter.factory(MetodoPagamentoBean.class, null);
@@ -147,8 +157,9 @@ public class CarteGesture extends HttpServlet {
                 card = metodopagamentoDAO.doRetrieveByCliente(idCliente);
             } catch (SQLException e) {
                 System.out.println("list error: " + e.getMessage());
-                request.setAttribute("error", "server error");
-                request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                 return;
             }
 
@@ -157,19 +168,22 @@ public class CarteGesture extends HttpServlet {
                 json = converter.toJson(card);
             } catch (Exception e) {
                 System.out.println("list pars error: " + e.getMessage());
-                request.setAttribute("error", "server error");
-                request.getRequestDispatcher("/utente.jsp").forward(request, response);
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                 return;
             }
 
             System.out.println("success");
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(json);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println(json);
 
         } else {
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("invalid action");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
         }
     }
 }

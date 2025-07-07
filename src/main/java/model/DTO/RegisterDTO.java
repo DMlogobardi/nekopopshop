@@ -23,7 +23,7 @@ public class RegisterDTO implements Serializable {
     private String nick;
 
     @JsonCreator
-    public RegisterDTO(@JsonProperty("name") String name, @JsonProperty("cognome") String cognome, @JsonProperty("nascita") String nascita, @JsonProperty("email") String email, @JsonProperty("cf") String cf, @JsonProperty("via") String via, @JsonProperty("civico") int civico, @JsonProperty("cap") String cap, @JsonProperty("prefisso") String prefisso, @JsonProperty("numero") String numero, @JsonProperty("password") String password, @JsonProperty("nicl") String nick) {
+    public RegisterDTO(@JsonProperty("name") String name, @JsonProperty("cognome") String cognome, @JsonProperty("nascita") String nascita, @JsonProperty("email") String email, @JsonProperty("cf") String cf, @JsonProperty("via") String via, @JsonProperty("civico") int civico, @JsonProperty("cap") String cap, @JsonProperty("prefisso") String prefisso, @JsonProperty("numero") String numero, @JsonProperty("password") String password, @JsonProperty("nick") String nick) {
         this.name = name;
         this.cognome = cognome;
         this.nascita = nascita;

@@ -1,5 +1,6 @@
 package model.DAO;
 
+import model.Bean.VolumeBean;
 import model.Bean.WishlistBean;
 
 import javax.sql.DataSource;
@@ -186,5 +187,38 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
             }
         }
         return wishLs;
+    }
+
+    public boolean uppdate(WishlistBean wishList) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+        String updateSQL = "";
+
+        if(wishList.getIdProdotto() != 0) {
+            updateSQL = "update " + TABLE_NAME + " set idProdotto = ? where idWishList = ?";
+        } else {
+            updateSQL = "update " + TABLE_NAME + " set idVolume = ? where idWishList = ?";
+        }
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setInt(2, wishList.getIdWishlist());
+            if(wishList.getIdProdotto() != 0) {
+                ps.setInt(1, wishList.getIdProdotto());
+            } else {
+                ps.setInt(1, wishList.getIdVolume());
+            }
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
     }
 }

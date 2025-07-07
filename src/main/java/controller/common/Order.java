@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet("/common/order")
 public class Order extends HttpServlet {
@@ -84,6 +85,7 @@ public class Order extends HttpServlet {
         }
 
         LocalDate oggi = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         if (card.getDataScadenzaFormatted().isBefore(oggi)) {
             System.out.println("carta scaduta");
             request.setAttribute("error", "card data scadenza is before oggi");
@@ -119,6 +121,9 @@ public class Order extends HttpServlet {
         ContenutoDAO contenutoDB = new ContenutoDAO(ds);
         VolumeDAO volumeDB = new VolumeDAO(ds);
         ProdottoDAO prodottoDB = new ProdottoDAO(ds);
+        CapitoloDAO capitoloDAO = new CapitoloDAO(ds);
+        ReaderDAO readerDAO = new ReaderDAO(ds);
+        CapitoloBean cap = null;
         int quantitaDB = 0;
         for(ContenutoBean conte : sCart.getContenuti()){
             //controllo quantità
@@ -127,6 +132,7 @@ public class Order extends HttpServlet {
                     quantitaDB = prodottoDB.doRetrieveQuantity(conte.getIdProdotto());
                 } else {
                     quantitaDB = volumeDB.doRetrieveQuantity(conte.getIdVolume());
+                    cap = (CapitoloBean) capitoloDAO.doRetrieveAllLimitByVol(null, 1,0, conte.getIdVolume());
                 }
             } catch (SQLException e) {
                 System.out.println("order error quantita db: " + e.getMessage());
@@ -135,6 +141,18 @@ public class Order extends HttpServlet {
                 return;
             }
 
+            if(cap != null){
+                try {
+                    ReaderBean reader = readerDAO.doRetrieveByVolAndUtent(conte.getIdVolume(), (int) session.getAttribute("logId") );
+                    if(reader == null)
+                        readerDAO.doSave(new ReaderBean(0, oggi.format(formatter), null, conte.getIdVolume(), (int) session.getAttribute("logId")));
+                } catch (SQLException e) {
+                    System.out.println("order error save reader db: " + e.getMessage());
+                    request.setAttribute("error", "internal error");
+                    request.getRequestDispatcher("/cart.jsp").forward(request, response);
+                    return;
+                }
+            }
 
             if(quantitaDB > conte.getqCarrello()) {
                 AcquistatoBean acquistato = conte.convertirAcquistato(idOrdine);
@@ -162,6 +180,14 @@ public class Order extends HttpServlet {
                     return;
                 }
             } else {
+                try {
+                    dbOrder.doDelete(idOrdine);
+                } catch (SQLException e) {
+                    request.setCharacterEncoding("UTF-8");
+                    response.setContentType("text/json");
+                    response.getWriter().write("{\"error\": \"internal error\"}");
+                    return;
+                }
                 System.out.println("quantità del prodotto troppo alta");
                 request.setCharacterEncoding("UTF-8");
                 response.setContentType("text/json");

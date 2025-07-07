@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NekoPopShop - Chi Siamo</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/about.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script>
@@ -22,217 +23,6 @@
             }
         }
     </script>
-    <style>
-        @font-face {
-            font-family: 'Milkyway';  /* Scegli un nome per il font */
-            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
-            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
-            font-weight: normal;        /* Peso del font (es. 400, 700) */
-            font-style: normal;        /* normale, italic, ecc. */
-            font-display: swap;        /* Ottimizza il rendering */
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes blossom-fall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-
-            background-color: #f0f0f0;
-
-            /* Immagine di background principale */
-            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
-
-            /* Centra e copre tutto lo spazio senza ripetizioni */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-
-            /* Altezza minima = viewport height */
-            min-height: 100vh;
-
-            /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
-            background-attachment: scroll;
-
-            /* Ottimizzazione prestazioni */
-            image-rendering: smooth;
-            overflow-x: hidden;
-        }
-        @media (min-width: 768px) {
-            body {
-                background-attachment: fixed;
-            }
-        }
-
-        .folder-tab {
-            position: relative;
-            background-color: #f2d5bb;
-            padding: 15px 25px;
-            border-radius: 15px 15px 0 0;
-            border: 2px solid #E55458;
-            border-bottom: none;
-            box-shadow: 0 -3px 8px #E55458;
-            margin-right: -10px;
-            z-index: 1;
-            transition: all 0.3s ease;
-            color: #E55458;
-        }
-
-        .folder-tab.active, .folder-tab:hover {
-            background-color: #E55458;
-            color: white;
-            transform: translateY(-0px);
-            z-index: 2;
-        }
-
-        .folder-tab::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 0;
-            width: 100%;
-            height: 15px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxNXB4IiB2aWV3Qm94PSIwIDAgMTAwIDUiPiAgPHBhdGggZmlsbD0iI2ZmZDJlNSIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
-            background-size: 100% 15px;
-            background-position: bottom center;
-            background-repeat: no-repeat;
-            z-index: -1;
-        }
-
-        .cat-elements i {
-            color: #fbd8da;
-            animation: float 4s infinite ease-in-out;
-        }
-
-        .cherry-blossom {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxLTE4IDB6Ii8+PHBhdGggZD0iTTYwIDYwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDAgMTggMiAyIDAgMCAwIDIgMiA5IDkgMCAwIDEgMC0xOHoiLz48L2c+PC9zdmc+d');
-            background-size: cover;
-            animation: blossom-fall 15s linear infinite;
-        }
-
-        .team-card {
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-            background: white;
-            border-radius: 15px;
-            border: 2px solid #fbd8da;
-        }
-
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .team-card::after {
-            content: 'NekoPop';
-            position: absolute;
-            top: 10px;
-            right: -35px;
-            background: #E55458;
-            color: #f2d5bb;
-            padding: 3px 35px;
-            transform: rotate(45deg);
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .sakura-divider {
-            height: 3px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSI1cHgiIHZpZXdCb3g9IjAgMCAxMDAgNSI+PHBhdGggZmlsbD0iI2ZmN2ViOCIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
-            background-size: cover;
-        }
-
-        .nekotag {
-            background: linear-gradient(90deg, #E55458, #F29966);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            font-weight: 900;
-            font-size: 45px;
-
-
-        }
-
-
-
-        .timeline-item {
-            position: relative;
-            padding-left: 60px;
-            margin-bottom: 30px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 0;
-            height: 100%;
-            width: 2px;
-            background: linear-gradient(to bottom, #E55458, #f2d5bb);
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: 10px;
-            top: 0;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #E55458;
-            border: 4px solid #f2d5bb;
-            z-index: 1;
-        }
-
-        .mission-icon {
-            background: linear-gradient(145deg, #E55458, #f2d5bb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 3rem;
-        }
-        .text-3xl{
-              font-family: 'Milkyway', sans-serif;
-              font-size: 2.5rem;
-              color: #333;
-          }
-        .text-sm{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 3rem;
-            color: #333;
-        }
-        .text-4xl{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 3rem;
-            color: #333;
-        }
-        .text-2xl{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 3rem;
-            color: #333;
-        }
-        .text-xl{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 3rem;
-            color: #333;
-        }
-        .text-right{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 3rem;
-            color: #333;
-        }
-
-    </style>
 </head>
 <body class="relative overflow-x-hidden">
 <!-- Decorative cat elements and cherry blossoms -->
@@ -260,18 +50,8 @@
             </div>
         </div>
 
-
-
         <!-- Navigation -->
-        <div class="w-full lg:w-auto">
-            <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
-                <a href="index.jsp" class="folder-tab"><i class="fas fa-home mr-2"></i> Home</a>
-                <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-                <a href="about.jsp" class="folder-tab active"><i class="fas fa-info-circle mr-2"></i> Chi Siamo</a>
-                <a href="cart.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Carrello</a>
-                <a href="utente.jsp" class="folder-tab"><i class="fas fa-user mr-2"></i> Utente</a>
-            </div>
-        </div>
+        <jsp:include page="navBar.jsp" />
     </div>
 
     <!-- Hero Section -->
@@ -308,7 +88,7 @@
                 </div>
             </div>
             <div class="relative">
-                <img src="https://images.unsplash.com/photo-1608889825103-eb5c0e8dc9d9?q=80&w=1000"
+                <img src="${pageContext.request.contextPath}/frontend/images/about.jpeg"
                      alt="NekoPop Store"
                      class="w-full h-auto rounded-lg shadow-lg border-4 border-white">
                 <div class="absolute -bottom-4 -right-4 bg-nekoorange text-white px-4 py-2 rounded-lg font-bold">
@@ -410,7 +190,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- Team Member -->
-            <div class="team-card p-6 text-center relative">
+            <div id="Ilaria" class="team-card p-6 text-center relative cursor-pointer z-10">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekopink mb-4 overflow-hidden">
                     <img src="${pageContext.request.contextPath}/frontend/images/mia_icona_git.png"
                          alt="Marta Rossi"
@@ -436,7 +216,7 @@
             </div>
 
             <!-- Team Member -->
-            <div class="team-card p-6 text-center relative">
+            <div id="davide" class="team-card p-6 text-center relative cursor-pointer z-10">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekoorange mb-4 overflow-hidden">
                     <img src="${pageContext.request.contextPath}/frontend/images/davide_icona_git.jpg"
                          alt="Luigi Bianchi"
@@ -459,20 +239,23 @@
             </div>
 
             <!-- Team Member -->
-            <div class="team-card p-6 text-center relative">
+            <div id="alessia" class="team-card p-6 text-center relative cursor-pointer z-10">
                 <div class="w-32 h-32 mx-auto rounded-full border-4 border-nekopeach mb-4 overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg"
+                    <img src="${pageContext.request.contextPath}/frontend/images/alessiagit.png"
                          alt="Luigi Bianchi"
                          class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-bold text-nekoorange mb-1">Alessia Palmigiano</h3>
                 <p class="text-nekopeach font-medium mb-3">Collaboratrice Shop</p>
-                <p class="text-gray-600 text-sm mb-4">Si assicura che il lavoro sia efficiente e che la manutenzione del sito sia attuata.</p>
+                <p class="text-gray-600 text-sm mb-4">Si assicura che il lavoro sia efficiente e che la manutenzione del
+                    sito sia attuata.</p>
                 <div class="flex justify-center space-x-3">
-                    <a href="#" class="w-8 h-8 rounded-full bg-nekoorange text-white flex items-center justify-center hover:bg-nekopurple transition">
+                    <a href="#"
+                       class="w-8 h-8 rounded-full bg-nekoorange text-white flex items-center justify-center hover:bg-nekopurple transition">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="#" class="w-8 h-8 rounded-full bg-nekoorange text-white flex items-center justify-center hover:bg-nekopurple transition">
+                    <a href="#"
+                       class="w-8 h-8 rounded-full bg-nekoorange text-white flex items-center justify-center hover:bg-nekopurple transition">
                         <i class="fab fa-instagram"></i>
                     </a>
                 </div>
@@ -481,10 +264,102 @@
                 </div>
 
 
-</div>
+            </div>
+        </div>
+
+    </div>
+        </div>
+<!-- Footer -->
+<footer class="mt-16 bg-gradient-to-b from-nekoorange to-nekopeach text-white pt-12 pb-8">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Footer section -->
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+                        <i class="fas fa-paw text-nekopink text-lg"></i>
+                    </div>
+                    <h4 class="font-bold text-xl ml-3 text-white">NekoPop Shop</h4>
+                </div>
+                <p class="text-pink-100">Il tuo negozio preferito per manga e action figure, fornito da appassionati per appassionati!</p>
+            </div>
+
+            <!-- Footer section -->
+            <div>
+                <h4 class="font-bold text-lg mb-4 text-white">Contatti</h4>
+                <p class="text-pink-100 flex items-center mb-3">
+                    <i class="fas fa-map-marker-alt mr-3"></i>
+                    <span>Via dei Manga, 123<br>Milano, Italia</span>
+                </p>
+                <p class="text-pink-100 flex items-center mb-3">
+                    <i class="fas fa-phone mr-3"></i> +39 02 1234567
+                </p>
+                <p class="text-pink-100 flex items-center">
+                    <i class="fas fa-envelope mr-3"></i> info@nekopopshop.com
+                </p>
+            </div>
+
+            <!-- Footer section -->
+            <div>
+                <h4 class="font-bold text-lg text-white mb-4">Link Utili</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
+                        <i class="fas fa-caret-right mr-2"></i> Assistenza Clienti
+                    </a></li>
+                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
+                        <i class="fas fa-caret-right mr-2"></i> FAQ
+                    </a></li>
+                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
+                        <i class="fas fa-caret-right mr-2"></i> Spedizioni
+                    </a></li>
+                    <li><a href="#" class="text-pink-100 hover:text-white transition flex items-center">
+                        <i class="fas fa-caret-right mr-2"></i> Termini e Condizioni
+                    </a></li>
+                </ul>
+            </div>
+
+            <!-- Footer section -->
+            <div>
+
+            </div>
+
+            <div class="mt-4">
+                <h5 class="font-bold mb-3">Seguici</h5>
+                <div class="flex space-x-4">
+                    <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="border-t border-pink-300/30 mt-8 pt-6 text-center text-pink-100">
+        <p>&copy; 2023 NekoPopShop. Tutti i diritti riservati.</p>
+        <div class="flex justify-center mt-4">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-cc-visa text-lg"></i>
+                <i class="fab fa-cc-mastercard text-lg"></i>
+                <i class="fab fa-cc-paypal text-lg"></i>
+                <i class="fab fa-cc-apple-pay text-lg"></i>
+            </div>
+        </div>
+    </div>
+</footer>
+
 </div>
+
+</body>
+
 
 </body>
 </html>

@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NekoPopShop - Il tuo negozio kawaii di manga e action figure</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="frontend/Scripts/index_Dainamic.js" defer></script>
+    <script src="frontend/Scripts/Nav_Bar.js" defer></script>
+
+
     <script>
         tailwind.config = {
             theme: {
@@ -22,169 +27,6 @@
             }
         }
     </script>
-    <style>
-        @font-face {
-            font-family: 'Milkyway';  /* Scegli un nome per il font */
-            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
-            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
-            font-weight: normal;        /* Peso del font (es. 400, 700) */
-            font-style: normal;        /* normale, italic, ecc. */
-            font-display: swap;        /* Ottimizza il rendering */
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes blossom-fall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f0f0f0;
-
-            /* Immagine di background principale */
-            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
-
-            /* Centra e copre tutto lo spazio senza ripetizioni */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-
-            /* Altezza minima = viewport height */
-            min-height: 100vh;
-
-            /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
-            background-attachment: scroll;
-
-            /* Ottimizzazione prestazioni */
-            image-rendering: smooth;
-            overflow-x: hidden;
-        }
-        @media (min-width: 768px) {
-            body {
-                background-attachment: fixed;
-            }
-        }
-
-        .folder-tab {
-            position: relative;
-            background-color: #f2d5bb;
-            padding: 15px 25px;
-            border-radius: 15px 15px 0 0;
-            border: 2px solid #E55458;
-            border-bottom: none;
-            box-shadow: 0 -3px 8px #E55458;
-            margin-right: -10px;
-            z-index: 1;
-            transition: all 0.3s ease;
-            color: #E55458;
-        }
-
-        .folder-tab.active, .folder-tab:hover {
-            background-color: #E55458;
-            color: white;
-            transform: translateY(-0px);
-            z-index: 2;
-        }
-
-        .folder-tab::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 0;
-            width: 100%;
-            height: 15px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxNXB4IiB2aWV3Qm94PSIwIDAgMTAwIDUiPiAgPHBhdGggZmlsbD0iI2ZmZDJlNSIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
-            background-size: 100% 15px;
-            background-position: bottom center;
-            background-repeat: no-repeat;
-            z-index: -1;
-        }
-
-
-
-        .cherry-blossom {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxLTE4IDB6Ii8+PHBhdGggZD0iTTYwIDYwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDAgMTggMiAyIDAgMCAwIDIgMiA5IDkgMCAwIDEgMC0xOHoiLz48L2c+PC9zdmc+');
-            background-size: cover;
-            animation: blossom-fall 15s linear infinite;
-        }
-
-        .product-card {
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px #E55458;
-            overflow: hidden;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px #E55458;
-        }
-
-        .product-card::after {
-            content: 'NekoPop';
-            position: absolute;
-            top: 10px;
-            right: -35px;
-            background: #E55458;
-            color: #f2d5bb;
-            padding: 3px 35px;
-            transform: rotate(45deg);
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .header-content {
-            background: linear-gradient(145deg, #E55458, #f2d5bb);
-            border-radius: 20px;
-            box-shadow: 0 10px 25px #E55458;
-            border: 2px solid #ffd1e3;
-        }
-
-        .sakura-divider {
-            height: 3px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSI1cHgiIHZpZXdCb3g9IjAgMCAxMDAgNSI+PHBhdGggZmlsbD0iI2ZmN2ViOCIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
-            background-size: cover;
-        }
-
-        .nekotag {
-            background: linear-gradient(90deg, #E55458, #F29966);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            font-weight: 800;
-            font-size: 45px;
-        }
-
-
-        .text-3xl{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .text-xl{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .text-lg{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .fa-star, .fas, .far {
-            font-style: normal !important;
-        }
-
-    </style>
 </head>
 <body class="relative overflow-x-hidden">
 <!-- Decorative cat elements and cherry blossoms -->
@@ -213,22 +55,65 @@
         </div>
 
         <!-- Navigation -->
-        <div class="w-full lg:w-auto">
-            <div class="flex flex-wrap justify-center lg:justify-start -mb-1">
-                <a href="index.jsp" class="folder-tab active"><i class="fas fa-home mr-2"></i> Home</a>
-                <a href="catalog.jsp" class="folder-tab"><i class="fas fa-book mr-2"></i> Catalogo</a>
-                <a href="about.jsp" class="folder-tab"><i class="fas fa-info-circle mr-2"></i> Chi Siamo</a>
-                <a href="cart.jsp" class="folder-tab"><i class="fas fa-shopping-cart mr-2"></i> Carrello</a>
-                <a href="admin.jsp" class="folder-tab"><i class="fas fa-user-shield mr-2"></i> Admin</a>
-                <a href="utente.jsp" class="folder-tab"><i class="fas fa-user mr-2"></i> Utente</a>
-            </div>
-        </div>
+        <div id="navbar"></div>
+        <jsp:include page="navBar.jsp" />
     </div>
+
+    <jsp:include page="error.jsp" />
 
     <!-- Sponsor Section -->
     <div class="flex flex-wrap gap-4 mb-8">
         <!-- Sponsor Banner -->
-        <div class="header-content p-6 w-full md:w-2/3 relative">
+        <div id="dayOffer" class="header-content p-6 w-full md:w-2/3 relative">
+            <div class="absolute -top-2 right-4 flex gap-2">
+                <div class="w-3 h-3 rounded-full bg-nekopink"></div>
+                <div class="w-3 h-3 rounded-full bg-nekopurple"></div>
+                <div class="w-3 h-3 rounded-full bg-kawaililac"></div>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-4">
+                <div class="bg-kawaililac rounded-xl px-4 py-2 flex items-center">
+                    <i class="fas fa-star text-yellow-400 text-2xl mr-3"> </i>
+                    <div>
+                        <h3 class="font-bold text-white text-xl" style="font-size: 30px"> Offerta del giorno!</h3>
+                        <p class="text-white text-xs">Sconti fino al 30%</p>
+                    </div>
+                </div>
+
+                <div class="md:flex-1 flex flex-col md:flex-row items-center gap-4">
+                    <div class="bg-gradient-to-r from-nekopink to-nekopurple w-24 h-24 rounded-xl p-1">
+                        <div class="bg-white w-full h-full rounded-lg overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1615800000134-d3a9c1b1a7f0?q=80&w=1000"
+                                 alt="Demon Slayer"
+                                 class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <div class="text-center md:text-left">
+                        <h3 class="font-bold text-xl text-nekopurple mb-1">Demon Slayer Vol. 1-10</h3>
+                        <div class="flex justify-center md:justify-start items-center gap-1">
+                            <p class="text-gray-500 line-through text-sm">&#8364 6,50</p>
+                            <p class="text-2xl font-bold text-nekopink">&#8364 5,00</p>
+                        </div>
+                        <div class="mt-2 flex gap-2 justify-center md:justify-start">
+                            <span class="bg-nekoorange px-2 py-1 rounded-lg text-white text-xs">Limited Edition</span>
+                            <span class="bg-nekored px-2 py-1 rounded-lg text-white text-xs">-30%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 flex justify-between items-center">
+                <p class="text-white text-sm">Offerta valida fino al 31/12/2023</p>
+                <button id="addCartOfferta" class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                    <i class="fas fa-gift mr-2"></i> Approfitta ora
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Sponsor Banner -->
+        <div id="dayOfferProd" class="header-content p-6 w-full md:w-2/3 relative">
             <div class="absolute -top-2 right-4 flex gap-2">
                 <div class="w-3 h-3 rounded-full bg-nekopink"></div>
                 <div class="w-3 h-3 rounded-full bg-nekopurple"></div>
@@ -274,28 +159,6 @@
                 </button>
             </div>
         </div>
-
-        <!-- Special Offer -->
-        <div class="header-content p-6 w-full md:w-1/3 relative overflow-hidden">
-            <div class="absolute top-0 left-0 right-0 bottom-0 z-0">
-                <div class="absolute top-2 left-2 w-8 h-8 rounded-full bg-nekopink opacity-20 animate-ping"></div>
-                <div class="absolute top-8 right-4 w-6 h-6 rounded-full bg-kawaiblue opacity-20 animate-ping"></div>
-                <div class="absolute bottom-4 left-10 w-10 h-10 rounded-full bg-nekopurple opacity-20 animate-ping"></div>
-            </div>
-
-            <div class="relative z-10 flex flex-col items-center justify-center h-full">
-                <div class="bg-gradient-to-br from-nekopeach to-nekoorange rounded-full w-20 h-20 flex items-center justify-center">
-                    <i class="fas fa-headset text-4xl text-white"></i>
-                </div>
-
-                <h3 class= "text-xl font-bold text-center text-white mt-4" style="font-size: 30px" >Supporto Premium</h3>
-                <p class="text-center text-gray-600 text-sm mt-2">Iscriviti oggi e ricevi un action figure in omaggio!</p>
-
-                <button class="bg-nekopeach hover:bg-nekopurple text-white px-4 py-2 rounded-lg mt-4 font-bold transition-all">
-                    <i class="fas fa-crown mr-2"></i> Vantaggi Premium
-                </button>
-            </div>
-        </div>
     </div>
 
     <div class="sakura-divider my-6"></div>
@@ -324,7 +187,7 @@
                         </div>
                         <div>
                             <h3 class= "font-semibold text-lg text-nekopurple mb-2" style="font-size: 25px"> Consegna Espressa!</h3>
-                            <p class="text-gray-600">Nuovo servizio di consegna in giornata per tutta la città di Milano! Dai un'occhiata alla nostra sezione informazioni.</p>
+                            <p class="text-gray-600">Nuovo servizio di consegna in giornata per tutta la citt&agrave di Milano! Dai un'occhiata alla nostra sezione informazioni.</p>
                             <div class="mt-3 flex items-center">
                                 <span class="bg-nekopeach text-white px-2 py-1 rounded-md text-xs">Esclusiva</span>
                                 <span class="ml-3 text-xs text-gray-400"><i class="far fa-clock mr-1"></i> 2 giorni fa</span>
@@ -376,7 +239,7 @@
                     </h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                <div id="weeklyFeatured" class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                     <!-- Product -->
                     <div class="product-card bg-white rounded-lg overflow-hidden border-2 border-kawaililac relative">
                         <div class="relative h-48 overflow-hidden">
@@ -421,7 +284,7 @@
         </div>
 
         <!-- Featured Manga -->
-        <div class="lg:col-span-1">
+        <div id="moreBuy" class="lg:col-span-1">
             <div class="bg-white rounded-xl border-2 border-nekoorange overflow-hidden h-full">
                 <div class="bg-gradient-to-r from-nekopink to-nekoorange p-4">
                     <h2 class="text-xl font-bold text-nekopeach flex items-center">
@@ -644,8 +507,8 @@
             <div class="text-center md:text-left mb-6 md:mb-0">
                 <h3 class="text-2xl md: text-3xl font-bold text-white">Action Figure Limited Edition!</h3>
                 <p class="text-white mt-2 max-w-md">Collezione esclusiva di figure da collezione con effetti luminosi e dettagli premium!</p>
-                <button class="mt-4 bg-white text-nekopeach px-6 py-3 rounded-full font-bold hover:bg-pink-50 transition">
-                    <i class="fas fa-gifts mr-2"></i> Scopri le offerte
+                <button class="mt-4 bg-white text-nekopeach px-6 py-3 rounded-full font-bold hover:bg-pink-50 transition to_catalog">
+                    <i class="fas fa-gifts mr-2"></i> Scopri di pi&ugrave
                 </button>
             </div>
 
@@ -654,7 +517,7 @@
                     <div class="absolute top-0 right-0 -mt-6 -mr-6 w-12 h-12 rounded-full bg-yellow-400 flex items-center justify-center">
                         <i class="fas fa-certificate text-white"></i>
                     </div>
-                    <div class="w-64 h-64 rounded-2xl overflow-hidden border-4 border-white shadow-2xl">
+                    <div id="limitedFigure" class="w-64 h-64 rounded-2xl overflow-hidden border-4 border-white shadow-2xl">
                         <img src="https://images.unsplash.com/photo-1598885154377-4d1dacdd0d5c?q=80&w=1000"
                              alt="Limited Edition Figure"
                              class="w-full h-full object-cover">
@@ -719,12 +582,7 @@
 
             <!-- Footer section -->
             <div>
-                <h4 class="font-bold text-lg text-white mb-4">Iscriviti alla Newsletter</h4>
-                <div class="flex mt-2">
-                    <input type="email" placeholder="Tua email" class="bg-white/20 border border-pink-300 text-white rounded-l-lg px-4 py-3 w-full placeholder-pink-200 focus:outline-none">
-                    <button class="bg-white text-nekopink font-bold px-4 rounded-r-lg">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
+
                 </div>
 
                 <div class="mt-4">
@@ -766,41 +624,5 @@
     <i class="fas fa-comment-alt text-white text-2xl"></i>
     <div class="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></div>
 </div>
-
-<script>
-    // Generate floating cherry blossoms and cat decorations
-    function generateDecorations() {
-        const decorationsContainer = document.getElementById('decorations');
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-
-
-
-
-
-        // Generate cherry blossom decorations
-        for (let i = 0; i < 15; i++) {
-            const blossom = document.createElement('div');
-            blossom.className = 'cherry-blossom';
-            blossom.style.left = `${Math.random() * viewportWidth}px`;
-            blossom.style.animationDelay = `${Math.random() * 15}s`;
-            blossom.style.opacity = `0.${Math.floor(2 + Math.random() * 7)}`;
-            blossom.style.transform = `scale(${0.5 + Math.random()})`;
-            decorationsContainer.appendChild(blossom);
-        }
-    }
-
-
-    // Generate decorations on page load
-    document.addEventListener('DOMContentLoaded', generateDecorations);
-
-    // Folder tab interaction
-    document.querySelectorAll('.folder-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.folder-tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-</script>
 </body>
 </html>

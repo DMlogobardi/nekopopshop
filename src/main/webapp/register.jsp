@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NekoPopShop - Registrazione</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="frontend/Scripts/Register.js" defer></script>
+    <script src="frontend/Scripts/MultiStepForm.js" defer></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -17,318 +21,39 @@
                         nekobeige: '#f2d5bb',
                         nekoorange: '#f29966',
                         nekored: '#f24535',
-
                     }
                 }
             }
         }
     </script>
-    <style>
-        @font-face {
-            font-family: 'Milkyway';  /* Scegli un nome per il font */
-            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
-            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
-            font-weight: normal;        /* Peso del font (es. 400, 700) */
-            font-style: normal;        /* normale, italic, ecc. */
-            font-display: swap;        /* Ottimizza il rendering */
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes blossom-fall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f0f0f0;
-
-            /* Immagine di background principale */
-            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
-
-            /* Centra e copre tutto lo spazio senza ripetizioni */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-
-            /* Altezza minima = viewport height */
-            min-height: 100vh;
-
-            /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
-            background-attachment: scroll;
-
-            /* Ottimizzazione prestazioni */
-            image-rendering: smooth;
-            overflow-x: hidden;
-        }
-        @media (min-width: 768px) {
-            body {
-                background-attachment: fixed;
-            }
-        }
-
-
-        .folder-tab {
-            position: relative;
-            background-color: #f2d5bb;
-            padding: 15px 25px;
-            border-radius: 15px 15px 0 0;
-            border: 2px solid #E55458;
-            border-bottom: none;
-            box-shadow: 0 -3px 8px #E55458;
-            margin-right: -10px;
-            z-index: 1;
-            transition: all 0.3s ease;
-            color: #E55458;
-        }
-
-        .folder-tab.active, .folder-tab:hover {
-            background-color: #E55458;
-            color: white;
-            transform: translateY(-0px);
-            z-index: 2;
-        }
-
-        .folder-tab::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 0;
-            width: 100%;
-            height: 15px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxNXB4IiB2aWV3Qm94PSIwIDAgMTAwIDUiPiAgPHBhdGggZmlsbD0iI2ZmZDJlNSIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
-            background-size: 100% 15px;
-            background-position: bottom center;
-            background-repeat: no-repeat;
-            z-index: -1;
-        }
-
-        .cat-elements i {
-            color: #fbd8da;
-            animation: float 4s infinite ease-in-out;
-        }
-
-        .cherry-blossom {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDIgOSA9IDAgMS0xOCAweiIvPjxwYXRoIGQ9Ik02MCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAwIDE4IDIgMiAwIDAgMCAyIDIgOSA5IDAgMCAxIDAtMTh6Ii8+PC9nPjwvc3ZnPg==');
-            background-size: cover;
-            animation: blossom-fall 15s linear infinite;
-        }
-
-        .profile-card {
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(229, 84, 88, 0.2);
-            overflow: hidden;
-            border-radius: 20px;
-        }
-
-        .profile-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(229, 84, 88, 0.3);
-        }
-
-        .header-content {
-            background: linear-gradient(145deg, #E55458, #f2d5bb);
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(229, 84, 88, 0.3);
-            border: 2px solid #ffd1e3;
-        }
-
-        .sakura-divider {
-            height: 3px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSI1cHgiIHZpZXdCb3g9IjAgMCAxMDAgNSI+PHBhdGggZmlsbD0iI2ZmN2ViOCIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
-            background-size: cover;
-        }
-
-        .nekotag {
-            background: linear-gradient(90deg, #E55458, #F29966);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            font-weight: 800;
-            font-size: 45px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .progress-bar {
-            height: 8px;
-            border-radius: 4px;
-            background-color: #f2d5bb;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #E55458, #F29966);
-            border-radius: 4px;
-        }
-
-        .avatar-upload {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto;
-        }
-
-        .avatar-upload .avatar-preview {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid #E55458;
-            background-color: #fbd8da;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .avatar-upload .avatar-edit {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            z-index: 1;
-        }
-
-        .avatar-upload .avatar-edit input {
+    <!--<style>
+        #registration-message {
             display: none;
-        }
-
-        .avatar-upload .avatar-edit label {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            margin-bottom: 0;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #E55458, #F29966);
-            border: 2px solid white;
-            cursor: pointer;
-            font-weight: normal;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
             color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
         }
 
-        .avatar-upload .avatar-edit label:hover {
-            transform: scale(1.1);
+        #registration-message.block {
+            display: block;
         }
 
-        .password-toggle {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #6a8cde;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .password-toggle:hover {
-            color: #e55458;
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
         }
-
-        .registration-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .registration-steps::before {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background-color: #f2d5bb;
-            z-index: 1;
-        }
-
-        .step {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            width: 30%;
-        }
-
-        .step-number {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #f2d5bb;
-            color: #e55458;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            font-weight: bold;
-        }
-
-        .step.active .step-number {
-            background-color: #e55458;
-            color: white;
-        }
-
-        .step.completed .step-number {
-            background-color: #6a8cde;
-            color: white;
-        }
-
-        .step-title {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .step.active .step-title {
-            color: #e55458;
-            font-weight: bold;
-        }
-
-        .step.completed .step-title {
-            color: #6a8cde;
-        }
-
-        .text-3xl{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .text-xl{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .text-lg{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .fa-star, .fas, .far {
-            font-style: normal !important;
-        }
-
-    </style>
+    </style> -->
 </head>
 <body class="relative overflow-x-hidden">
 <!-- Decorative elements -->
@@ -400,12 +125,12 @@
                             <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Informazioni personali</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="first-name">Nome*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="first-name" type="text" required>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Nome*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="name" placeholder="Nome" type="text" required>
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="last-name">Cognome*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="last-name" type="text" required>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="cognome">Cognome*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="cognome" placeholder="Cognome" type="text" required>
                                 </div>
                             </div>
                         </div>
@@ -413,18 +138,8 @@
                         <div class="mb-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="birthdate">Data di nascita*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="birthdate" type="date" required>
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">Genere</label>
-                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="gender">
-                                        <option value="">Seleziona</option>
-                                        <option value="male">Maschio</option>
-                                        <option value="female">Femmina</option>
-                                        <option value="other">Altro</option>
-                                        <option value="prefer-not-to-say">Preferisco non specificare</option>
-                                    </select>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="nascita">Data di nascita*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="nascita" placeholder="Data di nascita" type="date" required>
                                 </div>
                             </div>
                         </div>
@@ -443,17 +158,36 @@
                             <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Dettagli account</h3>
                             <div class="grid grid-cols-1 gap-4">
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="username" type="text" required>
-                                    <p class="text-xs text-gray-500 mt-1">Scegli un nome utente unico (min. 4 caratteri)</p>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="email" placeholder="Email" type="email" required>
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="email" type="email" required>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="cf">Codice Fiscale*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="cf" placeholder="Codice Fiscale" type="text" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="via">Via*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="via" placeholder="Via" type="text" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="civico">Civico*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="civico" placeholder="Civico" type="text" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="cap">CAP*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="cap" placeholder="CAP" type="text" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="prefisso">Prefisso*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="prefisso" placeholder="Prefisso" type="text" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="numero">Numero*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="numero" placeholder="Numero" type="text" required>
                                 </div>
                                 <div class="relative">
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password*</label>
-                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="password" type="password" required>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="password" placeholder="Password" type="password" required>
                                     <i class="fas fa-eye password-toggle" id="togglePassword"></i>
                                     <div class="mt-2">
                                         <div class="flex items-center mb-1">
@@ -475,6 +209,11 @@
                                     <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="confirm-password" type="password" required>
                                     <i class="fas fa-eye password-toggle" id="toggleConfirmPassword"></i>
                                 </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="nick">Nickname*</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekopeach" id="nick" placeholder="Nickname" type="text" required>
+                                    <p class="text-xs text-gray-500 mt-1">Scegli un nome utente unico (min. 4 caratteri)</p>
+                                </div>
                             </div>
                         </div>
 
@@ -482,12 +221,8 @@
                             <h3 class="font-bold text-lg text-nekopeach mb-4" style="font-size: 25px">Preferenze</h3>
                             <div class="grid grid-cols-1 gap-4">
                                 <div class="flex items-center">
-                                    <input id="newsletter" type="checkbox" class="w-4 h-4 text-nekopeach rounded focus:ring-nekopeach" checked>
-                                    <label for="newsletter" class="ml-2 text-sm text-gray-700">Ricevi newsletter e offerte speciali</label>
-                                </div>
-                                <div class="flex items-center">
                                     <input id="terms" type="checkbox" class="w-4 h-4 text-nekopeach rounded focus:ring-nekopeach" required>
-                                    <label for="terms" class="ml-2 text-sm text-gray-700">Accetto i <a href="#" class="text-kawaiblue hover:underline">Termini e condizioni</a> e l'<a href="#" class="text-kawaiblue hover:underline">Informativa sulla privacy</a>*</label>
+                                    <label for="terms" class="ml-2 text-sm text-gray-700">Accetto i <a href="#" class="text-nekored hover:underline">Termini e condizioni</a> e l'<a href="#" class="text-nekored hover:underline">Informativa sulla privacy</a>*</label>
                                 </div>
                             </div>
                         </div>
@@ -502,7 +237,7 @@
                 <!-- Step 3: Confirmation -->
                 <div class="step-content" id="step3-content">
                     <div class="text-center mb-6">
-                        <div class="w-24 h-24 mx-auto rounded-full bg-nekopink flex items-center justify-center mb-4">
+                        <div class="w-32 h-32 mx-auto rounded-full bg-nekopink flex items-center justify-center mb-4">
                             <i class="fas fa-check text-nekopeach text-2xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-gray-800 mb-2" style="font-size: 25px">Conferma i tuoi dati</h3>
@@ -513,48 +248,56 @@
                         <h4 class="font-bold text-nekopeach mb-3">Informazioni personali</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <p class="text-sm text-gray-600">Nome e cognome</p>
-                                <p class="font-medium" id="confirm-name">Mario Rossi</p>
+                                <p class="text-sm text-gray-600">Nome</p>
+                                <p class="font-medium" id="confirm-name"></p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Cognome</p>
+                                <p class="font-medium" id="confirm-cognome"></p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-600">Data di nascita</p>
-                                <p class="font-medium" id="confirm-birthdate">15/05/1990</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Genere</p>
-                                <p class="font-medium" id="confirm-gender">Maschio</p>
+                                <p class="font-medium" id="confirm-nascita"></p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-kawaiblue/10 p-6 rounded-xl mb-6">
-                        <h4 class="font-bold text-kawaiblue mb-3">Dettagli account</h4>
+                    <div class="bg-nekopink/10 p-6 rounded-xl mb-6">
+                        <h4 class="font-bold text-nekopeach mb-3">Dettagli account</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <p class="text-sm text-gray-600">Username</p>
-                                <p class="font-medium" id="confirm-username">nekofan123</p>
-                            </div>
-                            <div>
                                 <p class="text-sm text-gray-600">Email</p>
-                                <p class="font-medium" id="confirm-email">mario.rossi@example.com</p>
+                                <p class="font-medium" id="confirm-email"></p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Newsletter</p>
-                                <p class="font-medium" id="confirm-newsletter">Attiva</p>
+                                <p class="text-sm text-gray-600">Codice Fiscale</p>
+                                <p class="font-medium" id="confirm-cf"></p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Indirizzo</p>
+                                <p class="font-medium" id="confirm-indirizzo"></p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Telefono</p>
+                                <p class="font-medium" id="confirm-telefono"></p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Nickname</p>
+                                <p class="font-medium" id="confirm-nick"></p>
                             </div>
                         </div>
                     </div>
 
                     <div class="flex justify-between">
                         <button type="button" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-300 transition prev-step" data-prev="step2">Indietro</button>
-                        <button type="submit" class="bg-nekopeach text-white px-4 py-2 rounded-lg font-bold hover:bg-nekoorange transition">Completa registrazione</button>
+                        <button id="conferma" type="button" class="bg-nekopeach text-white px-4 py-2 rounded-lg font-bold hover:bg-nekoorange transition">Completa registrazione</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="mt-6 text-center">
-            <p class="text-gray-600">Hai gi&agrave un account? <a href="login.html" class="text-nekored font-bold hover:underline">Accedi qui</a></p>
+            <p class="text-gray-600">Hai gi&agrave un account? <a href="login.jsp" class="text-nekored font-bold hover:underline">Accedi qui</a></p>
         </div>
     </div>
 </div>
@@ -651,6 +394,7 @@
         </div>
     </div>
 </footer>
+
 <script>
     // Cherry blossom animation
     function createCherryBlossom() {
@@ -688,58 +432,167 @@
     const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
     const confirmPassword = document.getElementById('confirm-password');
 
-    togglePassword.addEventListener('click', function() {
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        this.classList.toggle('fa-eye-slash');
-    });
+    if (togglePassword && password) {
+        togglePassword.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    }
 
-    toggleConfirmPassword.addEventListener('click', function() {
-        const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-        confirmPassword.setAttribute('type', type);
-        this.classList.toggle('fa-eye-slash');
-    });
+    if (toggleConfirmPassword && confirmPassword) {
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPassword.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    }
 
     // Password validation
-    password.addEventListener('input', function() {
-        const value = this.value;
-        const lengthCheck = document.getElementById('length-check');
-        const uppercaseCheck = document.getElementById('uppercase-check');
-        const numberCheck = document.getElementById('number-check');
+    if (password) {
+        password.addEventListener('input', function() {
+            const value = this.value;
+            const lengthCheck = document.getElementById('length-check');
+            const uppercaseCheck = document.getElementById('uppercase-check');
+            const numberCheck = document.getElementById('number-check');
 
-        // Length check
-        if (value.length >= 8) {
-            lengthCheck.classList.add('bg-green-500', 'border-green-500');
-            lengthCheck.classList.remove('border-gray-300');
-            lengthCheck.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
-        } else {
-            lengthCheck.classList.remove('bg-green-500', 'border-green-500');
-            lengthCheck.classList.add('border-gray-300');
-            lengthCheck.innerHTML = '';
+            // Length check
+            if (value.length >= 8) {
+                lengthCheck.classList.add('bg-green-500', 'border-green-500');
+                lengthCheck.classList.remove('border-gray-300');
+                lengthCheck.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
+            } else {
+                lengthCheck.classList.remove('bg-green-500', 'border-green-500');
+                lengthCheck.classList.add('border-gray-300');
+                lengthCheck.innerHTML = '';
+            }
+
+            // Uppercase check
+            if (/[A-Z]/.test(value)) {
+                uppercaseCheck.classList.add('bg-green-500', 'border-green-500');
+                uppercaseCheck.classList.remove('border-gray-300');
+                uppercaseCheck.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
+            } else {
+                uppercaseCheck.classList.remove('bg-green-500', 'border-green-500');
+                uppercaseCheck.classList.add('border-gray-300');
+                uppercaseCheck.innerHTML = '';
+            }
+
+            // Number check
+            if (/\d/.test(value)) {
+                numberCheck.classList.add('bg-green-500', 'border-green-500');
+                numberCheck.classList.remove('border-gray-300');
+                numberCheck.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
+            } else {
+                numberCheck.classList.remove('bg-green-500', 'border-green-500');
+                numberCheck.classList.add('border-gray-300');
+                numberCheck.innerHTML = '';
+            }
+        });
+    }
+
+    // Funzione per aggiornare i dati di conferma
+    function aggiornaStep3Conferma() {
+        const getValue = (id) => {
+            const element = document.getElementById(id);
+            return element ? element.value : "";
+        };
+
+        const formatDate = (dateString) => {
+            if (!dateString) return "";
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('it-IT', options);
+        };
+
+        // Aggiorna i campi di conferma
+        document.getElementById("confirm-name").textContent = getValue("name");
+        document.getElementById("confirm-cognome").textContent = getValue("cognome");
+        document.getElementById("confirm-nascita").textContent = formatDate(getValue("nascita"));
+        document.getElementById("confirm-email").textContent = getValue("email");
+        document.getElementById("confirm-cf").textContent = getValue("cf");
+        document.getElementById("confirm-indirizzo").textContent =
+            `${getValue("via")}, ${getValue("civico")} - ${getValue("cap")}`;
+        document.getElementById("confirm-telefono").textContent =
+            `${getValue("prefisso")} ${getValue("numero")}`;
+        document.getElementById("confirm-nick").textContent = getValue("nick");
+    }
+
+    // Funzione per mostrare il banner di successo
+    function mostraBannerRegistrazioneSuccesso() {
+        const msg = document.getElementById("registration-message");
+        if (!msg) {
+            // Se il banner non esiste, reindirizza direttamente
+            window.location.href = "login.jsp";
+            return;
         }
 
-        // Uppercase check
-        if (/[A-Z]/.test(value)) {
-            uppercaseCheck.classList.add('bg-green-500', 'border-green-500');
-            uppercaseCheck.classList.remove('border-gray-300');
-            uppercaseCheck.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
-        } else {
-            uppercaseCheck.classList.remove('bg-green-500', 'border-green-500');
-            uppercaseCheck.classList.add('border-gray-300');
-            uppercaseCheck.innerHTML = '';
+        // Mostra il banner
+        msg.classList.remove("hidden");
+        msg.classList.add("block", "animate-fade-in");
+
+        // Nasconde il messaggio dopo 3 secondi e reindirizza al login
+        setTimeout(() => {
+            msg.classList.remove("block", "animate-fade-in");
+            msg.classList.add("hidden");
+            window.location.href = "login.jsp";
+        }, 3000);
+    }
+
+    // Funzione per completare la registrazione
+    async function completaRegistrazione() {
+        // Validazione finale
+        const password = document.getElementById("password")?.value;
+        const confirmPassword = document.getElementById("confirm-password")?.value;
+        const terms = document.getElementById("terms")?.checked;
+
+        if (!password || !confirmPassword || password !== confirmPassword) {
+            alert("Le password non coincidono");
+            return;
         }
 
-        // Number check
-        if (/\d/.test(value)) {
-            numberCheck.classList.add('bg-green-500', 'border-green-500');
-            numberCheck.classList.remove('border-gray-300');
-            numberCheck.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
-        } else {
-            numberCheck.classList.remove('bg-green-500', 'border-green-500');
-            numberCheck.classList.add('border-gray-300');
-            numberCheck.innerHTML = '';
+        if (!terms) {
+            alert("Devi accettare i termini e condizioni");
+            return;
         }
-    });
+
+        const dto = {
+            name: document.getElementById("name").value,
+            cognome: document.getElementById("cognome").value,
+            nascita: document.getElementById("nascita").value,
+            email: document.getElementById("email").value,
+            cf: document.getElementById("cf").value,
+            via: document.getElementById("via").value,
+            civico: parseInt(document.getElementById("civico").value),
+            cap: document.getElementById("cap").value,
+            prefisso: document.getElementById("prefisso").value,
+            numero: document.getElementById("numero").value,
+            password: password,
+            nick: document.getElementById("nick").value
+        };
+
+        try {
+            const response = await fetch("register", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(dto)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.status === "success") {
+                mostraBannerRegistrazioneSuccesso();
+            } else {
+                alert("Registrazione fallita: " + (data.message || "Errore generico"));
+            }
+        } catch (error) {
+            console.error("Errore durante la registrazione:", error);
+            alert("Si è verificato un errore durante la registrazione. Riprova più tardi.");
+        }
+    }
 
     // Step navigation
     document.querySelectorAll('.next-step').forEach(button => {
@@ -747,6 +600,11 @@
             const nextStep = this.getAttribute('data-next');
             const currentStep = document.querySelector('.step-content.active');
             const nextStepContent = document.getElementById(`${nextStep}-content`);
+
+            if (!nextStepContent) {
+                console.error(`Elemento con ID ${nextStep}-content non trovato`);
+                return;
+            }
 
             // Validate form before proceeding
             let isValid = true;
@@ -764,10 +622,10 @@
 
                 // Special validation for password match
                 if (nextStep === 'step3') {
-                    if (password.value !== confirmPassword.value) {
+                    if (password && confirmPassword && password.value !== confirmPassword.value) {
                         isValid = false;
                         confirmPassword.classList.add('border-red-500');
-                    } else {
+                    } else if (confirmPassword) {
                         confirmPassword.classList.remove('border-red-500');
                     }
                 }
@@ -788,20 +646,9 @@
                 currentStep.classList.remove('active');
                 nextStepContent.classList.add('active');
 
-                // Update confirmation data
+                // Se siamo passati al passo 3, aggiorna i dati di conferma
                 if (nextStep === 'step3') {
-                    document.getElementById('confirm-name').textContent =
-                        `${document.getElementById('first-name').value} ${document.getElementById('last-name').value}`;
-                    document.getElementById('confirm-birthdate').textContent =
-                        new Date(document.getElementById('birthdate').value).toLocaleDateString('it-IT');
-                    document.getElementById('confirm-gender').textContent =
-                        document.getElementById('gender').options[document.getElementById('gender').selectedIndex].text || 'Non specificato';
-                    document.getElementById('confirm-username').textContent =
-                        document.getElementById('username').value;
-                    document.getElementById('confirm-email').textContent =
-                        document.getElementById('email').value;
-                    document.getElementById('confirm-newsletter').textContent =
-                        document.getElementById('newsletter').checked ? 'Attiva' : 'Disattiva';
+                    aggiornaStep3Conferma();
                 }
             }
         });
@@ -812,6 +659,11 @@
             const prevStep = this.getAttribute('data-prev');
             const currentStep = document.querySelector('.step-content.active');
             const prevStepContent = document.getElementById(`${prevStep}-content`);
+
+            if (!prevStepContent) {
+                console.error(`Elemento con ID ${prevStep}-content non trovato`);
+                return;
+            }
 
             // Update steps
             document.querySelectorAll('.step').forEach(step => {
@@ -828,14 +680,19 @@
         });
     });
 
-    // Form submission
-    document.querySelector('#step3-content form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Here you would typically send the data to your server
-        alert('Registrazione completata con successo!');
-        // Redirect to login or dashboard
-        window.location.href = 'profile.html';
-    });
+    // Aggiungi event listener al pulsante di conferma
+    const confirmButton = document.getElementById('conferma');
+    if (confirmButton) {
+        confirmButton.addEventListener('click', completaRegistrazione);
+    }
+
+    // Inizializzazione
+    document.querySelector('.step-content.active').classList.add('active');
+    document.querySelector('.step').classList.add('active');
 </script>
+
+<div id="registration-message" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-200 text-green-900 font-bold px-6 py-3 rounded-lg shadow-lg z-50 transition duration-300 ease-in-out">
+    Registrazione completata con successo! ✨
+</div>
 </body>
 </html>

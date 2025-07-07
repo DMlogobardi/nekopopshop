@@ -13,13 +13,13 @@ import java.io.IOException;
  * Servlet implementation class login
  */
 @WebServlet("/common/utentdategesture")
-public class UtentDateGesture extends HttpServlet {
+public class UtentDataGesture extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor.
      */
-    public UtentDateGesture() {
+    public UtentDataGesture() {
         // TODO Auto-generated constructor stub
     }
 
@@ -38,44 +38,51 @@ public class UtentDateGesture extends HttpServlet {
         // TODO Auto-generated method stub
         HttpSession session = request.getSession();
         if(session.getAttribute("logToken") == null){
-            request.setAttribute("error", "utent is not logged in");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"access denied\"}");
             return;
         }
 
         String action = request.getParameter("action");
 
         if(action == null){
-            request.setAttribute("error", "invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("action is null");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
             return;
         }
 
-        session.setAttribute("gesture", "autorizato");
-
         if(action.equals("wishlist")){
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("wishlistgesture").forward(request, response);
 
         } else if (action.equals("indirizzi")) {
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("indirizzigesture").forward(request, response);
 
         } else if (action.equals("carte")) {
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("cartegesture").forward(request, response);
 
         } else if (action.equals("datiUtente")) {
-            //account compreso
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("utentegesture").forward(request, response);
 
         } else if (action.equals("ordini")) {
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("ordinigesture").forward(request, response);
 
         } else if (action.equals("reader")) {
+            session.setAttribute("gesture", "autorizato");
             request.getRequestDispatcher("getreader").forward(request, response);
 
         } else {
-            System.out.println("error");
-            request.setAttribute("error", "Invalid action");
-            request.getRequestDispatcher("/utente.jsp").forward(request, response);
+            System.out.println("invalid action");
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");;
         }
     }
 

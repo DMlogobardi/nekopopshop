@@ -1,6 +1,8 @@
 package model.DAO;
 
 import model.Bean.ProdottoBean;
+import model.Bean.VolumeBean;
+import model.DTO.BookDTO;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -29,10 +31,22 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
             con = ds.getConnection();
             ps = con.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getNome());
-            ps.setInt(2,bean.getQuantita());
-            ps.setDouble(3,bean.getPrezzo());
+            if(bean.getQuantita() != null) {
+                ps.setInt(2, bean.getQuantita());
+            } else {
+                ps.setNull(2, Types.INTEGER);
+            }
+            if(bean.getPrezzo() != null) {
+                ps.setDouble(3, bean.getPrezzo());
+            } else {
+                ps.setNull(3, Types.DOUBLE);
+            }
             ps.setString(4,bean.getAutore());
-            ps.setBytes(5,bean.getImgProd());
+            if(bean.getImgProd() != null) {
+                ps.setBytes(5,bean.getImgProd());
+            } else {
+                ps.setNull(5, Types.BLOB);
+            }
             ps.setString(6,bean.getDescrizione());
 
             ps.executeUpdate();
@@ -108,19 +122,139 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         return prod;
     }
 
+    public int doRetrieveTot() throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        int result = 0;
+
+        String selectSQL = "SELECT COUNT(*) FROM " + TABLE_NAME;
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                result = rs.getInt("COUNT(*)");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return result;
+    }
+
+    public ProdottoBean doRetrieveFigure() throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ProdottoBean prod = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE prezzo IS NOT NULL AND prezzo > 0.0 limit 1";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                prod = new ProdottoBean(
+                        rs.getInt("idProdotto"),
+                        rs.getString("nome"),
+                        rs.getInt("quantità"),
+                        rs.getDouble("prezzo"),
+                        rs.getString("autore"),
+                        rs.getBytes("imgProd"),
+                        rs.getString("descrizione")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return prod;
+    }
+
+    public ProdottoBean doRetrieveByVol(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ProdottoBean prod = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idVolum = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1,code);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                prod = new ProdottoBean(
+                        rs.getInt("idProdotto"),
+                        rs.getString("nome"),
+                        rs.getInt("quantità"),
+                        rs.getDouble("prezzo"),
+                        rs.getString("autore"),
+                        rs.getBytes("imgProd"),
+                        rs.getString("descrizione")
+                );
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return prod;
+    }
+
+    public int doRetrieveQuantity(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String selectSQL = "SELECT quantita FROM " + TABLE_NAME + " WHERE idProdotto = ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt("quantita");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return result;
+    }
+
     @Override
     public Collection<ProdottoBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
         Collection<ProdottoBean> prodotti = new LinkedList<ProdottoBean>();
 
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " ORDER BY " + order.strip();
-        }
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " ORDER BY ?";
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip())){
+                ps.setString(1, order.strip());
+            }
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -151,16 +285,30 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         PreparedStatement ps = null;
         Collection<ProdottoBean> prodotti = new LinkedList<ProdottoBean>();
 
-        String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " ORDER BY " + order.strip();
-        }
-        if(limit > 0 && page > 0){
-            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
-        }
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " where prezzo is not null or prezzo > 0 ORDER BY ? limit ? offset ?" ;
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+            if(order != null && orderWhiteList.contains(order.strip())){
+                ps.setString(1, order.strip());
+            } else {
+                ps.setString(1, "idProdotto");
+            }
+            if (limit > 0 && page > 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(2, 10);
+                ps.setInt(3, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(2, limit);
+                ps.setInt(3, 0);
+            } else {
+                ps.setInt(2, 10);
+                ps.setInt(3, 0);
+            }
+
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -191,18 +339,36 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
         Collection<ProdottoBean> prodotti = new LinkedList<ProdottoBean>();
 
         String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
-        if(!serch.isEmpty()){
-            selectAllSQL += " WHERE LOWER(nome) " + " LIKE " + "'%" + serch.toLowerCase() + "%'";
+        if (!serch.isEmpty()) {
+            selectAllSQL += " WHERE prezzo is not null or prezzo > 0 LOWER(nome) LIKE ?  ORDER BY ? ";
         }
-        if(order != null && orderWhiteList.contains(order.strip())){
-            selectAllSQL += " ORDER BY " + order.strip();
-        }
-        if(limit > 0 && page > 0){
-            selectAllSQL += " limit " + limit + " offset " + (page - 1) * limit;
-        }
+        selectAllSQL += " LIMIT ? OFFSET ?";
+
+
         try{
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
+
+            ps.setString(1, "%" + serch.toLowerCase() + "%");
+
+            if (order != null && orderWhiteList.contains(order.strip())) {
+                ps.setString(2, order.strip());
+            } else {
+                ps.setString(2, "idProdotto");
+            }
+            if (limit > 0 && page > 0) {
+                ps.setInt(3, limit);
+                ps.setInt(4, (page - 1) * limit);
+            } else if (page > 0 && limit <= 0) {
+                ps.setInt(3, 10);
+                ps.setInt(4, (page - 1) * limit);
+            } else if (limit > 0 && page <= 0) {
+                ps.setInt(3, limit);
+                ps.setInt(4, 0);
+            } else {
+                ps.setInt(3, 10);
+                ps.setInt(4, 0);
+            }
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -225,6 +391,97 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean>{
             }
         }
         return prodotti;
+    }
+
+    public boolean uppdate (ProdottoBean bean) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String updateSQL = "update " + TABLE_NAME + " set nome = ?, quantità = ?, prezzo = ?, autore = ?, imgProd = ?, descrizione = ? where idProdotto = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setString(1, bean.getNome());
+            if(bean.getQuantita() != null) {
+                ps.setInt(2, bean.getQuantita());
+            } else {
+                ps.setNull(2, Types.INTEGER);
+            }
+            if(bean.getPrezzo() != null) {
+                ps.setDouble(3, bean.getPrezzo());
+            } else {
+                ps.setNull(3, Types.DOUBLE);
+            }
+            ps.setString(4,bean.getAutore());
+            if(bean.getImgProd() != null) {
+                ps.setBytes(5,bean.getImgProd());
+            } else {
+                ps.setNull(5, Types.BLOB);
+            }
+            ps.setString(6,bean.getDescrizione());
+            ps.setInt(7, bean.getIdProdotto());
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
+    }
+
+    public boolean decrementQuantita (int quantita, int idProd) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+
+        String updateSQL = "update " + TABLE_NAME + " set quantità = quantità - ? where idProdotto = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(updateSQL);
+            ps.setInt(1, quantita);
+            ps.setInt(2, idProd);
+
+            result = ps.executeUpdate();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return (result != 0);
+    }
+
+    public Double doRetrievePrezzoByKey(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        double prezzo = 0;
+
+        String selectSQL = "SELECT prezzo FROM " + TABLE_NAME + " WHERE idProdotto = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1,code);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                prezzo = rs.getDouble("prezzo");
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return prezzo;
     }
 }
 
