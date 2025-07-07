@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="frontend/Scripts/checkout_dainamic.js" defer></script>
 
     <script>
         tailwind.config = {
@@ -90,19 +91,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Seleziona un indirizzo:</label>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="shipping-address-list">
 
-                            <!-- Address 2 -->
-                            <div class="address-option p-4 border rounded-lg cursor-pointer hover:border-nekopeach">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <h3 class="font-bold">Ufficio</h3>
-                                        <p class="text-sm text-gray-600">Mario Rossi</p>
-                                        <p class="text-sm text-gray-600">Via Dante 45, 00100 Roma</p>
-                                        <p class="text-sm text-gray-600">Italia</p>
-                                        <p class="text-sm text-gray-600">Tel: 0987654321</p>
-                                    </div>
-                                    <i class="fas fa-check text-nekopeach mt-1 invisible"></i>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 
@@ -115,57 +104,33 @@
                     <div id="new-address-form" class="mt-4 hidden">
                         <h3 class="font-bold mb-3">Nuovo indirizzo</h3>
                         <form class="space-y-3">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nome indirizzo (es. Casa)</label>
-                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nome completo</label>
-                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
-                                </div>
-                            </div>
 
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Indirizzo</label>
-                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
-                            </div>
+
+
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Città</label>
-                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Via</label>
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach" id="via" name="via">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Provincia</label>
-                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">N civico</label>
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach" id="civico" name="civico">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">CAP</label>
-                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach" id="cap" name="cap">
                                 </div>
+
+
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Paese</label>
-                                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
-                                        <option>Italia</option>
-                                        <option>Francia</option>
-                                        <option>Germania</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Telefono</label>
-                                    <input type="tel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
-                                </div>
-                            </div>
 
                             <div class="flex justify-end space-x-3 pt-2">
                                 <button type="button" id="cancel-new-address" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100">
                                     Annulla
                                 </button>
-                                <button type="submit" class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg font-medium">
+                                <button type="button" class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg font-medium" onclick="addIndirizzo();">
                                     Salva indirizzo
                                 </button>
                             </div>
@@ -183,42 +148,16 @@
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Seleziona un metodo di pagamento:</label>
                         <div class="space-y-3" id="payment-method-list">
-                            <!-- Saved Card 1 -->
-                            <div class="payment-option p-4 border rounded-lg cursor-pointer hover:border-nekopeach selected-payment">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-center">
-                                        <i class="fab fa-cc-visa text-3xl text-blue-800 mr-3"></i>
-                                        <div>
-                                            <h3 class="font-bold">Visa •••• •••• •••• 4242</h3>
-                                            <p class="text-sm text-gray-600">Scadenza: 12/25</p>
-                                        </div>
-                                    </div>
-                                    <i class="fas fa-check text-nekopeach"></i>
-                                </div>
-                            </div>
 
-                            <!-- Saved Card 2 -->
-                            <div class="payment-option p-4 border rounded-lg cursor-pointer hover:border-nekopeach">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-center">
-                                        <i class="fab fa-cc-mastercard text-3xl text-red-800 mr-3"></i>
-                                        <div>
-                                            <h3 class="font-bold">Mastercard •••• •••• •••• 5555</h3>
-                                            <p class="text-sm text-gray-600">Scadenza: 06/24</p>
-                                        </div>
-                                    </div>
-                                    <i class="fas fa-check text-nekopeach invisible"></i>
-                                </div>
-                            </div>
-
-                            <!-- New Card Option -->
-                            <div class="payment-option p-4 border rounded-lg cursor-pointer hover:border-nekopeach" id="add-new-card-btn">
-                                <div class="flex items-center text-nekopeach">
-                                    <i class="fas fa-plus-circle text-xl mr-3"></i>
-                                    <h3 class="font-bold">Aggiungi nuova carta</h3>
-                                </div>
+                        </div>
+                        <div class="text-nekopeach font-medium text-sm hover:text-nekored" id="add-new-card-btn">
+                            <div class="flex items-center text-nekopeach">
+                                <i class="fas fa-plus-circle text-xl mr-3"></i>
+                                <h3 class="font-bold">Aggiungi nuova carta</h3>
                             </div>
                         </div>
+
+
                     </div>
 
                     <!-- New Card Form (hidden by default) -->
@@ -226,19 +165,29 @@
                         <h3 class="font-bold mb-3">Dettagli carta</h3>
                         <form class="space-y-3">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Nome sulla carta</label>
-                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach" id="nome" name="nome">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Cognome</label>
+                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach" id="cognome" name="cognome">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Numero carta</label>
-                                <input type="text" placeholder="1234 5678 9012 3456" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
+                                <input type="text" placeholder="1234 5678 9012 3456" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach" id="nCarta" name="nCarta">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+                                <input type="text" placeholder="Visa" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach" id="tipo" name="tipo">
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Mese scadenza</label>
-                                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
+                                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach" id="mese" name="mese">
                                         <option>MM</option>
                                         <% for(int i=1; i<=12; i++) { %>
                                         <option value="<%= i %>"><%= String.format("%02d", i) %></option>
@@ -247,7 +196,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Anno scadenza</label>
-                                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach">
+                                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-nekopeach focus:border-nekopeach" id="anno" name="anno">
                                         <option>YYYY</option>
                                         <% int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
                                             for(int i=0; i<10; i++) { %>
@@ -261,16 +210,11 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center">
-                                <input type="checkbox" id="save-card" class="h-4 w-4 text-nekopeach focus:ring-nekopeach border-gray-300 rounded">
-                                <label for="save-card" class="ml-2 block text-sm text-gray-700">Salva questa carta per acquisti futuri</label>
-                            </div>
-
                             <div class="flex justify-end space-x-3 pt-2">
                                 <button type="button" id="cancel-new-card" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100">
                                     Annulla
                                 </button>
-                                <button type="submit" class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg font-medium">
+                                <button type="button" class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg font-medium" onclick="addCarta()">
                                     Aggiungi carta
                                 </button>
                             </div>
@@ -287,7 +231,7 @@
                     </h2>
 
                     <!-- Order Items -->
-                    <div class="space-y-4 mb-4">
+                    <div class="space-y-4 mb-4" id="items">
                         <div class="flex justify-between">
                             <div class="flex">
                                 <div class="w-16 h-16 rounded-md overflow-hidden mr-3">
@@ -367,33 +311,35 @@
     </div>
     <script>
         // Address selection
-        document.querySelectorAll('.address-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.address-option').forEach(opt => {
-                    opt.classList.remove('selected-address');
-                    opt.querySelector('.fa-check').classList.add('invisible');
-                });
-                this.classList.add('selected-address');
-                this.querySelector('.fa-check').classList.remove('invisible');
+        document.getElementById("shipping-address-list").addEventListener("click", function (e) {
+            const target = e.target.closest(".address-option");
+            if (!target) return;
+
+            document.querySelectorAll(".address-option").forEach(opt => {
+                opt.classList.remove("selected-address");
+                const checkIcon = opt.querySelector(".fa-check");
+                if (checkIcon) checkIcon.classList.add("invisible");
             });
+
+            target.classList.add("selected-address");
+            const checkIcon = target.querySelector(".fa-check");
+            if (checkIcon) checkIcon.classList.remove("invisible");
         });
 
         // Payment method selection
-        document.querySelectorAll('.payment-option').forEach(option => {
-            option.addEventListener('click', function() {
-                if(this.id === 'add-new-card-btn') return;
+        document.getElementById("payment-method-list").addEventListener("click", function (e) {
+            const target = e.target.closest(".payment-option");
+            if (!target || target.id === "add-new-card-btn") return;
 
-                document.querySelectorAll('.payment-option').forEach(opt => {
-                    opt.classList.remove('selected-payment');
-                    if(opt.querySelector('.fa-check')) {
-                        opt.querySelector('.fa-check').classList.add('invisible');
-                    }
-                });
-                this.classList.add('selected-payment');
-                if(this.querySelector('.fa-check')) {
-                    this.querySelector('.fa-check').classList.remove('invisible');
-                }
+            document.querySelectorAll(".payment-option").forEach(opt => {
+                opt.classList.remove("selected-payment");
+                const checkIcon = opt.querySelector(".fa-check");
+                if (checkIcon) checkIcon.classList.add("invisible");
             });
+
+            target.classList.add("selected-payment");
+            const checkIcon = target.querySelector(".fa-check");
+            if (checkIcon) checkIcon.classList.remove("invisible");
         });
 
         // Add new address
