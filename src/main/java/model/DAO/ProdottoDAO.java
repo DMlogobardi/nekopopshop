@@ -220,7 +220,7 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean> {
         PreparedStatement ps = null;
         int result = 0;
 
-        String selectSQL = "SELECT quantita FROM " + TABLE_NAME + " WHERE idProdotto = ?";
+        String selectSQL = "SELECT quantità FROM " + TABLE_NAME + " WHERE idProdotto = ?";
 
         try {
             con = ds.getConnection();

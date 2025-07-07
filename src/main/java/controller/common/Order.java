@@ -154,7 +154,7 @@ public class Order extends HttpServlet {
                 }
             }
 
-            if(quantitaDB > conte.getqCarrello()) {
+            if(quantitaDB < conte.getqCarrello()) {
                 AcquistatoBean acquistato = conte.convertirAcquistato(idOrdine);
 
                 try {

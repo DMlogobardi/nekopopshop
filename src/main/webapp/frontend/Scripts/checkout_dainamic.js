@@ -359,65 +359,70 @@ function loadRiassunto(){
 }
 
 function completaOrdine() {
-    // Trova l'elemento <i> visibile (senza la classe 'invisible')
     const checkIconAddress = document.querySelector('.address-option i.fas.fa-check:not(.invisible)');
-    let idAddress =0;
-    let idCarta = 0;
-    let a,b = null;
-    if (checkIconAddress) {
-        // Risali fino al div con la classe 'address-option'
-        const addressDiv = checkIconAddress.closest('.address-option');
+    let idAddress = 0;
 
+    if (checkIconAddress) {
+        const addressDiv = checkIconAddress.closest('.address-option');
         if (addressDiv) {
-            [b,idAddress] = addressDiv.id.split('-');
+            const parts = addressDiv.id.split('-');
+            if (parts.length > 1) {
+                idAddress = parseInt(parts[1], 10);
+            }
         }
     }
 
     const checkIconCarta = document.querySelector('.payment-option i.fas.fa-check:not(.invisible)');
+    let idCarta = 0;
 
     if (checkIconCarta) {
         const div = checkIconCarta.closest('.payment-option');
-
         if (div) {
-            [a,idCarta]= div.id.split('-');
-
-        } else {
-            console.warn('Div con classe address-option non trovato.');
+            const parts = div.id.split('-');
+            if (parts.length > 1) {
+                idCarta = parseInt(parts[1], 10);
+            }
         }
-    } else {
-        console.warn('Nessun elemento <i> visibile trovato.');
     }
-    console.log(`idCarta = ${idCarta}, idAddress = ${idAddress}`);
 
-    const params = new URLSearchParams();
-    params.append("card", idCarta);
-    params.append("indirizzo", idAddress);
+    if (idAddress === 0 || idCarta === 0) {
+        mostraErrore("Seleziona sia un indirizzo che un metodo di pagamento validi.");
+        return;
+    }
+
+    const payload = {
+        card: idCarta,
+        indirizzo: idAddress
+    };
 
     fetch("common/order", {
         method: "POST",
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/json"
         },
-        body: params.toString()
+        body: JSON.stringify(payload)
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error("Errore nell'ordine");
+                return response.json().then(err => {
+                    throw new Error(err.message || "Errore sconosciuto nel completamento dell'ordine.");
+                }).catch(() => {
+                    throw new Error(`Errore HTTP: ${response.status} ${response.statusText}`);
+                });
             }
-            else {
-                return response.json();
-            }
+            return response.json();
         })
         .then(result => {
-            if(result.success === "success") {
+            if (result.success === "success") {
                 window.location.href = "cart.jsp";
+            } else {
+                mostraErrore(result.message || "Errore nel completamento dell'ordine. Riprova.");
             }
-
         })
         .catch(error => {
-            mostraErrore(error);
-        })
-
+            console.error("Errore durante l'operazione di completamento ordine:", error);
+            mostraErrore(error.message || "Si è verificato un errore inaspettato.");
+        });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
