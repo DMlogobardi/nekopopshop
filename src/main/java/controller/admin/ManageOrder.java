@@ -43,7 +43,7 @@ public class ManageOrder extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        if(session.getAttribute("logToken") != "A") {
+        if(!"A".equals(session.getAttribute("logToken"))) {
             response.setStatus(422);
             response.setContentType("text/json");
             response.getWriter().println("{\"error\":\"access denied\"}");
@@ -179,18 +179,11 @@ public class ManageOrder extends HttpServlet {
             Collection<OrdineBean> ordini = null;
             OrdineDAO ordineDAO = new OrdineDAO(ds);
             AccountDAO accountDAO = new AccountDAO(ds);
-            String ordine = request.getParameter("ordine");
-            String nickname = request.getParameter("nick");
+            String ordine = request.getParameter("ordine") == null ? "" : request.getParameter("ordine");
+            int id = request.getParameter("id") == null ? 0 : Integer.parseInt(request.getParameter("id"));
 
             try {
-                AccountBean acc = accountDAO.doRetrieveByNick(nickname);
-                if(acc == null){
-                    response.setStatus(422);
-                    response.setContentType("text/json");
-                    response.getWriter().println("{\"error\":\"invalid account\"}");
-                    return;
-                }
-                ordini = ordineDAO.doRetrieveByUser(ordine, acc.getIdCliente());
+                ordini = ordineDAO.doRetrieveByUser(ordine, id);
             } catch (SQLException e) {
                 response.setStatus(500);
                 response.setContentType("text/json");

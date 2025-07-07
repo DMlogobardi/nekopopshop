@@ -128,7 +128,7 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean> {
 
         int result = 0;
 
-        String selectSQL = "SELECT COUNT(*) FROM " + TABLE_NAME;
+        String selectSQL = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE prezzo > 0.0";
 
         try {
             con = ds.getConnection();

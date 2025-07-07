@@ -48,7 +48,111 @@ function createCherryBlossoms() {
     }
 }
 
+async function ordiniForUser(id = 0){
+    if(id === 0){
+        mostraErrore("ordini non visualizabili");
+    }
+    const params = new URLSearchParams();
+    params.append("action", "order");
+    params.append("actionOrder", "fromUse");
+    params.append("id", id);
+
+    fetch("admin/admindatagesture", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.error !== undefined) {
+                mostraErrore("internal error");
+                return;
+            }
+
+            return data.length;
+        })
+}
+
+function caricaClienti(pag = 1){
+    const params = new URLSearchParams();
+    params.append("action", "cliente");
+    params.append("actionCliente", "getAll");
+    params.append("limit", "10");
+    params.append("page", pag.toString());
+
+    fetch("admin/admindatagesture", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+    }).then(res => res.json())
+        .then(data =>{
+            if(data.error !== undefined){
+                mostraErrore("internal error")
+            }
+            let tabbella = document.getElementById("table");
+
+            data.forEach(c =>{
+                const sezzione = creaSezione(c);
+                tabbella.appendChild(sezzione);
+            })
+
+            async function creaSezione(item) {
+                let numOrdini;
+
+                try {
+                    const ordini = await ordiniForUser(item.idCliente);
+                    numOrdini = ordini;
+                } catch (error) {
+                    console.warn(`Impossibile ottenere ordini per cliente ${item.idCliente}:`, error.message);
+                    numOrdini = 'Errore';
+                }
+
+                return `<tr>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.idCliente}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.nome} ${item.cognome}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.email}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">numOrdini</td>
+
+                </tr>
+                    `;
+            }
+        });
+}
+
+function utentiRegistrati(){
+    const params = new URLSearchParams();
+    params.append("action", "cliente");
+    params.append("actionCliente", "getAll");
+
+    fetch("admin/admindatagesture", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+    }).then(res => res.json())
+        .then(data =>{
+            if(data.error !== undefined){
+                mostraErrore("internal error")
+            }
+
+            const contUtent = document.getElementById("tot");
+            contUtent.textContent = data.length;
+        });
+}
+
+function initUtent(){
+    createCherryBlossoms();
+    utentiRegistrati();
+    caricaClienti();
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     createCherryBlossoms();
+    initUtent();
 });

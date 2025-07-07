@@ -32,7 +32,7 @@ public class AdminUserGesture extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        if(session.getAttribute("logToken") != "A") {
+        if(!"A".equals(session.getAttribute("logToken"))) {
             response.setStatus(422);
             response.setContentType("text/json");
             response.getWriter().println("{\"error\":\"access denied\"}");

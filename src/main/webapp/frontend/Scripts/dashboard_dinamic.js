@@ -257,8 +257,7 @@ function numProd() {
         });
 }
 
-// Initialize everything when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+function init(){
     createFloatingElements();
     utentiRegistrati();
     ordiniOggi();
@@ -283,4 +282,9 @@ document.addEventListener('DOMContentLoaded', function() {
             alert.style.display = 'flex';
         });
     }, 1000);
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    init()
 });

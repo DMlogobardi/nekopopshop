@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="frontend/Scripts/admin_Dainamic.js" defer></script>
     <script src="frontend/Scripts/dashboard_dinamic.js" defer></script>
+    <script src="frontend/Scripts/gestioneUtenti_Dinamic.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -106,7 +107,6 @@
                        onclick="handleSidebarClick(this, 'products')">
                         <i class="fas fa-box sidebar-icon mr-3 text-gray-500"></i>
                         <span>Prodotti</span>
-                        <span class="notification-badge ml-auto">5</span>
                     </a>
 
                     <a href="#"
@@ -114,7 +114,6 @@
                        onclick="handleSidebarClick(this, 'users')">
                         <i class="fas fa-users sidebar-icon mr-3 text-gray-500"></i>
                         <span>Utenti</span>
-                        <span class="text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded ml-auto">32</span>
                     </a>
 
                     <a href="#"
@@ -122,7 +121,6 @@
                        onclick="handleSidebarClick(this, 'orders')">
                         <i class="fas fa-shopping-cart sidebar-icon mr-3 text-gray-500"></i>
                         <span>Ordini</span>
-                        <span class="notification-badge ml-auto">12</span>
                     </a>
                 </nav>
             </div>

@@ -240,6 +240,12 @@ function loadContent(section) {
     $('#dynamic-content').html(loader).load(contentMap[section], function(response, status) {
         if (status === "error") {
             $('#dynamic-content').html(`<div class="alert alert-error">Errore nel caricamento</div>`);
+        } else {
+            if(section === "dashboard") {
+                init();
+            } else if (section === "users") {
+                initUtent();
+            }
         }
     });
 }

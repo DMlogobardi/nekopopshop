@@ -200,7 +200,8 @@ public class Order extends HttpServlet {
         sCart.push(ds);
 
         System.out.println("success");
-        request.setAttribute("success", "success");
-        request.getRequestDispatcher("/cart.jsp").forward(request, response);
+        response.setStatus(200);
+        response.setContentType("text/json");
+        response.getWriter().println("{\"success\":\"success\"}");
     }
 }
