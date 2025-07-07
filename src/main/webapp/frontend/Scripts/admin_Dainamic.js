@@ -48,7 +48,7 @@ function loadContent(section) {
 }
 
 // Inizializzazione della pagina
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function () {
     createFloatingElements();
     initCharts();
 
@@ -231,9 +231,8 @@ $(document).ready(function() {
 const contentMap = {
     'products': 'gestioneprodotti.jsp',
     'users': 'gestioneutenti.jsp',
-    'dashboard': 'dashboard.jsp',
+    'dashboard': 'impostazioniadmin.jsp',
     'orders' : 'ordini.jsp',
-    'settings' : 'impostazioniadmin.jsp'
 };
 
 function loadContent(section) {
@@ -244,6 +243,15 @@ function loadContent(section) {
         }
     });
 }
+
+function handleSidebarClick(element, contentId) {
+    document.querySelectorAll('.sidebar-item').forEach(link => {
+        link.classList.remove('active');
+    });
+    element.classList.add('active');
+    loadContent(contentId);
+}
+
 
 // Inizializzazione
 $(document).ready(function() {

@@ -49,35 +49,13 @@
 
     <!-- Admin Content -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- Left Sidebar - Admin Menu -->
-        <div class="lg:col-span-1">
-            <!-- Quick Actions Card -->
-            <div class="profile-card bg-white border-2 border-nekogreen mt-6">
-                <div class="bg-gradient-to-r from-nekogreen to-nekoblue p-4">
-                    <h3 class="text-lg font-bold text-white flex items-center" style="font-size: 30px">
-                        <i class="fas fa-bolt mr-2" style="font-size: 30px"></i> Azioni
-                    </h3>
-                </div>
-                <div class="p-4 space-y-3">
-                    <button  id="addProductBtn" class="w-full bg-nekogreen hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold transition flex items-center justify-center">
-                        <i class="fas fa-plus mr-2"></i> Aggiungi Prodotto
-                    </button>
-                    <button  id="removeProductBtn" class="w-full bg-nekored hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-bold transition flex items-center justify-center">
-                        <i class="fas fa-minus mr-2"></i> Rimuovi Prodotto
-                    </button>
-                    <button  id="modifyProductBtn" class="w-full bg-nekoorange hover:bg-orange-500 text-white px-4 py-2 rounded-lg font-bold transition flex items-center justify-center">
-                        <i class="fas fa-edit mr-2"></i> Modifica Prodotto
-                    </button>
-                </div>
-            </div>
-        </div>
 
         <!-- Main Content -->
-        <div class="lg:col-span-3">
+        <div class="lg:col-span-3 flex items-center">
             <!-- Products Management Tab -->
             <div class="tab-content active" id="products-tab">
-                <div class="profile-card bg-white border-2 border-nekopurple">
-                    <div class="bg-gradient-to-r from-nekopurple to-nekoblue p-4">
+                <div class="profile-card bg-white border-2 border-nekopink overflow-hidden">
+                    <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
                         <div class="flex justify-between items-center">
                             <h2 class="text-xl font-bold text-white flex items-center" style="font-size: 30px">
                                 <i class="fas fa-boxes mr-3"></i> Gestione Prodotti
@@ -100,40 +78,10 @@
                                 <div class="text-green-800 font-bold text-xl">1,012</div>
                                 <div class="text-xs text-green-600">Disponibili</div>
                             </div>
-                            <div class="bg-red-50 p-3 rounded-lg">
-                                <div class="text-red-800 font-bold text-xl">236</div>
-                                <div class="text-xs text-red-600">Esauriti</div>
-                            </div>
-                            <div class="bg-purple-50 p-3 rounded-lg">
-                                <div class="text-purple-800 font-bold text-xl">84</div>
-                                <div class="text-xs text-purple-600">In Arrivo</div>
-                            </div>
                         </div>
 
                         <!-- Filters Row -->
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                            <div class="flex flex-wrap gap-2">
-                                <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
-                                    <option>Tutte le categorie</option>
-                                    <option>Manga</option>
-                                    <option>Action Figure</option>
-                                    <option>Merchandising</option>
-                                    <option>Accessori</option>
-                                </select>
-                                <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
-                                    <option>Tutti gli stati</option>
-                                    <option>Disponibile</option>
-                                    <option>Esaurito</option>
-                                    <option>In arrivo</option>
-                                </select>
-                                <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
-                                    <option>Ordina per</option>
-                                    <option>Più recenti</option>
-                                    <option>Più venduti</option>
-                                    <option>Prezzo crescente</option>
-                                    <option>Prezzo decrescente</option>
-                                </select>
-                            </div>
                             <div class="flex items-center">
                                 <span class="text-sm text-gray-600 mr-2">Mostra:</span>
                                 <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
@@ -398,7 +346,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productImage1">Immagine Prodotto</label>
+                            <%--@declare id="productimage1"--%><label class="block text-gray-700 text-sm font-bold mb-2" for="productImage1">Immagine Prodotto</label>
                             <div class="mt-1 flex items-center">
                                 <span class="inline-block h-12 w-12 rounded-md overflow-hidden bg-gray-100">
                                     <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
@@ -492,7 +440,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productImage2">Immagine Prodotto</label>
+                            <%--@declare id="productimage2"--%><label class="block text-gray-700 text-sm font-bold mb-2" for="productImage2">Immagine Prodotto</label>
                             <div class="mt-1 flex items-center">
                                 <span class="inline-block h-12 w-12 rounded-md overflow-hidden bg-gray-100">
                                     <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
@@ -586,7 +534,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productImage3">Immagine Prodotto</label>
+                            <%--@declare id="productimage3"--%><label class="block text-gray-700 text-sm font-bold mb-2" for="productImage3">Immagine Prodotto</label>
                             <div class="mt-1 flex items-center">
                                 <span class="inline-block h-12 w-12 rounded-md overflow-hidden bg-gray-100">
                                     <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">

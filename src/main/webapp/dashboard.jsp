@@ -43,9 +43,9 @@
 <div id="decorations"></div>
 
 <!-- Main Content -->
-<div class="container mx-auto px-4 py-6">
+<div class="container mx-auto px-4 md:px-8 py-6">
   <!-- Welcome Banner -->
-  <div class="admin-card p-6 bg-white rounded-xl">
+  <div class="admin-card p-6 bg-white rounded-xl mb-8">
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
       <div>
         <h2 class="text-xl font-bold text-gray-800 mb-2">Benvenuto, <span class="text-admin-gradient">Admin Master</span> 👋</h2>
@@ -55,7 +55,7 @@
   </div>
 
   <!-- Quick Stats -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Order Stats -->
     <div class="stat-card p-5">
       <div class="flex items-start justify-between">
@@ -129,7 +129,7 @@
 
 
   <!-- Recent Orders & Top Products -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mx-auto px-4 md:px-8 py-6">
     <!-- Recent Orders -->
     <div class="admin-card">
       <div class="p-5 border-b border-gray-200">
@@ -202,65 +202,5 @@
   </div>
 </div>
 
-<!-- Add Product Modal -->
-<div class="modal" id="addProductModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 class="font-bold text-lg">Aggiungi Nuovo Prodotto</h3>
-      <button class="close-btn" onclick="closeModal('addProductModal')">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div class="space-y-4">
-        <div>
-          <label class="form-label">Nome Prodotto</label>
-          <input type="text" class="form-input w-full" placeholder="Es. Maglia Neko Kawaii">
-        </div>
-        <div>
-          <label class="form-label">Descrizione</label>
-          <textarea class="form-input w-full" rows="3" placeholder="Descrizione dettagliata del prodotto"></textarea>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="form-label">Prezzo</label>
-            <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">&#8364</span>
-              <input type="number" class="form-input w-full pl-8" placeholder="0.00">
-            </div>
-          </div>
-          <div>
-            <label class="form-label">Quantit&agrave in Stock</label>
-            <input type="number" class="form-input w-full" placeholder="0">
-          </div>
-        </div>
-        <div>
-          <label class="form-label">Categoria</label>
-          <select class="form-select w-full">
-            <option>Abbigliamento</option>
-            <option>Accessori</option>
-            <option>Peluche</option>
-            <option>Casa</option>
-            <option>Altro</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label">Immagine Prodotto</label>
-          <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-            <div class="flex flex-col items-center justify-center">
-              <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-              <p class="text-sm text-gray-500 mb-1">Trascina l'immagine qui o clicca per selezionare</p>
-              <p class="text-xs text-gray-400">Formati supportati: JPG, PNG (max 5MB)</p>
-              <button class="btn-secondary mt-3 text-sm">Scegli File</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeModal('addProductModal')">Annulla</button>
-      <button class="btn-primary">Aggiungi Prodotto</button>
-    </div>
-  </div>
-
-</div>
 </body>
 </html>

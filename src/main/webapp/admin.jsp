@@ -97,53 +97,37 @@
 
                 <!-- Sidebar Menu -->
                 <nav class="space-y-1 mb-6">
-                    <a href="#" class="sidebar-item active flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach" onclick="loadContent('dashboard')">
+                    <a href="#"
+                       class="sidebar-item active flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach"
+                       onclick="handleSidebarClick(this, 'dashboard')">
                         <i class="fas fa-tachometer-alt sidebar-icon mr-3 text-gray-500"></i>
                         <span>Dashboard</span>
                     </a>
-                    <a href="#" onclick="loadContent('products')" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach">
+
+                    <a href="#"
+                       class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach"
+                       onclick="handleSidebarClick(this, 'products')">
                         <i class="fas fa-box sidebar-icon mr-3 text-gray-500"></i>
                         <span>Prodotti</span>
                         <span class="notification-badge ml-auto">5</span>
                     </a>
-                    <a href="#" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach" onclick="loadContent('users')">
+
+                    <a href="#"
+                       class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach"
+                       onclick="handleSidebarClick(this, 'users')">
                         <i class="fas fa-users sidebar-icon mr-3 text-gray-500"></i>
                         <span>Utenti</span>
                         <span class="text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded ml-auto">32</span>
                     </a>
-                    <a href="#" onclick="loadContent('orders')" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach" onclick="loadContent('orders')">
+
+                    <a href="#"
+                       class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach"
+                       onclick="handleSidebarClick(this, 'orders')">
                         <i class="fas fa-shopping-cart sidebar-icon mr-3 text-gray-500"></i>
                         <span>Ordini</span>
                         <span class="notification-badge ml-auto">12</span>
                     </a>
-                    <a href="#" onclick="loadContent('settings')" class="sidebar-item flex items-center p-3 rounded-lg text-gray-700 hover:text-nekopeach" onclick="loadContent('settings')">
-                        <i class="fas fa-cog sidebar-icon mr-3 text-gray-500"></i>
-                        <span>Impostazioni</span>
-                    </a>
                 </nav>
-
-
-
-                <!-- Quick Actions -->
-                <div class="mt-4 pt-4 border-t border-gray-200">
-                    <h4 class="font-bold mb-3 text-gray-700 flex items-center">
-                        <i class="fas fa-bolt mr-2 text-gray-500"></i> Azioni Rapide
-                    </h4>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button class="btn-outline flex items-center justify-center text-xs py-2 px-3">
-                            <i class="fas fa-plus mr-1"></i> Prodotto
-                        </button>
-                        <button class="btn-outline flex items-center justify-center text-xs py-2 px-3">
-                            <i class="fas fa-tag mr-1"></i> Sconto
-                        </button>
-                        <button class="btn-outline flex items-center justify-center text-xs py-2 px-3">
-                            <i class="fas fa-file-export mr-1"></i> Report
-                        </button>
-                        <button class="btn-outline flex items-center justify-center text-xs py-2 px-3">
-                            <i class="fas fa-bell mr-1"></i> Notifiche
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -366,35 +350,6 @@
                         <i class="fas fa-caret-right mr-2"></i> Termini e Condizioni
                     </a></li>
                 </ul>
-            </div>
-
-            <!-- Footer section -->
-            <div>
-                <h4 class="font-bold text-lg text-white mb-4">Iscriviti alla Newsletter</h4>
-                <div class="flex mt-2">
-                    <input type="email" placeholder="Tua email" class="bg-white/20 border border-pink-300 text-white rounded-l-lg px-4 py-3 w-full placeholder-pink-200 focus:outline-none">
-                    <button class="bg-white text-nekopink font-bold px-4 rounded-r-lg">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-
-                <div class="mt-4">
-                    <h5 class="font-bold mb-3">Seguici</h5>
-                    <div class="flex space-x-4">
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-discord"></i>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
 

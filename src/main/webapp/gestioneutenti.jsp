@@ -47,34 +47,13 @@
         <!-- Admin Content -->
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <!-- Left Sidebar - Admin Menu -->
-            <div class="lg:col-span-1">
-                <!-- Quick Actions Card -->
-                <div class="profile-card bg-white border-2 border-nekogreen mt-6">
-                    <div class="bg-gradient-to-r from-nekogreen to-nekoblue p-4">
-                        <h3 class="text-lg font-bold text-white flex items-center" style="font-size: 30px">
-                            <i class="fas fa-bolt mr-2" style="font-size: 30px"></i> Azioni
-                        </h3>
-                    </div>
-                    <div class="p-4 space-y-3">
-                        <button id="addUserBtn" class="w-full bg-nekogreen hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold transition flex items-center justify-center">
-                            <i class="fas fa-user-plus mr-2"></i> Aggiungi Utente
-                        </button>
-                        <button class="w-full bg-nekopurple hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-bold transition flex items-center justify-center">
-                            <i class="fas fa-file-import mr-2"></i> Importa CSV
-                        </button>
-                        <button class="w-full bg-nekoorange hover:bg-orange-500 text-white px-4 py-2 rounded-lg font-bold transition flex items-center justify-center">
-                            <i class="fas fa-file-export mr-2"></i> Esporta CSV
-                        </button>
-                    </div>
-                </div>
-            </div>
 
             <!-- Main Content -->
-            <div class="lg:col-span-3">
+            <div class="lg:col-span-3 flex items-center">
                 <!-- Users Management Tab -->
                 <div class="tab-content active" id="users-tab">
-                    <div class="profile-card bg-white border-2 border-nekopurple">
-                        <div class="bg-gradient-to-r from-nekopurple to-nekoblue p-4">
+                    <div class="profile-card bg-white border-2 border-nekopink overflow-hidden">
+                        <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
                             <div class="flex justify-between items-center">
                                 <h2 class="text-xl font-bold text-white flex items-center" style="font-size: 30px">
                                     <i class="fas fa-users mr-3"></i> Gestione Utenti
@@ -93,43 +72,9 @@
                                     <div class="text-blue-800 font-bold text-xl">3,248</div>
                                     <div class="text-xs text-blue-600">Utenti Totali</div>
                                 </div>
-                                <div class="bg-green-50 p-3 rounded-lg">
-                                    <div class="text-green-800 font-bold text-xl">2,987</div>
-                                    <div class="text-xs text-green-600">Attivi</div>
-                                </div>
-                                <div class="bg-red-50 p-3 rounded-lg">
-                                    <div class="text-red-800 font-bold text-xl">156</div>
-                                    <div class="text-xs text-red-600">Bannati</div>
-                                </div>
-                                <div class="bg-yellow-50 p-3 rounded-lg">
-                                    <div class="text-yellow-800 font-bold text-xl">105</div>
-                                    <div class="text-xs text-yellow-600">In attesa</div>
-                                </div>
                             </div>
 
                             <!-- Filters Row -->
-                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                                <div class="flex flex-wrap gap-2">
-                                    <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
-                                        <option>Tutti i ruoli</option>
-                                        <option>Admin</option>
-                                        <option>Staff</option>
-                                        <option>Cliente</option>
-                                    </select>
-                                    <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
-                                        <option>Tutti gli stati</option>
-                                        <option>Attivo</option>
-                                        <option>Bannato</option>
-                                        <option>In attesa</option>
-                                    </select>
-                                    <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
-                                        <option>Ordina per</option>
-                                        <option>Più recenti</option>
-                                        <option>Più attivi</option>
-                                        <option>Ordini crescenti</option>
-                                        <option>Ordini decrescenti</option>
-                                    </select>
-                                </div>
                                 <div class="flex items-center">
                                     <span class="text-sm text-gray-600 mr-2">Mostra:</span>
                                     <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
@@ -150,7 +95,6 @@
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utente</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ruolo</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stato</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ordini</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Azioni</th>
                                     </tr>
@@ -173,9 +117,6 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">nekofan123@example.com</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 py-1 text-xs rounded-full user-role-customer">Cliente</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 py-1 text-xs rounded-full user-status-active">Attivo</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">24</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -203,9 +144,6 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 py-1 text-xs rounded-full user-role-admin">Admin</span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 py-1 text-xs rounded-full user-status-active">Attivo</span>
-                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button class="text-nekoblue hover:text-blue-600 mr-3"><i class="fas fa-edit"></i></button>
@@ -231,9 +169,6 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">mangalover@example.com</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 py-1 text-xs rounded-full user-role-customer">Cliente</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 py-1 text-xs rounded-full user-status-banned">Bannato</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">5</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -261,9 +196,6 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 py-1 text-xs rounded-full user-role-staff">Staff</span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 py-1 text-xs rounded-full user-status-active">Attivo</span>
-                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button class="text-nekoblue hover:text-blue-600 mr-3"><i class="fas fa-edit"></i></button>
@@ -289,9 +221,6 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">newuser@example.com</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 py-1 text-xs rounded-full user-role-customer">Cliente</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 py-1 text-xs rounded-full user-status-pending">In attesa</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">

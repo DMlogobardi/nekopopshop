@@ -46,8 +46,8 @@
 
     <!-- Search and Filter Section -->
     <div class="max-w-6xl mx-auto mb-8">
-        <div class="profile-card bg-white border-2 border-nekoblue">
-            <div class="bg-gradient-to-r from-nekoblue to-nekoaqua p-4">
+        <div class="profile-card bg-white border-2 border-nekopink overflow-hidden">
+            <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-filter mr-3" style="font-size: 30px"></i>
                     <span style="font-size: 30px">Filtra Ordini</span>
@@ -80,8 +80,8 @@
 
     <!-- Orders List -->
     <div class="max-w-6xl mx-auto">
-        <div class="profile-card bg-white border-2 border-nekoblue mb-6">
-            <div class="bg-gradient-to-r from-nekoblue to-nekoaqua p-4">
+        <div class="profile-card bg-white border-2 border-nekopink overflow-hidden">
+            <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
                 <h2 class="text-xl font-bold text-white flex items-center justify-between">
           <span>
             <i class="fas fa-clipboard-list mr-3" style="font-size: 30px"></i>

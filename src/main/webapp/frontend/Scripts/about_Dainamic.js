@@ -1,17 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     generateDecorations();
-    document.getElementById("about").classList.add("active");
 
     const ila = document.getElementById("Ilaria");
     const davide = document.getElementById("davide");
     const alessia = document.getElementById("alessia");
 
     ila.addEventListener("click", function (){
-        window.open("https://github.com/DMlogobardi", "_blank");
+        window.open("https://github.com/ilary2204", "_blank");
     })
 
     davide.addEventListener("click", function (){
-        window.open("https://github.com/ilary2204", "_blank");
+        window.open("https://github.com/DMlogobardi", "_blank");
     })
 
     alessia.addEventListener("click", function (){
