@@ -53,7 +53,7 @@ public class ManageOrder extends HttpServlet {
         if(session.getAttribute("gestureAdmin") != "autorizato"){
             response.setStatus(422);
             response.setContentType("text/json");
-            response.getWriter().println("{\"error\":\"access denied\"}");
+            response.getWriter().println("{\"error\":\"access denied gestureAdmin\"}");
             return;
         }
         session.removeAttribute("gestureAdmin");

@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="frontend/Scripts/admin_Dainamic.js" defer></script>
+    <script src="frontend/Scripts/dashboard_dinamic.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -84,13 +85,9 @@
         <!-- Sidebar -->
         <div class="lg:col-span-1">
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sticky top-6">
-                <!-- User Profile -->
                 <div class="flex items-center mb-6 pb-6 border-b border-gray-200">
-                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-adminblue to-adminindigo flex items-center justify-center text-white text-2xl font-bold">
-                        AM
-                    </div>
                     <div class="ml-4">
-                        <h3 class="font-bold text-gray-800">Admin Master</h3>
+                        <h3 id="nick" class="font-bold text-gray-800">Admin Master</h3>
                         <p class="text-xs text-gray-500">Super Admin <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded ml-1">Online</span></p>
                     </div>
                 </div>

@@ -1,3 +1,15 @@
+function mostraErrore(msg) {
+    const erroreBox = document.getElementById("messaggioErrore");
+    erroreBox.textContent = msg;
+    erroreBox.classList.remove("hidden");
+
+    erroreBox.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    setTimeout(() => {
+        erroreBox.classList.add("hidden");
+    }, 5000);
+}
+
 // Create floating elements
 function createFloatingElements() {
     const decorations = document.getElementById('decorations');
@@ -141,9 +153,116 @@ function closeModal(modalId) {
     document.body.style.overflow = 'auto';
 }
 
+function utentiRegistrati(){
+    const params = new URLSearchParams();
+    params.append("action", "cliente");
+    params.append("actionCliente", "getAll");
+
+    fetch("admin/admindatagesture", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+    }).then(res => res.json())
+        .then(data =>{
+            if(data.error !== undefined){
+                mostraErrore("internal error")
+            }
+
+            const contUtent = document.getElementById("utentiReg");
+            contUtent.textContent = data.length;
+        });
+}
+
+function ordiniOggi() {
+    const params = new URLSearchParams();
+    params.append("action", "order");
+    params.append("actionOrder", "fromDate");
+
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Mese da 0 a 11
+    const dd = String(today.getDate()).padStart(2, '0');
+    const formattedDate = `${yyyy}-${mm}-${dd}`;
+
+    // Imposta la stessa data per startDate e endDate
+    params.append("startDate", formattedDate);
+    params.append("endDate", formattedDate);
+
+    fetch("admin/admindatagesture", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.error !== undefined) {
+                mostraErrore("internal error");
+                return;
+            }
+
+            const orderNow = document.getElementById("ordini");
+            orderNow.textContent = data.length;
+        })
+        .catch(err => {
+            console.error("Errore nella richiesta:", err);
+            mostraErrore("Errore di connessione");
+        });
+}
+
+function fetchTotProd(){
+    return fetch("getcatalog?tot=tot&productType=prod").then(res => res.json())
+        .then(data =>{
+            if (data.totale !== undefined) {
+                return parseInt(data.totale);
+            } else {
+                mostraErrore("Totale non disponibile");
+            }
+        })
+}
+
+function fetchTotVol(){
+    return fetch("getcatalog?tot=tot&productType=Vol").then(res => res.json())
+        .then(data =>{
+            if (data.totale !== undefined) {
+                return parseInt(data.totale);
+            } else {
+                mostraErrore("Totale non disponibile");
+            }
+        })
+}
+
+function numProd() {
+    Promise.all([fetchTotProd(), fetchTotVol()])
+        .then(([totP, totV]) => {
+            console.log("Totale Prodotti:", totP);
+            console.log("Totale Volumi:", totV);
+
+            const tot = totP + totV;
+
+            if (!tot || tot <= 0) {
+                mostraErrore("Totale non disponibile");
+                return;
+            }
+
+            const totProd = document.getElementById("nProdotti");
+            totProd.textContent = tot;
+        })
+        .catch(error => {
+            console.error("Errore nel recupero dei totali:", error);
+            mostraErrore("Errore nel calcolo dei totali");
+        });
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     createFloatingElements();
+    utentiRegistrati();
+    ordiniOggi();
+    numProd();
     initCharts();
 
     // Close modal when clicking outside

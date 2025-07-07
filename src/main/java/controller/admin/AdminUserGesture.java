@@ -44,7 +44,7 @@ public class AdminUserGesture extends HttpServlet {
         if(action == null){
             response.setStatus(422);
             response.setContentType("text/json");
-            response.getWriter().println("{\"error\":\"access denied\"}");
+            response.getWriter().println("{\"error\":\"access denied gesture\"}");
             return;
         }
 

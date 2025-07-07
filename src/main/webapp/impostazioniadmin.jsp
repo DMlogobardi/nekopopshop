@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/impostazioniadmin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="frontend/Scripts/dashboard_dinamic.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -57,7 +58,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Utenti Registrati</p>
-                                    <p class="text-2xl font-bold text-nekored">1,284</p>
+                                    <p id="utentiReg" class="text-2xl font-bold text-nekored">1,284</p>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +70,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Ordini Oggi</p>
-                                    <p class="text-2xl font-bold text-nekoorange">24</p>
+                                    <p id="ordini" class="text-2xl font-bold text-nekoorange">24</p>
                                 </div>
                             </div>
                         </div>
@@ -81,57 +82,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Prodotti</p>
-                                    <p class="text-2xl font-bold text-nekopeach">547</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="stats-card bg-nekobeige/20 p-4 rounded-lg border border-nekobeige/30">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-nekobeige/30 text-nekoorange mr-4">
-                                    <i class="fas fa-chart-line text-sm"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600">Fatturato</p>
-                                    <p class="text-2xl font-bold text-nekoorange">&#8364 8,742</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recent Activity -->
-                    <div class="p-6 border-t border-gray-200">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                            <i class="fas fa-history mr-2 text-nekored"></i> Attivit&agrave Recente
-                        </h3>
-                        <div class="space-y-4">
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 mt-1">
-                                    <i class="fas fa-user-plus text-green-500"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray-700">Nuovo utente registrato: Mario Bianchi</p>
-                                    <p class="text-xs text-gray-500">2 minuti fa</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 mt-1">
-                                    <i class="fas fa-shopping-bag text-blue-500"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray-700">Nuovo ordine #ORD-45678 completato</p>
-                                    <p class="text-xs text-gray-500">15 minuti fa</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 mt-1">
-                                    <i class="fas fa-exclamation-triangle text-yellow-500"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray-700">Prodotto esaurito: Chainsaw Man Vol.5</p>
-                                    <p class="text-xs text-gray-500">1 ora fa</p>
+                                    <p id="nProdotti" class="text-2xl font-bold text-nekopeach">547</p>
                                 </div>
                             </div>
                         </div>
@@ -140,6 +91,5 @@
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>
