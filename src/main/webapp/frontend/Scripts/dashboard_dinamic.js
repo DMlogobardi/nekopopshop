@@ -167,7 +167,8 @@ function utentiRegistrati(){
     }).then(res => res.json())
         .then(data =>{
             if(data.error !== undefined){
-                mostraErrore("internal error")
+                console.log(data.error);
+                mostraErrore("internal error");
             }
 
             const contUtent = document.getElementById("utentiReg");
@@ -262,7 +263,7 @@ function init(){
     utentiRegistrati();
     ordiniOggi();
     numProd();
-    initCharts();
+    //initCharts();
 
     // Close modal when clicking outside
     const modals = document.querySelectorAll('.modal');

@@ -50,7 +50,7 @@ function loadContent(section) {
 // Inizializzazione della pagina
 document.addEventListener("DOMContentLoaded", function () {
     createFloatingElements();
-    initCharts();
+    //initCharts();
 
     // Gestione click sui link della sidebar
     $('.sidebar-item').click(function (e) {

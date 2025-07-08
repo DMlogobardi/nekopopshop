@@ -1,5 +1,38 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+         import="jakarta.servlet.http.HttpSession, jakarta.servlet.http.Cookie"%>
+<%@ page import="java.util.logging.Logger" %>
 <!DOCTYPE html>
 <html lang="it">
+<%
+    // Crea il logger
+    Logger logger = Logger.getLogger("MyLogger");
+
+    HttpSession s = request.getSession(false);
+    boolean isLoggedIn = false;
+
+    if (s != null) {
+        Object token = s.getAttribute("logToken");
+        if (token == null && !"A".equals(token)) {
+            isLoggedIn = true;
+        }
+    }
+
+    if (isLoggedIn) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("access".equals(cookie.getName())) {
+                    cookie.setValue("");
+                    cookie.setMaxAge(1);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                }
+            }
+        }
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
+    }
+%>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
