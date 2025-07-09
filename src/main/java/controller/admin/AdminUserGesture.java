@@ -48,10 +48,10 @@ public class AdminUserGesture extends HttpServlet {
             return;
         }
 
-        if(action.equals("order")){
+        if(action.toLowerCase().strip().equals("order")){
             session.setAttribute("gestureAdmin", "autorizato");
             request.getRequestDispatcher("manageorder").forward(request, response);
-        } else if (action.equals("cliente")) {
+        } else if (action.toLowerCase().strip().equals("cliente")) {
             session.setAttribute("gestureAdmin", "autorizato");
             request.getRequestDispatcher("managecliente").forward(request, response);
         } else {

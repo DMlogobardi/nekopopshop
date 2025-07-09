@@ -3,7 +3,7 @@ function caricaContenuto(pagina) {
 }
 
 // Funzione per caricare il contenuto via AJAX
-function loadContent(section) {
+/*function loadContent(section) {
     // Mostra loader
     $('#dynamic-content').html('<div class="loader"></div>');
 
@@ -45,7 +45,7 @@ function loadContent(section) {
                 `);
         }
     });
-}
+}*/
 
 // Inizializzazione della pagina
 document.addEventListener("DOMContentLoaded", function () {
@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.style.overflow = 'hidden';
     }
 
-    function closeModal(modalId) {
+    const closeModal = (modalId) => {
         document.getElementById(modalId).classList.remove('active');
         document.body.style.overflow = 'auto';
     }
@@ -236,6 +236,11 @@ const contentMap = {
 };
 
 function loadContent(section) {
+    if (!contentMap[section]) {
+        console.error(`Sezione "${section}" non trovata in contentMap`);
+        $('#dynamic-content').html(`<div class="alert alert-error">Sezione "${section}" non trovata</div>`);
+        return;
+    }
     const loader = `<div class="loader mt-8"> </div>`;
     $('#dynamic-content').html(loader).load(contentMap[section], function(response, status) {
         if (status === "error") {
@@ -244,7 +249,24 @@ function loadContent(section) {
             if(section === "dashboard") {
                 init();
             } else if (section === "users") {
-                initUtent();
+                console.log("user")
+                if (typeof initUtent === "function") {
+                    initUtent();
+                } else {
+                    // Altrimenti carica lo script e poi chiama la funzione
+                    $.getScript("frontend/Scripts/gestioneUtenti_Dinamic.js")
+                        .done(function() {
+                            if (typeof initUtent === "function") {
+                                initUtent();
+                            } else {
+                                mostraErrore("pagina bloccata, scusateci il disagio");
+                                console.log("is not defined")
+                            }
+                        })
+                        .fail(function() {
+                            console.error("Errore nel caricamento dello script gestioneUtenti_Dinamic.js");
+                        });
+                }
             }
         }
     });

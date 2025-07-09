@@ -153,7 +153,7 @@ function closeModal(modalId) {
     document.body.style.overflow = 'auto';
 }
 
-function utentiRegistrati(){
+async function utentiRegistrati(){
     const params = new URLSearchParams();
     params.append("action", "cliente");
     params.append("actionCliente", "getAll");
@@ -176,7 +176,7 @@ function utentiRegistrati(){
         });
 }
 
-function ordiniOggi() {
+async function ordiniOggi() {
     const params = new URLSearchParams();
     params.append("action", "order");
     params.append("actionOrder", "fromDate");
@@ -214,7 +214,7 @@ function ordiniOggi() {
         });
 }
 
-function fetchTotProd(){
+async function fetchTotProd(){
     return fetch("getcatalog?tot=tot&productType=prod").then(res => res.json())
         .then(data =>{
             if (data.totale !== undefined) {
@@ -225,7 +225,7 @@ function fetchTotProd(){
         })
 }
 
-function fetchTotVol(){
+async function fetchTotVol(){
     return fetch("getcatalog?tot=tot&productType=Vol").then(res => res.json())
         .then(data =>{
             if (data.totale !== undefined) {
@@ -236,7 +236,7 @@ function fetchTotVol(){
         })
 }
 
-function numProd() {
+async function numProd() {
     Promise.all([fetchTotProd(), fetchTotVol()])
         .then(([totP, totV]) => {
             console.log("Totale Prodotti:", totP);

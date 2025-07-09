@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/gestioneutenti.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="frontend/Scripts/gestioneUtenti_Dinamic.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -45,61 +44,52 @@
 
 
         <!-- Admin Content -->
-    <div class="container mx-auto px-4 lg:px-8 py-6">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div class="lg:col-span-3 w-full">
-                <div class="profile-card bg-white border-2 border-nekopink overflow-hidden rounded-xl w-full">
-                    <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                            <h2 class="text-2xl md:text-3xl font-bold text-white flex items-center">
-                                <i class="fas fa-users mr-3"></i> Gestione Utenti
-                            </h2>
-                        </div>
-                    </div>
-
-                    <div class="p-6">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                            <div class="bg-blue-50 p-4 rounded-lg text-center">
-                                <div id="tot" class="text-blue-800 font-bold text-2xl">3,248</div>
-                                <div class="text-xs text-blue-600">Utenti Totali</div>
+    <div class="w-full px-4">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div class="lg:col-span-4 w-full">
+                    <div class="profile-card bg-white border-2 border-nekopink overflow-hidden rounded-xl w-full shadow-md">
+                        <!-- Header -->
+                        <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                <h2 class="text-2xl md:text-3xl font-bold text-white flex items-center">
+                                    <i class="fas fa-users mr-3"></i> Gestione Utenti
+                                </h2>
                             </div>
                         </div>
 
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Utente</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ordini</th>
-                                </tr>
-                                </thead>
-                                <tbody id="table" class="bg-white divide-y divide-gray-200">
+                        <!-- Body -->
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 gap-4 mb-6">
+                                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                                    <div id="tot" class="text-blue-800 font-bold text-2xl">3,248</div>
+                                    <div class="text-xs text-blue-600">Utenti Totali</div>
+                                </div>
+                            </div>
 
-                                </tbody>
-                            </table>
-                        </div>
+                            <!-- Tabella -->
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Utente</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ordini</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="table" class="bg-white divide-y divide-gray-200">
+                                    <!-- Dati dinamici -->
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between mt-6 gap-4">
-                            <div class="flex flex-wrap space-x-2 justify-center">
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
+                            <!-- Bottoni -->
+                            <div class="flex justify-between mt-6">
+                                <button id ="prec" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
                                     Precedente
                                 </button>
-                                <button class="px-3 py-1 rounded-md border border-nekoblue bg-nekoblue text-sm text-white">
-                                    1
-                                </button>
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
-                                    2
-                                </button>
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
-                                    3
-                                </button>
-                                <span class="px-3 py-1 text-sm text-gray-500">...</span>
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
-                                    25
-                                </button>
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
+                                <button id = "suc" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
                                     Successivo
                                 </button>
                             </div>
@@ -110,13 +100,15 @@
         </div>
     </div>
 
+    </div>
+
     <!-- Add User Modal -->
     <div id="addUserModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
         <div class="modal-content bg-white rounded-lg w-full max-w-3xl mx-4">
             <div class="bg-gradient-to-r from-nekopurple to-nekoblue p-4 rounded-t-lg">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xl font-bold text-white"><i class="fas fa-user-plus mr-2"></i> Aggiungi Nuovo Utente</h3>
-                    <button id="closeModalBtn" class="text-white hover:text-gray-200">
+                    <button id="closeModalBtn1" class="text-white hover:text-gray-200">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -185,7 +177,7 @@
                     </div>
 
                     <div class="flex justify-end mt-6 space-x-3">
-                        <button type="button" id="cancelModalBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        <button type="button" id="cancelModalBtn1" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Annulla
                         </button>
                         <button type="submit" class="bg-nekogreen hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">

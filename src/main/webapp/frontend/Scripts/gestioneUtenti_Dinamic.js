@@ -1,63 +1,55 @@
-// Modal functionality
-const addUserBtn = document.getElementById('addUserBtn');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const cancelModalBtn = document.getElementById('cancelModalBtn');
-const modal = document.getElementById('addUserModal');
+const closeModalBtn1 = document.getElementById('closeModalBtn1');
+const cancelModalBtn1 = document.getElementById('cancelModalBtn1');
+const modal1 = document.getElementById('addUserModal');
 
-addUserBtn.addEventListener('click', () => {
-    modal.classList.add('active');
-    modal.classList.remove('opacity-0', 'invisible');
-});
-
-const closeModal = () => {
+const closeModal1 = () => {
     modal.classList.remove('active');
     modal.classList.add('opacity-0', 'invisible');
 };
 
-closeModalBtn.addEventListener('click', closeModal);
-cancelModalBtn.addEventListener('click', closeModal);
+closeModalBtn1.addEventListener('click', closeModal1);
+cancelModalBtn1.addEventListener('click', closeModal1);
 
 // Close modal when clicking outside
-modal.addEventListener('click', (e) => {
+modal1.addEventListener('click', (e) => {
     if (e.target === modal) {
-        closeModal();
+        closeModal1();
     }
 });
 
 // Generate cherry blossoms
-function createCherryBlossoms() {
+function createFloatingElements() {
     const decorations = document.getElementById('decorations');
-    for (let i = 0; i < 15; i++) {
-        const blossom = document.createElement('div');
-        blossom.className = 'cherry-blossom';
+    const types = ['cherry-blossom', 'cherry-blossom'];
+    const colors = ['#ff7eb8', '#ff65a3', '#ff4d8e'];
 
-        // Random position
-        const left = Math.random() * 100;
-        blossom.style.left = `${left}vw`;
+    for (let i = 0; i < 8; i++) {
+        const element = document.createElement('div');
+        const type = types[Math.floor(Math.random() * types.length)];
+        const color = colors[Math.floor(Math.random() * colors.length)];
 
-        // Random delay
-        const delay = Math.random() * 15;
-        blossom.style.animationDelay = `${delay}s`;
+        element.className = type;
+        element.style.left = Math.random() * 100 + 'vw';
+        element.style.animationDuration = (10 + Math.random() * 20) + 's';
+        element.style.animationDelay = Math.random() * 5 + 's';
+        element.style.opacity = Math.random() * 0.5 + 0.2;
+        element.style.transform = 'scale(' + (Math.random() * 0.5 + 0.5) + ')';
 
-        // Random size
-        const size = 15 + Math.random() * 15;
-        blossom.style.width = `${size}px`;
-        blossom.style.height = `${size}px`;
-
-        decorations.appendChild(blossom);
+        decorations.appendChild(element);
     }
 }
 
-async function ordiniForUser(id = 0){
+function ordiniForUser(id = 0) {
     if(id === 0){
         mostraErrore("ordini non visualizabili");
+        return Promise.resolve(0); // ritorna 0 se id non valido
     }
     const params = new URLSearchParams();
     params.append("action", "order");
-    params.append("actionOrder", "fromUse");
+    params.append("actionOrder", "fromUser");
     params.append("id", id);
 
-    fetch("admin/admindatagesture", {
+    return fetch("admin/admindatagesture", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -68,11 +60,12 @@ async function ordiniForUser(id = 0){
         .then(data => {
             if (data.error !== undefined) {
                 mostraErrore("internal error");
-                return;
+                return 0;
             }
-
-            return data.length;
-        })
+            const ordiniCliente = data.filter(item => item.idOrdine !== undefined);
+            console.log("ordini: " + ordiniCliente.length);
+            return ordiniCliente.length;
+        });
 }
 
 function caricaClienti(pag = 1){
@@ -93,29 +86,34 @@ function caricaClienti(pag = 1){
             if(data.error !== undefined){
                 mostraErrore("internal error")
             }
+            const clienti = data.filter(item => item.idCliente !== undefined);
             let tabbella = document.getElementById("table");
 
-            data.forEach(c =>{
-                const sezzione = creaSezione(c);
-                tabbella.appendChild(sezzione);
-            })
+            Promise.all(clienti.map(creaSezione)).then(sezioni => {
+                sezioni.forEach(html => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = html;
+                    tabbella.appendChild(row);
+                });
+            });
 
             async function creaSezione(item) {
                 let numOrdini;
 
                 try {
-                    const ordini = await ordiniForUser(item.idCliente);
-                    numOrdini = ordini;
+                    numOrdini = await ordiniForUser(item.idCliente);
+                    console.log("prende le cose");
                 } catch (error) {
                     console.warn(`Impossibile ottenere ordini per cliente ${item.idCliente}:`, error.message);
                     numOrdini = 'Errore';
                 }
+                console.log(numOrdini);
 
                 return `<tr>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.idCliente}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.nome} ${item.cognome}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.email}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">numOrdini</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${numOrdini}</td>
 
                 </tr>
                     `;
@@ -123,7 +121,7 @@ function caricaClienti(pag = 1){
         });
 }
 
-function utentiRegistrati(){
+async function utentiRegistrati(){
     const params = new URLSearchParams();
     params.append("action", "cliente");
     params.append("actionCliente", "getAll");
@@ -145,14 +143,8 @@ function utentiRegistrati(){
         });
 }
 
-function initUtent(){
-    createCherryBlossoms();
+window.initUtent = function() {
+    createFloatingElements();
     utentiRegistrati();
     caricaClienti();
 }
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    createCherryBlossoms();
-    initUtent();
-});
