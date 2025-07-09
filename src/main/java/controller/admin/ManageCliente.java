@@ -85,7 +85,7 @@ public class ManageCliente extends HttpServlet {
             }
 
             try {
-                if(limit == -1)
+                if(limit != -1)
                     clienti = clienteDAO.doRetrieveAllLimit(order, limit, page);
                 else
                     clienti = clienteDAO.doRetrieveAll(null);

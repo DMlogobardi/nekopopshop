@@ -63,10 +63,11 @@ function ordiniForUser(id = 0) {
                 return 0;
             }
             const ordiniCliente = data.filter(item => item.idOrdine !== undefined);
-            console.log("ordini: " + ordiniCliente.length);
             return ordiniCliente.length;
         });
 }
+
+let elem = true
 
 function caricaClienti(pag = 1){
     const params = new URLSearchParams();
@@ -89,25 +90,30 @@ function caricaClienti(pag = 1){
             const clienti = data.filter(item => item.idCliente !== undefined);
             let tabbella = document.getElementById("table");
 
-            Promise.all(clienti.map(creaSezione)).then(sezioni => {
-                sezioni.forEach(html => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = html;
-                    tabbella.appendChild(row);
+            if(clienti.length > 0) {
+                elem = true;
+                tabbella.innerHTML = '';
+                Promise.all(clienti.map(creaSezione)).then(sezioni => {
+                    sezioni.forEach(html => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = html;
+                        tabbella.appendChild(row);
+                    });
                 });
-            });
+            } else {
+                elem = false;
+                mostraErrore("clienti finiti");
+            }
 
             async function creaSezione(item) {
                 let numOrdini;
 
                 try {
                     numOrdini = await ordiniForUser(item.idCliente);
-                    console.log("prende le cose");
                 } catch (error) {
                     console.warn(`Impossibile ottenere ordini per cliente ${item.idCliente}:`, error.message);
                     numOrdini = 'Errore';
                 }
-                console.log(numOrdini);
 
                 return `<tr>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.idCliente}</td>
@@ -143,8 +149,28 @@ async function utentiRegistrati(){
         });
 }
 
+let curentPage = 1;
+
 window.initUtent = function() {
     createFloatingElements();
     utentiRegistrati();
-    caricaClienti();
+    caricaClienti(curentPage);
+
+    document.getElementById("prec").addEventListener("click", function () {
+        if(curentPage > 1){
+            curentPage -= 1;
+            caricaClienti(curentPage);
+        } else {
+            mostraErrore("sei arrivato all'inizio della lista");
+        }
+        console.log(curentPage);
+    })
+
+    document.getElementById("suc").addEventListener("click", function (){
+        if(elem){
+            curentPage += 1;
+            caricaClienti(curentPage);
+        }
+        console.log(curentPage);
+    })
 }
