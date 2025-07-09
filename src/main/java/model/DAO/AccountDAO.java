@@ -103,6 +103,35 @@ public class AccountDAO implements GenralDAO<AccountBean>{
         return account;
     }
 
+    public AccountBean doRetrieveByCliente(int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        AccountBean account = null;
+
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectSQL);
+            ps.setInt(1, code);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                account = new AccountBean(rs.getInt("idAccount"), rs.getString("password"), rs.getString("nickName"), rs.getInt("idCliente"));
+                if(rs.getInt("adminFlag") == 1){
+                    account.setAdmin();
+                }
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return account;
+    }
+
     public AccountBean doRetrieveByNick(String nick) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
@@ -212,5 +241,34 @@ public class AccountDAO implements GenralDAO<AccountBean>{
             }
         }
         return accounts;
+    }
+    public void updatePasswordByIdCliente(int code, String newPassword) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        String updateSQL = "UPDATE " + TABLE_NAME + " SET password = ? WHERE idCliente = ?";
+
+        try{
+            con = ds.getConnection();
+            con.setAutoCommit(false);
+            ps = con.prepareStatement(updateSQL);
+
+            String hashedPassword =AccountBean.hashPassword(newPassword);
+
+            ps.setString(1, hashedPassword);
+            ps.setInt(2, code);
+
+            int rowsUpdated =ps.executeUpdate();
+            if(rowsUpdated == 0){
+                System.out.println("Nessun utente aggiornato. Controlla:");
+            }
+            con.commit();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
     }
 }

@@ -280,16 +280,47 @@ function handleSidebarClick(element, contentId) {
     loadContent(contentId);
 }
 
+async function fetchNick() {
+    const params = new URLSearchParams();
+    params.append("action", "getNick");
+
+    try {
+        const response = await fetch("common/accountgesture", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: params.toString()
+        });
+
+        const data = await response.json();
+
+        if (data.error !== undefined) {
+            mostraErrore("internal server error");
+            return null;
+        }
+
+        return data.nick;
+    } catch (error) {
+        mostraErrore("network error");
+        return null;
+    }
+}
 
 // Inizializzazione
-$(document).ready(function() {
+$(document).ready(async function () {
     // Attiva il primo tab
     loadContent('dashboard');
 
     // Gestione click menu
-    $('.sidebar-item').click(function(e) {
+    $('.sidebar-item').click(function (e) {
         e.preventDefault();
         const section = $(this).data('section');
         loadContent(section);
     });
+
+    let nick = document.getElementById("nick");
+
+    const nickValue = await fetchNick();
+    nick.textContent = nickValue == null ? "Admin" : nickValue;
 });

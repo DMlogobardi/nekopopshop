@@ -154,14 +154,6 @@
             </div>
 
             <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <input
-                            type="checkbox"
-                            id="remember"
-                            class="w-4 h-4 text-nekopeach rounded focus:ring-0"
-                    >
-                    <label for="remember" class="ml-2 text-nekopeach text-sm">Ricordami</label>
-                </div>
                 <a href="#" class="text-nekoorange text-sm hover:text-nekopeach transition">
                     Password dimenticata?
                 </a>

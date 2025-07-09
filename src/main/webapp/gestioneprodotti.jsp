@@ -84,23 +84,6 @@
                                 </div>
                             </div>
 
-                            <!-- Filters Row -->
-                            <div
-                                    class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4"
-                            >
-                                <div class="flex items-center">
-                                    <span class="text-sm text-gray-600 mr-2">Mostra:</span>
-                                    <select
-                                            class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue"
-                                    >
-                                        <option>25</option>
-                                        <option>50</option>
-                                        <option>100</option>
-                                        <option>Tutti</option>
-                                    </select>
-                                </div>
-                            </div>
-
                             <!-- Products Table -->
                             <div class="overflow-x-auto">
                                 <table class="min-w-full divide-y divide-gray-200 w-full table-auto">
@@ -210,15 +193,7 @@
                             </div>
 
                             <!-- Pagination -->
-                            <div
-                                    class="flex items-center justify-between mt-6 flex-wrap gap-2"
-                            >
-                                <div class="text-sm text-gray-700">
-                                    Mostrati
-                                    <span class="font-medium">1</span> a
-                                    <span class="font-medium">25</span> di
-                                    <span class="font-medium">1,248</span> risultati
-                                </div>
+                            <div class="flex items-center justify-between mt-6 flex-wrap gap-2">
                                 <nav
                                         class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
                                         aria-label="Pagination"

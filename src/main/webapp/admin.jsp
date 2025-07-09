@@ -120,7 +120,7 @@
                 <div class="flex items-center mb-6 pb-6 border-b border-gray-200">
                     <div class="ml-4">
                         <h3 id="nick" class="font-bold text-gray-800">Admin Master</h3>
-                        <p class="text-xs text-gray-500">Super Admin <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded ml-1">Online</span></p>
+                        <p class="text-xs text-gray-500">Super Admin </p>
                     </div>
                 </div>
 
