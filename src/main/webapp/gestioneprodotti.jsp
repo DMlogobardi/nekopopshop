@@ -48,244 +48,225 @@
     </div>
 
     <!-- Admin Content -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
-        <!-- Main Content -->
-        <div class="lg:col-span-3 flex items-center">
-            <!-- Products Management Tab -->
-            <div class="tab-content active" id="products-tab">
-                <div class="profile-card bg-white border-2 border-nekopink overflow-hidden">
-                    <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-xl font-bold text-white flex items-center" style="font-size: 30px">
-                                <i class="fas fa-boxes mr-3"></i> Gestione Prodotti
-                            </h2>
-                            <div class="relative">
-                                <input type="text" placeholder="Cerca prodotto..." class="bg-white/20 border border-white/30 text-white rounded-lg px-4 py-2 pl-10 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white">
-                                <i class="fas fa-search absolute left-3 top-3 text-white/70"></i>
+            <!-- Main Content -->
+            <div class="col-span-1 lg:col-span-4 flex flex-col w-full">
+                <div class="tab-content active w-full">
+                    <div class="profile-card bg-white border-2 border-nekopink overflow-hidden w-full">
+                        <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
+                            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                                <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-white flex items-center">
+                                    <i class="fas fa-boxes mr-3"></i> Gestione Prodotti
+                                </h2>
+                                <div class="relative w-full max-w-md">
+                                    <input
+                                            type="text"
+                                            placeholder="Cerca prodotto..."
+                                            class="w-full bg-white/20 border border-white/30 text-white rounded-lg px-4 py-2 pl-10 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white"
+                                    />
+                                    <i class="fas fa-search absolute left-3 top-3 text-white/70"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="p-6">
 
-                    <div class="p-6">
-                        <!-- Filters and Stats -->
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                            <div class="bg-blue-50 p-3 rounded-lg">
-                                <div class="text-blue-800 font-bold text-xl">1,248</div>
-                                <div class="text-xs text-blue-600">Prodotti Totali</div>
+                            <!-- Filters and Stats -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="text-blue-800 font-bold text-xl">1,248</div>
+                                    <div class="text-xs text-blue-600">Prodotti Totali</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="text-green-800 font-bold text-xl">1,012</div>
+                                    <div class="text-xs text-green-600">Disponibili</div>
+                                </div>
                             </div>
-                            <div class="bg-green-50 p-3 rounded-lg">
-                                <div class="text-green-800 font-bold text-xl">1,012</div>
-                                <div class="text-xs text-green-600">Disponibili</div>
+
+                            <!-- Filters Row -->
+                            <div
+                                    class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4"
+                            >
+                                <div class="flex items-center">
+                                    <span class="text-sm text-gray-600 mr-2">Mostra:</span>
+                                    <select
+                                            class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue"
+                                    >
+                                        <option>25</option>
+                                        <option>50</option>
+                                        <option>100</option>
+                                        <option>Tutti</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Filters Row -->
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                            <div class="flex items-center">
-                                <span class="text-sm text-gray-600 mr-2">Mostra:</span>
-                                <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nekoblue">
-                                    <option>25</option>
-                                    <option>50</option>
-                                    <option>100</option>
-                                    <option>Tutti</option>
-                                </select>
+                            <!-- Products Table -->
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200 w-full table-auto">
+                                    <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            ID
+                                        </th>
+                                        <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Prodotto
+                                        </th>
+                                        <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Categoria
+                                        </th>
+                                        <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Prezzo
+                                        </th>
+                                        <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Quantità
+                                        </th>
+                                        <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Stato
+                                        </th>
+                                        <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        >
+                                            Azioni
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- Product 1 -->
+                                    <tr class="hover:bg-gray-50">
+                                        <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                        >
+                                            #NEKO-001
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0 h-10 w-10">
+                                                    <img
+                                                            class="h-10 w-10 rounded"
+                                                            src="https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=100"
+                                                            alt="Jujutsu Kaisen"
+                                                    />
+                                                </div>
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-900">
+                                                        Jujutsu Kaisen Vol.15
+                                                    </div>
+                                                    <div class="text-sm text-gray-500">Manga</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="px-2 py-1 text-xs rounded-full category-manga"
+                      >Manga</span
+                      >
+                                        </td>
+                                        <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                                        >
+                                            €14.99
+                                        </td>
+                                        <td
+                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                                        >
+                                            42
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                              class="px-2 py-1 text-xs rounded-full status-active"
+                      >Disponibile</span
+                      >
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-nekoblue hover:text-blue-600 mr-3">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-nekored hover:text-red-600">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
 
-                        <!-- Products Table -->
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prodotto</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prezzo</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantità</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stato</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Azioni</th>
-                                </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                <!-- Product 1 -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#NEKO-001</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded" src="https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=100" alt="Jujutsu Kaisen">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">Jujutsu Kaisen Vol.15</div>
-                                                <div class="text-sm text-gray-500">Manga</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full category-manga">Manga</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€14.99</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">42</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full status-active">Disponibile</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button class="text-nekoblue hover:text-blue-600 mr-3"><i class="fas fa-edit"></i></button>
-                                        <button class="text-nekored hover:text-red-600"><i class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-
-                                <!-- Product 2 -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#NEKO-002</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded" src="https://images.unsplash.com/photo-1598885154377-4d1dacdd0d5c?q=80&w=100" alt="Chainsaw Man Figure">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">Denji Chainsaw Man Figurine</div>
-                                                <div class="text-sm text-gray-500">Action Figure</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full category-figure">Action Figure</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€39.99</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full status-inactive">Esaurito</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button class="text-nekoblue hover:text-blue-600 mr-3"><i class="fas fa-edit"></i></button>
-                                        <button class="text-nekored hover:text-red-600"><i class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-
-                                <!-- Product 3 -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#NEKO-003</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded" src="https://images.unsplash.com/photo-1622372738946-e62b40262c90?q=80&w=100" alt="Demon Slayer T-Shirt">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">Demon Slayer T-Shirt</div>
-                                                <div class="text-sm text-gray-500">Merchandising</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full category-merch">Merchandising</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€24.99</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full status-active">Disponibile</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button class="text-nekoblue hover:text-blue-600 mr-3"><i class="fas fa-edit"></i></button>
-                                        <button class="text-nekored hover:text-red-600"><i class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-
-                                <!-- Product 4 -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#NEKO-004</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded" src="https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=100" alt="One Piece Vol.100">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">One Piece Vol.100</div>
-                                                <div class="text-sm text-gray-500">Manga</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full category-manga">Manga</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€12.99</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">8</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full status-active">Disponibile</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button class="text-nekoblue hover:text-blue-600 mr-3"><i class="fas fa-edit"></i></button>
-                                        <button class="text-nekored hover:text-red-600"><i class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-
-                                <!-- Product 5 -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#NEKO-005</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded" src="https://images.unsplash.com/photo-1598885154377-4d1dacdd0d5c?q=80&w=100" alt="Naruto Shippuden Figure">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">Naruto Shippuden Figure</div>
-                                                <div class="text-sm text-gray-500">Action Figure</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full category-figure">Action Figure</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€49.99</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-full status-inactive">In arrivo</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button class="text-nekoblue hover:text-blue-600 mr-3"><i class="fas fa-edit"></i></button>
-                                        <button class="text-nekored hover:text-red-600"><i class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination -->
-                        <div class="flex items-center justify-between mt-6">
-                            <div class="text-sm text-gray-500">
-                                Mostrando <span class="font-medium">1</span> a <span class="font-medium">5</span> di <span class="font-medium">1,248</span> prodotti
+                            <!-- Pagination -->
+                            <div
+                                    class="flex items-center justify-between mt-6 flex-wrap gap-2"
+                            >
+                                <div class="text-sm text-gray-700">
+                                    Mostrati
+                                    <span class="font-medium">1</span> a
+                                    <span class="font-medium">25</span> di
+                                    <span class="font-medium">1,248</span> risultati
+                                </div>
+                                <nav
+                                        class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                                        aria-label="Pagination"
+                                >
+                                    <a
+                                            href="#"
+                                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                                    >
+                                        <span class="sr-only">Previous</span>
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                    <a
+                                            href="#"
+                                            aria-current="page"
+                                            class="relative inline-flex items-center px-4 py-2 border border-nekopink bg-nekopink text-white text-sm font-medium"
+                                    >1</a
+                                    >
+                                    <a
+                                            href="#"
+                                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                    >2</a
+                                    >
+                                    <a
+                                            href="#"
+                                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                    >3</a
+                                    >
+                                    <a
+                                            href="#"
+                                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                                    >
+                                        <span class="sr-only">Next</span>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </nav>
                             </div>
-                            <div class="flex space-x-2">
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    Precedente
-                                </button>
-                                <button class="px-3 py-1 rounded-md border border-nekoblue bg-nekoblue text-sm font-medium text-white">
-                                    1
-                                </button>
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    2
-                                </button>
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    3
-                                </button>
-                                <span class="px-3 py-1 text-sm text-gray-500">...</span>
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    25
-                                </button>
-                                <button class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    Successivo
-                                </button>
-                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
-</div>
 
-<!-- Remove Product Modal -->
+
+
+    <!-- Remove Product Modal -->
 <div id="removeProductModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
     <div class="modal-content bg-white rounded-lg w-full max-w-3xl mx-4">
         <div class="bg-gradient-to-r from-nekored to-nekopeach p-4 rounded-t-lg">
