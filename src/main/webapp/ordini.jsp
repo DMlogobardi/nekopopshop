@@ -56,11 +56,11 @@
 
             <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                    <label for="search" class="block text-gray-700 text-sm font-bold mb-2">Cerca per ID ordine o cliente</label>
+                    <label for="search" class="block text-gray-700 text-sm font-bold mb-2">Cerca per cliente</label>
                     <div class="relative">
-                        <input type="text" id="search" placeholder="ID ordine, nome cliente..."
+                        <input type="text" id="search" placeholder="nome cliente..."
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekoblue">
-                        <button class="absolute right-0 top-0 h-full px-4 text-nekoblue">
+                        <button id="serchBTN" class="absolute right-0 top-0 h-full px-4 text-nekoblue">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -87,15 +87,12 @@
             <i class="fas fa-clipboard-list mr-3" style="font-size: 30px"></i>
             <span style="font-size: 30px">Elenco Ordini</span>
           </span>
-                    <span class="text-sm bg-white/30 px-3 py-1 rounded-full font-normal">
-            <span id="orders-count">8</span> ordini trovati
-          </span>
                 </h2>
             </div>
 
             <div class="p-6">
                 <!-- Loading state -->
-                <div id="loading" class="flex justify-center items-center py-12">
+                <div id="loading" class="flex justify-center items-center py-12 active">
                     <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-nekoblue"></div>
                 </div>
 
@@ -110,10 +107,7 @@
                                     <p class="text-sm text-gray-600">Cliente: Marco Rossi</p>
                                 </div>
                                 <div class="flex items-center">
-                  <span class="status-badge status-processing mr-3">
-                    <i class="fas fa-clock mr-1"></i> In elaborazione
-                  </span>
-                                    <span class="text-sm font-bold text-gray-700">€129.98</span>
+                                    <span class="text-sm font-bold text-gray-700">129.98</span>
                                 </div>
                             </div>
 
@@ -126,9 +120,6 @@
                                     <button class="action-btn view-btn">
                                         <i class="fas fa-eye mr-1"></i> Dettagli
                                     </button>
-                                    <button class="action-btn update-btn">
-                                        <i class="fas fa-check mr-1"></i> Completa
-                                    </button>
                                     <button class="action-btn cancel-btn">
                                         <i class="fas fa-times mr-1"></i> Annulla
                                     </button>
@@ -136,7 +127,7 @@
                             </div>
 
                             <!-- Order details (hidden by default) -->
-                            <div class="order-details">
+                            <div class="">
                                 <div class="border-t border-gray-200 pt-3 mt-3">
                                     <h4 class="font-bold text-gray-700 mb-2">Prodotti:</h4>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
@@ -220,7 +211,7 @@
                             </div>
 
                             <!-- Order details (hidden by default) -->
-                            <div class="order-details">
+                            <div class="hidden">
                                 <div class="border-t border-gray-200 pt-3 mt-3">
                                     <h4 class="font-bold text-gray-700 mb-2">Informazioni spedizione:</h4>
                                     <div class="bg-gray-50 p-3 rounded-lg mb-4">
@@ -265,14 +256,10 @@
             <!-- Pagination -->
             <div class="px-6 pb-6 pt-3">
                 <div class="flex justify-between items-center">
-                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium disabled:opacity-50" id="prev-page" disabled>
+                    <button id="precOrder" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium disabled:opacity-50" disabled>
                         <i class="fas fa-chevron-left mr-2"></i> Precedenti
                     </button>
-                    <div class="flex gap-2">
-                        <button class="pagination-btn w-8 h-8 rounded-full bg-nekopink text-nekopeach">1</button>
-                        <button class="pagination-btn w-8 h-8 rounded-full">2</button>
-                    </div>
-                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium" id="next-page">
+                    <button id="sucOrder" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium">
                         Successivi <i class="fas fa-chevron-right ml-2"></i>
                     </button>
                 </div>

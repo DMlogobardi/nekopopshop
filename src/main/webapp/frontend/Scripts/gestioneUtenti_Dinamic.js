@@ -102,6 +102,7 @@ function caricaClienti(pag = 1){
                 });
             } else {
                 elem = false;
+                curentPage -= 1;
                 mostraErrore("clienti finiti");
             }
 

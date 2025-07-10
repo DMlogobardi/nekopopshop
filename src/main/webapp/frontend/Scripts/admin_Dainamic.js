@@ -249,7 +249,6 @@ function loadContent(section) {
             if(section === "dashboard") {
                 init();
             } else if (section === "users") {
-                console.log("user")
                 if (typeof initUtent === "function") {
                     initUtent();
                 } else {
@@ -265,6 +264,24 @@ function loadContent(section) {
                         })
                         .fail(function() {
                             console.error("Errore nel caricamento dello script gestioneUtenti_Dinamic.js");
+                        });
+                }
+            } else if (section === "orders"){
+                if (typeof initOrder === "function") {
+                    initOrder();
+                } else {
+                    // Altrimenti carica lo script e poi chiama la funzione
+                    $.getScript("frontend/Scripts/Ordini_Dainamic.js")
+                        .done(function() {
+                            if (typeof initOrder === "function") {
+                                initOrder();
+                            } else {
+                                mostraErrore("pagina bloccata, scusateci il disagio");
+                                console.log("is not defined")
+                            }
+                        })
+                        .fail(function() {
+                            console.error("Errore nel caricamento dello script Ordini_Dainamic.js");
                         });
                 }
             }
