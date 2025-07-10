@@ -414,7 +414,12 @@ function completaOrdine() {
         })
         .then(result => {
             if (result.success === "success") {
-                window.location.href = "cart.jsp";
+                mostraErrore("ordine completato, ti reindiriziamo all'carello")
+                console.log("Messaggio mostrato, attendo 5 secondi prima del redirect...");
+
+                setTimeout(function () {
+                    window.location.href = "cart.jsp";
+                }, 5000);
             } else {
                 mostraErrore(result.message || "Errore nel completamento dell'ordine. Riprova.");
             }

@@ -58,7 +58,7 @@ public class ContenutoBean implements Serializable {
 
     public AcquistatoBean convertirAcquistato(int idOrder) {
         if(idOrder > 0){
-            AcquistatoBean temp = new AcquistatoBean(0, qCarrello, idCarrello, idProdotto, idVolume);
+            AcquistatoBean temp = new AcquistatoBean(0, qCarrello, idOrder, idProdotto, idVolume);
             return temp;
         }
         return null;

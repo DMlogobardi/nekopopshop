@@ -36,20 +36,12 @@
     <div class="flex flex-col lg:flex-row items-center justify-between gap-6 mb-8">
         <!-- Logo -->
         <div class="flex items-center">
-            <div class="relative">
-                <div class="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-nekopeach z-10 flex items-center justify-center animate-pulse">
-                    <i class="fas fa-paw text-white text-lg"></i>
-                </div>
-                <img src="frontend/images/logo_nekopop.jpg"
-                     alt="NekoPop Logo"
-                     style="width: 120px; height: 120px;"
-                     class="rounded-full border-4 border-white shadow-lg">
+            <div class="w-16 h-16 rounded-full bg-nekopeach flex items-center justify-center mr-4">
+                <i class="fas fa-shopping-bag text-white text-2xl"></i>
             </div>
-            <div class="ml-4">
-                <h1 class="text-3xl font-bold "> <span class="nekotag">NekoPop Shop</span></h1>
-                <p class= "text-sm text-nekopeach font-bold" style="font-size: 20px; background: linear-gradient(90deg, #E55458, #F29966);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;"> Manga & Action Figure</p>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-1000">Checkout</h1>
+                <p class="text-nekopeach font-semibold">Completa il tuo acquisto</p>
             </div>
         </div>
 
@@ -60,16 +52,6 @@
 
     <div class="container mx-auto px-4 py-8">
 
-        <!-- Header -->
-        <div class="flex items-center mb-8">
-            <div class="w-16 h-16 rounded-full bg-nekopeach flex items-center justify-center mr-4">
-                <i class="fas fa-shopping-bag text-white text-2xl"></i>
-            </div>
-            <div>
-                <h1 class="text-3xl font-bold text-gray-1000">Checkout</h1>
-                <p class="text-nekopeach font-semibold">Completa il tuo acquisto</p>
-            </div>
-        </div>
         <div class="container mx-auto px-4 py-8">
             <!-- Pulsante Torna Indietro -->
             <div class="mb-6">

@@ -142,7 +142,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         PreparedStatement ps = null;
         int result = 0;
 
-        String selectSQL = "SELECT quantita FROM " + TABLE_NAME + " WHERE idVolume = ?";
+        String selectSQL = "SELECT quantità FROM " + TABLE_NAME + " WHERE idVolume = ?";
 
         try {
             con = ds.getConnection();
@@ -151,7 +151,7 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return rs.getInt("quantita");
+                return rs.getInt("quantità");
             }
         } finally {
             try {

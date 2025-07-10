@@ -229,7 +229,7 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean> {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return rs.getInt("quantita");
+                return rs.getInt("quantità");
             }
         } finally {
             try {
