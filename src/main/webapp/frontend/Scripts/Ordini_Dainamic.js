@@ -1,10 +1,23 @@
 let elemOrder = true;
 let currentPageOrder = 1;
+let serch = false;
+let date = false;
 
 async function caricaOrdini(page = 1){
     const params = new URLSearchParams();
     params.append("action", "order");
-    params.append("actionOrder", "getAll");
+    if(serch){
+        params.append("actionOrder", "fromUser");
+        params.append("id", inputSerch.value);
+    } else if (date){
+        params.append("actionOrder", "fromDate");
+        params.append("startDate", startDateInput.value);
+        params.append("endDate", endDateInput.value);
+    } else {
+        params.append("actionOrder", "getAll");
+    }
+
+
     params.append("limit", "3");
     params.append("page", page.toString());
     try {
@@ -19,6 +32,10 @@ async function caricaOrdini(page = 1){
         const data = await response.json();
 
         if(data.error !== undefined){
+            if(serch || data){
+                mostraErrore("problemi col parametro di ricerca");
+                return;
+            }
             mostraErrore("errore nel caricamento");
             return;
         }
@@ -28,7 +45,7 @@ async function caricaOrdini(page = 1){
         const lodaing = document.getElementById("loading");
         const next = document.getElementById("sucOrder");
 
-        if(ordini.length > 0){
+        if(ordini.length > 0 && currentPageOrder >= 1){
             elemOrder = true;
             next.classList.remove("disabled:opacity-50");
             next.disabled = false;
@@ -315,6 +332,60 @@ async function annullaOrdine(idOrdine){
     }
 }
 
+function addFilter(tipo){
+    const removeBtn = document.getElementById("filter-remove-btn");
+    if(tipo === "sarch") {
+        date = false;
+        serch = true;
+        startDateInput.value = "";
+        endDateInput.value = "";
+        removeBtn.classList.remove("hidden");
+        currentPageOrder = 1;
+        caricaOrdini(currentPageOrder);
+        return null;
+    }
+
+    if(tipo === "range"){
+        date = true;
+        serch = false;
+        inputSerch.value = "";
+        removeBtn.classList.remove("hidden");
+        currentPageOrder = 1;
+        caricaOrdini(currentPageOrder);
+        return null
+    }
+
+    if(tipo === "remove"){
+        date = false;
+        serch = false;
+        startDateInput.value = "";
+        endDateInput.value = "";
+        inputSerch.value = "";
+        removeBtn.classList.add("hidden");
+        filterBtn.classList.add("hidden");
+        currentPageOrder = 1;
+        caricaOrdini(currentPageOrder);
+        return null
+    }
+}
+
+const startDateInput = document.getElementById('start-date');
+const endDateInput = document.getElementById('end-date');
+const filterBtn = document.getElementById('filter-date-btn');
+const inputSerch = document.getElementById("search");
+
+function validateDates() {
+    const startDate = startDateInput.value;
+    const endDate = endDateInput.value;
+
+    if (startDate && endDate && startDate <= endDate) {
+        filterBtn.classList.remove("hidden")
+    } else {
+        mostraErrore("range di ricerca non valido");
+        filterBtn.classList.add("hidden")
+    }
+}
+
 window.initOrder = function() {
     console.log("initOrder chiamata");
     caricaOrdini(currentPageOrder);
@@ -340,5 +411,26 @@ window.initOrder = function() {
             btn.disabled = false;
         }
         console.log(currentPageOrder);
+    })
+
+    startDateInput.addEventListener('input', validateDates);
+    endDateInput.addEventListener('input', validateDates);
+    filterBtn.addEventListener("click", btn => {
+        const filterType = btn.currentTarget.getAttribute('data-filter-type');
+        addFilter(filterType);
+    })
+
+    document.getElementById("serchBTN").addEventListener("click", btn => {
+        const filterType = btn.currentTarget.getAttribute('data-filter-type');
+        if(inputSerch.value.trim() === ""){
+            mostraErrore("parametro di ricerca non valido");
+            return;
+        }
+        addFilter(filterType);
+    })
+
+    document.getElementById("filter-remove-btn").addEventListener("click", btn => {
+        const filterType = btn.currentTarget.getAttribute('data-filter-type');
+        addFilter(filterType);
     })
 }

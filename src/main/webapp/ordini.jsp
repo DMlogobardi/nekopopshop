@@ -58,9 +58,9 @@
                 <div>
                     <label for="search" class="block text-gray-700 text-sm font-bold mb-2">Cerca per cliente</label>
                     <div class="relative">
-                        <input type="text" id="search" placeholder="nome cliente..."
+                        <input type="text" id="search" placeholder="id cliente..."
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekoblue">
-                        <button id="serchBTN" class="absolute right-0 top-0 h-full px-4 text-nekoblue">
+                        <button id="serchBTN" class="absolute right-0 top-0 h-full px-4 text-nekoblue" data-filter-type="sarch">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -68,11 +68,14 @@
 
                 <div>
                     <%--@declare id="date-range"--%><label for="date-range" class="block text-gray-700 text-sm font-bold mb-2">Intervallo date</label>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 mb-2">
                         <input type="date" id="start-date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekoblue">
                         <span class="flex items-center">a</span>
                         <input type="date" id="end-date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nekoblue">
                     </div>
+                        <button id="filter-date-btn" data-filter-type="range" class="bg-nekored text-white min-w-[80px] px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm hidden">
+                            Filtra
+                        </button>
                 </div>
             </div>
         </div>
@@ -87,6 +90,9 @@
             <i class="fas fa-clipboard-list mr-3" style="font-size: 30px"></i>
             <span style="font-size: 30px">Elenco Ordini</span>
           </span>
+                    <button id="filter-remove-btn" data-filter-type="remove" class="bg-nekored text-white min-w-[80px] px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm hidden">
+                        rimuovi filtro
+                    </button>
                 </h2>
             </div>
 
