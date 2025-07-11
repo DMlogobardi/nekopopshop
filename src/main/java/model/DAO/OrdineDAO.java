@@ -108,22 +108,34 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
         return ordine;
     }
 
-    public Collection<OrdineBean> doRetrieveByUser(String order, int code) throws SQLException {
+    public Collection<OrdineBean> doRetrieveByUser(String order, int code, int limit, int page) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<OrdineBean> ordini = new LinkedList<OrdineBean>();
+        Collection<OrdineBean> ordini = new LinkedList<>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME + " where idCliente = ? order by ?";
+        // Validazione nome colonna per l'ORDER BY
+        String orderBy = "idOrdine";
+        if (order != null && ordineWhiteList.contains(order.strip())) {
+            orderBy = order.strip();
+        }
 
-        try{
+        // Query con ORDER BY costruito in modo sicuro
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idCliente = ? ORDER BY " + orderBy + " LIMIT ? OFFSET ?";
+
+        try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
-            ps.setInt(1, code);
-            if(order != null && ordineWhiteList.contains(order.strip()))
-                ps.setString(2, order.strip());
-            else
-                ps.setString(2, "idOrdine");
 
+            // Impostazione dei parametri
+            ps.setInt(1, code);
+
+            int actualLimit = (limit > 0) ? limit : 10;
+            int actualOffset = (page > 0) ? (page - 1) * actualLimit : 0;
+
+            ps.setInt(2, actualLimit);
+            ps.setInt(3, actualOffset);
+
+            // Esecuzione query e costruzione risultato
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 OrdineBean ordine = new OrdineBean(
@@ -138,30 +150,31 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                 ordini.add(ordine);
             }
         } finally {
-            try {
-                if (ps != null) ps.close();
-            } finally {
-                if (con != null) con.close();
-            }
+            if (ps != null) ps.close();
+            if (con != null) con.close();
         }
+
         return ordini;
     }
+
 
     @Override
     public Collection<OrdineBean> doRetrieveAll(String order) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<OrdineBean> ordini = new LinkedList<OrdineBean>();
+        Collection<OrdineBean> ordini = new LinkedList<>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME + " order by ?";
+        // Ordine sicuro: se non valido o nullo, default = idOrdine
+        String orderBy = "idOrdine";
+        if (order != null && ordineWhiteList.contains(order.strip())) {
+            orderBy = order.strip();
+        }
+
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + orderBy;
 
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
-            if(order != null && ordineWhiteList.contains(order.strip()))
-                ps.setString(1, order.strip());
-            else
-                ps.setString(1, "idOrdine");
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -177,38 +190,45 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                 ordini.add(ordine);
             }
         } finally {
-            try {
-                if (ps != null) ps.close();
-            } finally {
-                if (con != null) con.close();
-            }
+            if (ps != null) ps.close();
+            if (con != null) con.close();
         }
+
         return ordini;
     }
 
-    public Collection<OrdineBean> doRetrieveAllByDateRange(String order, Date start, Date end) throws SQLException {
+
+    public Collection<OrdineBean> doRetrieveAllByDateRange(String order, Date start, Date end, int limit, int page) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<OrdineBean> ordini = new LinkedList<OrdineBean>();
+        Collection<OrdineBean> ordini = new LinkedList<>();
 
-        if (start == null && end == null) {
-            return null;
-        }
-        if (start.after(end)) {
+        if (start == null || end == null || start.after(end)) {
             return null;
         }
 
-        String selectAllSQL = "select * from " + TABLE_NAME + " where dataOrdine between ? and ? order by ?";
+        // Controllo ordine: di default ordina per idOrdine
+        String orderBy = "idOrdine";
+        if (order != null && ordineWhiteList.contains(order.strip())) {
+            orderBy = order.strip();
+        }
+
+        // Costruzione dinamica della query
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE dataOrdine BETWEEN ? AND ? " +
+                "ORDER BY " + orderBy + " LIMIT ? OFFSET ?";
 
         try {
             con = ds.getConnection();
-            ps = con.prepareStatement(selectAllSQL);
+            ps = con.prepareStatement(selectSQL);
             ps.setDate(1, start);
             ps.setDate(2, end);
-            if(order != null && ordineWhiteList.contains(order.strip()))
-                ps.setString(3, order.strip());
-            else
-                ps.setString(3, "idOrdine");
+
+            // Calcolo limite e offset
+            int actualLimit = (limit > 0) ? limit : 10;
+            int actualOffset = (page > 0) ? (page - 1) * actualLimit : 0;
+
+            ps.setInt(3, actualLimit);
+            ps.setInt(4, actualOffset);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -224,44 +244,38 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                 ordini.add(ordine);
             }
         } finally {
-            try {
-                if (ps != null) ps.close();
-            } finally {
-                if (con != null) con.close();
-            }
+            if (ps != null) ps.close();
+            if (con != null) con.close();
         }
+
         return ordini;
     }
+
 
     @Override
     public Collection<OrdineBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        Collection<OrdineBean> ordini = new LinkedList<OrdineBean>();
+        Collection<OrdineBean> ordini = new LinkedList<>();
 
-        String selectAllSQL = "select * from " + TABLE_NAME + " order by ? limit ? offset ?";
+        // Controllo ordine: default su "idOrdine"
+        String orderBy = "idOrdine";
+        if (order != null && ordineWhiteList.contains(order.strip())) {
+            orderBy = order.strip();
+        }
+
+        // Query costruita dinamicamente per inserire il nome colonna in modo sicuro
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + orderBy + " LIMIT ? OFFSET ?";
 
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectAllSQL);
-            if(order != null && ordineWhiteList.contains(order.strip()))
-                ps.setString(1, order.strip());
-            else
-                ps.setString(1, "idOrdine");
 
-            if (limit > 0 && page > 0) {
-                ps.setInt(2, limit);
-                ps.setInt(3, (page - 1) * limit);
-            } else if (page > 0 && limit <= 0) {
-                ps.setInt(2, 10);
-                ps.setInt(3, (page - 1) * limit);
-            } else if (limit > 0 && page <= 0) {
-                ps.setInt(2, limit);
-                ps.setInt(3, 0);
-            } else {
-                ps.setInt(2, 10);
-                ps.setInt(3, 0);
-            }
+            int actualLimit = (limit > 0) ? limit : 10;
+            int actualOffset = (page > 0) ? (page - 1) * actualLimit : 0;
+
+            ps.setInt(1, actualLimit);
+            ps.setInt(2, actualOffset);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -277,12 +291,11 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
                 ordini.add(ordine);
             }
         } finally {
-            try {
-                if (ps != null) ps.close();
-            } finally {
-                if (con != null) con.close();
-            }
+            if (ps != null) ps.close();
+            if (con != null) con.close();
         }
+
         return ordini;
     }
+
 }

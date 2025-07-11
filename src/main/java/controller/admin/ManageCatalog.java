@@ -49,7 +49,7 @@ public class ManageCatalog extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         HttpSession session = request.getSession();
-        if(session.getAttribute("logToken") != "A") {
+        if(!"A".equals(session.getAttribute("logToken"))) {
             System.out.println("session is not admin " + session.getServletContext().getAttribute("logToken"));
             request.setAttribute("errors", "access denied");
             request.getRequestDispatcher("/index.jsp").forward(request, response);

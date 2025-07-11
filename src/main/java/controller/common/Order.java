@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 
 @WebServlet("/common/order")
 public class Order extends HttpServlet {
@@ -123,16 +124,16 @@ public class Order extends HttpServlet {
         ProdottoDAO prodottoDB = new ProdottoDAO(ds);
         CapitoloDAO capitoloDAO = new CapitoloDAO(ds);
         ReaderDAO readerDAO = new ReaderDAO(ds);
-        CapitoloBean cap = null;
+        Collection<CapitoloBean> cap = null;
         int quantitaDB = 0;
         for(ContenutoBean conte : sCart.getContenuti()){
             //controllo quantità
             try {
-                if (conte.getIdProdotto() != null || conte.getIdProdotto() != 0) {
+                if (conte.getIdProdotto() != null && conte.getIdProdotto() != 0) {
                     quantitaDB = prodottoDB.doRetrieveQuantity(conte.getIdProdotto());
                 } else {
                     quantitaDB = volumeDB.doRetrieveQuantity(conte.getIdVolume());
-                    cap = (CapitoloBean) capitoloDAO.doRetrieveAllLimitByVol(null, 1,0, conte.getIdVolume());
+                    cap = capitoloDAO.doRetrieveAllLimitByVol(null, 1,0, conte.getIdVolume());
                 }
             } catch (SQLException e) {
                 System.out.println("order error quantita db: " + e.getMessage());
@@ -153,6 +154,9 @@ public class Order extends HttpServlet {
                     return;
                 }
             }
+
+            System.out.println(conte.getqCarrello());
+            System.out.println(quantitaDB);
 
             if(quantitaDB > conte.getqCarrello()) {
                 AcquistatoBean acquistato = conte.convertirAcquistato(idOrdine);
@@ -200,7 +204,8 @@ public class Order extends HttpServlet {
         sCart.push(ds);
 
         System.out.println("success");
-        request.setAttribute("success", "success");
-        request.getRequestDispatcher("/cart.jsp").forward(request, response);
+        response.setStatus(200);
+        response.setContentType("text/json");
+        response.getWriter().println("{\"success\":\"success\"}");
     }
 }

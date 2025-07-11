@@ -1,3 +1,52 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+         import="jakarta.servlet.http.HttpSession, jakarta.servlet.http.Cookie"%>
+<%@ page import="java.util.logging.Logger" %>
+<%
+    // Crea il logger
+    Logger logger = Logger.getLogger("MyLogger");
+
+    HttpSession s = request.getSession(false);
+    boolean isLoggedIn = false;
+    String access = "";
+
+    if (s != null) {
+        Object token = s.getAttribute("logToken");
+        if (token == null) {
+            isLoggedIn = true;
+        } else {
+            access = token.toString();
+        }
+    }
+
+    if (isLoggedIn) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("access".equals(cookie.getName())) {
+                    cookie.setValue("");
+                    cookie.setMaxAge(1);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    return;
+                }
+            }
+        }
+    } else {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("access".equals(cookie.getName())) {
+                    if(!cookie.getValue().equals(access))
+                        if(access.equals("A"))
+                            cookie.setValue("admin");
+                        else
+                            cookie.setValue("user");
+                }
+            }
+        }
+    }
+%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -5,6 +54,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NekoPopShop - Il tuo negozio kawaii di manga e action figure</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="frontend/Scripts/index_Dainamic.js" defer></script>
@@ -26,169 +76,6 @@
             }
         }
     </script>
-    <style>
-        @font-face {
-            font-family: 'Milkyway';  /* Scegli un nome per il font */
-            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
-            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
-            font-weight: normal;        /* Peso del font (es. 400, 700) */
-            font-style: normal;        /* normale, italic, ecc. */
-            font-display: swap;        /* Ottimizza il rendering */
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes blossom-fall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f0f0f0;
-
-            /* Immagine di background principale */
-            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
-
-            /* Centra e copre tutto lo spazio senza ripetizioni */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-
-            /* Altezza minima = viewport height */
-            min-height: 100vh;
-
-            /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
-            background-attachment: scroll;
-
-            /* Ottimizzazione prestazioni */
-            image-rendering: smooth;
-            overflow-x: hidden;
-        }
-        @media (min-width: 768px) {
-            body {
-                background-attachment: fixed;
-            }
-        }
-
-        .folder-tab {
-            position: relative;
-            background-color: #f2d5bb;
-            padding: 15px 25px;
-            border-radius: 15px 15px 0 0;
-            border: 2px solid #E55458;
-            border-bottom: none;
-            box-shadow: 0 -3px 8px #E55458;
-            margin-right: -10px;
-            z-index: 1;
-            transition: all 0.3s ease;
-            color: #E55458;
-        }
-
-        .folder-tab.active, .folder-tab:hover {
-            background-color: #E55458;
-            color: white;
-            transform: translateY(-0px);
-            z-index: 2;
-        }
-
-        .folder-tab::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 0;
-            width: 100%;
-            height: 15px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxNXB4IiB2aWV3Qm94PSIwIDAgMTAwIDUiPiAgPHBhdGggZmlsbD0iI2ZmZDJlNSIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
-            background-size: 100% 15px;
-            background-position: bottom center;
-            background-repeat: no-repeat;
-            z-index: -1;
-        }
-
-
-
-        .cherry-blossom {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxLTE4IDB6Ii8+PHBhdGggZD0iTTYwIDYwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDAgMTggMiAyIDAgMCAwIDIgMiA5IDkgMCAwIDEgMC0xOHoiLz48L2c+PC9zdmc+');
-            background-size: cover;
-            animation: blossom-fall 15s linear infinite;
-        }
-
-        .product-card {
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px #E55458;
-            overflow: hidden;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px #E55458;
-        }
-
-        .product-card::after {
-            content: 'NekoPop';
-            position: absolute;
-            top: 10px;
-            right: -35px;
-            background: #E55458;
-            color: #f2d5bb;
-            padding: 3px 35px;
-            transform: rotate(45deg);
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .header-content {
-            background: linear-gradient(145deg, #E55458, #f2d5bb);
-            border-radius: 20px;
-            box-shadow: 0 10px 25px #E55458;
-            border: 2px solid #ffd1e3;
-        }
-
-        .sakura-divider {
-            height: 3px;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSI1cHgiIHZpZXdCb3g9IjAgMCAxMDAgNSI+PHBhdGggZmlsbD0iI2ZmN2ViOCIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
-            background-size: cover;
-        }
-
-        .nekotag {
-            background: linear-gradient(90deg, #E55458, #F29966);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            font-weight: 800;
-            font-size: 45px;
-        }
-
-
-        .text-3xl{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .text-xl{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .text-lg{
-            font-family: 'Milkyway', sans-serif;
-            font-size: 2.5rem;
-            color: #333;
-        }
-        .fa-star, .fas, .far {
-            font-style: normal !important;
-        }
-
-    </style>
 </head>
 <body class="relative overflow-x-hidden">
 <!-- Decorative cat elements and cherry blossoms -->
@@ -275,7 +162,7 @@
 
 
         <!-- Sponsor Banner -->
-        <div class="header-content p-6 w-full md:w-2/3 relative">
+        <div id="dayOfferProd" class="header-content p-6 w-full md:w-2/3 relative">
             <div class="absolute -top-2 right-4 flex gap-2">
                 <div class="w-3 h-3 rounded-full bg-nekopink"></div>
                 <div class="w-3 h-3 rounded-full bg-nekopurple"></div>
@@ -549,7 +436,7 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('shonen')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-user-ninja text-2xl text-nekopurple"></i>
                 </div>
@@ -563,7 +450,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('shojo')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-heart text-2xl text-pink-500"></i>
                 </div>
@@ -577,7 +464,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('seinen')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-brain text-2xl text-blue-500"></i>
                 </div>
@@ -591,7 +478,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('kemono')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-nekopink rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-paw text-2xl text-green-500"></i>
                 </div>
@@ -605,7 +492,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('kodomo')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fab fa-fort-awesome text-2xl text-red-500"></i>
                 </div>
@@ -619,7 +506,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('josei')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-venus-double text-2xl text-fuchsia-600"></i>
                 </div>
@@ -633,7 +520,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('sci-Fi')" href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-syringe text-2xl text-blue-600"></i>
                 </div>
@@ -647,7 +534,7 @@
             </a>
 
             <!-- Category -->
-            <a href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
+            <a onclick="event.preventDefault(); category('horror')"  href="#" class="bg-nekopink p-6 rounded-xl border-2 border-nekopeach text-center group hover:shadow-lg transition">
                 <div class="mx-auto w-16 h-16 bg-kawaiblue rounded-full flex items-center justify-center mb-4">
                     <i class="fas fa-spider text-2xl text-black-600"></i>
                 </div>
@@ -778,13 +665,7 @@
                 </div>
             </div>
         </div>
-    </div>
 </footer>
 
-<!-- Fixed chat button -->
-<div class="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-nekopink to-nekopurple rounded-full flex items-center justify-center shadow-xl z-50">
-    <i class="fas fa-comment-alt text-white text-2xl"></i>
-    <div class="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></div>
-</div>
 </body>
 </html>

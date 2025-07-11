@@ -61,7 +61,7 @@ public class WishListGesture extends HttpServlet {
 
         String action = request.getParameter("actionWishList");
         if(action == null){
-            System.out.println("action is null");
+            System.out.println("actionWishList is null ");
             response.setStatus(422);
             response.setContentType("text/json");
             response.getWriter().println("{\"error\":\"invalid action\"}");
@@ -83,24 +83,30 @@ public class WishListGesture extends HttpServlet {
             }
 
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
+            int lodId = (Integer) session.getAttribute("logId");
             WishlistDAO wishlistDAO = new WishlistDAO(ds);
             ProdottoDAO prodottoDAO = new ProdottoDAO(ds);
             VolumeDAO volumeDAO = new VolumeDAO(ds);
             for(WishListDTO wishListDTO : dto){
                 Boolean exists = false;
                 try {
-                    if (wishListDTO.getIdProdotto() != 0 || wishListDTO.getIdVolume() != null) {
-                        if (prodottoDAO.doRetrieveByKey(wishListDTO.getIdProdotto()) != null) {
+                    if (wishListDTO.getIdProdotto() != null || wishListDTO.getIdVolume() == null) {
+                        if (prodottoDAO.doRetrieveByKey(wishListDTO.getIdProdotto()) != null && wishlistDAO.doRetrieveByProd(wishListDTO.getIdProdotto(), lodId) == null) {
                             exists = true;
                         }
                     } else {
-                        if (volumeDAO.doRetrieveByKey(wishListDTO.getIdVolume()) != null) {
+                        if (volumeDAO.doRetrieveByKey(wishListDTO.getIdVolume()) != null && wishlistDAO.doRetrieveByVol(wishListDTO.getIdVolume(), lodId) == null) {
                             exists = true;
                         }
                     }
 
                     if (exists) {
-                        wishlistDAO.doSave(new WishlistBean(0, wishListDTO.getIdProdotto(), wishListDTO.getIdCliente(), wishListDTO.getIdVolume()));
+                        wishlistDAO.doSave(new WishlistBean(
+                                0,
+                                wishListDTO.getIdProdotto() != null ? wishListDTO.getIdProdotto() : 0,  // o un valore di default
+                                (Integer) session.getAttribute("logId"),
+                                wishListDTO.getIdVolume() != null ? wishListDTO.getIdVolume() : 0      // o un valore di default
+                        ));
                     }
                 } catch (SQLException e) {
                     response.setStatus(500);

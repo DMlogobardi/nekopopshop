@@ -42,7 +42,7 @@ public class ManageCliente extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        if(session.getAttribute("logToken") != "A") {
+        if(!"A".equals(session.getAttribute("logToken"))) {
             response.setStatus(422);
             response.setContentType("text/json");
             response.getWriter().println("{\"error\":\"access denied\"}");
@@ -73,9 +73,9 @@ public class ManageCliente extends HttpServlet {
             JsonConverter<ClienteBean> converter = JsonConverter.factory(ClienteBean.class, null);
             ClienteDAO clienteDAO = new ClienteDAO(ds);
             Collection<ClienteBean> clienti = null;
-            String order = request.getParameter("order");
-            Integer limit = Integer.parseInt(request.getParameter("limit"));
-            Integer page = Integer.parseInt(request.getParameter("page"));
+            String order = request.getParameter("order") == null ? "" : request.getParameter("order");
+            Integer limit = request.getParameter("limit") == null ? -1 : Integer.parseInt(request.getParameter("limit"));
+            Integer page = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
 
             if(limit == null || page == null){
                 response.setStatus(422);
@@ -85,7 +85,10 @@ public class ManageCliente extends HttpServlet {
             }
 
             try {
-                clienti = clienteDAO.doRetrieveAllLimit(order, limit, page);
+                if(limit != -1)
+                    clienti = clienteDAO.doRetrieveAllLimit(order, limit, page);
+                else
+                    clienti = clienteDAO.doRetrieveAll(null);
             } catch (SQLException e) {
                 response.setStatus(500);
                 response.setContentType("text/json");
@@ -181,7 +184,7 @@ public class ManageCliente extends HttpServlet {
             System.out.println("invalid action");
             response.setStatus(422);
             response.setContentType("text/json");
-            response.getWriter().println("{\"error\":\"invalid action\"}");
+            response.getWriter().println("{\"error\":\"invalid actionClient\"}");
         }
     }
 }

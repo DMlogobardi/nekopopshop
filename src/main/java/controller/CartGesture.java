@@ -287,6 +287,7 @@ public class CartGesture extends HttpServlet {
                 }
             }
 
+            sCart.push(ds);
 
             System.out.println("remove success");
             response.setStatus(200);

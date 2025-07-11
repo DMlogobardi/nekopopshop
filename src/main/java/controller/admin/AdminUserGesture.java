@@ -32,7 +32,7 @@ public class AdminUserGesture extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        if(session.getAttribute("logToken") != "A") {
+        if(!"A".equals(session.getAttribute("logToken"))) {
             response.setStatus(422);
             response.setContentType("text/json");
             response.getWriter().println("{\"error\":\"access denied\"}");
@@ -44,14 +44,14 @@ public class AdminUserGesture extends HttpServlet {
         if(action == null){
             response.setStatus(422);
             response.setContentType("text/json");
-            response.getWriter().println("{\"error\":\"access denied\"}");
+            response.getWriter().println("{\"error\":\"access denied gesture\"}");
             return;
         }
 
-        if(action.equals("order")){
+        if(action.toLowerCase().strip().equals("order")){
             session.setAttribute("gestureAdmin", "autorizato");
             request.getRequestDispatcher("manageorder").forward(request, response);
-        } else if (action.equals("cliente")) {
+        } else if (action.toLowerCase().strip().equals("cliente")) {
             session.setAttribute("gestureAdmin", "autorizato");
             request.getRequestDispatcher("managecliente").forward(request, response);
         } else {
