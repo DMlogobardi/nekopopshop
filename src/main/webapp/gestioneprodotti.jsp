@@ -193,42 +193,15 @@
                             </div>
 
                             <!-- Pagination -->
-                            <div class="flex items-center justify-between mt-6 flex-wrap gap-2">
-                                <nav
-                                        class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                                        aria-label="Pagination"
-                                >
-                                    <a
-                                            href="#"
-                                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                                    >
-                                        <span class="sr-only">Previous</span>
-                                        <i class="fas fa-chevron-left"></i>
-                                    </a>
-                                    <a
-                                            href="#"
-                                            aria-current="page"
-                                            class="relative inline-flex items-center px-4 py-2 border border-nekopink bg-nekopink text-white text-sm font-medium"
-                                    >1</a
-                                    >
-                                    <a
-                                            href="#"
-                                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                                    >2</a
-                                    >
-                                    <a
-                                            href="#"
-                                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                                    >3</a
-                                    >
-                                    <a
-                                            href="#"
-                                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                                    >
-                                        <span class="sr-only">Next</span>
-                                        <i class="fas fa-chevron-right"></i>
-                                    </a>
-                                </nav>
+                            <div class="px-6 pb-6 pt-3">
+                                <div class="flex justify-between items-center">
+                                    <button id="precProd" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium disabled:opacity-50" disabled>
+                                        <i class="fas fa-chevron-left mr-2"></i> Precedenti
+                                    </button>
+                                    <button id="sucProd" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium">
+                                        Successivi <i class="fas fa-chevron-right ml-2"></i>
+                                    </button>
+                                </div>
                             </div>
 
                         </div>

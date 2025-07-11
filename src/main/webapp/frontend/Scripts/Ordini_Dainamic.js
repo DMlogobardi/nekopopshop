@@ -422,7 +422,7 @@ window.initOrder = function() {
 
     document.getElementById("serchBTN").addEventListener("click", btn => {
         const filterType = btn.currentTarget.getAttribute('data-filter-type');
-        if(inputSerch.value.trim() === ""){
+        if(inputSerch.value.toString().trim() === ""){
             mostraErrore("parametro di ricerca non valido");
             return;
         }

@@ -86,11 +86,11 @@
 
                             <!-- Bottoni -->
                             <div class="flex justify-between mt-6">
-                                <button id ="prec" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
-                                    Precedente
+                                <button id ="prec" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium disabled:opacity-50" disabled>
+                                    <i class="fas fa-chevron-left mr-2"></i> Precedenti
                                 </button>
-                                <button id = "suc" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
-                                    Successivo
+                                <button id = "suc" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium">
+                                    Successivi <i class="fas fa-chevron-right ml-2"></i>
                                 </button>
                             </div>
                         </div>
