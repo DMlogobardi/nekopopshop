@@ -140,6 +140,14 @@ public class SessionCart {
         }
     }
 
+    private boolean idsMatch(Integer id1, Integer id2) {
+        return Objects.equals(normalizeId(id1), normalizeId(id2));
+    }
+
+    private Integer normalizeId(Integer id) {
+        return (id == null || id == 0) ? null : id;
+    }
+
     public Boolean margeCart(CarrelloBean dbCart, DataSource ds) throws SQLException {
         if (dbCart == null || ds == null) {
             return false;
@@ -148,12 +156,18 @@ public class SessionCart {
         ContenutoDAO contenutoSQL = new ContenutoDAO(ds);
         Collection<ContenutoBean> dbContenuto = contenutoSQL.doRetrieveAllproduct(dbCart.getIdCarello());
 
+        System.out.println("db = "+ dbContenuto);
+        System.out.println("sessione = "+ this.contenuti);
+
         for (ContenutoBean contenutoDB : dbContenuto) {
+
+
             Optional<ContenutoBean> match = this.contenuti.stream()
                     .filter(conte ->
-                            Objects.equals(conte.getIdProdotto(), contenutoDB.getIdProdotto()) &&
-                                    Objects.equals(conte.getIdVolume(), contenutoDB.getIdVolume()))
+                            idsMatch(conte.getIdProdotto(), contenutoDB.getIdProdotto()) &&
+                                    idsMatch(conte.getIdVolume(), contenutoDB.getIdVolume()))
                     .findFirst();
+            System.out.println("match = " + match);
 
             if (match.isPresent()) {
                 ContenutoBean sessionConte = match.get();
