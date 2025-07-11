@@ -131,6 +131,13 @@ public class UtentGesture extends HttpServlet {
                 return;
             }
 
+            if(user == null){
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"invalid user data\"}");
+                return;
+            }
+
             if(dto.getNome() != null){
                 user.setNome(dto.getNome());
             }
@@ -147,12 +154,6 @@ public class UtentGesture extends HttpServlet {
                 user.setcF(dto.getcF());
             }
 
-            if(user == null){
-                response.setStatus(500);
-                response.setContentType("text/json");
-                response.getWriter().println("{\"error\":\"invalid user data\"}");
-                return;
-            }
             try{
                 clienteDAO.uppdate(user);
             } catch (SQLException e) {
