@@ -68,15 +68,14 @@ public class UtentGesture extends HttpServlet {
         }
 
         if(action.equals("list")){
-            int page = Integer.parseInt(request.getParameter("page"));
-            String order = request.getParameter("order");
+            int id = Integer.parseInt(session.getAttribute("logId").toString());
             JsonConverter<ClienteBean> converter = JsonConverter.factory(ClienteBean.class, null);
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
             ClienteDAO clienteDAO = new ClienteDAO(ds);
-            Collection<ClienteBean> dto = null;
+            ClienteBean dto = null;
 
             try{
-                dto = clienteDAO.doRetrieveAllLimit(order, 10, page);
+                dto = clienteDAO.doRetrieveByKey(id);
             } catch (SQLException e) {
                 response.setStatus(500);
                 response.setContentType("text/json");
@@ -123,15 +122,38 @@ public class UtentGesture extends HttpServlet {
             ClienteDAO clienteDAO = new ClienteDAO(ds);
             ClienteBean user = null;
 
-            if(dto.getcF().length() == 16){
-                user = ClienteBean.getByCheckEmail(id, dto.getNome(), dto.getCognome(), dto.getDataNascita(), dto.getEmail(), dto.getcF());
+            try {
+                user = clienteDAO.doRetrieveByKey(id);
+            } catch (SQLException e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
             }
+
             if(user == null){
                 response.setStatus(500);
                 response.setContentType("text/json");
                 response.getWriter().println("{\"error\":\"invalid user data\"}");
                 return;
             }
+
+            if(dto.getNome() != null){
+                user.setNome(dto.getNome());
+            }
+            if(dto.getCognome() != null) {
+                user.setCognome(dto.getCognome());
+            }
+            if(dto.getDataNascita() != null) {
+                user.setDataNascita(dto.getDataNascita());
+            }
+            if(dto.getEmail() != null) {
+                user.setEmail(dto.getEmail());
+            }
+            if(dto.getcF() != null && dto.getcF().length() == 16) {
+                user.setcF(dto.getcF());
+            }
+
             try{
                 clienteDAO.uppdate(user);
             } catch (SQLException e) {

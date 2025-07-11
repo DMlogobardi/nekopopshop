@@ -201,7 +201,7 @@ public class ClienteDAO implements GenralDAO<ClienteBean>{
         PreparedStatement ps = null;
         int result = 0;
 
-        String updateSQL = "update " + TABLE_NAME + " set nomw = ?, cognome = ?, dataNascita = ?, email = ?, cF = ? where idCliente = ?";
+        String updateSQL = "update " + TABLE_NAME + " set nome = ?, cognome = ?, dataNascita = ?, email = ?, cF = ? where idCliente = ?";
 
         try {
             con = ds.getConnection();

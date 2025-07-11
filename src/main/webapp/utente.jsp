@@ -7,10 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src ="frontend/Scripts/OrdiniUtente.js"></script>
-    <script src ="frontend/Scripts/WishlistUtente.js"></script>
+   <script src ="frontend/Scripts/OrdiniUtente.js"></script>
+   <script src ="frontend/Scripts/WishlistUtente.js"></script>
     <script src ="frontend/Scripts/ImpostazioniUtente.js"></script>
-    <script src ="frontend/Scripts/Sicurezza.js"></script>
     <script src ="frontend/Scripts/Pagamenti.js"></script>
     <script src ="frontend/Scripts/Indirizzi.js"></script>
     <script src ="frontend/Scripts/Logout.js"></script>
@@ -379,39 +378,10 @@
                     </div>
 
                     <h3 class="text-2xl font-bold mt-4 text-gray-800">NekoFan123</h3>
-                    <p class="text-gray-600">Membro dal: 15/03/2022</p>
 
-                    <div class="mt-4 flex justify-center space-x-2">
-                        <span class="badge bg-nekopink text-nekopeach">Premium</span>
-                        <span class="badge bg-nekopink text-nekopeach">Verified</span>
-                    </div>
                 </div>
 
-                <!-- Stats -->
-                <div class="px-6 pb-6">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-gray-600">Livello</span>
-                        <span class="font-bold text-nekopeach">12</span>
-                    </div>
-                    <div class="progress-bar mb-4">
-                        <div class="progress-fill" style="width: 65%"></div>
-                    </div>
 
-                    <div class="grid grid-cols-3 gap-2 text-center">
-                        <div class="stats-card bg-nekopink/20 p-3 rounded-lg">
-                            <div class="text-nekopeach font-bold text-xl">24</div>
-                            <div class="text-xs text-gray-600">Ordini</div>
-                        </div>
-                        <div class="stats-card bg-nekored/20 p-3 rounded-lg">
-                            <div class="text-nekopeach font-bold text-xl">128</div>
-                            <div class="text-xs text-gray-600">Punti</div>
-                        </div>
-                        <div class="stats-card bg-nekoorange/20 p-3 rounded-lg">
-                            <div class="text-nekored font-bold text-xl">8</div>
-                            <div class="text-xs text-gray-600">Liste</div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Navigation -->
                 <div class="border-t border-gray-200">
@@ -427,10 +397,6 @@
 
                     <button id="settings-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
                         <i class="fas fa-cog mr-3"></i> Impostazioni
-                    </button>
-
-                    <button id="security-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="security">
-                        <i class="fas fa-lock mr-3"></i> Sicurezza
                     </button>
 
                     <button id="payments-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="payments">
@@ -452,39 +418,7 @@
                 </div>
             </div>
 
-            <!-- Rewards Card -->
-            <div class="profile-card bg-white border-2 border-nekoorange mt-6">
-                <div class="bg-gradient-to-r from-nekoorange to-nekopink p-4">
-                    <h3 class="text-lg font-bold text-white flex items-center" style="font-size: 30px">
-                        <i class= "fas fa-trophy mr-2" style="font-size: 30px" ></i> I tuoi premi
-                    </h3>
-                </div>
-                <div class="p-4">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 rounded-full bg-nekopink flex items-center justify-center mr-3">
-                            <i class= "fas fa-medal text-nekopeach text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-gray-800">Collezionista</h4>
-                            <p class="text-xs text-gray-600">Hai completato 10 ordini</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-full bg-nekopink flex items-center justify-center mr-3">
-                            <i class="fas fa-star text-nekopeach text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-gray-800">Fan accanito</h4>
-                            <p class="text-xs text-gray-600">50 articoli nella wishlist</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <button onclick="window.location.href='premi.jsp'" class="bg-nekoorange hover:bg-nekopeach text-white px-4 py-2 rounded-lg text-sm font-bold transition">
-                            Scopri altri premi
-                        </button>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
         <!-- Main Content -->

@@ -140,7 +140,7 @@ function loadOrdersContent() {
 
     showLoading(mainContent);
 
-    fetch('common/UtentDataGesture', {
+    fetch('common/utentdategesture',{
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"

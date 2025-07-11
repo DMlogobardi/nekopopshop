@@ -108,16 +108,21 @@ function loadSettingsContent() {
     }
 }
 
+
+
 function fetchCurrentUserSettings(container) {
-    const formData = new FormData();
-    formData.append('action', 'datiUtente');
-    formData.append('actionUtent', 'getCurrentUser');
+    const params = new URLSearchParams();
+    params.append("action", "datiUtente");
+    params.append("actionUtent", "list");
 
-    console.log(`Fetching URL: ${pageContext.request.contextPath}/common/utentdategesture`);
+    console.log(`Fetching URL: ${pageContext.request.contextPath}/common/utentdatagesture`);
 
-    fetch(`${pageContext.request.contextPath}/common/utentdategesture`, {
+    fetch(`common/utentdategesture`, {
         method: 'POST',
-        body: formData,
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString(),
         credentials: 'include'
     })
         .then(response => {
@@ -164,13 +169,13 @@ function showSettingsError(container, error) {
     `;
 }
 
-function renderSettingsContent(container, userData = {}) {
+ function renderSettingsContent(container, userData = {}) {
     const defaultData = {
         firstName: '',
         lastName: '',
         email: '',
-        phone: '',
-        avatar: `${pageContext.request.contextPath}/frontend/Assets/Images/default-avatar.png`
+
+
     };
 
     const data = {...defaultData, ...userData};
@@ -179,8 +184,8 @@ function renderSettingsContent(container, userData = {}) {
         <div class="tab-content active" id="settings-tab">
             <div class="profile-card bg-white rounded-lg shadow-md overflow-hidden">
                 <!-- Header -->
-                <div class="bg-nekoblue p-6 text-white">
-                    <h2 class="text-2xl font-bold flex items-center">
+                <div class="bg-gradient-to-r from-nekored to-nekoorange p-6 ">
+                    <h2 class="text-3xl font-bold text-white flex items-center">
                         <i class="fas fa-user-cog mr-3"></i> Impostazioni Account
                     </h2>
                 </div>
@@ -193,26 +198,12 @@ function renderSettingsContent(container, userData = {}) {
                         
                         <!-- Sezione Informazioni Personali -->
                         <div class="mb-8">
-                            <h3 class="text-lg font-bold text-nekoblue mb-4 flex items-center">
+                            <h3 class="text-lg font-bold text-nekoorange mb-4 flex items-center">
                                 <i class="fas fa-user-circle mr-2"></i> Informazioni Personali
                             </h3>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Avatar Upload -->
-                                <div class="md:col-span-2 flex flex-col items-center">
-                                    <div class="avatar-upload mb-4">
-                                        <div class="avatar-preview rounded-full w-32 h-32 bg-gray-200 overflow-hidden" 
-                                             style="background-image: url('${data.avatar}')">
-                                        </div>
-                                        <div class="avatar-edit">
-                                            <input type="file" id="settings-avatar-upload" name="avatar" accept=".png, .jpg, .jpeg">
-                                            <label for="settings-avatar-upload" class="bg-nekoblue text-white p-2 rounded-full cursor-pointer hover:bg-nekoblue-dark">
-                                                <i class="fas fa-camera"></i>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <p class="text-sm text-gray-500">Clicca sull'icona per cambiare l'avatar</p>
-                                </div>
+                       
 
                                 <!-- Nome -->
                                 <div class="form-group">
@@ -234,7 +225,7 @@ function renderSettingsContent(container, userData = {}) {
 
                         <!-- Sezione Contatti -->
                         <div class="mb-8">
-                            <h3 class="text-lg font-bold text-nekoblue mb-4 flex items-center">
+                            <h3 class="text-lg font-bold text-nekoorange mb-4 flex items-center">
                                 <i class="fas fa-envelope mr-2"></i> Informazioni di Contatto
                             </h3>
                             
@@ -250,13 +241,7 @@ function renderSettingsContent(container, userData = {}) {
                                     </div>
                                 </div>
 
-                                <!-- Telefono -->
-                                <div class="form-group">
-                                    <label for="settings-phone" class="block text-sm font-medium text-gray-700 mb-1">Telefono</label>
-                                    <input type="tel" id="settings-phone" name="telefono"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nekoblue focus:border-transparent" 
-                                           value="${data.phone}">
-                                </div>
+                             
                             </div>
                         </div>
 
@@ -266,8 +251,8 @@ function renderSettingsContent(container, userData = {}) {
                                     class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                                 Annulla
                             </button>
-                            <button type="submit" id="save-settings"
-                                    class="px-6 py-2 bg-nekoblue text-white rounded-lg hover:bg-nekoblue-dark transition">
+                            <button type="button" id="save-settings"
+                                    class="px-6 py-2 bg-nekoorange text-white rounded-lg hover:bg-nekoblue-dark transition">
                                 Salva Modifiche
                             </button>
                         </div>
@@ -276,8 +261,42 @@ function renderSettingsContent(container, userData = {}) {
             </div>
         </div>
     `;
-
+    document.getElementById('save-settings').addEventListener('click', () => {
+        updateSettings()
+    });
     setupSettingsEventHandlers();
+}
+
+function updateSettings(){
+    const params = new URLSearchParams();
+    params.append("action", "datiUtente");
+    params.append("actionUtent", "update");
+    const data={
+        nome: document.getElementById("settings-firstname").value,
+        cognome: document.getElementById("settings-lastname").value,
+        email: document.getElementById("settings-email").value
+    }
+    params.append("json", JSON.stringify(data))
+    fetch(`common/utentdategesture`, {
+        method: 'POST',
+        body: params.toString(),
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        credentials: 'include'
+    }).then(response=>{
+        if(!response.ok){
+            throw new Error('Errore durante il salvataggio')
+        }
+        return response.json()
+    }).then(data=>{
+        if(data.error){
+            throw new Error(data.error)
+        }
+        showNotification('Impostazioni salvate con successo!')
+        loadSettingsContent()
+    })
+
 }
 
 function setupSettingsEventHandlers() {
@@ -394,14 +413,6 @@ function getLoggedInUserId() {
     return parseInt(localStorage.getItem('userId')) || 0;
 }
 
-function showLoginPrompt() {
-    const notification = document.createElement('div');
-    notification.className = 'fixed top-0 left-0 right-0 bg-nekored text-white p-4 text-center z-50';
-    notification.innerHTML = `
-        <p>Per accedere alle impostazioni, effettua il login. <a href="${pageContext.request.contextPath}/login.jsp" class="font-bold underline">Accedi ora</a></p>
-    `;
-    document.body.appendChild(notification);
-}
 
 function redirectToLogin() {
     window.location.href = `${pageContext.request.contextPath}/login.jsp?redirect=${encodeURIComponent(window.location.pathname + window.location.hash)}`;

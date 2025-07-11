@@ -68,7 +68,7 @@ public class UtentDataGesture extends HttpServlet {
 
         } else if (action.equals("datiUtente")) {
             session.setAttribute("gesture", "autorizato");
-            request.getRequestDispatcher("utentegesture").forward(request, response);
+            request.getRequestDispatcher("utentgesture").forward(request, response);
 
         } else if (action.equals("ordini")) {
             session.setAttribute("gesture", "autorizato");
