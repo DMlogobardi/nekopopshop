@@ -284,6 +284,24 @@ function loadContent(section) {
                             console.error("Errore nel caricamento dello script Ordini_Dainamic.js");
                         });
                 }
+            }  else if (section === "products"){
+                if (typeof initProduct === "function") {
+                    initProduct();
+                } else {
+                    // Altrimenti carica lo script e poi chiama la funzione
+                    $.getScript("frontend/Scripts/gestioneprodotti_Dinamic.js")
+                        .done(function() {
+                            if (typeof initProduct === "function") {
+                                initProduct();
+                            } else {
+                                mostraErrore("pagina bloccata, scusateci il disagio");
+                                console.log("is not defined")
+                            }
+                        })
+                        .fail(function() {
+                            console.error("Errore nel caricamento dello script gestioneprodotti_Dinamic.js");
+                        });
+                }
             }
         }
     });

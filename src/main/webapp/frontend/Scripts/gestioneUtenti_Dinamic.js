@@ -133,27 +133,27 @@ async function utentiRegistrati(){
     params.append("action", "cliente");
     params.append("actionCliente", "getAll");
 
-    fetch("admin/admindatagesture", {
+    const respons = await fetch("admin/admindatagesture", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
         body: params.toString()
-    }).then(res => res.json())
-        .then(data =>{
-            if(data.error !== undefined){
-                mostraErrore("internal error")
-            }
+    })
+    const data = await respons.json()
 
-            const contUtent = document.getElementById("tot");
-            contUtent.textContent = data.length;
-        });
+    if(data.error !== undefined){
+        mostraErrore("internal error")
+    }
+
+    const contUtent = document.getElementById("tot");
+    contUtent.textContent = data.length;
+
 }
 
 let curentPage = 1;
 
 window.initUtent = function() {
-    createFloatingElements();
     utentiRegistrati();
     caricaClienti(curentPage);
 

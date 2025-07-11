@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/gestioneprodotti.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="frontend/Scripts/gestioneprodotti_DInamic.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -57,7 +56,7 @@
                     <div class="profile-card bg-white border-2 border-nekopink overflow-hidden w-full">
                         <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
                             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                                <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-white flex items-center">
+                                <h2 class="text-xl md:text-2xl lg:text-3xl font-medium text-white flex items-center">
                                     <i class="fas fa-boxes mr-3"></i> Gestione Prodotti
                                 </h2>
                                 <div class="relative w-full max-w-md">
@@ -74,123 +73,85 @@
 
                             <!-- Filters and Stats -->
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                <div class="bg-blue-50 p-3 rounded-lg">
-                                    <div class="text-blue-800 font-bold text-xl">1,248</div>
-                                    <div class="text-xs text-blue-600">Prodotti Totali</div>
-                                </div>
-                                <div class="bg-green-50 p-3 rounded-lg">
-                                    <div class="text-green-800 font-bold text-xl">1,012</div>
-                                    <div class="text-xs text-green-600">Disponibili</div>
+                                <div class="md:col-start-2 md:col-span-2 flex justify-center">
+                                    <div class="bg-blue-50 p-3 rounded-lg">
+                                        <div id="tot_prod" class="text-blue-800 font-bold text-xl text-center">1,248</div>
+                                        <div class="text-xs text-blue-600">Prodotti Totali</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Products Table -->
                             <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200 w-full table-auto">
-                                    <thead class="bg-gray-50">
-                                    <tr>
-                                        <th
-                                                scope="col"
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            ID
-                                        </th>
-                                        <th
-                                                scope="col"
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Prodotto
-                                        </th>
-                                        <th
-                                                scope="col"
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Categoria
-                                        </th>
-                                        <th
-                                                scope="col"
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Prezzo
-                                        </th>
-                                        <th
-                                                scope="col"
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Quantità
-                                        </th>
-                                        <th
-                                                scope="col"
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Stato
-                                        </th>
-                                        <th
-                                                scope="col"
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Azioni
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                    <!-- Product 1 -->
-                                    <tr class="hover:bg-gray-50">
-                                        <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                                        >
-                                            #NEKO-001
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="flex-shrink-0 h-10 w-10">
-                                                    <img
-                                                            class="h-10 w-10 rounded"
-                                                            src="https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=100"
-                                                            alt="Jujutsu Kaisen"
-                                                    />
-                                                </div>
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900">
-                                                        Jujutsu Kaisen Vol.15
-                                                    </div>
-                                                    <div class="text-sm text-gray-500">Manga</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="px-2 py-1 text-xs rounded-full category-manga"
-                      >Manga</span
-                      >
-                                        </td>
-                                        <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
-                                        >
-                                            €14.99
-                                        </td>
-                                        <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
-                                        >
-                                            42
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                      <span
-                              class="px-2 py-1 text-xs rounded-full status-active"
-                      >Disponibile</span
-                      >
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-nekoblue hover:text-blue-600 mr-3">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="text-nekored hover:text-red-600">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <p class="text-center text-2xl md:text-3xl lg:text-4xl font-light text-gray-800 mb-4">Manga</p>
+                                <button id="addVol" class="float-right bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium mb-4">
+                                    <i class="fas fa-plus ml-2"></i> add
+                                </button>
+                                <div class="mb-4">
+                                    <table class="min-w-full divide-y divide-gray-200 w-full table-auto mb-4">
+                                        <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                ID
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Prodotto
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Categoria
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Prezzo
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Quantità
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Azioni
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tableManga" class="bg-white divide-y divide-gray-200">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="text-center text-2xl md:text-3xl lg:text-4xl font-light text-gray-800 mb-4">Action Figure</p>
+                                <button id="addProd" class="float-right bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium mb-4">
+                                    <i class="fas fa-plus ml-2"></i> add
+                                </button>
+                                <div>
+                                    <table class="min-w-full divide-y divide-gray-200 w-full table-auto">
+                                        <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                ID
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Prodotto
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Categoria
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Prezzo
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Quantità
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Azioni
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tableFigure" class="bg-white divide-y divide-gray-200">
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+
 
                             <!-- Pagination -->
                             <div class="px-6 pb-6 pt-3">
@@ -309,7 +270,7 @@
 </div>
 
 <!-- Add Product Modal -->
-<div id="addProductModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
+<div id="addProductModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="modal-content bg-white rounded-lg w-full max-w-3xl mx-4">
         <div class="bg-gradient-to-r from-nekogreen to-nekoblue p-4 rounded-t-lg">
             <div class="flex justify-between items-center">

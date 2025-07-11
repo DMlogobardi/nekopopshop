@@ -68,15 +68,14 @@ public class UtentGesture extends HttpServlet {
         }
 
         if(action.equals("list")){
-            int page = Integer.parseInt(request.getParameter("page"));
-            String order = request.getParameter("order");
+            int id = Integer.parseInt(session.getAttribute("logId").toString());
             JsonConverter<ClienteBean> converter = JsonConverter.factory(ClienteBean.class, null);
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
             ClienteDAO clienteDAO = new ClienteDAO(ds);
-            Collection<ClienteBean> dto = null;
+            ClienteBean dto = null;
 
             try{
-                dto = clienteDAO.doRetrieveAllLimit(order, 10, page);
+                dto = clienteDAO.doRetrieveByKey(id);
             } catch (SQLException e) {
                 response.setStatus(500);
                 response.setContentType("text/json");
