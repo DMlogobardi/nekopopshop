@@ -122,9 +122,31 @@ public class UtentGesture extends HttpServlet {
             ClienteDAO clienteDAO = new ClienteDAO(ds);
             ClienteBean user = null;
 
-            if(dto.getcF().length() == 16){
-                user = ClienteBean.getByCheckEmail(id, dto.getNome(), dto.getCognome(), dto.getDataNascita(), dto.getEmail(), dto.getcF());
+            try {
+                user = clienteDAO.doRetrieveByKey(id);
+            } catch (SQLException e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
             }
+
+            if(dto.getNome() != null){
+                user.setNome(dto.getNome());
+            }
+            if(dto.getCognome() != null) {
+                user.setCognome(dto.getCognome());
+            }
+            if(dto.getDataNascita() != null) {
+                user.setDataNascita(dto.getDataNascita());
+            }
+            if(dto.getEmail() != null) {
+                user.setEmail(dto.getEmail());
+            }
+            if(dto.getcF() != null && dto.getcF().length() == 16) {
+                user.setcF(dto.getcF());
+            }
+
             if(user == null){
                 response.setStatus(500);
                 response.setContentType("text/json");
