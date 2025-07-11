@@ -1,52 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-         import="jakarta.servlet.http.HttpSession, jakarta.servlet.http.Cookie"%>
-<%@ page import="java.util.logging.Logger" %>
-<%
-    // Crea il logger
-    Logger logger = Logger.getLogger("MyLogger");
-
-    HttpSession s = request.getSession(false);
-    boolean isLoggedIn = false;
-    String access = "";
-
-    if (s != null) {
-        Object token = s.getAttribute("logToken");
-        if (token == null) {
-            isLoggedIn = true;
-        } else {
-            access = token.toString();
-        }
-    }
-
-    if (isLoggedIn) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("access".equals(cookie.getName())) {
-                    cookie.setValue("");
-                    cookie.setMaxAge(1);
-                    cookie.setPath("/");
-                    response.addCookie(cookie);
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
-                    return;
-                }
-            }
-        }
-    } else {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("access".equals(cookie.getName())) {
-                    if(!cookie.getValue().equals(access))
-                        if(access.equals("A"))
-                            cookie.setValue("admin");
-                        else
-                            cookie.setValue("user");
-                }
-            }
-        }
-    }
-%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -54,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NekoPopShop - Registrazione</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="frontend/Scripts/Register.js" defer></script>
@@ -75,7 +25,310 @@
             }
         }
     </script>
-    <!--<style>
+    <style>
+        @font-face {
+            font-family: 'Milkyway';
+            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),
+            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes blossom-fall {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f0f0;
+            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            min-height: 100vh;
+            background-attachment: scroll;
+            image-rendering: smooth;
+            overflow-x: hidden;
+        }
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed;
+            }
+        }
+
+        .folder-tab {
+            position: relative;
+            background-color: #f2d5bb;
+            padding: 15px 25px;
+            border-radius: 15px 15px 0 0;
+            border: 2px solid #E55458;
+            border-bottom: none;
+            box-shadow: 0 -3px 8px #E55458;
+            margin-right: -10px;
+            z-index: 1;
+            transition: all 0.3s ease;
+            color: #E55458;
+        }
+
+        .folder-tab.active, .folder-tab:hover {
+            background-color: #E55458;
+            color: white;
+            transform: translateY(-0px);
+            z-index: 2;
+        }
+
+        .folder-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxNXB4IiB2aWV3Qm94PSIwIDAgMTAwIDUiPiAgPHBhdGggZmlsbD0iI2ZmZDJlNSIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
+            background-size: 100% 15px;
+            background-position: bottom center;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+
+        .cat-elements i {
+            color: #fbd8da;
+            animation: float 4s infinite ease-in-out;
+        }
+
+        .cherry-blossom {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDIgOSA9IDAgMS0xOCAweiIvPjxwYXRoIGQ9Ik02MCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAwIDE4IDIgMiAwIDAgMCAyIDIgOSA5IDAgMCAxIDAtMTh6Ii8+PC9nPjwvc3ZnPg==');
+            background-size: cover;
+            animation: blossom-fall 15s linear infinite;
+        }
+
+        .profile-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(229, 84, 88, 0.2);
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(229, 84, 88, 0.3);
+        }
+
+        .header-content {
+            background: linear-gradient(145deg, #E55458, #f2d5bb);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(229, 84, 88, 0.3);
+            border: 2px solid #ffd1e3;
+        }
+
+        .sakura-divider {
+            height: 3px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSI1cHgiIHZpZXdCb3g9IjAgMCAxMDAgNSI+PHBhdGggZmlsbD0iI2ZmN2ViOCIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
+            background-size: cover;
+        }
+
+        .nekotag {
+            background: linear-gradient(90deg, #E55458, #F29966);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            font-weight: 800;
+            font-size: 45px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #f2d5bb;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #E55458, #F29966);
+            border-radius: 4px;
+        }
+
+        .avatar-upload {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+
+        .avatar-upload .avatar-preview {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #E55458;
+            background-color: #fbd8da;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .avatar-upload .avatar-edit {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+        }
+
+        .avatar-upload .avatar-edit input {
+            display: none;
+        }
+
+        .avatar-upload .avatar-edit label {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin-bottom: 0;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #E55458, #F29966);
+            border: 2px solid white;
+            cursor: pointer;
+            font-weight: normal;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .avatar-upload .avatar-edit label:hover {
+            transform: scale(1.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6a8cde;
+        }
+
+        .password-toggle:hover {
+            color: #e55458;
+        }
+
+        .registration-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .registration-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #f2d5bb;
+            z-index: 1;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 30%;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #f2d5bb;
+            color: #e55458;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+        }
+
+        .step.active .step-number {
+            background-color: #e55458;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background-color: #6a8cde;
+            color: white;
+        }
+
+        .step-title {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .step.active .step-title {
+            color: #e55458;
+            font-weight: bold;
+        }
+
+        .step.completed .step-title {
+            color: #6a8cde;
+        }
+
+        .text-3xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-lg{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .fa-star, .fas, .far {
+            font-style: normal !important;
+        }
+
+        .step.completed {
+            border-color: #a3e635;
+        }
+
+        .step.completed .step-number {
+            background-color: #a3e635;
+            color: white;
+        }
+    </style>
+    <style>
         #registration-message {
             display: none;
             position: fixed;
@@ -102,7 +355,7 @@
         .animate-fade-in {
             animation: fadeIn 0.5s ease-out forwards;
         }
-    </style> -->
+    </style>
 </head>
 <body class="relative overflow-x-hidden">
 <!-- Decorative elements -->

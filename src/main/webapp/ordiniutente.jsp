@@ -29,8 +29,8 @@
     <style>
         @font-face {
             font-family: 'Milkyway';  /* Scegli un nome per il font */
-            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
-            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+            src: url('frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+            url('frontend/fonts/Milkyway_DEMO.ttf') format('woff');
             font-weight: normal;        /* Peso del font (es. 400, 700) */
             font-style: normal;        /* normale, italic, ecc. */
             font-display: swap;        /* Ottimizza il rendering */
@@ -53,7 +53,7 @@
             background-color: #f0f0f0;
 
             /* Immagine di background principale */
-            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+            background-image: url('frontend/images/sfondo.png');
 
             /* Centra e copre tutto lo spazio senza ripetizioni */
             background-position: center;

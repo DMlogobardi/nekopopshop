@@ -52,9 +52,7 @@ function renderPaymentsContent(container) {
                         <div class="form-tab ml-2" onclick="openPaymentsTab('aggiungi-carta')">
                             <i class="far fa-credit-card mr-2"></i> Aggiungi Carta
                         </div>
-                        <div class="form-tab ml-2" onclick="openPaymentsTab('aggiungi-paypal')">
-                            <i class="fab fa-paypal mr-2"></i> Aggiungi PayPal
-                        </div>
+                       
                     </div>
 
                     <!-- Saved Payment Methods -->
@@ -111,23 +109,7 @@ function renderPaymentsContent(container) {
                                 </div>
                             </div>
 
-                            <div class="payment-method-item flex items-center relative bg-white">
-                                <div class="payment-icon">
-                                    <i class="fab fa-paypal"></i>
-                                </div>
-                                <div class="flex-grow">
-                                    <h4 class="font-bold text-gray-800">PayPal</h4>
-                                    <p class="text-gray-600 text-sm">neko.fan@example.com</p>
-                                </div>
-                                <div class="flex space-x-3">
-                                    <button class="text-blue-500 hover:text-blue-700 transition" title="Imposta come predefinito">
-                                        <i class="fas fa-star"></i>
-                                    </button>
-                                    <button class="text-gray-500 hover:text-gray-700 transition" title="Rimuovi">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
+                        
                         </div>
                     </div>
 
@@ -207,66 +189,7 @@ function renderPaymentsContent(container) {
                         </form>
                     </div>
 
-                    <!-- Add PayPal Form -->
-                    <div id="aggiungi-paypal" class="form-tab-content">
-                        <form id="addPayPalForm" method="post" action="AddPayPalMethodServlet">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                <!-- PayPal Preview -->
-                                <div class="credit-card credit-card-paypal">
-                                    <div class="card-type">
-                                        <i class="fab fa-paypal"></i>
-                                    </div>
-                                    <div class="card-number"><i class="fas fa-user mr-2"></i> <span id="paypal-preview-email">email@esempio.com</span></div>
-                                    <div class="card-name">Il tuo account PayPal</div>
-                                    <div class="absolute bottom-5 left-5">
-                                        <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" alt="PayPal Logo" width="74" height="46">
-                                    </div>
-                                </div>
-
-                                <!-- PayPal Form -->
-                                <div>
-                                    <div class="input-group">
-                                        <label for="paypal-email">Email PayPal</label>
-                                        <input type="email" id="paypal-email" name="paypal-email" placeholder="tua@email.com" oninput="updatePayPalPreview()">
-                                    </div>
-
-                                    <div class="input-group">
-                                        <label for="paypal-password">Password PayPal</label>
-                                        <div class="relative">
-                                            <input type="password" id="paypal-password" name="paypal-password" placeholder="••••••••">
-                                        </div>
-                                    </div>
-
-                                    <p class="text-xs text-gray-500 mt-3 mb-6">
-                                        Collegando il tuo account PayPal, autorizzi NekoPopShop a effettuare pagamenti utilizzando questo
-                                        metodo in base alle <a href="#" class="text-nekopeach hover:underline">Condizioni d'uso di PayPal</a>.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center mb-6">
-                                <input type="checkbox" id="save-paypal" name="save-paypal" class="rounded border-nekopeach text-nekopeach focus:ring-nekopeach" checked>
-                                <label for="save-paypal" class="ml-2 block text-sm text-gray-700">
-                                    Salva questo metodo di pagamento per acquisti futuri
-                                </label>
-                            </div>
-
-                            <div class="flex items-center mb-6">
-                                <input type="checkbox" id="default-paypal" name="default-paypal" class="rounded border-nekopeach text-nekopeach focus:ring-nekopeach">
-                                <label for="default-paypal" class="ml-2 block text-sm text-gray-700">
-                                    Imposta come metodo di pagamento predefinito
-                                </label>
-                            </div>
-
-                            <div class="flex justify-end mt-6">
-                                <button type="reset" class="px-6 py-2 border-2 border-nekopeach text-nekopeach font-bold rounded-lg mr-3 hover:bg-nekopeach hover:text-white transition">
-                                    Annulla
-                                </button>
-                                <button type="submit" class="px-6 py-2 bg-nekopeach text-white font-bold rounded-lg hover:bg-nekored transition">
-                                    <i class="fab fa-paypal mr-2"></i> Collega PayPal
-                                </button>
-                            </div>
-                        </form>
+                   
                     </div>
                 </div>
             </div>
@@ -595,7 +518,7 @@ function loadPaymentsContent() {
 
     showPaymentsLoading(mainContent);
 
-    fetch('${pageContext.request.contextPath}/getPaymentMethods')
+    fetch('/getPaymentMethods')
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.text();

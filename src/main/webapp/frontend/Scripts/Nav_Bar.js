@@ -61,7 +61,7 @@ window.addEventListener("storage", creaNavbar); // Se cambi login da un'altra sc
 
 // Funzione per il logout
 function logout() {
-    const contextPath = '${pageContext.request.contextPath}';
+    const contextPath = '';
     fetch(`/nekopopshop/common/logout`, { method: 'POST' })
         .then(res => res.json())
         .then(data =>{

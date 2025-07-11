@@ -484,7 +484,7 @@ function loadWishlistContent() {
 
     showWishlistLoading(mainContent);
 
-    fetch('${pageContext.request.contextPath}/getUserWishlist')
+    fetch('/getUserWishlist')
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
@@ -511,7 +511,7 @@ function loadWishlistContent() {
 function removeWishlistItem(item) {
     const itemId = item.getAttribute('data-id');
 
-    fetch('${pageContext.request.contextPath}/removeFromWishlist', {
+    fetch('/removeFromWishlist', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

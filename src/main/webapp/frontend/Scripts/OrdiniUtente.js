@@ -99,6 +99,7 @@ function renderOrdersContent(container) {
     `;
 
     addOrdersStyles();
+    initOrdersTab();
 }
 
 function addOrdersStyles() {
@@ -129,13 +130,24 @@ function addOrdersStyles() {
 
 // Versione con AJAX reale
 
+const params = new URLSearchParams();
+params.append("action", "ordini");
+params.append("actionOrdini", "list");
+
 function loadOrdersContent() {
     const mainContent = document.querySelector('.lg\\:col-span-3');
     if (!mainContent) return;
 
     showLoading(mainContent);
 
-    fetch('${pageContext.request.contextPath}/getUserOrders')
+    fetch('common/UtentDataGesture', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body:params.toString()
+    })
+
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.text();

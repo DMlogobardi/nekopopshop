@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadAddressesContent() {
-    const addressesTab = document.getElementById('addresses-tab');
+    const addressesTab = document.querySelector('.lg\\:col-span-3');
 
     // Se il contenuto è già stato caricato, non fare nulla
     if (addressesTab.dataset.loaded === 'true') return;
@@ -32,6 +32,8 @@ function loadAddressesContent() {
         // Inizializza le funzionalità degli indirizzi
         initAddressesFunctionality();
     }, 800);
+
+    loadAddress();
 }
 
 
@@ -201,12 +203,7 @@ function getAddressesHTMLContent() {
                 <div id="aggiungi-indirizzo" class="form-tab-content">
                     <form id="addAddressForm" method="post" action="AddAddressServlet">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <!-- Map Preview -->
-                            <div class="map-container">
-                                <i class="fas fa-map-marked-alt text-3xl text-gray-300"></i>
-                                <p class="ml-3">Anteprima mappa</p>
-                                <div class="map-overlay"></div>
-                            </div>
+                           
 
                             <!-- Address Form -->
                             <div>
@@ -623,3 +620,58 @@ function initAddressesFunctionality() {
         }
     });
 }
+
+
+//sezione creata da me
+function loadAddress(){
+    const params = new URLSearchParams();
+    params.append("action", "indirizzi");
+    params.append("actionIndirizzo","list");
+
+    fetch("common/utentdategesture", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Errore nel recupero degli indirizzi");
+            }
+            else {
+                return response.json();
+            }
+        })
+        .then(dati =>{
+            const container = document.getElementById("address-container");
+            dati.forEach(indirizzo => {
+                const card = creaCard(indirizzo);
+                container.appendChild(card);
+            })
+
+            function creaCard(item){
+                return `<div class="address-card bg-white p-6 default">
+                <div class="mb-4">
+                  <p class="text-gray-800">
+                    ${item.via} ${item.nCivico}<br>
+                    ${item.cap}<br>
+                    Italia
+                  </p>
+                </div>
+               
+                <div class="flex justify-end mt-4 space-x-2">
+                  <button class="text-nekopeach hover:text-nekored transition" title="Modifica">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button class="text-gray-500 hover:text-gray-700 transition" title="Rimuovi">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>`;
+                
+                
+            }
+        })
+}
+

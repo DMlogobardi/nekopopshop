@@ -1,52 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-         import="jakarta.servlet.http.HttpSession, jakarta.servlet.http.Cookie"%>
-<%@ page import="java.util.logging.Logger" %>
-<%
-  // Crea il logger
-  Logger logger = Logger.getLogger("MyLogger");
-
-  HttpSession s = request.getSession(false);
-  boolean isLoggedIn = false;
-  String access = "";
-
-  if (s != null) {
-    Object token = s.getAttribute("logToken");
-    if (token == null) {
-      isLoggedIn = true;
-    } else {
-      access = token.toString();
-    }
-  }
-
-  if (isLoggedIn) {
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        if ("access".equals(cookie.getName())) {
-          cookie.setValue("");
-          cookie.setMaxAge(1);
-          cookie.setPath("/");
-          response.addCookie(cookie);
-          response.sendRedirect(request.getContextPath() + "/index.jsp");
-          return;
-        }
-      }
-    }
-  } else {
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        if ("access".equals(cookie.getName())) {
-          if(!cookie.getValue().equals(access))
-            if(access.equals("A"))
-              cookie.setValue("admin");
-            else
-              cookie.setValue("user");
-        }
-      }
-    }
-  }
-%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -56,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/cart.css">
   <script src="frontend/Scripts/Carrello_Dainamic.js" defer></script>
   <script>
     tailwind.config = {
@@ -74,6 +24,244 @@
       }
     }
   </script>
+  <style>
+    @font-face {
+      font-family: 'Milkyway';  /* Scegli un nome per il font */
+      src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+      url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+      font-weight: normal;        /* Peso del font (es. 400, 700) */
+      font-style: normal;        /* normale, italic, ecc. */
+      font-display: swap;        /* Ottimizza il rendering */
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes blossom-fall {
+      0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f0f0f0;
+
+      /* Immagine di background principale */
+      background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+
+      /* Centra e copre tutto lo spazio senza ripetizioni */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      /* Altezza minima = viewport height */
+      min-height: 100vh;
+
+      /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
+      background-attachment: scroll;
+
+      /* Ottimizzazione prestazioni */
+      image-rendering: smooth;
+      overflow-x: hidden;
+    }
+    @media (min-width: 768px) {
+      body {
+        background-attachment: fixed;
+      }
+    }
+
+
+    .folder-tab {
+      position: relative;
+      background-color: #f2d5bb;
+      padding: 15px 25px;
+      border-radius: 15px 15px 0 0;
+      border: 2px solid #E55458;
+      border-bottom: none;
+      box-shadow: 0 -3px 8px #E55458;
+      margin-right: -10px;
+      z-index: 1;
+      transition: all 0.3s ease;
+      color: #E55458;
+    }
+
+    .folder-tab.active, .folder-tab:hover {
+      background-color: #E55458;
+      color: white;
+      transform: translateY(-0px);
+      z-index: 2;
+    }
+
+    .folder-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 0;
+      width: 100%;
+      height: 15px;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxNXB4IiB2aWV3Qm94PSIwIDAgMTAwIDUiPiAgPHBhdGggZmlsbD0iI2ZmZDJlNSIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
+      background-size: 100% 15px;
+      background-position: bottom center;
+      background-repeat: no-repeat;
+      z-index: -1;
+    }
+
+    .cat-elements i {
+      color: #fbd8da;
+      animation: float 4s infinite ease-in-out;
+    }
+
+    .cherry-blossom {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxLTE4IDB6Ii8+PHBhdGggZD0iTTYwIDYwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDAgMTggMiAyIDAgMCAwIDIgMiA5IDkgMCAwIDEgMC0xOHoiLz48L2c+PC9zdmc+');
+      background-size: cover;
+      animation: blossom-fall 15s linear infinite;
+    }
+
+    .product-card {
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(229, 84, 88, 0.2);
+      overflow: hidden;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(229, 84, 88, 0.3);
+    }
+
+    .header-content {
+      background: linear-gradient(145deg, #E55458, #f2d5bb);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(229, 84, 88, 0.3);
+      border: 2px solid #ffd1e3;
+    }
+
+    .sakura-divider {
+      height: 3px;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSI1cHgiIHZpZXdCb3g9IjAgMCAxMDAgNSI+PHBhdGggZmlsbD0iI2ZmN2ViOCIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
+      background-size: cover;
+    }
+
+    .nekotag {
+      background: linear-gradient(90deg, #E55458, #F29966);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      font-weight: 800;
+      font-size: 45px;
+    }
+
+    .quantity-selector {
+      display: inline-flex;
+      align-items:center;
+      border: 1px solid #E55458;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .quantity-btn {
+      background-color: #E55458;
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .quantity-btn:hover {
+      background-color: #c43c40;
+    }
+
+    .quantity-input {
+      width: 40px;
+      text-align: center;
+      border: none;
+      outline: none;
+      font-weight: bold;
+    }
+
+    .remove-btn {
+      color: #E55458;
+      transition: all 0.3s;
+    }
+
+    .remove-btn:hover {
+      transform: scale(1.2);
+      color: #c43c40;
+    }
+
+    .checkout-btn {
+      background: linear-gradient(145deg, #E55458, #F29966);
+      transition: all 0.3s;
+    }
+
+    .checkout-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(229, 84, 88, 0.3);
+    }
+
+    .empty-cart {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(229, 84, 88, 0.2);
+    }
+
+    .discount-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #E55458;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .payment-method {
+      border: 2px solid #f2d5bb;
+      border-radius: 10px;
+      transition: all 0.3s;
+    }
+
+    .payment-method:hover {
+      border-color: #E55458;
+      transform: translateY(-3px);
+    }
+
+    .payment-method.selected {
+      border-color: #E55458;
+      background-color: rgba(229, 84, 88, 0.1);
+    }
+    .text-3xl{
+      font-family: 'Milkyway', sans-serif;
+      font-size: 2.5rem;
+      color: #333;
+    }
+    .text-xl{
+      font-family: 'Milkyway', sans-serif;
+      font-size: 2.5rem;
+      color: #333;
+    }
+    .text-lg{
+      font-family: 'Milkyway', sans-serif;
+      font-size: 2.5rem;
+      color: #333;
+    }
+    .fa-star, .fas, .far {
+      font-style: normal !important;
+    }
+  </style>
 </head>
 <body class="relative overflow-x-hidden">
 <!-- Decorative elements -->
@@ -219,7 +407,24 @@
             <p>Spedizione stimata: 2-4 giorni lavorativi</p>
           </div>
 
-
+          <!-- Payment Methods -->
+          <div class="mt-6">
+            <h3 class= "font-bold mb-3">Metodi di pagamento</h3>
+            <div class="grid grid-cols-4 gap-2">
+              <div class="payment-method p-2 flex items-center justify-center cursor-pointer">
+                <i class="fab fa-cc-visa text-2xl text-blue-800"></i>
+              </div>
+              <div class="payment-method p-2 flex items-center justify-center cursor-pointer">
+                <i class= "fab fa-cc-mastercard text-2xl text-red-800"></i>
+              </div>
+              <div class="payment-method p-2 flex items-center justify-center cursor-pointer">
+                <i class="fab fa-cc-paypal text-2xl text-blue-500"></i>
+              </div>
+              <div class="payment-method p-2 flex items-center justify-center cursor-pointer selected">
+                <i class="fas fa-money-bill-wave text-2xl text-green-600"></i>
+              </div>
+            </div>
+          </div>
 
           <!-- Secure Payment Info -->
           <div class="mt-6 bg-nekopink/10 rounded-lg p-3">

@@ -1,52 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-         import="jakarta.servlet.http.HttpSession, jakarta.servlet.http.Cookie"%>
-<%@ page import="java.util.logging.Logger" %>
-<%
-    // Crea il logger
-    Logger logger = Logger.getLogger("MyLogger");
-
-    HttpSession s = request.getSession(false);
-    boolean isLoggedIn = false;
-    String access = "";
-
-    if (s != null) {
-        Object token = s.getAttribute("logToken");
-        if (token == null) {
-            isLoggedIn = true;
-        } else {
-            access = token.toString();
-        }
-    }
-
-    if (isLoggedIn) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("access".equals(cookie.getName())) {
-                    cookie.setValue("");
-                    cookie.setMaxAge(1);
-                    cookie.setPath("/");
-                    response.addCookie(cookie);
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
-                    return;
-                }
-            }
-        }
-    } else {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("access".equals(cookie.getName())) {
-                    if(!cookie.getValue().equals(access))
-                        if(access.equals("A"))
-                            cookie.setValue("admin");
-                        else
-                            cookie.setValue("user");
-                }
-            }
-        }
-    }
-%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -54,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NekoPopShop - Catalogo Manga</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/catalog.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="frontend/Scripts/catalog_dainamic.js" defer></script>
-    <script src="frontend/Scripts/catalogFilter.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -77,6 +26,196 @@
             }
         }
     </script>
+    <style>
+        @font-face {
+            font-family: 'Milkyway';  /* Scegli un nome per il font */
+            src: url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff2'),  /* Percorso relativo */
+            url('${pageContext.request.contextPath}/frontend/fonts/Milkyway_DEMO.ttf') format('woff');
+            font-weight: normal;        /* Peso del font (es. 400, 700) */
+            font-style: normal;        /* normale, italic, ecc. */
+            font-display: swap;        /* Ottimizza il rendering */
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes blossom-fall {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f0f0;
+
+            /* Immagine di background principale */
+            background-image: url('${pageContext.request.contextPath}/frontend/images/sfondo.png');
+
+            /* Centra e copre tutto lo spazio senza ripetizioni */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            /* Altezza minima = viewport height */
+            min-height: 100vh;
+
+            /* Fix per mobile: scroll invece di fixed (evita bug su iOS/Android) */
+            background-attachment: scroll;
+
+            /* Ottimizzazione prestazioni */
+            image-rendering: smooth;
+            overflow-x: hidden;
+        }
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed;
+            }
+        }
+
+        .folder-tab {
+            position: relative;
+            background-color: #f2d5bb;
+            padding: 15px 25px;
+            border-radius: 15px 15px 0 0;
+            border: 2px solid #E55458;
+            border-bottom: none;
+            box-shadow: 0 -3px 8px #E55458;
+            margin-right: -10px;
+            z-index: 1;
+            transition: all 0.3s ease;
+            color: #E55458;
+        }
+
+        .folder-tab.active, .folder-tab:hover {
+            background-color: #E55458;
+            color: white;
+            transform: translateY(-0px);
+            z-index: 2;
+        }
+
+        .folder-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxNXB4IiB2aWV3Qm94PSIwIDAgMTAwIDUiPiAgPHBhdGggZmlsbD0iI2ZmZDJlNSIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
+            background-size: 100% 15px;
+            background-position: bottom center;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+
+        .cherry-blossom {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMj000MC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjZmY3ZWI4Ij48cGF0aCBkPSJNNTAgMTBjLTIyIDAtNDAgMTgtNDAgNDBzMTggNDAgNDAgNDAgNDAtMTggNDAtNDAtMTgtNDAtNDAtNDB6bTAgODFhOSA5IDAgMCAxIDAgMCAwIDkgOSAwIDAgMCAwIDB6Ii8+PHBhdGggZD0iTTIwIDEwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDE4IDAgMiAyIDAgMCAwLTIgMiA5IDkgMCAwIDEtMTggMHoiLz48cGF0aCBkPSJNNjAgMTBhMiAyIDAgMCAwLTItMmE5IDkgMCAwIDEgMCAxOCAyIDIgMCAwIDAgMiAyIDkgOSAwIDAgMSAwLTE4eiIvPjxwYXRoIGQ9Ik0yMCA2MGEyIDIgMCAwIDAtMiAyIDkgOSAwIDAgMSAxOCAwIDIgMiAwIDAgMC0yIDKgOSA5IDAgMCAxLTE4IDB6Ii8+PHBhdGggZD0iTTYwIDYwYTIgMiAwIDAgMC0yIDIgOSA5IDAgMCAxIDAgMTggMiAyIDAgMCAwIDIgMiA5IDkgMCAwIDEgMC0xOHoiLz48L2c+PC9zdmc+');
+            background-size: cover;
+            animation: blossom-fall 15s linear infinite;
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background: white;
+            border-radius: 15px;
+            border: 2px solid #fbd8da;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+
+
+        .header-content {
+            background: linear-gradient(145deg, #E55458, #f2d5bb);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(233, 87, 110, 0.3);
+            border: 2px solid #ffd1e3;
+        }
+
+        .sakura-divider {
+            height: 3px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSI1cHgiIHZpZXdCb3g9IjAgMCAxMDAgNSI+PHBhdGggZmlsbD0iI2ZmN2ViOCIgZD0iTTAgMCBMNTAgNSBMIDEwMCAwIFoiLz48L3N2Zz4=');
+            background-size: cover;
+        }
+
+        .nekotag {
+            background: linear-gradient(90deg, #E55458, #F29966);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            font-weight: 800;
+            font-size: 45px;
+        }
+
+
+
+        .filter-btn {
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #f2d5bb;
+            color: #E55458;
+            font-weight: 600;
+        }
+
+        .filter-btn.active {
+            background: #E55458;
+            color: white;
+        }
+
+        .alphabet-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-weight: 700;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .alphabet-link.active, .alphabet-link:hover {
+            background: #E55458;
+            color: white;
+            transform: translateY(-3px);
+        }
+        .text-3xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-sm{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        .text-2xl{
+            font-family: 'Milkyway', sans-serif;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        .fa-star, .fas, .far {
+            font-style: normal !important;
+        }
+    </style>
 </head>
 <body class="relative overflow-x-hidden">
 <!-- Decorative elements -->
@@ -127,62 +266,73 @@
     <div class="bg-white rounded-2xl border-2 border-nekopink p-6 mb-8">
         <!-- Search Section -->
         <div class="search-section mb-6 relative">
-            <form id="searchForm" class="relative" onsubmit="handleSearch(event)">
-                <input id="search" type="text"
+            <form id="searchForm" method="GET" action="getcatalog" class="relative">
+                <input type="text"
                        class="w-full p-4 pl-12 pr-6 rounded-full border-2 border-nekopink focus:border-nekopeach focus:outline-none"
                        name="serch"
-                       placeholder="Cerca nel catalogo...">
+                       placeholder="Cerca manga per nome...">
                 <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-nekopeach"></i>
                 <input type="hidden" name="filter" id="filterInput" value="">
                 <input type="hidden" name="page" id="pageInput" value="0">
             </form>
         </div>
+
         <!-- Filter Section -->
         <div class="filter-section flex flex-wrap gap-2 mb-6">
-            <button class="filter-btn active" onclick="loadALL()">
+            <button class="filter-btn active" onclick="setFilter('')">
                 <i class="fas fa-layer-group mr-2"></i> Tutti
             </button>
-            <button class="filter-btn" onclick="filter('nome')">
+            <button class="filter-btn" onclick="setFilter('volumi')">
+                <i class="fas fa-book-open mr-2"></i> Volumi
+            </button>
+            <button class="filter-btn" onclick="setFilter('action figure')">
+                <i class="fas fa-dragon mr-2"></i> Action Figure
+            </button>
+            <button class="filter-btn" onclick="setFilter('nome')">
                 <i class="fas fa-sort-alpha-down mr-2"></i> Per Nome
             </button>
-            <button class="filter-btn" onclick="filter('autore')">
+            <button class="filter-btn" onclick="setFilter('autore')">
                 <i class="fa fa-pencil mr-2"></i> Per Autore
             </button>
-            <button class="filter-btn" onclick="filter('dataPubl')">
+            <button class="filter-btn" onclick="setFilter('autore')">
                 <i class="far fa-calendar-alt mr-2"></i> Per Anno
             </button>
+            <button class="filter-btn" onclick="setFilter('vendite')">
+                <i class="fa fa-line-chart mr-2"></i> Per Vendite
+            </button>
+
 
         </div>
 
         <!-- Alphabet Navigation -->
         <div class="alphabet-nav flex flex-wrap gap-2">
-            <a onclick="loadALL()" href="#" class="alphabet-link active">Tutti</a>
-            <a onclick="serch('A')" href="#" class="alphabet-link">A</a>
-            <a onclick="serch('B')" href="#" class="alphabet-link">B</a>
-            <a onclick="serch('C')" href="#" class="alphabet-link">C</a>
-            <a onclick="serch('D')" href="#" class="alphabet-link">D</a>
-            <a onclick="serch('E')" href="#" class="alphabet-link">E</a>
-            <a onclick="serch('F')" href="#" class="alphabet-link">F</a>
-            <a onclick="serch('G')" href="#" class="alphabet-link">G</a>
-            <a onclick="serch('H')" href="#" class="alphabet-link">H</a>
-            <a onclick="serch('I')" href="#" class="alphabet-link">I</a>
-            <a onclick="serch('J')" href="#" class="alphabet-link">J</a>
-            <a onclick="serch('K')" href="#" class="alphabet-link">K</a>
-            <a onclick="serch('L')" href="#" class="alphabet-link">L</a>
-            <a onclick="serch('M')" href="#" class="alphabet-link">M</a>
-            <a onclick="serch('N')" href="#" class="alphabet-link">N</a>
-            <a onclick="serch('O')" href="#" class="alphabet-link">O</a>
-            <a onclick="serch('P')" href="#" class="alphabet-link">P</a>
-            <a onclick="serch('Q')" href="#" class="alphabet-link">Q</a>
-            <a onclick="serch('R')" href="#" class="alphabet-link">R</a>
-            <a onclick="serch('S')" href="#" class="alphabet-link">S</a>
-            <a onclick="serch('T')" href="#" class="alphabet-link">T</a>
-            <a onclick="serch('U')" href="#" class="alphabet-link">U</a>
-            <a onclick="serch('V')" href="#" class="alphabet-link">V</a>
-            <a onclick="serch('W')" href="#" class="alphabet-link">W</a>
-            <a onclick="serch('X')" href="#" class="alphabet-link">X</a>
-            <a onclick="serch('Y')" href="#" class="alphabet-link">Y</a>
-            <a onclick="serch('Z')" href="#" class="alphabet-link">Z</a>
+            <a href="#" class="alphabet-link active">Tutti</a>
+            <a href="#" class="alphabet-link">A</a>
+            <a href="#" class="alphabet-link">B</a>
+            <a href="#" class="alphabet-link">C</a>
+            <a href="#" class="alphabet-link">D</a>
+            <a href="#" class="alphabet-link">E</a>
+            <a href="#" class="alphabet-link">F</a>
+            <a href="#" class="alphabet-link">G</a>
+            <a href="#" class="alphabet-link">H</a>
+            <a href="#" class="alphabet-link">I</a>
+            <a href="#" class="alphabet-link">J</a>
+            <a href="#" class="alphabet-link">K</a>
+            <a href="#" class="alphabet-link">L</a>
+            <a href="#" class="alphabet-link">M</a>
+            <a href="#" class="alphabet-link">N</a>
+            <a href="#" class="alphabet-link">O</a>
+            <a href="#" class="alphabet-link">P</a>
+            <a href="#" class="alphabet-link">Q</a>
+            <a href="#" class="alphabet-link">R</a>
+            <a href="#" class="alphabet-link">S</a>
+            <a href="#" class="alphabet-link">T</a>
+            <a href="#" class="alphabet-link">U</a>
+            <a href="#" class="alphabet-link">V</a>
+            <a href="#" class="alphabet-link">W</a>
+            <a href="#" class="alphabet-link">X</a>
+            <a href="#" class="alphabet-link">Y</a>
+            <a href="#" class="alphabet-link">Z</a>
         </div>
     </div>
 
@@ -193,54 +343,25 @@
             <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
                 <i class= "fas fa-layer-group text-white"></i>
             </div>
-            <h2 class= "text-2xl font-bold text-nekopeach"> I nostri magnifici manga</h2>
+            <h2 class= "text-2xl font-bold text-nekopeach"> I nostri magnifici prodotti</h2>
         </div>
 
-        <div id = "catalogo1" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        </div>
-    </div>
-
-    <!-- Pagination -->
-    <div class="flex justify-center gap-4 mb-8">
-        <button id="prev-btn1" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
-            <i class="fas fa-arrow-left mr-2"></i> Precedente
-        </button>
-
-        <div id="pagination1" class="flex items-center gap-2">
-            <!-- Pagine generate dinamicamente -->
-        </div>
-
-        <button id="next-btn1" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
-            Successivo <i class="fas fa-arrow-right ml-2"></i>
-        </button>
-    </div>
-
-    <!-- action figure Series Section -->
-    <div class="bg-white rounded-2xl border-2 border-nekoorange p-6 mb-8">
-        <div class="flex items-center mb-6">
-            <div class="w-10 h-10 rounded-full bg-nekopeach flex items-center justify-center mr-3">
-                <i class= "fas fa-layer-group text-white"></i>
-            </div>
-            <h2 class= "text-2xl font-bold text-nekopeach"> Le nostre magnifiche action figure</h2>
-        </div>
-
-        <div id = "catalogo2" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id = "catalogo" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
         </div>
     </div>
 
     <!-- Pagination -->
     <div class="flex justify-center gap-4">
-        <button id="prev-btn2" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+        <button id="prev-btn" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
             <i class="fas fa-arrow-left mr-2"></i> Precedente
         </button>
 
-        <div id="pagination2" class="flex items-center gap-2">
+        <div id="pagination" class="flex items-center gap-2">
             <!-- Pagine generate dinamicamente -->
         </div>
 
-        <button id="next-btn2" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
+        <button id="next-btn" class="bg-nekopeach hover:bg-nekored text-white px-6 py-3 rounded-full font-bold flex items-center transition">
             Successivo <i class="fas fa-arrow-right ml-2"></i>
         </button>
     </div>
