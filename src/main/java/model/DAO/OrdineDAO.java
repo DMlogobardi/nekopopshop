@@ -298,4 +298,50 @@ public class OrdineDAO implements GenralDAO<OrdineBean>{
         return ordini;
     }
 
+    public Collection<OrdineBean> doRetrieveAllLimitByUtent(String order, int limit, int page, int code) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<OrdineBean> ordini = new LinkedList<>();
+
+        // Controllo ordine: default su "idOrdine"
+        String orderBy = "idOrdine";
+        if (order != null && ordineWhiteList.contains(order.strip())) {
+            orderBy = order.strip();
+        }
+
+        // Query costruita dinamicamente per inserire il nome colonna in modo sicuro
+        String selectAllSQL = "SELECT * FROM " + TABLE_NAME + " where idCliente = ? ORDER BY " + orderBy + " LIMIT ? OFFSET ?";
+
+        try {
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+
+            int actualLimit = (limit > 0) ? limit : 10;
+            int actualOffset = (page > 0) ? (page - 1) * actualLimit : 0;
+
+            ps.setInt(1, code);
+            ps.setInt(2, actualLimit);
+            ps.setInt(3, actualOffset);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrdineBean ordine = new OrdineBean(
+                        rs.getInt("idOrdine"),
+                        rs.getDouble("tot"),
+                        rs.getString("dataOrdine"),
+                        rs.getString("dataArrivoS"),
+                        rs.getInt("idCliente"),
+                        rs.getInt("idIndirizzo"),
+                        rs.getInt("idMetodoPag")
+                );
+                ordini.add(ordine);
+            }
+        } finally {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        }
+
+        return ordini;
+    }
+
 }

@@ -66,7 +66,6 @@ public class ManageCatalog extends HttpServlet {
         }
 
         DataSource ds = (DataSource) session.getServletContext().getAttribute("dataSource");
-        System.out.println(ds);
 
         if(action.equals("insert")) {
             System.out.println("insert");

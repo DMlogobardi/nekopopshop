@@ -69,7 +69,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="p-6">
+                        <div id="modal" class="p-6"> </div>
+                        <div id="view" class="p-6">
 
                             <!-- Filters and Stats -->
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -79,14 +80,14 @@
                                         <div class="text-xs text-blue-600">Prodotti Totali</div>
                                     </div>
                                 </div>
+                                <button id="add" class="float-right bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium mb-4">
+                                    <i class="fas fa-plus ml-2"></i> add
+                                </button>
                             </div>
 
                             <!-- Products Table -->
                             <div class="overflow-x-auto">
                                 <p class="text-center text-2xl md:text-3xl lg:text-4xl font-light text-gray-800 mb-4">Manga</p>
-                                <button id="addVol" class="float-right bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium mb-4">
-                                    <i class="fas fa-plus ml-2"></i> add
-                                </button>
                                 <div class="mb-4">
                                     <table class="min-w-full divide-y divide-gray-200 w-full table-auto mb-4">
                                         <thead class="bg-gray-50">
@@ -116,11 +117,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-
                                 <p class="text-center text-2xl md:text-3xl lg:text-4xl font-light text-gray-800 mb-4">Action Figure</p>
-                                <button id="addProd" class="float-right bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium mb-4">
-                                    <i class="fas fa-plus ml-2"></i> add
-                                </button>
                                 <div>
                                     <table class="min-w-full divide-y divide-gray-200 w-full table-auto">
                                         <thead class="bg-gray-50">
@@ -173,106 +170,10 @@
         </div>
     </div>
 
-
-
-    <!-- Remove Product Modal -->
-<div id="removeProductModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
-    <div class="modal-content bg-white rounded-lg w-full max-w-3xl mx-4">
-        <div class="bg-gradient-to-r from-nekored to-nekopeach p-4 rounded-t-lg">
-            <div class="flex justify-between items-center">
-                <h3 class="text-xl font-bold text-white"><i class="fas fa-plus mr-2"></i> Aggiungi Nuovo Prodotto</h3>
-                <button id="closeModalBtn1" class="text-white hover:text-gray-200">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="p-6">
-            <form>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Left Column -->
-                    <div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productName1">Nome Prodotto</label>
-                            <input type="text" id="productName1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productCategory1">Categoria</label>
-                            <select id="productCategory1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                                <option value="">Seleziona una categoria</option>
-                                <option value="manga">Manga</option>
-                                <option value="figure">Action Figure</option>
-                                <option value="merch">Merchandising</option>
-                                <option value="accessories">Accessori</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productPrice1">Prezzo (&#8364)</label>
-                            <input type="number" step="0.01" id="productPrice1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productStock1">Quantità in Stock</label>
-                            <input type="number" id="productStock1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                        </div>
-                    </div>
-
-                    <!-- Right Column -->
-                    <div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productStatus1">Stato</label>
-                            <select id="productStatus1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                                <option value="active">Disponibile</option>
-                                <option value="inactive">Esaurito</option>
-                                <option value="coming">In arrivo</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productSKU1">SKU</label>
-                            <input type="text" id="productSKU1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                        </div>
-
-                        <div class="mb-4">
-                            <%--@declare id="productimage1"--%><label class="block text-gray-700 text-sm font-bold mb-2" for="productImage1">Immagine Prodotto</label>
-                            <div class="mt-1 flex items-center">
-                                <span class="inline-block h-12 w-12 rounded-md overflow-hidden bg-gray-100">
-                                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                </span>
-                                <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nekoblue">
-                                    Cambia
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productDescription1">Descrizione</label>
-                            <textarea id="productDescription1" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-end mt-6 space-x-3">
-                    <button type="button" id="cancelModalBtn1" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Annulla
-                    </button>
-                    <button type="submit" class="bg-nekogreen hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Salva Prodotto
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- Add Product Modal -->
 <div id="addProductModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="modal-content bg-white rounded-lg w-full max-w-3xl mx-4">
-        <div class="bg-gradient-to-r from-nekogreen to-nekoblue p-4 rounded-t-lg">
+        <div class="bg-gradient-to-r from-nekored to-nekoorange p-4 rounded-t-lg">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white"><i class="fas fa-plus mr-2"></i> Aggiungi Nuovo Prodotto</h3>
                 <button id="closeModalBtn2" class="text-white hover:text-gray-200">
@@ -287,19 +188,21 @@
                     <!-- Left Column -->
                     <div>
                         <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productCategory2">Categoria</label>
+                            <select id="productCategory2" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
+                                <option value="figure">Action Figure</option>
+                                <option value="manga">Manga</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="productName2">Nome Prodotto</label>
                             <input type="text" id="productName2" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
                         </div>
 
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productCategory2">Categoria</label>
-                            <select id="productCategory2" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                                <option value="">Seleziona una categoria</option>
-                                <option value="manga">Manga</option>
-                                <option value="figure">Action Figure</option>
-                                <option value="merch">Merchandising</option>
-                                <option value="accessories">Accessori</option>
-                            </select>
+                        <div id="productvolNumDiv" class="mb-4 hidden">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productName2">Numero Volume</label>
+                            <input type="text" id="productvolNum" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
                         </div>
 
                         <div class="mb-4">
@@ -315,31 +218,39 @@
 
                     <!-- Right Column -->
                     <div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productStatus2">Stato</label>
-                            <select id="productStatus2" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                                <option value="active">Disponibile</option>
-                                <option value="inactive">Esaurito</option>
-                                <option value="coming">In arrivo</option>
+                        <div id="volTagDiv" class="mb-4 hidden">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Tag</label>
+                            <select id="volTag" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
+                                <option value="">Seleziona una categoria</option>
+                                <option value="Shonen">Shonen</option>
+                                <option value="Shojo">Shojo</option>
+                                <option value="Seinen">Seinen</option>
+                                <option value="Kemono">Kemono</option>
+                                <option value="Kodomo">Kodomo</option>
+                                <option value="Josei">Josei</option>
+                                <option value="Sci-Fi">Sci-Fi</option>
+                                <option value="Horror">Horror</option>
                             </select>
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productSKU2">SKU</label>
-                            <input type="text" id="productSKU2" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Autore</label>
+                            <input type="text" id="autore" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
                         </div>
 
                         <div class="mb-4">
-                            <%--@declare id="productimage2"--%><label class="block text-gray-700 text-sm font-bold mb-2" for="productImage2">Immagine Prodotto</label>
-                            <div class="mt-1 flex items-center">
-                                <span class="inline-block h-12 w-12 rounded-md overflow-hidden bg-gray-100">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Immagine Prodotto</label>
+                            <div class="mt-1 flex items-center space-x-4">
+                                <!-- Preview dell'immagine -->
+                                <span id="imagePreview" class="inline-block h-16 w-16 rounded-md overflow-hidden bg-gray-100">
                                     <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                     </svg>
                                 </span>
-                                <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nekoblue">
-                                    Cambia
-                                </button>
+
+                                <!-- Input file -->
+                                <input id="imgAdd" type="file" name="productImage2" accept="image/*"
+                                       class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-nekoblue file:text-white hover:file:bg-blue-600" />
                             </div>
                         </div>
 
@@ -366,9 +277,9 @@
 <!-- Modify Product Modal -->
 <div id="modifyProductModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
     <div class="modal-content bg-white rounded-lg w-full max-w-3xl mx-4">
-        <div class="bg-gradient-to-r from-nekopurple to-nekoblue p-4 rounded-t-lg">
+        <div class="bg-gradient-to-r from-nekored to-nekoorange p-4 rounded-t-lg">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-bold text-white"><i class="fas fa-plus mr-2"></i> Aggiungi Nuovo Prodotto</h3>
+                <h3 class="text-xl font-bold text-white"><i class="fas fa-edit"></i> Modifica </h3>
                 <button id="closeModalBtn3" class="text-white hover:text-gray-200">
                     <i class="fas fa-times"></i>
                 </button>
@@ -385,15 +296,9 @@
                             <input type="text" id="productName3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
                         </div>
 
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productCategory3">Categoria</label>
-                            <select id="productCategory3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                                <option value="">Seleziona una categoria</option>
-                                <option value="manga">Manga</option>
-                                <option value="figure">Action Figure</option>
-                                <option value="merch">Merchandising</option>
-                                <option value="accessories">Accessori</option>
-                            </select>
+                        <div id="productvolNumDivModify" class="mb-4 hidden">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productName2">Numero Volume</label>
+                            <input type="text" id="productvolNumModify" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
                         </div>
 
                         <div class="mb-4">
@@ -409,31 +314,40 @@
 
                     <!-- Right Column -->
                     <div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productStatus3">Stato</label>
-                            <select id="productStatus3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
-                                <option value="active">Disponibile</option>
-                                <option value="inactive">Esaurito</option>
-                                <option value="coming">In arrivo</option>
+
+                        <div id="tagModify" class="mb-4 hidden">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productCategory3">Tag</label>
+                            <select id="productCategory3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
+                                <option value="">Seleziona una categoria</option>
+                                <option value="Shonen">Shonen</option>
+                                <option value="Shojo">Shojo</option>
+                                <option value="Seinen">Seinen</option>
+                                <option value="Kemono">Kemono</option>
+                                <option value="Kodomo">Kodomo</option>
+                                <option value="Josei">Josei</option>
+                                <option value="Sci-Fi">Sci-Fi</option>
+                                <option value="Horror">Horror</option>
                             </select>
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="productSKU3">SKU</label>
-                            <input type="text" id="productSKU3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">autore</label>
+                            <input type="text" id="productAutore3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue">
                         </div>
 
                         <div class="mb-4">
-                            <%--@declare id="productimage3"--%><label class="block text-gray-700 text-sm font-bold mb-2" for="productImage3">Immagine Prodotto</label>
-                            <div class="mt-1 flex items-center">
-                                <span class="inline-block h-12 w-12 rounded-md overflow-hidden bg-gray-100">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Immagine Prodotto</label>
+                            <div class="mt-1 flex items-center space-x-4">
+                                <!-- Preview dell'immagine -->
+                                <span id="imagePreviewModify" class="inline-block h-16 w-16 rounded-md overflow-hidden bg-gray-100">
                                     <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                     </svg>
                                 </span>
-                                <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nekoblue">
-                                    Cambia
-                                </button>
+
+                                <!-- Input file -->
+                                <input type="file" id="imgModify" name="productImage2" accept="image/*"
+                                       class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-nekoblue file:text-white hover:file:bg-blue-600" />
                             </div>
                         </div>
 

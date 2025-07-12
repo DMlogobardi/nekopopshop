@@ -2,6 +2,7 @@ package controller.common;
 
 import controller.tools.JsonConverter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collection;
 
+@WebServlet("/common/ordinigesture")
 public class OrdiniGesture extends HttpServlet {
     private static final long serialVersionUID = 1L;
     /**
@@ -113,6 +115,7 @@ public class OrdiniGesture extends HttpServlet {
 
         } else if (action.equals("list")) {
             int page = Integer.parseInt(request.getParameter("page"));
+            int id = Integer.parseInt(session.getAttribute("logId").toString());
             String order = request.getParameter("order");
             JsonConverter<OrdineBean> converter = JsonConverter.factory(OrdineBean.class, null);
             DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
@@ -120,7 +123,7 @@ public class OrdiniGesture extends HttpServlet {
             Collection<OrdineBean> ordini = null;
 
             try{
-                ordini = ordineDAO.doRetrieveAllLimit(order, 10, page);
+                ordini = ordineDAO.doRetrieveAllLimitByUtent(order, 10, page, id);
             } catch (SQLException e) {
                 response.setStatus(500);
                 response.setContentType("text/json");
