@@ -184,7 +184,7 @@ function showSettingsError(container, error) {
         <div class="tab-content active" id="settings-tab">
             <div class="profile-card bg-white rounded-lg shadow-md overflow-hidden">
                 <!-- Header -->
-                <div class="bg-gradient-to-r from-nekored to-nekoorange p-6 ">
+                <div class="bg-gradient-to-r from-nekopeach to-nekopink p-6 ">
                     <h2 class="text-3xl font-bold text-white flex items-center">
                         <i class="fas fa-user-cog mr-3"></i> Impostazioni Account
                     </h2>

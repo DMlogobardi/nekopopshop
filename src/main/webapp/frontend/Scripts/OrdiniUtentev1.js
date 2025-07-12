@@ -1,5 +1,5 @@
 // frontend/js/userOrders.js
-
+let currentPage = 1; // Variabile per tenere traccia della pagina corrente
 document.addEventListener('DOMContentLoaded', function() {
     // Inizializza la gestione degli ordini
     initOrdersTab();
@@ -11,7 +11,7 @@ function initOrdersTab() {
 
     ordersTabBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        loadOrdersContent();
+        loadOrdersContent(currentPage);
     });
 }
 
@@ -130,14 +130,15 @@ function addOrdersStyles() {
 
 // Versione con AJAX reale
 
-const params = new URLSearchParams();
-params.append("action", "ordini");
-params.append("actionOrdini", "list");
 
-function loadOrdersContent() {
+
+function loadOrdersContent(page = 1) {
     const mainContent = document.querySelector('.lg\\:col-span-3');
     if (!mainContent) return;
-
+    const params = new URLSearchParams();
+    params.append("action", "ordini");
+    params.append("actionOrdini", "list");
+    params.append("page", page.toString()),
     showLoading(mainContent);
 
     fetch('common/utentdategesture',{
@@ -150,7 +151,7 @@ function loadOrdersContent() {
 
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
-            return response.text();
+            return response.json([0]);
         })
         .then(html => {
             mainContent.innerHTML = html;

@@ -515,11 +515,18 @@ function addPaymentsStyles() {
 function loadPaymentsContent() {
     const mainContent = document.querySelector('.lg\\:col-span-3');
     if (!mainContent) return;
-
+    const params = new URLSearchParams();
+    params.append("action", "carte");
+    params.append("actionCarte", "list");
     showPaymentsLoading(mainContent);
 
-    fetch('/getPaymentMethods')
-        .then(response => {
+    fetch('common/utentdategesture'),{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body:params.toString(),
+    }.then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.text();
         })
@@ -540,5 +547,4 @@ function loadPaymentsContent() {
             `;
             console.error('Error loading payment methods:', error);
         });
-}
-*/
+}*/

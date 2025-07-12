@@ -7,8 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-   <script src ="frontend/Scripts/OrdiniUtente.js"></script>
-   <script src ="frontend/Scripts/WishlistUtente.js"></script>
+   <script src ="frontend/Scripts/OrdiniUtentev1.js"></script>
+   <script src ="frontend/Scripts/WishlistUtentev1.js"></script>
     <script src ="frontend/Scripts/ImpostazioniUtente.js"></script>
     <script src ="frontend/Scripts/Pagamenti.js"></script>
     <script src ="frontend/Scripts/Indirizzi.js"></script>
