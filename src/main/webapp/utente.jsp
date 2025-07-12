@@ -368,13 +368,12 @@
                 <div class="p-6 text-center">
                     <div class="avatar-upload">
                         <div class="avatar-preview">
-                            <div id="imagePreview" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400');">
+                            <div id="imagePreview">
+                                <img src="frontend/images/hachiprofilo.jpeg" alt="Avatar Preview" class="w-full h-full object-cover rounded-full">
+
                             </div>
                         </div>
-                        <div class="avatar-edit">
-                            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
-                            <label for="imageUpload"><i class="fas fa-camera"></i></label>
-                        </div>
+
                     </div>
 
                     <h3 class="text-2xl font-bold mt-4 text-gray-800">NekoFan123</h3>
