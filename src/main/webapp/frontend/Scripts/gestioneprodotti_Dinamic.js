@@ -555,6 +555,37 @@ async function fatchAdd(){
     }
 }
 
+function dataModify(){
+    const nome = document.getElementById("productName3");
+    const numVol = document.getElementById("productvolNumModify");
+    const prezzo = document.getElementById("productPrice3");
+    const quantita = document.getElementById("productStock3"); // CORRETTO!
+    const tag = document.getElementById("productCategory3");
+    const autore = document.getElementById("productAutore3");
+    const img = document.getElementById("imgModify");
+    const descrizione = document.getElementById("productDescription3");
+
+    const params = new FormData();
+    params.append("action", "edit");
+
+    if(numVol.value === undefined || numVol.value === ""){
+        params.append("update", "prodotto");
+
+
+    } else {
+        /*
+            ti scrivo il commento altrimenti impazzisci, la servlet modifica o un prodotto o un volume ma il volume
+            è l'unione dei due quindi devi fare due liste una prodottoDTO e una VolumeDTO, non ti preoccupare il volume ha l'id del prodotto
+            lo metto da qualche parte nel modal o lo fai tu, io mo devo scendere.
+            Comunque per il volume bisogna fare due fetch una per il volume e una per il prodotto associato, magari sottolinei che modificando un
+            prodotto quindi i parametri del taga si modificano a catena tutti i suoi figli, scusami lo so che ti cago il cazzo ma spero che con sto
+            cosa ti è più chiaro che fare, non esitare a chiamarmi anche se lo farai lo stesso, almeno ti ho messo la logica.
+            la servlet e la stessa che uso in ad e il ragionamento e similare.
+        */
+        params.append("update", "volume");
+    }
+}
+
 async function fatchModify(){
 
 }
