@@ -676,7 +676,7 @@ window.initProduct = function () {
         loadTableVol(curentPageProd);
     });
 
-    document.getElementById("addGo").addEventListener("click", function (){
+    document.getElementById("modifyGo").addEventListener("click", function (){
         fatchModify();
         const modal = document.getElementById('addProductModal');
         modal.classList.remove('active');
