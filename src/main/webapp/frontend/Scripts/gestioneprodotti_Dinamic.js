@@ -329,13 +329,14 @@ async function editProduct(id, tipo, btnElement) {
     const update = document.getElementById("modifyProductModal");
     const nVolume = document.getElementById("productvolNumDivModify");
     const tag = document.getElementById("tagModify");
+    const hiddenProductId = document.getElementById("hiddenProductIdModify");
     update.classList.add('active');
     update.classList.remove('opacity-0', 'invisible');
 
     const item = JSON.parse(btnElement.dataset.item);
 
     if(tipo === "prod"){
-        console.log(item.prezzo);
+        hiddenProductId.value = item.idProdotto;
         nVolume.classList.add("hidden");
         tag.classList.add("hidden");
         await loadDataProd(item);
@@ -343,6 +344,7 @@ async function editProduct(id, tipo, btnElement) {
     }
     if(tipo === "vol"){
         const tagItem = JSON.parse(btnElement.dataset.tag);
+        hiddenProductId.value = tagItem.idProdotto;
         nVolume.classList.remove("hidden");
         tag.classList.remove("hidden");
         await loadDataVol(item, tagItem);
@@ -448,6 +450,7 @@ function clearModal(tipo) {
         const autore = document.getElementById("productAutore3");
         const imgPrev = document.getElementById("imagePreviewModify");
         const img = document.getElementById("imgModify");
+        const hiddenProductId = document.getElementById("hiddenProductIdModify");
         const descrizione = document.getElementById("productDescription3");
 
         if (nome) nome.value = "";
@@ -464,6 +467,7 @@ function clearModal(tipo) {
             `;
         }
         if (img) img.value = "";
+        if(hiddenProductId) hiddenProductId.value = "";
         if(descrizione) descrizione.value = "";
     }
 }
@@ -555,14 +559,26 @@ async function fatchAdd(){
     }
 }
 
-function dataModify(){
+function base64ToFile(base64, filename) {
+    const arr = base64.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) u8arr[n] = bstr.charCodeAt(n);
+    return new File([u8arr], filename, { type: mime });
+}
+
+async function dataModify(){
     const nome = document.getElementById("productName3");
     const numVol = document.getElementById("productvolNumModify");
     const prezzo = document.getElementById("productPrice3");
     const quantita = document.getElementById("productStock3"); // CORRETTO!
     const tag = document.getElementById("productCategory3");
     const autore = document.getElementById("productAutore3");
+    const imgPrev = document.getElementById("imagePreview");
     const img = document.getElementById("imgModify");
+    const hiddenProductId = document.getElementById("hiddenProductIdModify");
     const descrizione = document.getElementById("productDescription3");
 
     const params = new FormData();
@@ -571,23 +587,104 @@ function dataModify(){
     if(numVol.value === undefined || numVol.value === ""){
         params.append("update", "prodotto");
 
+        if (img.files && img.files[0]) {
+            const originalFile = img.files[0];
+            const renamedFile = renameFileWithSuffix(originalFile, "_1");
+            params.append("image", renamedFile);
+        } else {
+            const imgTag = imgPrev.querySelector("img");
+            if (imgTag) {
+                const src = imgTag.getAttribute("src");
+                const renamedFile = base64ToFile(src, "immagine_1.jpg");
+                params.append("image", renamedFile);
+            } else {
+                console.log("Nessuna immagine caricata");
+            }
+        }
 
+        const data = {
+            idImg: 1,
+            idTempVolume: hiddenProductId.value,
+            nome: nome.value,
+            quantita: quantita.value,
+            prezzo: prezzo.value,
+            autor: autore.value,
+            descrizzione: descrizione.value
+        };
+
+        params.append("json", JSON.stringify(data));
+
+        await fatchModify(params);
+        return;
     } else {
-        /*
-            ti scrivo il commento altrimenti impazzisci, la servlet modifica o un prodotto o un volume ma il volume
-            è l'unione dei due quindi devi fare due liste una prodottoDTO e una VolumeDTO, non ti preoccupare il volume ha l'id del prodotto
-            lo metto da qualche parte nel modal o lo fai tu, io mo devo scendere.
-            Comunque per il volume bisogna fare due fetch una per il volume e una per il prodotto associato, magari sottolinei che modificando un
-            prodotto quindi i parametri del taga si modificano a catena tutti i suoi figli, scusami lo so che ti cago il cazzo ma spero che con sto
-            cosa ti è più chiaro che fare, non esitare a chiamarmi anche se lo farai lo stesso, almeno ti ho messo la logica.
-            la servlet e la stessa che uso in ad e il ragionamento e similare.
-        */
+        const paramsTag = new FormData();
+        paramsTag.append("action", "edit");
+        paramsTag.append("update", "prodotto");
         params.append("update", "volume");
+
+        if (img.files && img.files[0]) {
+            const originalFile = img.files[0];
+            const renamedFile = renameFileWithSuffix(originalFile, "_1");
+            params.append("image", renamedFile);
+        } else {
+            const imgTag = imgPrev.querySelector("img");
+            if (imgTag) {
+                const src = imgTag.getAttribute("src");
+                const renamedFile = base64ToFile(src, "immagine_1.jpg");
+                params.append("image", renamedFile);
+            } else {
+                console.log("Nessuna immagine caricata");
+            }
+        }
+
+        const prod = {
+            idImg: 0,
+            idTempVolume: hiddenProductId.value,
+            nome: nome.value,
+            quantita: 0,
+            prezzo: 0.0,
+            autor: autore.value,
+            descrizzione: descrizione.value
+        };
+
+        paramsTag.append("json", JSON.stringify(prod));
+
+        const oggi = new Date();
+        const data = `${oggi.getFullYear()}-${(oggi.getMonth() + 1).toString().padStart(2, '0')}-${oggi.getDate().toString().padStart(2, '0')}`;
+
+        const vol = {
+            idImg: 1,
+            idProd: hiddenProductId.value,
+            numVolume: numVol.value,
+            prezzo: prezzo.value,
+            quantita: quantita.value,
+            datapubl: data,
+            tag:tag.value
+        }
+
+        params.append("json", JSON.stringify(vol));
+
+        await fatchModify(params);
+        await fatchModify(paramsTag);
     }
 }
 
-async function fatchModify(){
+async function fatchModify(params){
+    try {
+        const response = await fetch('admin/manageproduct', {
+            method: 'POST',
+            body: params,   // NON impostare Content-Type! Il browser lo fa automaticamente
+        });
 
+        const data = await response.json();
+
+        if(data.success !== undefined){
+            mostraErrore("prodotto aggiornato con successo");
+        }
+    } catch (error) {
+        mostraErrore("Errore nell'aggiunta");
+        console.error('Errore nella fetch:', error);
+    }
 }
 
 window.initProduct = function () {
@@ -708,8 +805,8 @@ window.initProduct = function () {
     });
 
     document.getElementById("modifyGo").addEventListener("click",  async function (){
-        await fatchModify();
-        const modal = document.getElementById('addProductModal');
+        await dataModify();
+        const modal = document.getElementById('modifyProductModal');
         modal.classList.remove('active');
         modal.classList.add('opacity-0', 'invisible');
         clearModal("modify");

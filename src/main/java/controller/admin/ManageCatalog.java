@@ -243,7 +243,7 @@ public class ManageCatalog extends HttpServlet {
             String update = request.getParameter("update");
 
             if(update.equals("prodotto")) {
-                Part image = request.getPart("image"); // può essere null
+                Part image = request.getPart("image");
                 JsonConverter<ProdottoDTO> converter = JsonConverter.factory(ProdottoDTO.class, null);
                 String json = request.getParameter("json");
                 ProdottoDTO prod = null;

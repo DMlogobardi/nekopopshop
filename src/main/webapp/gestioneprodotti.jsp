@@ -347,6 +347,7 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="productDescription3">Descrizione</label>
                             <textarea id="productDescription3" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-nekoblue"></textarea>
                         </div>
+                        <input type="hidden" id="hiddenProductIdModify" name="idProdotto">
                     </div>
                 </div>
 
