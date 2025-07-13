@@ -665,26 +665,26 @@ window.initProduct = function () {
     }
     });
 
-    document.getElementById("addGo").addEventListener("click", function (){
-        fatchAdd();
+    document.getElementById("addGo").addEventListener("click", async function () {
+        await fatchAdd();
         const modal = document.getElementById('addProductModal');
         modal.classList.remove('active');
         modal.classList.add('opacity-0', 'invisible');
         clearModal("add");
         curentPageProd = 1;
-        loadTableProd(curentPageProd);
-        loadTableVol(curentPageProd);
+        await loadTableProd(curentPageProd);
+        await loadTableVol(curentPageProd);
     });
 
-    document.getElementById("modifyGo").addEventListener("click", function (){
-        fatchModify();
+    document.getElementById("modifyGo").addEventListener("click",  async function (){
+        await fatchModify();
         const modal = document.getElementById('addProductModal');
         modal.classList.remove('active');
         modal.classList.add('opacity-0', 'invisible');
         clearModal("modify");
         curentPageProd = 1;
-        loadTableProd(curentPageProd);
-        loadTableVol(curentPageProd);
+        await loadTableProd(curentPageProd);
+        await loadTableVol(curentPageProd);
     });
 
 }
