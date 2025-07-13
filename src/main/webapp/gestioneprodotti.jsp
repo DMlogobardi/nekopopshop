@@ -59,14 +59,6 @@
                                 <h2 class="text-xl md:text-2xl lg:text-3xl font-medium text-white flex items-center">
                                     <i class="fas fa-boxes mr-3"></i> Gestione Prodotti
                                 </h2>
-                                <div class="relative w-full max-w-md">
-                                    <input
-                                            type="text"
-                                            placeholder="Cerca prodotto..."
-                                            class="w-full bg-white/20 border border-white/30 text-white rounded-lg px-4 py-2 pl-10 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white"
-                                    />
-                                    <i class="fas fa-search absolute left-3 top-3 text-white/70"></i>
-                                </div>
                             </div>
                         </div>
                         <div id="modal" class="p-6"> </div>
