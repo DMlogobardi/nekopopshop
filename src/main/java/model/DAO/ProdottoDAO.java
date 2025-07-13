@@ -181,17 +181,17 @@ public class ProdottoDAO implements GenralDAO<ProdottoBean> {
         return prod;
     }
 
-    public ProdottoBean doRetrieveByVol(int code) throws SQLException {
+    public ProdottoBean doRetrieveByVol(String nome) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
         ProdottoBean prod = null;
 
-        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idVolum = ?";
+        String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE nome = ?";
 
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
-            ps.setInt(1, code);
+            ps.setString(1, nome);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

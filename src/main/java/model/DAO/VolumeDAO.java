@@ -163,30 +163,30 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
         return result;
     }
 
-    public VolumeBean doRetrieveByProduct(int code) throws SQLException {
+    public Collection<VolumeBean> doRetrieveByProduct(int code) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        VolumeBean volume = null;
-
+        Collection<VolumeBean> volumi = new LinkedList<VolumeBean>();
         String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idProdotto = ?";
 
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(selectSQL);
             ps.setInt(1, code);
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                volume = new VolumeBean(
-                        rs.getInt("idVolume"),
-                        rs.getInt("numVolumi"),
-                        rs.getDouble("prezzo"),
-                        rs.getInt("quantità"),
-                        rs.getString("dataPubl"),
-                        rs.getBytes("imgVol"),
-                        rs.getString("tag"),
-                        rs.getInt("idProdotto")
-                );
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    VolumeBean volume = new VolumeBean(
+                            rs.getInt("idVolume"),
+                            rs.getInt("numVolumi"),
+                            rs.getDouble("prezzo"),
+                            rs.getInt("quantità"),
+                            rs.getString("dataPubl"),
+                            rs.getBytes("imgVol"),
+                            rs.getString("tag"),
+                            rs.getInt("idProdotto")
+                    );
+                    volumi.add(volume);
+                }
             }
         } finally {
             try {
@@ -195,8 +195,9 @@ public class VolumeDAO implements GenralDAO<VolumeBean> {
                 if (con != null) con.close();
             }
         }
-        return volume;
+        return volumi;
     }
+
 
     @Override
     public Collection<VolumeBean> doRetrieveAll(String order) throws SQLException {

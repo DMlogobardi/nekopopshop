@@ -77,8 +77,9 @@ public class ManageCatalog extends HttpServlet {
                 String json = request.getParameter("json");
                 if (json == null || json.trim().isEmpty()) {
                     System.out.println("Errore: JSON nullo o vuoto");
-                    request.setAttribute("errors", "json error");
-                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"JSON nullo o vuoto\"}");
                     return;
                 }
 
@@ -98,16 +99,18 @@ public class ManageCatalog extends HttpServlet {
                     if(prod.getPrezzo() == null){
                         volDTO = dati.getVolumi().stream().filter(v -> v.getIdProd() == prod.getIdTempVolume()).findFirst().orElse(null);
                         if (volDTO == null) {
-                            request.setAttribute("errors", "volume not found");
-                            request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                            response.setStatus(500);
+                            response.setContentType("text/json");
+                            response.getWriter().println("{\"error\":\"volume not found\"}");
                             return;
                         }
 
                         Optional<Part> imgPart = ImgByteConverter.getPartByID(images, volDTO.getIdImg());
 
                         if(imgPart.isEmpty()) {
-                            request.setAttribute("errors", "image not found");
-                            request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                            response.setStatus(500);
+                            response.setContentType("text/json");
+                            response.getWriter().println("{\"error\":\"image not found\"}");
                             return;
                         }
 
@@ -116,17 +119,36 @@ public class ManageCatalog extends HttpServlet {
                     }
 
                     if(volDTO != null){
-                        int id;
-                        pro = new ProdottoBean(0, prod.getNome(), null, null, prod.getAutor(), null , prod.getDescrizzione());
-                        id = prodDB.doSave(pro);
+                        int id = 0;
+                        ProdottoBean prodExsit = prodDB.doRetrieveByVol(prod.getNome());
+
+                        if(prodExsit == null) {
+                            pro = new ProdottoBean(0, prod.getNome(), null, null, prod.getAutor(), null, prod.getDescrizzione());
+                            id = prodDB.doSave(pro);
+                        } else {
+                            System.out.println("prodotto esistente" + prodExsit.getIdProdotto());
+                            id = prodExsit.getIdProdotto();
+                            Collection<VolumeBean> volExsist = volDB.doRetrieveByProduct(id);
+                            if(!volExsist.isEmpty()) {
+                                VolumeBean finalVol = vol;
+                                Optional<VolumeBean> testVol =  volExsist.stream().filter(v -> v.getNumVolumi() == finalVol.getNumVolumi()).findFirst();
+                                if(testVol.isPresent()) {
+                                    response.setStatus(422);
+                                    response.setContentType("text/json");
+                                    response.getWriter().println("{\"error\":\"volume già esistente\"}");
+                                    return;
+                                }
+                            }
+                        }
                         
                         vol.setIdProdotto(id);
                         volDB.doSave(vol);
                     } else {
                         Optional<Part> prodImg = ImgByteConverter.getPartByID(images, prod.getIdImg());
                         if(prodImg.isEmpty()) {
-                            request.setAttribute("errors", "image not found");
-                            request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                            response.setStatus(500);
+                            response.setContentType("text/json");
+                            response.getWriter().println("{\"error\":\"image not found\"}");
                             return;
                         }
 
@@ -140,8 +162,9 @@ public class ManageCatalog extends HttpServlet {
                     for (VolumeDTO volDTO : dati.getVolumi()) {
                         Optional<Part> volImg = ImgByteConverter.getPartByID(images, volDTO.getIdImg());
                         if (volImg.isEmpty()) {
-                            request.setAttribute("errors", "image not found");
-                            request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                            response.setStatus(500);
+                            response.setContentType("text/json");
+                            response.getWriter().println("{\"error\":\"image not found\"}");
                             return;
                         }
 
@@ -152,14 +175,16 @@ public class ManageCatalog extends HttpServlet {
                 }
 
                 System.out.println("ManageCatalog servlet insert success");
-                request.setAttribute("success", "success");
-                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                response.setStatus(200);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"success\":\"success\"}");
                 return;
                 
             } catch (Exception e) {
                 System.out.println("ManageCatalog servlet DTO pars error: " + e.getMessage());
-                request.setAttribute("errors", "internal error");
-                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                 return;
             }
             
@@ -173,37 +198,44 @@ public class ManageCatalog extends HttpServlet {
                 delete = converter.parse(json);
             } catch (Exception e) {
                 System.out.println("ManageCatalog servlet DTO pars error: " + e.getMessage());
-                request.setAttribute("errors", "internal error");
-                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                 return;
             }
 
             ProdottoDAO prodDB = new ProdottoDAO(ds);
             VolumeDAO volDB = new VolumeDAO(ds);
-            ArrayList<Boolean> result = new ArrayList<Boolean>();
             for(IdClassDTO element : delete.getIds()){
                 try{
                     if(element.getTipo().equals("prodotto")){
-                      result.add(prodDB.doDelete(element.getId()));
+                        prodDB.doDelete(element.getId());
                     } else if(element.getTipo().equals("volume")){
-                      result.add(volDB.doDelete(element.getId()));
+                        VolumeBean tempVol = volDB.doRetrieveByKey(element.getId());
+                        volDB.doDelete(element.getId());
+                        Collection<VolumeBean> validityTag = volDB.doRetrieveByProduct(tempVol.getIdProdotto());
+                        if(!validityTag.isEmpty()) {
+                            prodDB.doDelete(tempVol.getIdProdotto());
+                        }
                     }
                 } catch (SQLException e) {
                     sqlErrors.add(e.getMessage());
+                    System.out.println("ManageCatalog servlet sql delete error: " + sqlErrors.toString());
                 }
             }
             
             if(!sqlErrors.isEmpty()){
                 System.out.println("ManageCatalog servlet sql delete error: " + sqlErrors.toString());
-                request.setAttribute("errors", sqlErrors);
-                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + sqlErrors + "\"}");
                 return;
             }
 
             System.out.println("ManageCatalog servlet delete success");
-            request.setAttribute("success", "success");
-            request.setAttribute("quary_result", result);
-            request.getRequestDispatcher("/admin.jsp").forward(request, response);
+            response.setStatus(200);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"success\":\"success\"}");
 
         } else if (action.equals("edit")) {
             //qui usiamo idTempVolume come id per il prodotto, !SOLO QUI!
@@ -220,8 +252,9 @@ public class ManageCatalog extends HttpServlet {
                     prod = converter.parse(json);
                 } catch (Exception e) {
                     System.out.println("ManageCatalog servlet DTO parse error (Prodotto): " + e.getMessage());
-                    request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
 
@@ -245,14 +278,16 @@ public class ManageCatalog extends HttpServlet {
                     prodDB.uppdate(prd);
                 } catch (SQLException e) {
                     System.out.println("ManageCatalog servlet SQL update error (Prodotto): " + e.getMessage());
-                    request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
 
                 System.out.println("ManageCatalog servlet update success");
-                request.setAttribute("success", "success");
-                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                response.setStatus(200);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"success\":\"success\"}");
             }
 
             if(update.equals("volume")) {
@@ -265,8 +300,9 @@ public class ManageCatalog extends HttpServlet {
                     vol = converter.parse(json);
                 } catch (Exception e) {
                     System.out.println("ManageCatalog servlet DTO parse error (Volume): " + e.getMessage());
-                    request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
 
@@ -291,21 +327,24 @@ public class ManageCatalog extends HttpServlet {
                     volDB.uppdate(vbean);
                 } catch (SQLException e) {
                     System.out.println("ManageCatalog servlet SQL update error (Volume): " + e.getMessage());
-                    request.setAttribute("errors", "internal error");
-                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                    response.setStatus(500);
+                    response.setContentType("text/json");
+                    response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
                     return;
                 }
 
                 System.out.println("ManageCatalog servlet update success");
-                request.setAttribute("success", "success");
-                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                response.setStatus(200);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"success\":\"success\"}");
             }
 
 
         } else {
             System.out.println("ManageCatalog wrong action");
-            request.setAttribute("errors", "internal error");
-            request.getRequestDispatcher("/admin.jsp").forward(request, response);
+            response.setStatus(422);
+            response.setContentType("text/json");
+            response.getWriter().println("{\"error\":\"invalid action\"}");
         }
 
     }

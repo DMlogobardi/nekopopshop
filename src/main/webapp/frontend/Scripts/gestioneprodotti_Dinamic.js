@@ -110,10 +110,10 @@ async function loadTableProd(pag){
                             ${item.quantita}
                         </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editProduct(\`${item.idProdotto}\`, 'prod')" class="text-nekoblue hover:text-blue-600 mr-3">
+                        <button onclick="editProduct(\`${item.idProdotto}\`, 'prod', \`${item}\`)" class="text-nekoblue hover:text-blue-600 mr-3">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button onclick="removeProduct(\`${item.idProdotto}\`, 'prod')" class="text-nekored hover:text-red-600">
+                        <button onclick="removeProduct(\`${item.idProdotto}\`, 'prodotto')" class="text-nekored hover:text-red-600">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -171,7 +171,7 @@ async function loadTableVol(pag){
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 h-10 w-10">
-                                    <img
+                                    <img id=\`img\`
                                         class="h-10 w-10 rounded"
                                         src=${imgSrc}
                                         alt="Jujutsu Kaisen"
@@ -194,10 +194,10 @@ async function loadTableVol(pag){
                             ${item.quantita}
                         </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editProduct(\`${item.idVolume}\`, 'vol')" class="text-nekoblue hover:text-blue-600 mr-3">
+                        <button onclick="editProduct(\`${item.idVolume}\`, 'vol',\`${item}\`)" class="text-nekoblue hover:text-blue-600 mr-3">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button onclick="removeProduct(\`${item.idVolume}\`, 'vol')" class="text-nekored hover:text-red-600">
+                        <button onclick="removeProduct(\`${item.idVolume}\`, 'volume')" class="text-nekored hover:text-red-600">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -212,26 +212,26 @@ async function loadTableVol(pag){
 }
 
 async function removeProduct(id, tipo) {
-    const params = new URLSearchParams();
-    params.append("action", "delete");
-    const del = {
-        tipo: tipo,
-        id: id
-    }
     const delBody = {
-        elements: del
-    }
-    params.append("json", JSON.stringify(delBody));
+        element: [
+            {
+                tipo: tipo,
+                id: id
+            }
+        ]
+    };
+
+    const form = new FormData();
+    form.append("action", "delete");
+    form.append("json", JSON.stringify(delBody));
+
     try {
-        const respons = await fetch("admin/manageproduct", {
+        const response = await fetch("admin/manageproduct", {
             method: "POST",
-            headers: {
-                "Content-Type": "form-data"
-            },
-            body: params.toString()
+            body: form
         });
 
-        const data = await respons.json();
+        const data = await response.json();
 
         if (data.error !== undefined) {
             mostraErrore("errore nel caricamento");
@@ -240,9 +240,9 @@ async function removeProduct(id, tipo) {
 
         if (data.success !== undefined) {
             if (tipo === "vol") {
-                loadTableProd(curentPageProd);
+                await loadTableProd(curentPageProd);
             } else {
-                loadTableVol(curentPageProd);
+                await  loadTableVol(curentPageProd);
             }
         }
     } catch (error) {
@@ -252,7 +252,8 @@ async function removeProduct(id, tipo) {
     }
 }
 
-async function editProduct(id, tipo) {
+
+async function editProduct(id, tipo, item) {
     const update = document.getElementById("modifyProductModal");
     const nVolume = document.getElementById("productvolNumDivModify");
     const tag = document.getElementById("tagModify");
@@ -388,6 +389,97 @@ function clearModal(tipo) {
     }
 }
 
+function renameFileWithSuffix(file, suffix) {
+    const dotIndex = file.name.lastIndexOf(".");
+    const baseName = dotIndex !== -1 ? file.name.substring(0, dotIndex) : file.name;
+    const extension = dotIndex !== -1 ? file.name.substring(dotIndex) : "";
+    const newName = baseName + suffix + extension;
+
+    return new File([file], newName, { type: file.type, lastModified: file.lastModified });
+}
+
+function paramsAdd() {
+    const categoria = document.getElementById("productCategory2");
+    const nome = document.getElementById("productName2");
+    const numVol = document.getElementById("productvolNum");
+    const prezzo = document.getElementById("productPrice2");
+    const quantita = document.getElementById("productStock2");
+    const tag = document.getElementById("volTag");
+    const autore = document.getElementById("autore");
+    const img = document.getElementById("imgAdd");
+    const descrizione = document.getElementById("productDescription2");
+
+    const params = new FormData();
+    params.append("action", "insert");
+
+    const prodotti = [];
+    const volumi = [];
+
+    if (categoria.value === "manga") {
+        const oggi = new Date();
+        const data = `${oggi.getFullYear()}-${(oggi.getMonth() + 1).toString().padStart(2, '0')}-${oggi.getDate().toString().padStart(2, '0')}`;
+
+        prodotti.push({
+            idTempVolume: 1,
+            nome: nome.value,
+            autor: autore.value,
+            descrizzione: descrizione.value
+        });
+
+        volumi.push({
+            idImg: 1,
+            idProd: 1,
+            numVolume: Number(numVol.value),
+            prezzo: Number(prezzo.value),
+            quantita: Number(quantita.value),
+            datapubl: data,
+            tag: tag.value
+        });
+
+    } else {
+        prodotti.push({
+            idImg: 1,
+            nome: nome.value,
+            quantita: Number(quantita.value),
+            prezzo: Number(prezzo.value),
+            autor: autore.value,
+            descrizzione: descrizione.value
+        });
+    }
+
+    const json = { prodotti, volumi };
+    params.append("json", JSON.stringify(json));
+    const originalFile = img.files[0];
+    const renamedFile = renameFileWithSuffix(originalFile, "_1");
+    params.append("image", renamedFile);
+    return params;
+}
+
+
+async function fatchAdd(){
+    const formData = paramsAdd();
+
+    try {
+        const response = await fetch('admin/manageproduct', {
+            method: 'POST',
+            body: formData,   // NON impostare Content-Type! Il browser lo fa automaticamente
+        });
+
+        const data = await response.json();
+
+        if(data.success !== undefined){
+            mostraErrore("prodotto aggiunto con successo");
+        }
+    } catch (error) {
+        mostraErrore("Errore nell'aggiunta");
+        console.error('Errore nella fetch:', error);
+    }
+}
+
+async function fatchModify(){
+
+}
+
 window.initProduct = function () {
     loadTableProd(curentPageProd);
     loadTableVol(curentPageProd);
@@ -492,6 +584,28 @@ window.initProduct = function () {
             </svg>
         `;
     }
+    });
+
+    document.getElementById("addGo").addEventListener("click", function (){
+        fatchAdd();
+        const modal = document.getElementById('addProductModal');
+        modal.classList.remove('active');
+        modal.classList.add('opacity-0', 'invisible');
+        clearModal("add");
+        curentPageProd = 1;
+        loadTableProd(curentPageProd);
+        loadTableVol(curentPageProd);
+    });
+
+    document.getElementById("addGo").addEventListener("click", function (){
+        fatchModify();
+        const modal = document.getElementById('addProductModal');
+        modal.classList.remove('active');
+        modal.classList.add('opacity-0', 'invisible');
+        clearModal("modify");
+        curentPageProd = 1;
+        loadTableProd(curentPageProd);
+        loadTableVol(curentPageProd);
     });
 
 }

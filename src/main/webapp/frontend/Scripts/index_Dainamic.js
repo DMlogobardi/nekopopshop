@@ -211,18 +211,18 @@ document.addEventListener("DOMContentLoaded", function () {
                             
                             <div class="mt-4 flex justify-between items-center">
                                 <p class="text-white text-sm">Offerta valida fino al ${dataFormattata}</p>
-                                <button data-id="${data[0].idProdotto}" id="addCartOfferta" class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                                <button data-id="${data[0].idProdotto}" id="addCartOffertaProd" class="bg-nekopeach hover:bg-nekopink text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
                                     <i class="fas fa-gift mr-2"></i> Approfitta ora
                                 </button>
                             </div>
                 `;
 
-            document.getElementById("addCartOfferta").addEventListener("click", function(e) {
-                const idVolume = this.dataset.id;
+            document.getElementById("addCartOffertaProd").addEventListener("click", function(e) {
+                const idProdotto = this.dataset.id;
 
                 const dati = {
                     qCarrello: 1,
-                    idVolume: idVolume
+                    idProdotto: idProdotto
                 };
 
                 const params = new URLSearchParams();

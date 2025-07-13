@@ -160,7 +160,6 @@ public class GetCatalog extends HttpServlet {
 				String jsonProd = prodConverter.toJson(dbPrd);
 				response.setContentType("text/json");
 				response.setCharacterEncoding("UTF-8");
-				System.out.println("if JsonProd: " + jsonProd);
 				response.getWriter().write(jsonProd);
 
 			} else if (dbPrd == null || dbPrd.isEmpty()) {
@@ -174,13 +173,10 @@ public class GetCatalog extends HttpServlet {
 
 				JsonConverter<ProdottoBean> prodConverter = JsonConverter.factory(ProdottoBean.class, null);
 				String jsonProd = prodConverter.toJson(dbPrd);
-				System.out.println("else JsonProd: " + jsonProd);
 				JsonConverter<VolumeBean> volConverter = JsonConverter.factory(VolumeBean.class, null);
 				String jsonVol = volConverter.toJson(dbVol);
-				System.out.println("else JsonVol: " + jsonVol);
 
 				String jsonSend = JsonConverter.merge(jsonProd, jsonVol);
-				System.out.println("else: " + jsonSend);
 
 				response.setContentType("text/json");
 				response.setCharacterEncoding("UTF-8");
@@ -189,13 +185,10 @@ public class GetCatalog extends HttpServlet {
 			} else {
 				JsonConverter<ProdottoBean> prodConverter = JsonConverter.factory(ProdottoBean.class, null);
 				String jsonProd = prodConverter.toJson(dbPrd);
-				System.out.println("else JsonProd: " + jsonProd);
 				JsonConverter<VolumeBean> volConverter = JsonConverter.factory(VolumeBean.class, null);
 				String jsonVol = volConverter.toJson(dbVol);
-				System.out.println("else JsonVol: " + jsonVol);
 
 				String jsonSend = JsonConverter.merge(jsonProd, jsonVol);
-				System.out.println("else: " + jsonSend);
 
 				response.setContentType("text/json");
 				response.setCharacterEncoding("UTF-8");
