@@ -74,6 +74,10 @@ async function loadTableProd(pag){
         }
 
         function createRiga(item) {
+            const safeDataItem = JSON.stringify(item)
+                .replace(/"/g, '&quot;')  // escape i doppi apici per HTML
+                .replace(/'/g, '&#39;');
+
             const imgSrc = item.imgProd
                 ? (item.imgProd.startsWith("data:")
                     ? item.imgProd
@@ -110,8 +114,11 @@ async function loadTableProd(pag){
                             ${item.quantita}
                         </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editProduct(\`${item.idProdotto}\`, 'prod', \`${item}\`)" class="text-nekoblue hover:text-blue-600 mr-3">
-                            <i class="fas fa-edit"></i>
+                        <button 
+                            data-item="${safeDataItem}"  
+                            onclick="editProduct('${item.idProdotto}', 'prod', this)" 
+                            class="edit-btn text-nekoblue hover:text-blue-600 mr-3">
+                                <i class="fas fa-edit"></i>
                         </button>
                         <button onclick="removeProduct(\`${item.idProdotto}\`, 'prodotto')" class="text-nekored hover:text-red-600">
                             <i class="fas fa-trash"></i>
@@ -158,6 +165,14 @@ async function loadTableVol(pag){
         }
 
         function createVolEow(item, tag){
+            const safeDataItem = JSON.stringify(item)
+                .replace(/"/g, '&quot;')  // escape i doppi apici per HTML
+                .replace(/'/g, '&#39;');
+
+            const safeDataTag = JSON.stringify(tag)
+                .replace(/"/g, '&quot;')  // escape i doppi apici per HTML
+                .replace(/'/g, '&#39;');
+
             const imgSrc = item.imgVol
                 ? (item.imgVol.startsWith("data:")
                     ? item.imgVol
@@ -194,8 +209,12 @@ async function loadTableVol(pag){
                             ${item.quantita}
                         </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editProduct(\`${item.idVolume}\`, 'vol',\`${item}\`)" class="text-nekoblue hover:text-blue-600 mr-3">
-                            <i class="fas fa-edit"></i>
+                        <button 
+                            data-item="${safeDataItem}"
+                            data-tag="${safeDataTag}"  
+                            onclick="editProduct('${item.idVolume}', 'vol', this)" 
+                            class="edit-btn text-nekoblue hover:text-blue-600 mr-3">
+                                <i class="fas fa-edit"></i>
                         </button>
                         <button onclick="removeProduct(\`${item.idVolume}\`, 'volume')" class="text-nekored hover:text-red-600">
                             <i class="fas fa-trash"></i>
@@ -252,21 +271,81 @@ async function removeProduct(id, tipo) {
     }
 }
 
+async function loadDataProd(item){
+    console.log(item);
+    const nome = document.getElementById("productName3");
+    const prezzo = document.getElementById("productPrice3");
+    const quantita = document.getElementById("productStock3"); // CORRETTO!
+    const autore = document.getElementById("productAutore3");
+    const imgPrev = document.getElementById("imagePreviewModify");
+    const descrizione = document.getElementById("productDescription3");
 
-async function editProduct(id, tipo, item) {
+    nome.value = item.nome;
+    prezzo.value = item.prezzo;
+    quantita.value = item.quantita;
+    if (autore) autore.value = item.autore;
+    if (imgPrev && item.imgProd) {
+        const imgSrc = item.imgProd.startsWith("data:")
+            ? item.imgProd
+            : `data:image/jpeg;base64,${item.imgProd}`;
+
+        imgPrev.innerHTML = `
+        <img src="${imgSrc}" class="h-full w-full object-cover rounded" alt="Anteprima immagine">
+    `;
+    }
+    if(descrizione) descrizione.value = item.descrizione;
+}
+
+async function loadDataVol(item, tagItem){
+    const nome = document.getElementById("productName3");
+    const numVol = document.getElementById("productvolNumModify");
+    const prezzo = document.getElementById("productPrice3");
+    const quantita = document.getElementById("productStock3"); // CORRETTO!
+    const tag = document.getElementById("productCategory3");
+    const autore = document.getElementById("productAutore3");
+    const imgPrev = document.getElementById("imagePreviewModify");
+    const descrizione = document.getElementById("productDescription3");
+
+    if (nome) nome.value = tagItem.nome;
+    if (numVol) numVol.value = item.numVolumi;
+    if (prezzo) prezzo.value = item.prezzo;
+    if (quantita) quantita.value = item.quantita;
+    if (tag) tag.value = item.tag;
+    if (autore) autore.value = tagItem.autore;
+    if (imgPrev && item.imgVol) {
+        const imgSrc = item.imgVol.startsWith("data:")
+            ? item.imgVol
+            : `data:image/jpeg;base64,${item.imgVol}`;
+
+        imgPrev.innerHTML = `
+        <img src="${imgSrc}" class="h-full w-full object-cover rounded" alt="Anteprima immagine">
+    `;
+    }
+    if(descrizione) descrizione.value = tagItem.descrizione;
+
+}
+
+async function editProduct(id, tipo, btnElement) {
     const update = document.getElementById("modifyProductModal");
     const nVolume = document.getElementById("productvolNumDivModify");
     const tag = document.getElementById("tagModify");
     update.classList.add('active');
     update.classList.remove('opacity-0', 'invisible');
+
+    const item = JSON.parse(btnElement.dataset.item);
+
     if(tipo === "prod"){
+        console.log(item.prezzo);
         nVolume.classList.add("hidden");
-        tag.classList.add("hidden")
+        tag.classList.add("hidden");
+        await loadDataProd(item);
         return;
     }
     if(tipo === "vol"){
+        const tagItem = JSON.parse(btnElement.dataset.tag);
         nVolume.classList.remove("hidden");
-        tag.classList.remove("hidden")
+        tag.classList.remove("hidden");
+        await loadDataVol(item, tagItem);
         return;
     }
 }
