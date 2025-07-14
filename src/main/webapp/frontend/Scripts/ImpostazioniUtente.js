@@ -1,7 +1,18 @@
-// frontend/Scripts/ImpostazioniUtente.js
+
+if (typeof window.APP_CONTEXT_PATH === 'undefined') {
+    window.APP_CONTEXT_PATH = '';
+    console.warn("APP_CONTEXT_PATH non definito. Assicurati di impostarlo nella JSP.");
+}
+
+const pageContext = {
+    request: {
+        contextPath: window.APP_CONTEXT_PATH
+    }
+};
 
 document.addEventListener('DOMContentLoaded', function() {
     initSettingsTab();
+    loadInitialSettings();
 });
 
 function initSettingsTab() {
@@ -14,34 +25,160 @@ function initSettingsTab() {
     });
 }
 
+
+function loadInitialSettings() {
+    const formData = new URLSearchParams();
+    formData.append('action', 'datiUtente'); // Per UtentDataGesture
+    formData.append('actionUtent', 'list');  // Per UtentGesture
+
+    fetch(`common/utentdategesture`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData,
+
+    })
+        .then(response => {
+            if (response.status === 422) {
+                throw new Error('Accesso non autorizzato. Effettua il login.');
+            }
+            if (!response.ok) {
+                throw new Error(`Errore HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            // Estrai i dati dell'utente corrente
+            const userId = getLoggedInUserId();
+            const userData = Array.isArray(data) ?
+                data.find(user => user.idCliente == userId) :
+                data;
+
+            if (!userData) {
+                throw new Error('Dati utente non trovati');
+            }
+
+            // Normalizza i dati per il frontend
+            const normalizedData = {
+                firstName: data.nome || '',
+                lastName: data.cognome || '',
+                email: data.email || '',
+            };
+
+            localStorage.setItem('userSettings', JSON.stringify(normalizedData));
+
+            if (window.location.hash === '#settings') {
+                renderSettingsContent(document.querySelector('.main-content-container'), normalizedData);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading settings:', error);
+            showErrorNotification(error.message);
+
+            if (error.message.includes('autorizzato') || error.message.includes('accesso')) {
+                redirectToLogin();
+            }
+        });
+}
+
 function loadSettingsContent() {
-    const mainContent = document.querySelector('.lg\\:col-span-3');
+    const mainContent = document.querySelector('.main-content-container') ||
+        document.querySelector('.lg\\:col-span-3');
     if (!mainContent) return;
 
     showSettingsLoading(mainContent);
 
-    // Simula chiamata AJAX (sostituisci con chiamata reale)
-    setTimeout(() => {
-        renderSettingsContent(mainContent);
-    }, 800);
+    const savedSettings = localStorage.getItem('userSettings');
+    if (savedSettings) {
+        renderSettingsContent(mainContent, JSON.parse(savedSettings));
+    } else {
+        fetchCurrentUserSettings(mainContent);
+    }
+}
+
+
+
+function fetchCurrentUserSettings(container) {
+    const params = new URLSearchParams();
+    params.append("action", "datiUtente");
+    params.append("actionUtent", "list");
+
+    console.log(`Fetching URL: ${pageContext.request.contextPath}/common/utentdatagesture`);
+
+    fetch(`common/utentdategesture`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString(),
+        credentials: 'include'
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Errore nel caricamento delle impostazioni');
+            return response.json();
+        })
+        .then(data => {
+            const normalizedData = {
+                firstName: data.nome || '',
+                lastName: data.cognome || '',
+                email: data.email || '',
+                phone: data.telefono || '',
+                avatar: data.avatar || `${pageContext.request.contextPath}/frontend/Assets/Images/default-avatar.png`
+            };
+
+            renderSettingsContent(container, normalizedData);
+            localStorage.setItem('userSettings', JSON.stringify(normalizedData));
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showSettingsError(container, error);
+        });
 }
 
 function showSettingsLoading(container) {
     container.innerHTML = `
-        <div class="flex justify-center items-center h-64">
-            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-nekopink"></div>
-            <span class="ml-3 text-nekopeach">Caricamento impostazioni...</span>
+        <div class="text-center p-8">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-nekoorange mb-4"></div>
+            <p class="text-nekoblue">Caricamento impostazioni...</p>
         </div>
     `;
 }
 
-function renderSettingsContent(container) {
+function showSettingsError(container, error) {
+    container.innerHTML = `
+        <div class="text-center p-8 text-nekopeach">
+            <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+            <p>Si è verificato un errore durante il caricamento delle impostazioni.</p>
+            <p class="text-sm text-gray-500 mb-4">${error.message}</p>
+            <button onclick="loadSettingsContent()" class="mt-4 bg-nekopeach text-white px-4 py-2 rounded-lg">
+                Riprova
+            </button>
+        </div>
+    `;
+}
+
+function renderSettingsContent(container, userData = {}) {
+    const defaultData = {
+        firstName: '',
+        lastName: '',
+        email: '',
+
+
+    };
+
+    const data = {...defaultData, ...userData};
+
     container.innerHTML = `
         <div class="tab-content active" id="settings-tab">
-            <div class="profile-card bg-white border-2 border-nekopink overflow-hidden">
+            <div class="profile-card bg-white rounded-lg shadow-md overflow-hidden">
                 <!-- Header -->
-                <div class="bg-gradient-to-r from-nekored to-nekoorange p-6">
-                    <h2 class="text-xl font-bold text-white flex items-center" style="font-size: 30px">
+                <div class="bg-gradient-to-r from-nekopeach to-nekopink p-6 ">
+                    <h2 class="text-3xl font-bold text-white flex items-center">
                         <i class="fas fa-user-cog mr-3"></i> Impostazioni Account
                     </h2>
                 </div>
@@ -49,110 +186,66 @@ function renderSettingsContent(container) {
                 <!-- Form Impostazioni -->
                 <div class="p-6">
                     <form id="settings-form">
+                        <input type="hidden" name="action" value="datiUtente">
+                        <input type="hidden" name="actionUtent" value="update">
+                        
                         <!-- Sezione Informazioni Personali -->
                         <div class="mb-8">
-                            <h3 class="text-lg font-bold text-nekopeach mb-4 flex items-center">
+                            <h3 class="text-lg font-bold text-nekoorange mb-4 flex items-center">
                                 <i class="fas fa-user-circle mr-2"></i> Informazioni Personali
                             </h3>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Avatar Upload -->
-                                <div class="md:col-span-2 flex flex-col items-center">
-                                    <div class="avatar-upload mb-4">
-                                        <div class="avatar-preview" id="settings-avatar-preview" 
-                                             style="background-image: url('https://randomuser.me/api/portraits/women/44.jpg')">
-                                        </div>
-                                        <div class="avatar-edit">
-                                            <input type="file" id="settings-avatar-upload" accept=".png, .jpg, .jpeg">
-                                            <label for="settings-avatar-upload"><i class="fas fa-camera"></i></label>
-                                        </div>
-                                    </div>
-                                    <p class="text-sm text-gray-500">Clicca sull'icona per cambiare l'avatar</p>
-                                </div>
+                       
 
                                 <!-- Nome -->
-                                <div class="relative">
-                                    <input type="text" id="settings-firstname" class="form-input w-full px-4 py-3 rounded-lg" 
-                                           value="Marika" required>
-                                    <label for="settings-firstname" class="form-label">Nome</label>
+                                <div class="form-group">
+                                    <label for="settings-firstname" class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+                                    <input type="text" id="settings-firstname" name="nome" 
+                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nekoblue focus:border-transparent" 
+                                           value="${data.firstName}" required>
                                 </div>
 
                                 <!-- Cognome -->
-                                <div class="relative">
-                                    <input type="text" id="settings-lastname" class="form-input w-full px-4 py-3 rounded-lg" 
-                                           value="Rossi" required>
-                                    <label for="settings-lastname" class="form-label">Cognome</label>
+                                <div class="form-group">
+                                    <label for="settings-lastname" class="block text-sm font-medium text-gray-700 mb-1">Cognome</label>
+                                    <input type="text" id="settings-lastname" name="cognome"
+                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nekoblue focus:border-transparent" 
+                                           value="${data.lastName}" required>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Sezione Contatti -->
                         <div class="mb-8">
-                            <h3 class="text-lg font-bold text-nekopeach mb-4 flex items-center">
+                            <h3 class="text-lg font-bold text-nekoorange mb-4 flex items-center">
                                 <i class="fas fa-envelope mr-2"></i> Informazioni di Contatto
                             </h3>
                             
                             <div class="grid grid-cols-1 gap-6">
                                 <!-- Email -->
-                                <div class="relative">
-                                    <input type="email" id="settings-email" class="form-input w-full px-4 py-3 rounded-lg" 
-                                           value="marika.rossi@example.com" required>
-                                    <label for="settings-email" class="form-label">Email</label>
-                                    <div class="absolute right-4 top-4">
-                                        <span class="verification-badge">Verificata</span>
+                                <div class="form-group">
+                                    <label for="settings-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <div class="relative">
+                                        <input type="email" id="settings-email" name="email"
+                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nekoblue focus:border-transparent pr-16" 
+                                               value="${data.email}" required>
+                                        <span class="absolute right-3 top-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Verificata</span>
                                     </div>
                                 </div>
 
-                                <!-- Telefono -->
-                                <div class="relative">
-                                    <input type="tel" id="settings-phone" class="form-input w-full px-4 py-3 rounded-lg" 
-                                           value="+39 1234567890">
-                                    <label for="settings-phone" class="form-label">Telefono</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sezione Preferenze -->
-                        <div class="mb-8">
-                            <h3 class="text-lg font-bold text-nekopeach mb-4 flex items-center">
-                                <i class="fas fa-sliders-h mr-2"></i> Preferenze
-                            </h3>
-                            
-                            <div class="space-y-4">
-                                <!-- Notifiche Email -->
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">Notifiche Email</h4>
-                                        <p class="text-sm text-gray-500">Ricevi aggiornamenti e offerte speciali</p>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-
-                                <!-- Newsletter -->
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">Iscrizione Newsletter</h4>
-                                        <p class="text-sm text-gray-500">Novità e promozioni settimanali</p>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
+                             
                             </div>
                         </div>
 
                         <!-- Bottoni Azione -->
                         <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8">
                             <button type="button" id="cancel-settings" 
-                                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-lg transition">
+                                    class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                                 Annulla
                             </button>
-                            <button type="submit" 
-                                    class="bg-nekoorange hover:bg-nekored text-white px-6 py-2 rounded-lg transition">
+                            <button type="button" id="save-settings"
+                                    class="px-6 py-2 bg-nekoorange text-white rounded-lg hover:bg-nekoblue-dark transition">
                                 Salva Modifiche
                             </button>
                         </div>
@@ -161,39 +254,69 @@ function renderSettingsContent(container) {
             </div>
         </div>
     `;
+    document.getElementById('save-settings').addEventListener('click', () => {
+        updateSettings()
+    });
 
-    // Aggiungi gestori eventi
+    document.getElementById('cancel-settings').addEventListener('click', () => {
+        renderSettingsContent(container, userData);
+    });
+
     setupSettingsEventHandlers();
-    addSettingsStyles();
+}
+
+function updateSettings(){
+    const params = new URLSearchParams();
+    params.append("action", "datiUtente");
+    params.append("actionUtent", "update");
+    const data={
+        nome: document.getElementById("settings-firstname").value,
+        cognome: document.getElementById("settings-lastname").value,
+        email: document.getElementById("settings-email").value
+    }
+    params.append("json", JSON.stringify(data))
+    fetch(`common/utentdategesture`, {
+        method: 'POST',
+        body: params.toString(),
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        credentials: 'include'
+    }).then(response=>{
+        if(!response.ok){
+            throw new Error('Errore durante il salvataggio')
+        }
+        return response.json()
+    }).then(data=>{
+        if(data.error){
+            throw new Error(data.error)
+        }
+        showNotification('Impostazioni salvate con successo!')
+        loadSettingsContent()
+    })
+
 }
 
 function setupSettingsEventHandlers() {
     // Gestione upload avatar
     const avatarUpload = document.getElementById('settings-avatar-upload');
     if (avatarUpload) {
-        avatarUpload.addEventListener('change', function() {
-            const file = this.files[0];
+        avatarUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('settings-avatar-preview');
-                    preview.style.backgroundImage = `url('${e.target.result}')`;
-                }
+                reader.onload = function(event) {
+                    const avatarPreview = document.querySelector('.avatar-preview');
+                    if (avatarPreview) {
+                        avatarPreview.style.backgroundImage = `url('${event.target.result}')`;
+                    }
+                };
                 reader.readAsDataURL(file);
             }
         });
     }
 
-    // Gestione annullamento
-    const cancelBtn = document.getElementById('cancel-settings');
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', function() {
-            // Qui puoi reindirizzare alla dashboard o ricaricare i dati originali
-            window.location.reload();
-        });
-    }
-
-    // Gestione submit form
+    // Gestione form
     const settingsForm = document.getElementById('settings-form');
     if (settingsForm) {
         settingsForm.addEventListener('submit', function(e) {
@@ -201,24 +324,111 @@ function setupSettingsEventHandlers() {
             saveSettings();
         });
     }
+
+    // Bottone annulla
+    const cancelBtn = document.getElementById('cancel-settings');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            loadSettingsContent();
+        });
+    }
 }
 
 function saveSettings() {
-    // Simula salvataggio (sostituisci con chiamata AJAX reale)
-    console.log('Salvataggio impostazioni...');
+    const form = document.getElementById('settings-form');
+    if (!form) return;
 
-    // Mostra notifica
-    showNotification('Impostazioni salvate con successo!', 'success');
+    const formData = new FormData(form);
+    const userId = getLoggedInUserId();
+
+    // Aggiungi l'ID utente e i campi nel formato corretto per il backend
+    formData.append('idCliente', userId);
+
+    // Crea l'oggetto JSON per l'update
+    const userData = {
+        nome: formData.get('nome'),
+        cognome: formData.get('cognome'),
+        telefono: formData.get('telefono'),
+        email: formData.get('email')
+    };
+
+    // Se c'è un nuovo avatar, aggiungilo
+    const avatarFile = document.getElementById('settings-avatar-upload').files[0];
+    if (avatarFile) {
+        formData.append('avatarFile', avatarFile);
+    } else {
+        formData.append('avatar', formData.get('avatar'));
+    }
+
+    // Aggiungi il JSON come parametro
+    formData.append('json', JSON.stringify(userData));
+
+    showNotification('Salvataggio in corso...', 'info');
+
+    fetch(`${pageContext.request.contextPath}/common/utentdategesture`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+    })
+        .then(response => {
+            if (response.status === 422) {
+                throw new Error('Accesso non autorizzato durante il salvataggio');
+            }
+            if (!response.ok) {
+                throw new Error('Errore durante il salvataggio');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            showNotification('Impostazioni salvate con successo!', 'success');
+
+            // Aggiorna i dati in localStorage
+            const currentSettings = JSON.parse(localStorage.getItem('userSettings') || {});
+            const updatedSettings = {
+                ...currentSettings,
+                firstName: userData.nome,
+                lastName: userData.cognome,
+                phone: userData.telefono
+            };
+
+            if (data.avatar) {
+                updatedSettings.avatar = data.avatar;
+            }
+
+            localStorage.setItem('userSettings', JSON.stringify(updatedSettings));
+        })
+        .catch(error => {
+            console.error('Error saving settings:', error);
+            showNotification(error.message || 'Errore durante il salvataggio', 'error');
+        });
 }
 
-function showNotification(message, type) {
+// Funzioni di utilità
+function getLoggedInUserId() {
+    return parseInt(localStorage.getItem('userId')) || 0;
+}
+
+
+function redirectToLogin() {
+    window.location.href = `${pageContext.request.contextPath}/login.jsp?redirect=${encodeURIComponent(window.location.pathname + window.location.hash)}`;
+}
+
+function showNotification(message, type = 'info') {
+    const colors = {
+        info: 'bg-blue-100 text-blue-800',
+        success: 'bg-green-100 text-green-800',
+        error: 'bg-red-100 text-red-800',
+        warning: 'bg-yellow-100 text-yellow-800'
+    };
+
     const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white ${
-        type === 'success' ? 'bg-green-500' : 'bg-red-500'
-    }`;
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg ${colors[type]} z-50`;
     notification.innerHTML = `
         <div class="flex items-center">
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-times-circle' : 'fa-info-circle'} mr-2"></i>
             <span>${message}</span>
         </div>
     `;
@@ -228,142 +438,59 @@ function showNotification(message, type) {
     setTimeout(() => {
         notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
         setTimeout(() => notification.remove(), 500);
-    }, 3000);
+    }, 5000);
 }
 
+// Stili aggiuntivi
 function addSettingsStyles() {
     if (document.getElementById('settings-styles')) return;
 
     const style = document.createElement('style');
     style.id = 'settings-styles';
     style.textContent = `
-        /* Stili specifici per la pagina impostazioni */
-        .form-input {
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-        
-        .form-input:focus {
-            border-color: #E55458;
-            box-shadow: 0 0 0 3px rgba(229, 84, 88, 0.2);
-        }
-        
-        .form-label {
-            position: absolute;
-            left: 1rem;
-            top: -0.5rem;
-            background-color: white;
-            padding: 0 0.25rem;
-            font-size: 0.75rem;
-            color: #718096;
-            transition: all 0.3s ease;
-        }
-        
-        .verification-badge {
-            background: linear-gradient(90deg, #4CAF50, #8BC34A);
-            color: white;
-            font-size: 0.75rem;
-            padding: 0.125rem 0.5rem;
-            border-radius: 9999px;
-        }
-        
-        .toggle-switch {
+        .avatar-upload {
             position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
+            max-width: 128px;
+            margin: 0 auto;
         }
-        
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
+        .avatar-preview {
+            width: 128px;
+            height: 128px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
-        .toggle-slider {
+        .avatar-edit {
             position: absolute;
+            right: 5px;
+            bottom: 5px;
+        }
+        .avatar-edit input {
+            display: none;
+        }
+        .avatar-edit label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
+            transition: all 0.3s ease;
         }
-        
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
+        .avatar-edit label:hover {
+            transform: scale(1.1);
         }
-        
-        input:checked + .toggle-slider {
-            background: linear-gradient(90deg, #E55458, #F29966);
+        .form-group {
+            margin-bottom: 1.5rem;
         }
-        
-        input:checked + .toggle-slider:before {
-            transform: translateX(26px);
+        #settings-notification {
+            transition: all 0.3s ease;
         }
     `;
     document.head.appendChild(style);
 }
 
-// Versione con AJAX reale
-/*
-function loadSettingsContent() {
-    const mainContent = document.querySelector('.lg\\:col-span-3');
-    if (!mainContent) return;
-
-    showSettingsLoading(mainContent);
-
-    fetch('${pageContext.request.contextPath}/getUserSettings')
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.text();
-        })
-        .then(html => {
-            mainContent.innerHTML = html;
-            setupSettingsEventHandlers();
-            addSettingsStyles();
-        })
-        .catch(error => {
-            mainContent.innerHTML = `
-                <div class="text-center p-8 text-nekopeach">
-                    <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-                    <p>Si è verificato un errore durante il caricamento delle impostazioni.</p>
-                    <button onclick="loadSettingsContent()" class="mt-4 bg-nekopeach text-white px-4 py-2 rounded-lg">
-                        Riprova
-                    </button>
-                </div>
-            `;
-            console.error('Error loading settings:', error);
-        });
-}
-
-function saveSettings() {
-    const formData = new FormData(document.getElementById('settings-form'));
-    
-    fetch('${pageContext.request.contextPath}/saveUserSettings', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Salvataggio fallito');
-        return response.json();
-    })
-    .then(data => {
-        showNotification('Impostazioni salvate con successo!', 'success');
-    })
-    .catch(error => {
-        showNotification('Errore durante il salvataggio', 'error');
-        console.error('Error:', error);
-    });
-}
-*/
+// Inizializza gli stili al caricamento
+addSettingsStyles();

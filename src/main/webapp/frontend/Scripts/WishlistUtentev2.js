@@ -1,5 +1,6 @@
-// frontend/Scripts/WishlistUtentev1.js
+// frontend/Scripts/WishlistUtentev2.js
 
+let currentPageWishlist = 1;
 document.addEventListener('DOMContentLoaded', function() {
     initWishlistTab();
 });
@@ -35,7 +36,7 @@ function showWishlistLoading(container) {
     `;
 }
 
-function renderWishlistContent(container) {
+function renderWishlistContent(container, data) {
     container.innerHTML = `
         <div class="tab-content active" id="wishlist-tab">
             <div class="profile-card bg-white border-2 border-nekopink overflow-hidden">
@@ -87,172 +88,50 @@ function renderWishlistContent(container) {
                     <!-- Pagination -->
                     <div class="mt-8 flex justify-center">
                         <nav class="flex items-center space-x-1">
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="prev">
+                            <button class="pagination-prev-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" 
+                            data-page="prev" onclick="indietroPage()">
                                 <i class="fas fa-chevron-left text-xs"></i>
                             </button>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-nekopeach bg-nekopeach text-white flex items-center justify-center" data-page="1">
-                                1
-                            </button>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="2">
-                                2
-                            </button>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="3">
-                                3
-                            </button>
-                            <span class="px-2 text-gray-500">...</span>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="8">
-                                8
-                            </button>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="next">
+                                
+                            <button class="pagination-succ-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" 
+                            data-page="next" onclick="avantiPage()">
                                 <i class="fas fa-chevron-right text-xs"></i>
                             </button>
                         </nav>
                     </div>
+                    
                 </div>
             </div>
         </div>
     `;
 
-    // Carica gli elementi della wishlist
-    loadWishlistItems();
+
+
     setupWishlistEventHandlers();
     addWishlistStyles();
 }
 
-function loadWishlistItems() {
-    const wishlistGrid = document.getElementById('wishlist-items-grid');
-    if (!wishlistGrid) return;
+function avantiPage(){
 
-    // Simula dati della wishlist (sostituisci con chiamata AJAX reale)
-    const wishlistItems = [
-        {
-            id: 1,
-            title: "Jujutsu Kaisen Vol.15",
-            author: "Gege Akutami",
-            price: 14.99,
-            originalPrice: 19.99,
-            image: "https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=500",
-            category: "Manga",
-            code: "#JKS015",
-            stock: "in",
-            rating: 4.8
-        },
-        {
-            id: 2,
-            title: "Chainsaw Man - Denji Figure",
-            author: "Tatsuki Fujimoto",
-            price: 59.99,
-            image: "https://images.unsplash.com/photo-1622372738946-e62b40262c90?q=80&w=500",
-            category: "Action Figure",
-            code: "#CSM001",
-            stock: "low",
-            rating: 4.9
-        },
-        {
-            id: 3,
-            title: "Attack on Titan - Levi Figurine",
-            author: "Hajime Isayama",
-            price: 79.99,
-            originalPrice: 89.99,
-            image: "https://images.unsplash.com/photo-1598885154377-4d1dacdd0d5c?q=80&w=500",
-            category: "Preordine",
-            code: "#AOT204",
-            stock: "preorder",
-            availableDate: "15/12/23",
-            rating: 5.0
+        if(currentPageWishlist > 1){
+            currentPageWishlist--;
+            loadWishlistContent(currentPageWishlist);
         }
-    ];
 
-    // Genera gli elementi della wishlist
-    wishlistGrid.innerHTML = wishlistItems.map(item => `
-        <div class="wishlist-item bg-white p-4 rounded-xl border border-gray-200" data-id="${item.id}" data-category="${item.category.toLowerCase()}" data-stock="${item.stock}">
-            <div class="relative">
-                <div class="wishlist-item-image overflow-hidden rounded-lg mb-3">
-                    <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover hover:scale-105 transition duration-300">
-                </div>
-
-                <button class="wishlist-remove-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-white text-nekopeach flex items-center justify-center shadow-lg hover:text-nekored transition">
-                    <i class="fas fa-heart"></i>
-                </button>
-
-                <div class="quick-shop-btn absolute bottom-16 right-2">
-                    <button class="add-to-cart-btn w-8 h-8 rounded-full bg-nekopeach text-white flex items-center justify-center shadow-lg hover:bg-nekored transition">
-                        <i class="fas fa-shopping-cart text-xs"></i>
-                    </button>
-                </div>
-
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs text-white ${getCategoryColorClass(item.category)} px-2 py-1 rounded-full">${item.category}</span>
-                    <span class="text-xs text-gray-500">${item.code}</span>
-                </div>
-
-                <div class="mb-1">
-                    ${renderStockInfo(item)}
-                </div>
-            </div>
-
-            <h3 class="font-bold text-gray-800 text-sm mb-1 hover:text-nekopeach transition">${item.title}</h3>
-            <p class="text-xs text-gray-500 mb-2">${item.author}</p>
-
-            <div class="flex justify-between items-center">
-                <div>
-                    <span class="font-bold ${item.stock === 'out' ? 'text-gray-400' : 'text-nekopeach'}">€${item.price.toFixed(2)}</span>
-                    ${item.originalPrice ? `<span class="text-xs text-gray-500 ml-1 line-through">€${item.originalPrice.toFixed(2)}</span>` : ''}
-                </div>
-                <div class="flex items-center">
-                    <i class="fas fa-star text-yellow-400 text-xs"></i>
-                    <span class="text-xs text-gray-600 ml-1">${item.rating}</span>
-                </div>
-            </div>
-        </div>
-    `).join('');
 }
 
-function renderStockInfo(item) {
-    if (item.stock === 'preorder') {
-        return `
-            <div class="flex justify-between items-center">
-                <span class="text-xs font-medium text-gray-500">Disponibile dal:</span>
-                <span class="text-xs font-bold text-blue-500">${item.availableDate}</span>
-            </div>
-            <div class="stock-indicator bg-gray-200 mt-1"></div>
-        `;
-    } else {
-        const stockText = {
-            'in': { text: 'In stock', class: 'text-green-600' },
-            'low': { text: 'Ultimi 3', class: 'text-yellow-600' },
-            'out': { text: 'Esaurito', class: 'text-red-600' }
-        };
-
-        return `
-            <div class="flex justify-between items-center">
-                <span class="text-xs font-medium text-gray-500">Disponibilità:</span>
-                <span class="text-xs font-bold ${stockText[item.stock].class}">${stockText[item.stock].text}</span>
-            </div>
-            <div class="stock-indicator ${getStockIndicatorClass(item.stock)} mt-1"></div>
-        `;
+function indietroPage(){
+    if(elem){
+        currentPageWishlist++;
+        loadWishlistContent(currentPageWishlist);
+        if(elem === false){
+            currentPageWishlist--;
+            loadWishlistContent(currentPageWishlist);
+        }
     }
 }
 
-function getCategoryColorClass(category) {
-    const colors = {
-        'Manga': 'bg-nekopeach',
-        'Action Figure': 'bg-nekoorange',
-        'Preordine': 'bg-nekopink',
-        'Merchandise': 'bg-purple-500',
-        'Poster': 'bg-blue-500'
-    };
-    return colors[category] || 'bg-gray-500';
-}
 
-function getStockIndicatorClass(stock) {
-    const classes = {
-        'in': 'stock-in',
-        'low': 'stock-low',
-        'out': 'stock-out'
-    };
-    return classes[stock] || '';
-}
 
 function setupWishlistEventHandlers() {
     // Filtri
@@ -464,23 +343,54 @@ function addWishlistStyles() {
 }
 
 // Versione con AJAX reale
-/*
-function loadWishlistContent() {
+let elem = true;
+
+function loadWishlistContent(page = 1) {
     const mainContent = document.querySelector('.lg\\:col-span-3');
     if (!mainContent) return;
+    const params = new URLSearchParams();
+    params.append("action", "wishlist");
+    params.append("actionWishList", "list");
+    params.append("page", page.toString()),
 
-    showWishlistLoading(mainContent);
+        showWishlistLoading(mainContent);
 
-    fetch('/getUserWishlist')
+    fetch('common/utentdategesture',{
+        method:'POST',
+        headers:{
+            'Content-type':'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        body:params.toString(),
+    })
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         })
         .then(data => {
-            renderWishlistContent(mainContent, data);
+            if(data === undefined || data.length === 0) {
+                elem = false;
+                mainContent.innerHTML = `
+                    <div class="empty-wishlist">
+                        <i class="fas fa-heart-broken text-5xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-600 mb-2">La tua wishlist è vuota</h3>
+                        <button class="bg-nekopeach hover:bg-nekored text>white font-bold py-2 px-6 rounded-full transition" id="catalog-ref">
+                            Esplora il catalogo
+                        </button>
+                    </div>
+                `;
+                document.getElementById("catalog-ref").addEventListener("click",()=>{
+                    window.location.href="catalog.jsp";
+                });
+            }else{
+                renderWishlistContent(mainContent,data);
+                elem = true;
+            }
+
+
             setupWishlistEventHandlers();
             addWishlistStyles();
         })
+
         .catch(error => {
             mainContent.innerHTML = `
                 <div class="text-center p-8 text-nekopeach">
@@ -494,7 +404,7 @@ function loadWishlistContent() {
             console.error('Error loading wishlist:', error);
         });
 }
-
+/*
 function removeWishlistItem(item) {
     const itemId = item.getAttribute('data-id');
 

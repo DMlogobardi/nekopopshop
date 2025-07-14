@@ -139,7 +139,7 @@ function loadOrdersContent(page = 1) {
     params.append("action", "ordini");
     params.append("actionOrdini", "list");
     params.append("page", page.toString()),
-    showLoading(mainContent);
+        showLoading(mainContent);
 
     fetch('common/utentdategesture',{
         method: "POST",
