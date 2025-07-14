@@ -147,15 +147,12 @@ public class UtentGesture extends HttpServlet {
             if(dto.getDataNascita() != null) {
                 user.setDataNascita(dto.getDataNascita());
             }
-            if(dto.getEmail() != null) {
-                user.setEmail(dto.getEmail());
-            }
             if(dto.getcF() != null && dto.getcF().length() == 16) {
                 user.setcF(dto.getcF());
             }
 
             try{
-                clienteDAO.uppdate(user);
+                clienteDAO.uppdate(user, dto.getEmail());
             } catch (SQLException e) {
                 response.setStatus(500);
                 response.setContentType("text/json");

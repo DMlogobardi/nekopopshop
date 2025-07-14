@@ -196,22 +196,35 @@ public class ClienteDAO implements GenralDAO<ClienteBean>{
         return clienti;
     }
 
-    public boolean uppdate(ClienteBean cliente) throws SQLException {
+    public boolean uppdate(ClienteBean cliente, String newEmail) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
         int result = 0;
+        String updateSQL = "";
 
-        String updateSQL = "update " + TABLE_NAME + " set nome = ?, cognome = ?, dataNascita = ?, email = ?, cF = ? where idCliente = ?";
+        if(newEmail.equals(cliente.getEmail())){
+            updateSQL = "update " + TABLE_NAME + " set nome = ?, cognome = ?, dataNascita = ?, cF = ? where idCliente = ?";
+        } else {
+            updateSQL = "update " + TABLE_NAME + " set nome = ?, cognome = ?, dataNascita = ?, email = ?, cF = ? where idCliente = ?";
+        }
 
         try {
             con = ds.getConnection();
             ps = con.prepareStatement(updateSQL);
-            ps.setString(1, cliente.getNome());
-            ps.setString(2, cliente.getCognome());
-            ps.setDate(3, cliente.getDataNascitaFormatted());
-            ps.setString(4, cliente.getEmail());
-            ps.setString(5, cliente.getcF());
-            ps.setInt(6, cliente.getIdCliente());
+            if(newEmail.equals(cliente.getEmail())){
+                ps.setString(1, cliente.getNome());
+                ps.setString(2, cliente.getCognome());
+                ps.setString(3, cliente.getDataNascita());
+                ps.setString(4, cliente.getcF());
+                ps.setInt(5, cliente.getIdCliente());
+            } else {
+                ps.setString(1, cliente.getNome());
+                ps.setString(2, cliente.getCognome());
+                ps.setDate(3, cliente.getDataNascitaFormatted());
+                ps.setString(4, newEmail);
+                ps.setString(5, cliente.getcF());
+                ps.setInt(6, cliente.getIdCliente());
+            }
 
             result = ps.executeUpdate();
         } finally {
