@@ -12,7 +12,7 @@
 
     if (s != null) {
         Object token = s.getAttribute("logToken");
-        if (token == null && !"A".equals(token)) {
+        if (!"A".equals(token)) {
             isLoggedIn = true;
         }
     }

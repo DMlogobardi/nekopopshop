@@ -191,27 +191,27 @@ async function ordiniOggi() {
     params.append("startDate", formattedDate);
     params.append("endDate", formattedDate);
 
-    fetch("admin/admindatagesture", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: params.toString()
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.error !== undefined) {
-                mostraErrore("internal error");
-                return;
-            }
-
-            const orderNow = document.getElementById("ordini");
-            orderNow.textContent = data.length;
+    try {
+        const response = await fetch("admin/admindatagesture", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: params.toString()
         })
-        .catch(err => {
-            console.error("Errore nella richiesta:", err);
-            mostraErrore("Errore di connessione");
-        });
+        const data = await response.json();
+
+        if (data.error !== undefined) {
+            mostraErrore("internal error");
+            return;
+        }
+
+        const orderNow = document.getElementById("ordini");
+        orderNow.textContent = data.length;
+    } catch (err) {
+        console.error("Errore nella richiesta:", err);
+        mostraErrore("Errore di connessione");
+    }
 }
 
 async function fetchTotProd(){
@@ -254,7 +254,6 @@ async function numProd() {
         })
         .catch(error => {
             console.error("Errore nel recupero dei totali:", error);
-            mostraErrore("Errore nel calcolo dei totali");
         });
 }
 

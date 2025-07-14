@@ -1,4 +1,4 @@
-// frontend/Scripts/WishlistUtente.js
+// frontend/Scripts/WishlistUtentev1.js
 
 document.addEventListener('DOMContentLoaded', function() {
     initWishlistTab();
@@ -40,11 +40,16 @@ function renderWishlistContent(container) {
         <div class="tab-content active" id="wishlist-tab">
             <div class="profile-card bg-white border-2 border-nekopink overflow-hidden">
                 <!-- Wishlist Header -->
-                <div class="wishlist-header p-6">
+                 <div class="bg-gradient-to-r from-nekopeach to-nekopink p-6 ">
+                    <h2 class="text-3xl font-bold text-white flex items-center">
+                        <i class="fas fa-heart mr-3"></i> Lista Preferiti
+                    </h2>
+                </div>
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
                         <div>
-                            <h2 class="text-xl font-bold text-white" style="font-size: 30px">Lista Preferiti</h2>
-                            <p class="text-pink-200">47 articoli salvati</p>
+                 
+                            <div class="bg-1/2 h-auto rounded-md flex items-center justify-center gap-4white">
+                            
                         </div>
                         <div class="mt-4 md:mt-0 flex space-x-3">
                             <button class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition flex items-center">
@@ -60,25 +65,7 @@ function renderWishlistContent(container) {
                     </div>
                 </div>
 
-                <!-- Wishlist Filter -->
-                <div class="wishlist-filter border-b border-gray-200 px-6 py-3 flex flex-wrap items-center gap-2">
-                    <button class="filter-btn active flex items-center text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition" data-filter="all">
-                        <span>Tutto</span>
-                        <span class="ml-2 bg-gray-300 rounded-full px-2 py-0.5 text-xs">47</span>
-                    </button>
-                    <button class="filter-btn flex items-center text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition" data-filter="available">
-                        <span>Disponibili</span>
-                        <span class="ml-2 bg-gray-300 rounded-full px-2 py-0.5 text-xs">18</span>
-                    </button>
-                    <button class="filter-btn flex items-center text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition" data-filter="preorder">
-                        <span>Preordini</span>
-                        <span class="ml-2 bg-gray-300 rounded-full px-2 py-0.5 text-xs">6</span>
-                    </button>
-                    <button class="filter-btn flex items-center text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition" data-filter="outofstock">
-                        <span>Esauriti</span>
-                        <span class="ml-2 bg-gray-300 rounded-full px-2 py-0.5 text-xs">23</span>
-                    </button>
-                </div>
+    
 
                 <!-- Wishlist Items -->
                 <div class="p-6">
@@ -484,7 +471,7 @@ function loadWishlistContent() {
 
     showWishlistLoading(mainContent);
 
-    fetch('${pageContext.request.contextPath}/getUserWishlist')
+    fetch('/getUserWishlist')
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
@@ -511,7 +498,7 @@ function loadWishlistContent() {
 function removeWishlistItem(item) {
     const itemId = item.getAttribute('data-id');
 
-    fetch('${pageContext.request.contextPath}/removeFromWishlist', {
+    fetch('/removeFromWishlist', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

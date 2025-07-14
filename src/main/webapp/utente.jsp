@@ -1,5 +1,38 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+         import="jakarta.servlet.http.HttpSession, jakarta.servlet.http.Cookie"%>
+<%@ page import="java.util.logging.Logger" %>
 <!DOCTYPE html>
 <html lang="it">
+<%
+    // Crea il logger
+    Logger logger = Logger.getLogger("MyLogger");
+
+    HttpSession s = request.getSession(false);
+    boolean isLoggedIn = false;
+
+    if (s != null) {
+        Object token = s.getAttribute("logToken");
+        if (!"C".equals(token)) {
+            isLoggedIn = true;
+        }
+    }
+
+    if (isLoggedIn) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("access".equals(cookie.getName())) {
+                    cookie.setValue("");
+                    cookie.setMaxAge(1);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                }
+            }
+        }
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
+    }
+%>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +41,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/style/utente.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src ="frontend/Scripts/OrdiniUtente.js"></script>
-    <script src ="frontend/Scripts/WishlistUtente.js"></script>
+    <script src ="frontend/Scripts/OrdiniUtentev1.js"></script>
+    <script src ="frontend/Scripts/WishlistUtentev1.js"></script>
     <script src ="frontend/Scripts/ImpostazioniUtente.js"></script>
+    <script src ="frontend/Scripts/Pagamenti.js"></script>
+    <script src ="frontend/Scripts/Indirizzi.js"></script>
+    <script src ="frontend/Scripts/Logout.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -74,49 +110,19 @@
                 <div class="p-6 text-center">
                     <div class="avatar-upload">
                         <div class="avatar-preview">
-                            <div id="imagePreview" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400');">
+                            <div id="imagePreview">
+                                <img src="frontend/images/hachiprofilo.jpeg" alt="Avatar Preview" class="w-full h-full object-cover rounded-full">
+
                             </div>
                         </div>
-                        <div class="avatar-edit">
-                            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
-                            <label for="imageUpload"><i class="fas fa-camera"></i></label>
-                        </div>
+
                     </div>
 
                     <h3 class="text-2xl font-bold mt-4 text-gray-800">NekoFan123</h3>
-                    <p class="text-gray-600">Membro dal: 15/03/2022</p>
 
-                    <div class="mt-4 flex justify-center space-x-2">
-                        <span class="badge bg-nekopink text-nekopeach">Premium</span>
-                        <span class="badge bg-nekopink text-nekopeach">Verified</span>
-                    </div>
                 </div>
 
-                <!-- Stats -->
-                <div class="px-6 pb-6">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-gray-600">Livello</span>
-                        <span class="font-bold text-nekopeach">12</span>
-                    </div>
-                    <div class="progress-bar mb-4">
-                        <div class="progress-fill" style="width: 65%"></div>
-                    </div>
 
-                    <div class="grid grid-cols-3 gap-2 text-center">
-                        <div class="stats-card bg-nekopink/20 p-3 rounded-lg">
-                            <div class="text-nekopeach font-bold text-xl">24</div>
-                            <div class="text-xs text-gray-600">Ordini</div>
-                        </div>
-                        <div class="stats-card bg-nekored/20 p-3 rounded-lg">
-                            <div class="text-nekopeach font-bold text-xl">128</div>
-                            <div class="text-xs text-gray-600">Punti</div>
-                        </div>
-                        <div class="stats-card bg-nekoorange/20 p-3 rounded-lg">
-                            <div class="text-nekored font-bold text-xl">8</div>
-                            <div class="text-xs text-gray-600">Liste</div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Navigation -->
                 <div class="border-t border-gray-200">
@@ -134,57 +140,26 @@
                         <i class="fas fa-cog mr-3"></i> Impostazioni
                     </button>
 
-                    <button onclick="window.location.href='sicurezza.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
-                        <i class="fas fa-lock mr-3"></i> Sicurezza
-                    </button>
-
-                    <button onclick="window.location.href='pagamenti.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+                    <button id="payments-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="payments">
                         <i class="fas fa-credit-card mr-3"></i> Pagamenti
                     </button>
 
-                    <button onclick="window.location.href='indirizzi.jsp'" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="settings">
+                    <button id="addresses-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="addresses">
                         <i class="fas fa-map-marker-alt mr-3"></i> Indirizzi
                     </button>
 
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="logout">
+
+                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition"
+                            data-tab="logout"
+                            type="button"> <!-- Aggiunto type="button" -->
                         <i class="fas fa-sign-out-alt mr-3"></i> Esci
                     </button>
+
+
                 </div>
             </div>
 
-            <!-- Rewards Card -->
-            <div class="profile-card bg-white border-2 border-nekoorange mt-6">
-                <div class="bg-gradient-to-r from-nekoorange to-nekopink p-4">
-                    <h3 class="text-lg font-bold text-white flex items-center" style="font-size: 30px">
-                        <i class= "fas fa-trophy mr-2" style="font-size: 30px" ></i> I tuoi premi
-                    </h3>
-                </div>
-                <div class="p-4">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 rounded-full bg-nekopink flex items-center justify-center mr-3">
-                            <i class= "fas fa-medal text-nekopeach text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-gray-800">Collezionista</h4>
-                            <p class="text-xs text-gray-600">Hai completato 10 ordini</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-full bg-nekopink flex items-center justify-center mr-3">
-                            <i class="fas fa-star text-nekopeach text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-gray-800">Fan accanito</h4>
-                            <p class="text-xs text-gray-600">50 articoli nella wishlist</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <button onclick="window.location.href='premi.jsp'" class="bg-nekoorange hover:bg-nekopeach text-white px-4 py-2 rounded-lg text-sm font-bold transition">
-                            Scopri altri premi
-                        </button>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
         <!-- Main Content -->
@@ -279,7 +254,7 @@
                                             <h4 class= "font-bold text-sm text-gray-600"></h4>
                                         </div>
 
-                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -343,39 +318,39 @@
             <!-- Footer section -->
             <div>
 
-                </div>
+            </div>
 
-                <div class="mt-4">
-                    <h5 class="font-bold mb-3">Seguici</h5>
-                    <div class="flex space-x-4">
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
-                            <i class="fab fa-discord"></i>
-                        </a>
-                    </div>
+            <div class="mt-4">
+                <h5 class="font-bold mb-3">Seguici</h5>
+                <div class="flex space-x-4">
+                    <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="bg-nekopeach text-nekopink w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-100 transition">
+                        <i class="fab fa-discord"></i>
+                    </a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="border-t border-pink-300/30 mt-8 pt-6 text-center text-pink-100">
-            <p>&copy; 2023 NekoPopShop. Tutti i diritti riservati.</p>
-            <div class="flex justify-center mt-4">
-                <div class="flex items-center gap-4">
-                    <i class="fab fa-cc-visa text-2xl"></i>
-                    <i class="fab fa-cc-mastercard text-2xl"></i>
-                    <i class="fab fa-cc-paypal text-2xl"></i>
-                    <i class="fab fa-cc-apple-pay text-2xl"></i>
-                </div>
+    <div class="border-t border-pink-300/30 mt-8 pt-6 text-center text-pink-100">
+        <p>&copy; 2023 NekoPopShop. Tutti i diritti riservati.</p>
+        <div class="flex justify-center mt-4">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-cc-visa text-2xl"></i>
+                <i class="fab fa-cc-mastercard text-2xl"></i>
+                <i class="fab fa-cc-paypal text-2xl"></i>
+                <i class="fab fa-cc-apple-pay text-2xl"></i>
             </div>
         </div>
+    </div>
     </div>
 </footer>
 

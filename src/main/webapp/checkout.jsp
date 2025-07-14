@@ -1,4 +1,52 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+         import="jakarta.servlet.http.HttpSession, jakarta.servlet.http.Cookie"%>
+<%@ page import="java.util.logging.Logger" %>
+<%
+    // Crea il logger
+    Logger logger = Logger.getLogger("MyLogger");
+
+    HttpSession s = request.getSession(false);
+    boolean isLoggedIn = false;
+    String access = "";
+
+    if (s != null) {
+        Object token = s.getAttribute("logToken");
+        if (token == null) {
+            isLoggedIn = true;
+        } else {
+            access = token.toString();
+        }
+    }
+
+    if (isLoggedIn) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("access".equals(cookie.getName())) {
+                    cookie.setValue("");
+                    cookie.setMaxAge(1);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    return;
+                }
+            }
+        }
+    } else {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("access".equals(cookie.getName())) {
+                    if(!cookie.getValue().equals(access))
+                        if(access.equals("A"))
+                            cookie.setValue("admin");
+                        else
+                            cookie.setValue("user");
+                }
+            }
+        }
+    }
+%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
