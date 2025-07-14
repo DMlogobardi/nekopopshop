@@ -20,7 +20,6 @@ function loadSettingsContent() {
 
     showSettingsLoading(mainContent);
 
-    // Simula chiamata AJAX (sostituisci con chiamata reale)
     setTimeout(() => {
         renderSettingsContent(mainContent);
     }, 800);

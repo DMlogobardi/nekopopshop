@@ -704,7 +704,7 @@ window.initProduct = function () {
             btn.disabled = true;
             mostraErrore("sei arrivato all'inizio della lista");
         }
-        console.log(currentPageProd);
+        console.log(curentPageProd);
     })
 
     document.getElementById("sucProd").addEventListener("click", function () {
