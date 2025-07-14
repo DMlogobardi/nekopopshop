@@ -121,6 +121,7 @@ public class UtentGesture extends HttpServlet {
             int id = Integer.parseInt(session.getAttribute("logId").toString());
             ClienteDAO clienteDAO = new ClienteDAO(ds);
             ClienteBean user = null;
+            System.out.println(id);
 
             try {
                 user = clienteDAO.doRetrieveByKey(id);
@@ -147,15 +148,14 @@ public class UtentGesture extends HttpServlet {
             if(dto.getDataNascita() != null) {
                 user.setDataNascita(dto.getDataNascita());
             }
-            if(dto.getEmail() != null) {
-                user.setEmail(dto.getEmail());
-            }
+
             if(dto.getcF() != null && dto.getcF().length() == 16) {
                 user.setcF(dto.getcF());
             }
 
             try{
-                clienteDAO.uppdate(user);
+                boolean result = clienteDAO.uppdate(user, dto.getEmail());
+                System.out.println(result);
             } catch (SQLException e) {
                 response.setStatus(500);
                 response.setContentType("text/json");

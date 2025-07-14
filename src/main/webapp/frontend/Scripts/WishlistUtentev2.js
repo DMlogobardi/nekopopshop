@@ -1,5 +1,6 @@
-// frontend/Scripts/WishlistUtentev1.js
+// frontend/Scripts/WishlistUtentev2.js
 
+let currentPageWishlist = 1;
 document.addEventListener('DOMContentLoaded', function() {
     initWishlistTab();
 });
@@ -87,33 +88,41 @@ function renderWishlistContent(container) {
                     <!-- Pagination -->
                     <div class="mt-8 flex justify-center">
                         <nav class="flex items-center space-x-1">
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="prev">
+                            <button class="pagination-prev-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="prev">
                                 <i class="fas fa-chevron-left text-xs"></i>
                             </button>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-nekopeach bg-nekopeach text-white flex items-center justify-center" data-page="1">
-                                1
-                            </button>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="2">
-                                2
-                            </button>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="3">
-                                3
-                            </button>
-                            <span class="px-2 text-gray-500">...</span>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="8">
-                                8
-                            </button>
-                            <button class="pagination-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="next">
+                                
+                            <button class="pagination-succ-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" data-page="next">
                                 <i class="fas fa-chevron-right text-xs"></i>
                             </button>
                         </nav>
                     </div>
+                    
                 </div>
             </div>
         </div>
     `;
 
-    // Carica gli elementi della wishlist
+    document.getElementById("pagination-prev-btn").addEventListener("click", () => {
+        if(currentPageWishlist > 1){
+            currentPageWishlist--;
+            loadWishlistContent(currentPageWishlist);
+        }
+
+    });
+
+    document.getElementById("pagination-succ-btn").addEventListener("click", () => {
+        if(elem){
+            currentPageWishlist++;
+            loadWishlistContent(currentPageWishlist);
+            if(elem === false){
+                currentPageWishlist--;
+                loadWishlistContent(currentPageWishlist);
+            }
+        }
+
+    });
+
     loadWishlistItems();
     setupWishlistEventHandlers();
     addWishlistStyles();
@@ -464,23 +473,54 @@ function addWishlistStyles() {
 }
 
 // Versione con AJAX reale
-/*
-function loadWishlistContent() {
+let elem = true;
+
+function loadWishlistContent(page = 1) {
     const mainContent = document.querySelector('.lg\\:col-span-3');
     if (!mainContent) return;
+    const params = new URLSearchParams();
+    params.append("action", "wishlist");
+    params.append("actionWishList", "list");
+    params.append("page", page.toString()),
 
     showWishlistLoading(mainContent);
 
-    fetch('/getUserWishlist')
+    fetch('common/utentdategesture',{
+        method:'POST',
+        headers:{
+            'Content-type':'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        body:params.toString(),
+    })
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         })
         .then(data => {
-            renderWishlistContent(mainContent, data);
+            if(data.length === 0) {
+                elem = false;
+                mainContent.innerHTML = `
+                    <div class="empty-wishlist">
+                        <i class="fas fa-heart-broken text-5xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-600 mb-2">La tua wishlist è vuota</h3>
+                        <button class="bg-nekopeach hover:bg-nekored text>white font-bold py-2 px-6 rounded-full transition" id="catalog-ref">
+                            Esplora il catalogo
+                        </button>
+                    </div>
+                `;
+                document.getElementById("catalog-ref").addEventListener("click",()=>{
+                    window.location.href="catalog.jsp";
+                });
+            }else{
+                renderWishlistContent(mainContent,data);
+                elem = true;
+            }
+
+
             setupWishlistEventHandlers();
             addWishlistStyles();
         })
+
         .catch(error => {
             mainContent.innerHTML = `
                 <div class="text-center p-8 text-nekopeach">
@@ -494,7 +534,7 @@ function loadWishlistContent() {
             console.error('Error loading wishlist:', error);
         });
 }
-
+/*
 function removeWishlistItem(item) {
     const itemId = item.getAttribute('data-id');
 

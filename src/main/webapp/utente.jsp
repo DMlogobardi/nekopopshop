@@ -8,10 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
    <script src ="frontend/Scripts/OrdiniUtentev1.js"></script>
-   <script src ="frontend/Scripts/WishlistUtentev1.js"></script>
-    <script src ="frontend/Scripts/ImpostazioniUtente.js"></script>
-    <script src ="frontend/Scripts/Pagamenti.js"></script>
-    <script src ="frontend/Scripts/Indirizzi.js"></script>
+   <script src ="frontend/Scripts/WishlistUtentev2.js"></script>
+    <script src ="frontend/Scripts/ImpostazioniUtente1.js"></script>
     <script src ="frontend/Scripts/Logout.js"></script>
 
     <script>
@@ -398,13 +396,6 @@
                         <i class="fas fa-cog mr-3"></i> Impostazioni
                     </button>
 
-                    <button id="payments-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="payments">
-                        <i class="fas fa-credit-card mr-3"></i> Pagamenti
-                    </button>
-
-                    <button id="addresses-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="addresses">
-                        <i class="fas fa-map-marker-alt mr-3"></i> Indirizzi
-                    </button>
 
 
                     <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition"

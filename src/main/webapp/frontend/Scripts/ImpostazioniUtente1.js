@@ -12,7 +12,7 @@ const pageContext = {
 
 document.addEventListener('DOMContentLoaded', function() {
     initSettingsTab();
-    checkSessionAndLoadSettings();
+    loadInitialSettings();
 });
 
 function initSettingsTab() {
@@ -25,24 +25,19 @@ function initSettingsTab() {
     });
 }
 
-function checkSessionAndLoadSettings() {
-    // Verifica se esiste un token di sessione valido
-    if (!localStorage.getItem('authToken') && !document.cookie.includes('sessionToken')) {
-        showLoginPrompt();
-        return;
-    }
-    loadInitialSettings();
-}
 
 function loadInitialSettings() {
-    const formData = new FormData();
+    const formData = new URLSearchParams();
     formData.append('action', 'datiUtente'); // Per UtentDataGesture
     formData.append('actionUtent', 'list');  // Per UtentGesture
 
     fetch(`common/utentdategesture`, {
         method: 'POST',
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
         body: formData,
-        credentials: 'include' // Importante per i cookie di sessione
+
     })
         .then(response => {
             if (response.status === 422) {
@@ -70,11 +65,9 @@ function loadInitialSettings() {
 
             // Normalizza i dati per il frontend
             const normalizedData = {
-                firstName: userData.nome || '',
-                lastName: userData.cognome || '',
-                email: userData.email || '',
-                phone: userData.telefono || '',
-                avatar: userData.avatar || `${pageContext.request.contextPath}/frontend/Assets/Images/default-avatar.png`
+                firstName: data.nome || '',
+                lastName: data.cognome || '',
+                email: data.email || '',
             };
 
             localStorage.setItem('userSettings', JSON.stringify(normalizedData));
@@ -236,7 +229,7 @@ function showSettingsError(container, error) {
                                     <div class="relative">
                                         <input type="email" id="settings-email" name="email"
                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nekoblue focus:border-transparent pr-16" 
-                                               value="${data.email}" required readonly>
+                                               value="${data.email}" required>
                                         <span class="absolute right-3 top-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Verificata</span>
                                     </div>
                                 </div>
@@ -264,6 +257,11 @@ function showSettingsError(container, error) {
     document.getElementById('save-settings').addEventListener('click', () => {
         updateSettings()
     });
+
+     document.getElementById('cancel-settings').addEventListener('click', () => {
+         renderSettingsContent(container, userData);
+     });
+
     setupSettingsEventHandlers();
 }
 
