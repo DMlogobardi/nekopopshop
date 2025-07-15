@@ -1,10 +1,10 @@
-function loadAddress() {
+async function loadAddress() {
     let addressContainer = document.getElementById("shipping-address-list");
     const params = new URLSearchParams();
     params.append("action", "indirizzi");
     params.append("actionIndirizzo","list");
 
-    fetch("common/utentdategesture", {
+    await fetch("common/utentdategesture", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -21,25 +21,30 @@ function loadAddress() {
         })
         .then(response => {
             console.log(response);
-            document.getElementById("shipping-address-list").innerHTML="";
-            response.forEach(element => {
-                if(element.idIndirizzo >0){
-                    let oldAddress = document.getElementById("shipping-address-list").innerHTML;
-                    let address = `
-                            <div class="address-option p-4 border rounded-lg cursor-pointer hover:border-nekopeach" id="indirizzo-${element.idIndirizzo}">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <p class="text-sm text-gray-600">${element.via}</p>
-                                        <p class="text-sm text-gray-600">${element.nCivico}</p>
-                                        <p class="text-sm text-gray-600">${element.cap}</p>
-                                    </div>
-                                    <i class="fas fa-check text-nekopeach mt-1 invisible"></i>
+
+                document.getElementById("shipping-address-list").innerHTML = "";
+
+                response.forEach(element => {
+                    if (element.idIndirizzo > 0) {
+                        let oldAddress = document.getElementById("shipping-address-list").innerHTML;
+                        let address = `
+                        <div class="address-option p-4 border rounded-lg cursor-pointer hover:border-nekopeach" id="indirizzo-${element.idIndirizzo}">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">${element.via}</p>
+                                    <p class="text-sm text-gray-600">${element.nCivico}</p>
+                                    <p class="text-sm text-gray-600">${element.cap}</p>
                                 </div>
-                            </div><br>`
-                    document.getElementById("shipping-address-list").innerHTML = oldAddress + address;
+                                <i class="fas fa-check text-nekopeach mt-1 invisible"></i>
+                            </div>
+                        </div> `
+                        document.getElementById("shipping-address-list").innerHTML = oldAddress + address;
+                    }
+                })
+                if(document.getElementById("shipping-address-list").firstElementChild !== null){
+                    document.getElementById("shipping-address-list").firstElementChild.firstElementChild.children[1].classList.remove('invisible');
+
                 }
-            })
-            document.getElementById("shipping-address-list").firstElementChild.firstElementChild.children[1].classList.remove('invisible');
 
 
         })
@@ -50,57 +55,91 @@ function loadAddress() {
 }
 
 function addIndirizzo() {
-    let via = document.getElementById("via").value;
-    let civico = document.getElementById("civico").value;
-    let cap = document.getElementById("cap").value;
+    let via = document.getElementById("via").value.trim();
+    let civico = document.getElementById("civico").value.trim();
+    let cap = document.getElementById("cap").value.trim();
+    let errore ="";
     let json= {
       via : via,
       nCivico : civico,
       cap : cap
     };
+    const viaRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.'-]{2,}$/;  // accetta lettere accentate, numeri, spazi, punti e apostrofi
+    const civicoRegex = /^[0-9]{1,4}[A-Za-z]?$/;         // es. "10", "12B", "5"
+    const capRegex = /^\d{5}$/;                          // es. "00100", "12345"
+    // Validazione "via"
+    if (!viaRegex.test(via)) {
+        if (errore === "") {
+            document.getElementById("via").focus();
+        }
+        errore += "Via non valida ";
+    }
 
-    const params = new URLSearchParams();
-    params.append("action", "indirizzi");
-    params.append("actionIndirizzo","add");
-    params.append("json",JSON.stringify(json));
+    // Validazione "civico"
+    if (!civicoRegex.test(civico)) {
+        if (errore === "") {
+            document.getElementById("civico").focus();
+        }
+        errore += "Civico non valido ";
+    }
 
-    fetch("common/utentdategesture", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: params.toString()
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Errore nel recupero degli indirizzi");
-            }
-            else {
-                return response.json();
-            }
+    // Validazione "cap"
+    if (!capRegex.test(cap)) {
+        if (errore === "") {
+            document.getElementById("cap").focus();
+        }
+        errore += "CAP non valido (deve contenere 5 cifre) ";
+    }
+
+    // Mostra errore se presente
+    if (errore !== "") {
+        mostraErrore(errore);
+    }
+    else {
+
+
+        const params = new URLSearchParams();
+        params.append("action", "indirizzi");
+        params.append("actionIndirizzo", "add");
+        params.append("json", JSON.stringify(json));
+
+        fetch("common/utentdategesture", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: params.toString()
         })
-        .then(response => {
-            if(response.success === "success") {
-                mostraErrore("Indirizzo aggiunto con successo!");
-                loadAddress();
-            }
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Errore nel recupero degli indirizzi");
+                } else {
+                    return response.json();
+                }
+            })
+            .then(response => {
+                if (response.success === "success") {
+                    mostraErrore("Indirizzo aggiunto con successo!");
+                    loadAddress();
+                }
 
-        })
-        .catch(error => {
-            mostraErrore(error);
-        })
+            })
+            .catch(error => {
+                mostraErrore(error);
+                console.error(error);
+            })
 
-
+    }
 
 }
 
-function loadCarte() {
+async function loadCarte() {
     let addressContainer = document.getElementById("payment-method-list");
     const params = new URLSearchParams();
     params.append("action", "carte");
     params.append("actionCard","list");
 
-    fetch("common/utentdategesture", {
+    await fetch("common/utentdategesture", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -116,86 +155,149 @@ function loadCarte() {
             }
         })
         .then(response => {
+
             console.log(response);
 
-            document.getElementById("payment-method-list").innerHTML="";
+            document.getElementById("payment-method-list").innerHTML = "";
             response.forEach(element => {
-                if(element.idMetodoPagamento >0){
+
+                if (element.idMetodoPagamento > 0) {
                     let oldCarte = document.getElementById("payment-method-list").innerHTML;
                     let dataScadenza = "2035-06-15";
                     let [anno, mese] = dataScadenza.split("-");
                     let nuovaData = `${mese}/${anno}`;
 
                     let carta = `
-                            <div class="payment-option p-4 border rounded-lg cursor-pointer hover:border-nekopeach selected-payment" id="carta-${element.idMetodoPagamento}">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-center">
-                                        <div>
-                                            <h3 class="font-bold">${element.tipo}: •••• •••• •••• ${element.nCarta}</h3>
-                                            <p class="text-sm text-gray-600">Scadenza: ${nuovaData}</p>
-                                        </div>
+                        <div class="payment-option p-4 border rounded-lg cursor-pointer hover:border-nekopeach selected-payment" id="carta-${element.idMetodoPagamento}">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <div>
+                                        <h3 class="font-bold">${element.tipo}: •••• •••• •••• ${element.nCarta}</h3>
+                                        <p class="text-sm text-gray-600">Scadenza: ${nuovaData}</p>
                                     </div>
-                                    <i class="fas fa-check text-nekopeach invisible"></i>
                                 </div>
-                            </div>`;
+                                <i class="fas fa-check text-nekopeach invisible"></i>
+                            </div>
+                        </div>`;
                     document.getElementById("payment-method-list").innerHTML = oldCarte + carta;
                 }
             })
-            document.getElementById("payment-method-list").firstElementChild.firstElementChild.children[1].classList.remove('invisible');
-
+            if(document.getElementById("payment-method-list").firstElementChild !== null) {
+                document.getElementById("payment-method-list").firstElementChild.firstElementChild.children[1].classList.remove('invisible');
+            }
         })
         .catch(error => {
             mostraErrore(error);
+            console.error(error);
+
         })
 
 
 }
 
 function addCarta() {
-    let nome = document.getElementById("nome").value;
-    let cognome = document.getElementById("cognome").value;
-    let nCarta = document.getElementById("nCarta").value;
-    let mese = document.getElementById("mese").value;
-    let tipo = document.getElementById("tipo").value;
-    let anno = document.getElementById("anno").value;
-    let json= {
-        nomeInte : nome,
-        cognomeInt : cognome,
-        tipo : tipo,
-        nCarta : nCarta.toString().trim().slice(-4),
-        dataScadenza : `${anno}-${mese}-01`
+    let nome = document.getElementById("nome").value.trim();
+    let cognome = document.getElementById("cognome").value.trim();
+    let nCarta = document.getElementById("nCarta").value.trim();
+    let mese = document.getElementById("mese").value.trim();
+    let tipo = document.getElementById("tipo").value.trim();
+    let anno = document.getElementById("anno").value.trim();
+    let json = {
+        nomeInte: nome,
+        cognomeInt: cognome,
+        tipo: tipo,
+        nCarta: nCarta.toString().trim().slice(-4),
+        dataScadenza: `${anno}-${mese}-01`
     };
 
-    const params = new URLSearchParams();
-    params.append("action", "carte");
-    params.append("actionCard","add");
-    params.append("json",JSON.stringify(json));
+    let errore = "";
 
-    fetch("common/utentdategesture", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: params.toString()
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Errore nel recupero delle carte");
-            }
-            else {
-                return response.json();
-            }
-        })
-        .then(response => {
-            if(response.success === "success") {
-                mostraErrore("Carta aggiunta con successo!");
+// Regex
+    const nomeRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ'\s-]{2,}$/;
+    const cognomeRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ'\s-]{2,}$/;
+    const cartaRegex = /^\d{16}$/; // 16 cifre
+    const meseRegex = /^(0[1-9]|1[0-2])$/; // da 01 a 12
+    const annoRegex = /^\d{4}$/; // 4 cifre
 
-            }
+    // Validazione nome
+    if (!nomeRegex.test(nome)) {
+        if (errore === "") {
+            document.getElementById("nome").focus();
+        }
+        errore += "Nome non valido ";
+    }
 
+    // Validazione cognome
+    if (!cognomeRegex.test(cognome)) {
+        if (errore === "") {
+            document.getElementById("cognome").focus();
+        }
+        errore += "Cognome non valido ";
+    }
+
+    // Validazione numero carta
+    if (!cartaRegex.test(nCarta)) {
+        if (errore === "") {
+            document.getElementById("nCarta").focus();
+        }
+        errore += "Numero carta non valido (inserisci 16 cifre) ";
+    }
+
+    // Validazione mese
+    if (!meseRegex.test(mese)) {
+        if (errore === "") {
+            document.getElementById("mese").focus();
+        }
+        errore += "Mese non valido (01-12) ";
+    }
+
+    // Validazione anno
+    if (!annoRegex.test(anno) || parseInt(anno) < new Date().getFullYear()) {
+        if (errore === "") {
+            document.getElementById("anno").focus();
+        }
+        errore += "Anno non valido o già passato ";
+    }
+
+    // Mostra errori se presenti
+    if (errore !== "") {
+        mostraErrore(errore);
+    } else {
+
+
+        const params = new URLSearchParams();
+        params.append("action", "carte");
+        params.append("actionCard", "add");
+        params.append("json", JSON.stringify(json));
+
+        fetch("common/utentdategesture", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: params.toString()
         })
-        .catch(error => {
-            mostraErrore(error);
-        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Errore nel recupero delle carte");
+                } else {
+                    return response.json();
+                }
+            })
+            .then(response => {
+                if (response.success === "success") {
+                    mostraErrore("Carta aggiunta con successo!");
+
+                }
+
+            })
+            .catch(error => {
+                mostraErrore(error);
+                console.error(error);
+
+            })
+    }
+
 }
 
 function loadValori(){
@@ -236,6 +338,8 @@ function loadValori(){
         })
         .catch(error => {
             mostraErrore(error);
+            console.error(error);
+
         });
 }
 // Funzione per creare card prodotto/volume nel carrello

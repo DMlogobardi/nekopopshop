@@ -1,4 +1,4 @@
-// frontend/js/userOrders.js
+// frontend/js/OrdiniUtente2.js
 let currentPage = 1; // Variabile per tenere traccia della pagina corrente
 document.addEventListener('DOMContentLoaded', function() {
     // Inizializza la gestione degli ordini
@@ -36,20 +36,18 @@ function showLoading(container) {
     `;
 }
 
-function renderOrdersContent(container) {
+function renderOrdersContent(container, data) {
     container.innerHTML = `
         <div class="tab-content active" id="orders-tab">
             <div class="profile-card bg-white border-2 border-nekopeach">
                 <div class="bg-gradient-to-r from-nekopeach to-nekopink p-4">
                     <h2 class="text-xl font-bold text-white flex items-center justify-between" style="font-size: 30px">
                         <span><i class="fas fa-shopping-bag mr-3"></i> I miei ordini</span>
-                        <span class="text-sm bg-white/30 px-3 py-1 rounded-full font-normal">
-                            2 ordini trovati
-                        </span>
+                       
                     </h2>
                 </div>
 
-                <div class="p-6">
+                <div class="p-6" id = "ordiniContainer">
                     <!-- Ordine 1 -->
                     <div class="order-card bg-white p-4 rounded-lg relative mb-4">
                         <div class="flex justify-between items-start">
@@ -74,34 +72,81 @@ function renderOrdersContent(container) {
                         </div>
                     </div>
 
-                    <!-- Ordine 2 -->
-                    <div class="order-card bg-white p-4 rounded-lg relative">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-bold text-gray-800">Ordine #NEKO-2023-044</h4>
-                                <p class="text-sm text-gray-600">2 Ottobre 2023</p>
-                            </div>
-                            <span class="badge bg-blue-100 text-blue-800">In elaborazione</span>
-                        </div>
-                        <div class="mt-2">
-                            <div class="w-10 h-10 rounded-full overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1598885154377-4d1dacdd0d5c?q=80&w=100" alt="Action Figure" class="w-full h-full object-cover">
-                            </div>
-                        </div>
-                        <div class="mt-3 flex justify-between items-center">
-                            <span class="font-bold text-nekopeach">€39,99</span>
-                            <a href="#" class="text-sm text-nekoblue hover:underline">Dettagli</a>
-                        </div>
+                   
+                        
+                            <!-- Pagination -->
+                    <div class="mt-8 flex justify-center">
+                        <nav class="flex items-center space-x-1">
+                            <button class="pagination-prev-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" 
+                            data-page="prev" onclick="backPage()">
+                                <i class="fas fa-chevron-left text-xs"></i>
+                            </button>
+                                
+                            <button class="pagination-succ-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:bg-gray-100" 
+                            data-page="next" onclick="succPage()">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </button>
+                        </nav>
+                    </div>
                     </div>
                 </div>
             </div>
         </div>
     `;
 
+
+
+
     addOrdersStyles();
     initOrdersTab();
 }
 
+function riempiContainer(data) {
+    let container = document.getElementById("ordiniContainer");
+    container.innerHTML = "";
+    data.forEach((item) => {
+        let orderCard = document.createElement("div");
+        orderCard.innerHTML = createOrdersCardHTML(item);
+        container.appendChild(orderCard);
+    })
+    function createOrdersCardHTML(item) {
+        return `
+                    <div class="order-card bg-white p-4 rounded-lg relative mb-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-gray-800">Ordine #NEKO ${item.idOrdine}</h4>
+                                <p class="text-sm text-gray-600">${item.dataOrdine}</p>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="mt-3 flex justify-between items-center">
+                            <span class="font-bold text-nekopeach">${item.tot}&#8364</span>
+                            
+                        </div>
+                    </div>`
+    }
+    }
+
+function succPage(){
+
+    if(currentPageWishlist > 1){
+        currentPageWishlist--;
+        loadWishlistContent(currentPageWishlist);
+    }
+
+}
+
+function backPage(){
+    if(elem){
+        currentPageWishlist++;
+        loadWishlistContent(currentPageWishlist);
+        if(elem === false){
+            currentPageWishlist--;
+            loadWishlistContent(currentPageWishlist);
+        }
+    }
+}
 function addOrdersStyles() {
     // Verifica se gli stili sono già stati aggiunti
     if (document.getElementById('orders-styles')) return;
@@ -131,7 +176,7 @@ function addOrdersStyles() {
 // Versione con AJAX reale
 
 
-
+let element = true;
 function loadOrdersContent(page = 1) {
     const mainContent = document.querySelector('.lg\\:col-span-3');
     if (!mainContent) return;
@@ -139,7 +184,7 @@ function loadOrdersContent(page = 1) {
     params.append("action", "ordini");
     params.append("actionOrdini", "list");
     params.append("page", page.toString()),
-    showLoading(mainContent);
+        showLoading(mainContent);
 
     fetch('common/utentdategesture',{
         method: "POST",
@@ -151,14 +196,37 @@ function loadOrdersContent(page = 1) {
 
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
-            return response.json([0]);
+            return response.json();
         })
-        .then(html => {
-            mainContent.innerHTML = html;
-            addOrdersStyles();
-        })
-        .catch(error => {
+
+        .then(data => {
+        if(data === undefined || data.length === 0) {
+            element = false;
             mainContent.innerHTML = `
+                    <div class="p-6">
+                      <div class="empty-orders">
+                        <i class="fas fa-heart-broken text-5xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-600 mb-2">Non sono ancora stati effettuati ordini</h3>
+                        <button class="bg-nekopeach hover:bg-nekored text>white font-bold py-2 px-6 rounded-full transition" id="catalog-ref">
+                            Esplora il catalogo
+                        </button>
+                    </div>
+                    </div>
+                  
+                `;
+            document.getElementById("catalog-ref").addEventListener("click",()=>{
+                window.location.href="catalog.jsp";
+            });
+        }else{
+            renderOrdersContent(mainContent,data);
+            element = true;
+            riempiContainer(data);
+        }
+
+
+        addOrdersStyles();
+    })  .catch(error => {
+        mainContent.innerHTML = `
                 <div class="text-center p-8 text-nekopeach">
                     <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
                     <p>Si è verificato un errore durante il caricamento degli ordini.</p>
@@ -167,6 +235,6 @@ function loadOrdersContent(page = 1) {
                     </button>
                 </div>
             `;
-            console.error('Error loading orders:', error);
-        });
+        console.error('Error loading orders:', error);
+    })
 }
