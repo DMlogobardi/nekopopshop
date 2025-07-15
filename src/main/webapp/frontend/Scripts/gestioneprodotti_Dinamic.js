@@ -482,60 +482,129 @@ function renameFileWithSuffix(file, suffix) {
 }
 
 function paramsAdd() {
-    const categoria = document.getElementById("productCategory2");
-    const nome = document.getElementById("productName2");
-    const numVol = document.getElementById("productvolNum");
-    const prezzo = document.getElementById("productPrice2");
-    const quantita = document.getElementById("productStock2");
-    const tag = document.getElementById("volTag");
-    const autore = document.getElementById("autore");
-    const img = document.getElementById("imgAdd");
-    const descrizione = document.getElementById("productDescription2");
+    const categoria = document.getElementById("productCategory2").value.trim();
+    const nome = document.getElementById("productName2").value.trim();
+    const numVol = document.getElementById("productvolNum").value.trim();
+    const prezzo = document.getElementById("productPrice2").value.trim();
+    const quantita = document.getElementById("productStock2").value.trim();
+    const tag = document.getElementById("volTag").value.trim();
+    const autore = document.getElementById("autore").value.trim();
+    const img = document.getElementById("imgAdd").files[0];
+    const descrizione = document.getElementById("productDescription2").value.trim();
 
-    const params = new FormData();
-    params.append("action", "insert");
+    let errore = "";
 
-    const prodotti = [];
-    const volumi = [];
+    // Regex
+    const nomeRegex = /^[\wÀ-ÖØ-öø-ÿ\s-]{2,}$/;
+    const numeroInteroRegex = /^\d+$/;
+    const prezzoRegex = /^\d+(\.\d{1,2})?$/;
+    const autoreRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]{2,}$/;
+    const descrizioneMinLunghezza = 10;
 
-    if (categoria.value === "manga") {
-        const oggi = new Date();
-        const data = `${oggi.getFullYear()}-${(oggi.getMonth() + 1).toString().padStart(2, '0')}-${oggi.getDate().toString().padStart(2, '0')}`;
-
-        prodotti.push({
-            idTempVolume: 1,
-            nome: nome.value,
-            autor: autore.value,
-            descrizzione: descrizione.value
-        });
-
-        volumi.push({
-            idImg: 1,
-            idProd: 1,
-            numVolume: Number(numVol.value),
-            prezzo: Number(prezzo.value),
-            quantita: Number(quantita.value),
-            datapubl: data,
-            tag: tag.value
-        });
-
-    } else {
-        prodotti.push({
-            idImg: 1,
-            nome: nome.value,
-            quantita: Number(quantita.value),
-            prezzo: Number(prezzo.value),
-            autor: autore.value,
-            descrizzione: descrizione.value
-        });
+    // categoria
+    if (categoria === "") {
+        if (errore === "") document.getElementById("productCategory2").focus();
+        errore += "Categoria obbligatoria  ";
     }
 
-    const json = { prodotti, volumi };
-    params.append("json", JSON.stringify(json));
-    const originalFile = img.files[0];
-    const renamedFile = renameFileWithSuffix(originalFile, "_1");
-    params.append("image", renamedFile);
-    return params;
+    // nome
+    if (!nomeRegex.test(nome)) {
+        if (errore === "") document.getElementById("productName2").focus();
+        errore += "Nome non valido (min 2 caratteri, lettere e numeri)  ";
+    }
+
+    // numero volume
+    if (!numeroInteroRegex.test(numVol) || parseInt(numVol) <= 0) {
+        if (errore === "") document.getElementById("productvolNum").focus();
+        errore += "Numero volume non valido  ";
+    }
+
+    // prezzo
+    if (!prezzoRegex.test(prezzo)) {
+        if (errore === "") document.getElementById("productPrice2").focus();
+        errore += "Prezzo non valido (es: 10.99)  ";
+    }
+
+    // quantità
+    if (!numeroInteroRegex.test(quantita)) {
+        if (errore === "") document.getElementById("productStock2").focus();
+        errore += "Quantità non valida (solo numeri interi ≥ 0)  ";
+    }
+
+    // tag
+    if (tag.length < 2) {
+        if (errore === "") document.getElementById("volTag").focus();
+        errore += "Tag troppo corto  ";
+    }
+
+    // autore
+    if (!autoreRegex.test(autore)) {
+        if (errore === "") document.getElementById("autore").focus();
+        errore += "Autore non valido  ";
+    }
+
+    // immagine
+    if (!img) {
+        if (errore === "") document.getElementById("imgAdd").focus();
+        errore += "Seleziona un'immagine  ";
+    }
+
+    // descrizione
+    if (descrizione.length < descrizioneMinLunghezza) {
+        if (errore === "") document.getElementById("productDescription2").focus();
+        errore += "Descrizione troppo breve (min 10 caratteri)  ";
+    }
+
+    if (errore !== "") {
+        mostraErrore(errore);
+    }
+    else {
+
+        const params = new FormData();
+        params.append("action", "insert");
+
+        const prodotti = [];
+        const volumi = [];
+
+        if (categoria.value === "manga") {
+            const oggi = new Date();
+            const data = `${oggi.getFullYear()}-${(oggi.getMonth() + 1).toString().padStart(2, '0')}-${oggi.getDate().toString().padStart(2, '0')}`;
+
+            prodotti.push({
+                idTempVolume: 1,
+                nome: nome.value,
+                autor: autore.value,
+                descrizzione: descrizione.value
+            });
+
+            volumi.push({
+                idImg: 1,
+                idProd: 1,
+                numVolume: Number(numVol.value),
+                prezzo: Number(prezzo.value),
+                quantita: Number(quantita.value),
+                datapubl: data,
+                tag: tag.value
+            });
+
+        } else {
+            prodotti.push({
+                idImg: 1,
+                nome: nome.value,
+                quantita: Number(quantita.value),
+                prezzo: Number(prezzo.value),
+                autor: autore.value,
+                descrizzione: descrizione.value
+            });
+        }
+
+        const json = {prodotti, volumi};
+        params.append("json", JSON.stringify(json));
+        const originalFile = img;
+        const renamedFile = renameFileWithSuffix(originalFile, "_1");
+        params.append("image", renamedFile);
+        return params;
+    }
 }
 
 
@@ -570,102 +639,167 @@ function base64ToFile(base64, filename) {
 }
 
 async function dataModify(){
-    const nome = document.getElementById("productName3");
-    const numVol = document.getElementById("productvolNumModify");
-    const prezzo = document.getElementById("productPrice3");
-    const quantita = document.getElementById("productStock3"); // CORRETTO!
-    const tag = document.getElementById("productCategory3");
-    const autore = document.getElementById("productAutore3");
-    const imgPrev = document.getElementById("imagePreview");
+    const nome = document.getElementById("productName3").value.trim();
+    const numVol = document.getElementById("productvolNumModify").value.trim();
+    const prezzo = document.getElementById("productPrice3").value.trim();
+    const quantita = document.getElementById("productStock3").value.trim(); // CORRETTO!
+    const tag = document.getElementById("productCategory3").value.trim();
+    const autore = document.getElementById("productAutore3").value.trim();
+    const imgPrev = document.getElementById("imagePreview").src;
     const img = document.getElementById("imgModify");
-    const hiddenProductId = document.getElementById("hiddenProductIdModify");
-    const descrizione = document.getElementById("productDescription3");
+    const hiddenProductId = document.getElementById("hiddenProductIdModify").value.trim();
+    const descrizione = document.getElementById("productDescription3").value.trim();
 
-    const params = new FormData();
-    params.append("action", "edit");
+    let errore = "";
 
-    if(numVol.value === undefined || numVol.value === ""){
-        params.append("update", "prodotto");
+    // Regex
+    const nomeRegex = /^[\wÀ-ÖØ-öø-ÿ\s-]{2,}$/;
+    const numeroInteroRegex = /^\d+$/;
+    const prezzoRegex = /^\d+(\.\d{1,2})?$/;
+    const autoreRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]{2,}$/;
+    const descrizioneMinLunghezza = 10;
 
-        if (img.files && img.files[0]) {
-            const originalFile = img.files[0];
-            const renamedFile = renameFileWithSuffix(originalFile, "_1");
-            params.append("image", renamedFile);
-        } else {
-            const imgTag = imgPrev.querySelector("img");
-            if (imgTag) {
-                const src = imgTag.getAttribute("src");
-                const renamedFile = base64ToFile(src, "immagine_1.jpg");
+    // nome
+    if (!nomeRegex.test(nome)) {
+        if (errore === "") document.getElementById("productName3").focus();
+        errore += "Nome non valido (min 2 caratteri, lettere e numeri)\n";
+    }
+
+    // numero volume
+    if (!numeroInteroRegex.test(numVol) || parseInt(numVol) <= 0) {
+        if (errore === "") document.getElementById("productvolNumModify").focus();
+        errore += "Numero volume non valido\n";
+    }
+
+    // prezzo
+    if (!prezzoRegex.test(prezzo) && prezzo <=0) {
+        if (errore === "") document.getElementById("productPrice3").focus();
+        errore += "Prezzo non valido (es: 10.99)\n";
+    }
+
+    // quantità
+    if (!numeroInteroRegex.test(quantita)) {
+        if (errore === "") document.getElementById("productStock3").focus();
+        errore += "Quantità non valida (solo numeri interi ≥ 0)\n";
+    }
+
+    // categoria/tag
+    if (tag === "") {
+        if (errore === "") document.getElementById("productCategory3").focus();
+        errore += "Categoria obbligatoria\n";
+    }
+
+    // autore
+    if (!autoreRegex.test(autore)) {
+        if (errore === "") document.getElementById("productAutore3").focus();
+        errore += "Autore non valido\n";
+    }
+
+
+    // hidden product id (sicurezza)
+    if (hiddenProductId === "") {
+        errore += "ID prodotto mancante (problema tecnico)\n";
+    }
+
+    // descrizione
+    if (descrizione.length < descrizioneMinLunghezza) {
+        if (errore === "") document.getElementById("productDescription3").focus();
+        errore += "Descrizione troppo breve (min 10 caratteri)\n";
+    }
+
+    // mostra errori se presenti
+    if (errore !== "") {
+        mostraErrore(errore);
+    }
+    else {
+
+
+        const params = new FormData();
+        params.append("action", "edit");
+
+        if (numVol.value === undefined || numVol.value === "") {
+            params.append("update", "prodotto");
+
+            if (img.files && img.files[0]) {
+                const originalFile = img.files[0];
+                const renamedFile = renameFileWithSuffix(originalFile, "_1");
                 params.append("image", renamedFile);
             } else {
-                console.log("Nessuna immagine caricata");
+                const imgTag = imgPrev.querySelector("img");
+                if (imgTag) {
+                    const src = imgTag.getAttribute("src");
+                    const renamedFile = base64ToFile(src, "immagine_1.jpg");
+                    params.append("image", renamedFile);
+                } else {
+                    console.log("Nessuna immagine caricata");
+                }
             }
-        }
 
-        const data = {
-            idImg: 1,
-            idTempVolume: hiddenProductId.value,
-            nome: nome.value,
-            quantita: quantita.value,
-            prezzo: prezzo.value,
-            autor: autore.value,
-            descrizzione: descrizione.value
-        };
+            const data = {
+                idImg: 1,
+                idTempVolume: hiddenProductId.value,
+                nome: nome.value,
+                quantita: quantita.value,
+                prezzo: prezzo.value,
+                autor: autore.value,
+                descrizzione: descrizione.value
+            };
 
-        params.append("json", JSON.stringify(data));
+            params.append("json", JSON.stringify(data));
 
-        await fatchModify(params);
-        return;
-    } else {
-        const paramsTag = new FormData();
-        paramsTag.append("action", "edit");
-        paramsTag.append("update", "prodotto");
-        params.append("update", "volume");
-
-        if (img.files && img.files[0]) {
-            const originalFile = img.files[0];
-            const renamedFile = renameFileWithSuffix(originalFile, "_1");
-            params.append("image", renamedFile);
+            await fatchModify(params);
+            return;
         } else {
-            const imgTag = imgPrev.querySelector("img");
-            if (imgTag) {
-                const src = imgTag.getAttribute("src");
-                const renamedFile = base64ToFile(src, "immagine_1.jpg");
+            const paramsTag = new FormData();
+            paramsTag.append("action", "edit");
+            paramsTag.append("update", "prodotto");
+            params.append("update", "volume");
+
+            if (img.files && img.files[0]) {
+                const originalFile = img.files[0];
+                const renamedFile = renameFileWithSuffix(originalFile, "_1");
                 params.append("image", renamedFile);
             } else {
-                console.log("Nessuna immagine caricata");
+                const imgTag = imgPrev.querySelector("img");
+                if (imgTag) {
+                    const src = imgTag.getAttribute("src");
+                    const renamedFile = base64ToFile(src, "immagine_1.jpg");
+                    params.append("image", renamedFile);
+                } else {
+                    console.log("Nessuna immagine caricata");
+                }
             }
+
+            const prod = {
+                idImg: 0,
+                idTempVolume: hiddenProductId.value,
+                nome: nome.value,
+                quantita: 0,
+                prezzo: 0.0,
+                autor: autore.value,
+                descrizzione: descrizione.value
+            };
+
+            paramsTag.append("json", JSON.stringify(prod));
+
+            const oggi = new Date();
+            const data = `${oggi.getFullYear()}-${(oggi.getMonth() + 1).toString().padStart(2, '0')}-${oggi.getDate().toString().padStart(2, '0')}`;
+
+            const vol = {
+                idImg: 1,
+                idProd: hiddenProductId.value,
+                numVolume: numVol.value,
+                prezzo: prezzo.value,
+                quantita: quantita.value,
+                datapubl: data,
+                tag: tag.value
+            }
+
+            params.append("json", JSON.stringify(vol));
+
+            await fatchModify(params);
+            await fatchModify(paramsTag);
         }
-
-        const prod = {
-            idImg: 0,
-            idTempVolume: hiddenProductId.value,
-            nome: nome.value,
-            quantita: 0,
-            prezzo: 0.0,
-            autor: autore.value,
-            descrizzione: descrizione.value
-        };
-
-        paramsTag.append("json", JSON.stringify(prod));
-
-        const oggi = new Date();
-        const data = `${oggi.getFullYear()}-${(oggi.getMonth() + 1).toString().padStart(2, '0')}-${oggi.getDate().toString().padStart(2, '0')}`;
-
-        const vol = {
-            idImg: 1,
-            idProd: hiddenProductId.value,
-            numVolume: numVol.value,
-            prezzo: prezzo.value,
-            quantita: quantita.value,
-            datapubl: data,
-            tag:tag.value
-        }
-
-        params.append("json", JSON.stringify(vol));
-
-        await fatchModify(params);
-        await fatchModify(paramsTag);
     }
 }
 
