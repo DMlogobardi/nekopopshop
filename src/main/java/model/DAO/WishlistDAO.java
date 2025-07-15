@@ -203,6 +203,42 @@ public class WishlistDAO implements GenralDAO<WishlistBean>{
         return wishLs;
     }
 
+    public Collection<WishlistBean> doRetrieveAllByClient(String order, int id) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        Collection<WishlistBean> wishLs = new LinkedList<WishlistBean>();
+
+        String selectAllSQL = "select * from " + TABLE_NAME + " where idCliente = ? order by ?";
+
+        try{
+            con = ds.getConnection();
+            ps = con.prepareStatement(selectAllSQL);
+            ps.setInt(1, id);
+            if(order != null && orderWhiteList.contains(order.strip()))
+                ps.setString(2, order.strip());
+            else
+                ps.setString(2, "idWishList");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                WishlistBean wishL = new WishlistBean(
+                        rs.getInt("idWishList"),
+                        rs.getInt("idProdotto"),
+                        rs.getInt("idCliente"),
+                        rs.getInt("idVolume")
+                );
+                wishLs.add(wishL);
+            }
+        } finally {
+            try {
+                if (ps != null) ps.close();
+            } finally {
+                if (con != null) con.close();
+            }
+        }
+        return wishLs;
+    }
+
     @Override
     public Collection<WishlistBean> doRetrieveAllLimit(String order, int limit, int page) throws SQLException {
         Connection con = null;

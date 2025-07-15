@@ -199,6 +199,11 @@ function addToWhisList(){
                     mostraErrore("non siamo riusciti ad aggiungerlo alla lista");
                     return;
                 }
+
+                if(data.msg){
+                    mostraErrore("prodotto già inserito in precedenza");
+                    return;
+                }
                 mostraErrore("aggiunto con successo")
             })
         return;

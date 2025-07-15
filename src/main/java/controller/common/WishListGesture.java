@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Bean.ProdottoBean;
+import model.Bean.VolumeBean;
 import model.Bean.WishlistBean;
 import model.DAO.ProdottoDAO;
 import model.DAO.VolumeDAO;
@@ -93,10 +95,24 @@ public class WishListGesture extends HttpServlet {
                     if (wishListDTO.getIdProdotto() != null || wishListDTO.getIdVolume() == null) {
                         if (prodottoDAO.doRetrieveByKey(wishListDTO.getIdProdotto()) != null && wishlistDAO.doRetrieveByProd(wishListDTO.getIdProdotto(), lodId) == null) {
                             exists = true;
+                            WishlistBean listYour = wishlistDAO.doRetrieveByProd(wishListDTO.getIdProdotto(), lodId);
+                            if (listYour != null) {
+                                response.setStatus(422);
+                                response.setContentType("text/json");
+                                response.getWriter().println("{\"msg\":\"già inserito\"}");
+                                return;
+                            }
                         }
                     } else {
                         if (volumeDAO.doRetrieveByKey(wishListDTO.getIdVolume()) != null && wishlistDAO.doRetrieveByVol(wishListDTO.getIdVolume(), lodId) == null) {
                             exists = true;
+                            WishlistBean listYour = wishlistDAO.doRetrieveByVol(wishListDTO.getIdVolume(), lodId);
+                            if (listYour != null) {
+                                response.setStatus(422);
+                                response.setContentType("text/json");
+                                response.getWriter().println("{\"error\":\"già inserito\"}");
+                                return;
+                            }
                         }
                     }
 
@@ -182,7 +198,7 @@ public class WishListGesture extends HttpServlet {
             response.setContentType("text/json");
             response.getWriter().println("{\"success\":\"success\"}");
 
-        } else if (action.equals("list")){
+        } else if (action.equals("list")) {
             int page = Integer.parseInt(request.getParameter("page"));
             String order = request.getParameter("order");
             JsonConverter<WishlistBean> converter = JsonConverter.factory(WishlistBean.class, null);
@@ -220,6 +236,86 @@ public class WishListGesture extends HttpServlet {
             response.setContentType("text/json");
             response.getWriter().println(json);
 
+        } else if (action.equals("specifiche")){
+            int lodId = (Integer) session.getAttribute("logId");
+            DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
+            JsonConverter<VolumeBean> converter = JsonConverter.factory(VolumeBean.class, null);
+            JsonConverter<ProdottoBean> converter2 = JsonConverter.factory(ProdottoBean.class, null);
+            WishlistDAO wishlistDAO = new WishlistDAO(ds);
+            VolumeDAO volumeDAO = new VolumeDAO(ds);
+            ProdottoDAO prodottoDAO = new ProdottoDAO(ds);
+            Collection<WishlistBean> dto = null;
+            Collection<ProdottoBean> prodotto = new ArrayList<>();
+            Collection<VolumeBean> volume = new ArrayList<>();
+
+            try{
+                dto = wishlistDAO.doRetrieveAllByClient(null, lodId);
+            } catch (SQLException e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
+            }
+
+            for (WishlistBean wishlistBean : dto) {
+                if(wishlistBean.getIdProdotto() > 0){
+                    try {
+                        ProdottoBean prod = prodottoDAO.doRetrieveByKey(wishlistBean.getIdProdotto());
+                        prodotto.add(prod);
+                    } catch (SQLException e) {
+                        response.setStatus(500);
+                        response.setContentType("text/json");
+                        response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                        return;
+                    }
+                } else {
+                    try {
+                        VolumeBean vol = volumeDAO.doRetrieveByKey(wishlistBean.getIdVolume());
+                        ProdottoBean prod = prodottoDAO.doRetrieveByKey(wishlistBean.getIdProdotto());
+                        prodotto.add(prod);
+                        volume.add(vol);
+                    } catch (SQLException e) {
+                        response.setStatus(500);
+                        response.setContentType("text/json");
+                        response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                        return;
+                    }
+                }
+            }
+
+            JsonConverter<ProdottoBean> prodConverter = JsonConverter.factory(ProdottoBean.class, null);
+            String jsonProd = null;
+            try {
+                jsonProd = prodConverter.toJson(prodotto);
+            } catch (Exception e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
+            }
+            JsonConverter<VolumeBean> volConverter = JsonConverter.factory(VolumeBean.class, null);
+            String jsonVol = null;
+            try {
+                jsonVol = volConverter.toJson(volume);
+            } catch (Exception e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;            }
+
+            String jsonSend = "";
+            try {
+                jsonSend = JsonConverter.merge(jsonProd, jsonVol);
+            } catch (Exception e) {
+                response.setStatus(500);
+                response.setContentType("text/json");
+                response.getWriter().println("{\"error\":\"" + e.getMessage() + "\"}");
+                return;
+            }
+
+            response.setContentType("text/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonSend);
         } else {
             System.out.println("invalid action");
             response.setStatus(422);
