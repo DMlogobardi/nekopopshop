@@ -28,6 +28,9 @@ function initDashboardTab() {
     }
 }
 
+document.getElementById("dashboard-tab-btn").addEventListener("click",()=>{
+    window.location.href="utente.jsp";
+});
 
 function loadDashboardContent() {
     const mainContent = document.querySelector('.lg\\:col-span-3');

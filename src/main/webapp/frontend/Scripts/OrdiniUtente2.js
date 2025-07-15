@@ -238,3 +238,4 @@ function loadOrdersContent(page = 1) {
         console.error('Error loading orders:', error);
     })
 }
+

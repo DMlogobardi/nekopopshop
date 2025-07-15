@@ -114,7 +114,8 @@
 
                 <!-- Navigation -->
                 <div class="border-t border-gray-200">
-                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-nekopeach font-bold border-b border-gray-200" data-tab="dashboard">
+                    <button class="tab-btn w-full text-left px-6 py-3 flex items-center text-nekopeach font-bold border-b border-gray-200" data-tab="dashboard"
+                    id="dashboard-tab-btn">
                         <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
                     </button>
                     <button id="orders-tab-btn" class="tab-btn w-full text-left px-6 py-3 flex items-center text-gray-600 hover:text-nekopeach transition" data-tab="orders">
@@ -154,92 +155,16 @@
                         </h2>
                     </div>
 
+
                     <div class="p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <div class="bg-nekopink/10 p-6 rounded-xl">
-                                <h3 class="font-bold text-lg text-nekopeach mb-4 flex items-center">
-                                    <i class="fas fa-shopping-bag mr-2"></i> Ultimi ordini
-                                </h3>
-                                <div class="space-y-4">
-                                    <div class="order-card bg-white p-4 rounded-lg relative">
-                                        <div class="flex justify-between items-start">
-                                            <div>
-                                                <h4 class="font-bold text-gray-800">Ordine #NEKO-2023-045</h4>
-                                                <p class="text-sm text-gray-600">15 Ottobre 2023</p>
-                                            </div>
-                                            <span class="badge bg-green-100 text-green-800">Spedito</span>
-                                        </div>
-                                        <div class="mt-2 flex items-center">
-                                            <div class="w-10 h-10 rounded-full overflow-hidden mr-2">
-                                                <img src="https://images.unsplash.com/photo-1622372738946-e62b40262c90?q=80&w=100" alt="Chainsaw Man" class="w-full h-full object-cover">
-                                            </div>
-                                            <div class="w-10 h-10 rounded-full overflow-hidden mr-2">
-                                                <img src="https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=100" alt="Jujutsu Kaisen" class="w-full h-full object-cover">
-                                            </div>
-                                            <div class="text-sm text-gray-500">+2 altri</div>
-                                        </div>
-                                        <div class="mt-3 flex justify-between items-center">
-                                            <span class="font-bold text-nekopeach">&#8364 42,97</span>
-                                            <a href="#" class="text-sm text-kawaiblue hover:underline">Dettagli</a>
-                                        </div>
-                                    </div>
+                        <h2 class="font-bold text-lg text-nekopeach mb-4 flex items-center">
+                        <i class="fas fa-heart mr-2"></i> Benvenuto nella tua area utente!
+                    </h2>
 
-                                    <div class="order-card bg-white p-4 rounded-lg relative">
-                                        <div class="flex justify-between items-start">
-                                            <div>
-                                                <h4 class="font-bold text-gray-800">Ordine #NEKO-2023-044</h4>
-                                                <p class="text-sm text-gray-600">2 Ottobre 2023</p>
-                                            </div>
-                                            <span class="badge bg-blue-100 text-blue-800">In elaborazione</span>
-                                        </div>
-                                        <div class="mt-2">
-                                            <div class="w-10 h-10 rounded-full overflow-hidden">
-                                                <img src="https://images.unsplash.com/photo-1598885154377-4d1dacdd0d5c?q=80&w=100" alt="Action Figure" class="w-full h-full object-cover">
-                                            </div>
-                                        </div>
-                                        <div class="mt-3 flex justify-between items-center">
-                                            <span class="font-bold text-nekopeach">&#8364 39,99</span>
-                                            <a href="#" class="text-sm text-kawaiblue hover:underline">Dettagli</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-4 text-center">
-                                    <a href="ordiniutente.jsp" class="text-sm text-nekopeach font-bold hover:underline">Vedi tutti gli ordini</a>
-                                </div>
-                            </div>
+                        <h2 class="font-bold text-lg text-nekopeach mb-4 flex items-center">
+                            <i class="fas fa-heart mr-2"></i> Preparati all'esperienza offerta da NekoPop Shop!
+                        </h2>
 
-                            <div class="bg-nekored/10 p-6 rounded-xl">
-                                <h3 class="font-bold text-lg text-nekopeach mb-4 flex items-center">
-                                    <i class="fas fa-heart mr-2"></i> Lista desideri
-                                </h3>
-                                <div class="space-y-4">
-                                    <div class="wishlist-item bg-white p-3 rounded-lg flex items-center">
-                                        <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                                            <img src="https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=200" alt="Jujutsu Kaisen" class="w-full h-full object-cover">
-                                        </div>
-                                        <div class="ml-3 flex-1">
-                                            <h4 class="font-bold text-sm text-gray-800">Jujutsu Kaisen Vol.15</h4>
-                                            <p class="text-xs text-gray-600">Disponibile dal 15/11</p>
-                                        </div>
-                                        <div class="text-right">
-                                            <span class="block font-bold text-nekopeach">&#8364 14,99</span>
-                                            <button class="text-xs text-kawaiblue hover:underline">Aggiungi al carrello</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="wishlist-item bg-white p-3 rounded-lg flex items-center">
-                                        <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                                            <img src="https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=200" alt="Demon Slayer" class="w-full h-full object-cover">
-                                        </div>
-                                        <div class="ml-3 flex-1">
-                                            <h4 class= "font-bold text-sm text-gray-600"></h4>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
