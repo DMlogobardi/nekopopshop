@@ -70,15 +70,7 @@ function renderWishlistContent(container, data) {
 
                 <!-- Wishlist Items -->
                 <div class="p-6">
-                    <!-- Empty State (hidden by default) -->
-                    <div id="empty-wishlist" class="empty-wishlist hidden">
-                        <i class="fas fa-heart-broken text-5xl text-gray-300 mb-4"></i>
-                        <h3 class="text-xl font-bold text-gray-600 mb-2">La tua wishlist è vuota</h3>
-                        <p class="text-gray-500 mb-4">Aggiungi articoli che ti interessano cliccando sull'icona del cuore</p>
-                        <button class="bg-nekopeach hover:bg-nekored text-white font-bold py-2 px-6 rounded-full transition">
-                            Esplora il catalogo
-                        </button>
-                    </div>
+                
 
                     <!-- Wishlist Items Grid -->
                     <div id="wishlist-items-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -110,6 +102,7 @@ function renderWishlistContent(container, data) {
     setupWishlistEventHandlers();
     addWishlistStyles();
 }
+
 
 function avantiPage(){
 
@@ -383,6 +376,8 @@ function loadWishlistContent(page = 1) {
                 });
             }else{
                 renderWishlistContent(mainContent,data);
+                specificheWishlistItem(data);
+                riempiWishlistContainer(data);
                 elem = true;
             }
 
@@ -404,16 +399,123 @@ function loadWishlistContent(page = 1) {
             console.error('Error loading wishlist:', error);
         });
 }
-/*
-function removeWishlistItem(item) {
-    const itemId = item.getAttribute('data-id');
+function specificheWishlistItem(item){
+    const params = new URLSearchParams();
+    params.append("action", "wishlist");
+    params.append("actionWishList","specifiche");
+    params.append("id",item.idWishlist);
 
-    fetch('/removeFromWishlist', {
+
+    fetch('common/utentdategesture', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
+        headers:{
+            'Content-type':'application/x-www-form-urlencode; charset=UTF-8',
         },
-        body: JSON.stringify({ itemId: itemId })
+        body: params.toString()
+    })  .then(response => {
+        if (!response.ok) throw new Error('Visualizzazione specifiche fallita');
+        return response.json();
+
+    }).then(data => {
+        const prodotti = data.filter(item => item.idVolume === undefined);  // prodotti
+        const volumi = data.filter(item => item.idVolume !== undefined);// volumi
+
+
+        const wishlistTable = document.getElementById("wishlist-items-grid");
+        wishlistTable.innerHTML = "";
+
+        item.forEach(e => {
+            if (e.idVolume === undefined || e === 0) {
+                prodotti.forEach(prod => {
+                    if (prod.idProdotto == e.idProdotto) {
+                        const imgSrc = item.imgProd
+                            ? (item.imgProd.startsWith("data:")
+                                ? item.imgProd
+                                : `data:image/jpeg;base64,${item.imgProd}`)
+                            : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+                        wishlistTable.innerHTML += `
+                            <div class="order-card bg-white p-4 rounded-lg relative mb-4">
+                                <img src="${imgSrc}" alt="" class="w-full h-48 object-cover rounded-lg mb-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">${prod.nome}</h4>
+                                        <p class="text-sm text-gray-600">${prod.descrizione}</p>`
+                    }
+                })
+            } else {
+                volumi.forEach(vol => {
+                    if (vol.idVolume == e.idVolume) {
+                        const prod = data.filter(item => item.idProdotto === vol.idProdotto);  // prodotti
+                        const imgSrc = item.imgVol
+                            ? (item.imgVol.startsWith("data:")
+                                ? item.imgVol
+                                : `data:image/jpeg;base64,${item.imgVol}`)
+                            : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+                        wishlistTable.innerHTML += `
+                                <div class="order-card bg-white p-4 rounded-lg relative mb-4">
+                                    <img src="${imgSrc}" alt="" class="w-full h-48 object-cover rounded-lg mb-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">${prod.nome}</h4>
+                                            <p class="text-sm text-gray-600">${prod.descrizione}</p>`
+                    }
+
+
+                })
+            }
+
+
+        })
+    }).catch(error => {console.error('Error:', error)})
+}
+function riempiWishlistContainer(data) {
+    let container = document.getElementById("wishlist-items-grid");
+    container.innerHTML = "";
+    data.forEach((item) => {
+        let wishlistCard = document.createElement("div");
+        wishlistCard.innerHTML = createWishlistCardHTML(item);
+        container.appendChild(wishlistCard);
+    })
+    function createWishlistCardHTML(item) {
+        return `
+                    <div class="order-card bg-white p-4 rounded-lg relative mb-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-gray-800"> #NEKO ${item.idWishlist}</h4>
+                              
+                            </div>
+                            
+                        </div>
+                        
+                        <button onclick="specificheWishlistItem(\`${item.idWishlist}\`)" class="action-btn view-btn">
+                                        <i class="fas fa-eye mr-1"></i> specifiche
+                                    </button>
+                        <button onclick="removeWishlistItem(\`${item.idWishlist}\`)" class="action-btn cancel-btn">
+                                        <i class="fas fa-times mr-1"></i> elimina
+                                    </button>
+                    </div>`
+    }
+
+}
+
+function removeWishlistItem(idWishlist) {
+    const params = new URLSearchParams();
+    params.append("action", "wishlist");
+    params.append("actionWishList", "remove");
+    const data={
+        idWishlist: idWishlist,
+        idProdotto: 0,
+        idCliente: 0,
+        idVolume:0,
+    }
+    params.append("json", JSON.stringify(data))
+
+    fetch('common/utentdategesture', {
+        method: 'POST',
+        headers:{
+            'Content-type':'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        body: params.toString()
     })
     .then(response => {
         if (!response.ok) throw new Error('Rimozione fallita');
@@ -436,4 +538,3 @@ function removeWishlistItem(item) {
         console.error('Error:', error);
     });
 }
-*/
