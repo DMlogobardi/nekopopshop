@@ -1,4 +1,4 @@
-// frontend/Scripts/WishlistUtentev2.js
+// frontend/Scripts/WishlistUtente2.js
 
 let currentPageWishlist = 1;
 document.addEventListener('DOMContentLoaded', function() {
@@ -74,6 +74,7 @@ function renderWishlistContent(container, data) {
 
                     <!-- Wishlist Items Grid -->
                     <div id="wishlist-items-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
                         <!-- Items will be loaded here dynamically -->
                     </div>
 
@@ -176,40 +177,6 @@ function setupWishlistEventHandlers() {
     }
 }
 
-function filterWishlistItems(filter) {
-    const items = document.querySelectorAll('.wishlist-item');
-
-    items.forEach(item => {
-        switch(filter) {
-            case 'all':
-                item.style.display = 'block';
-                break;
-            case 'available':
-                item.style.display = item.getAttribute('data-stock') === 'out' ? 'none' : 'block';
-                break;
-            case 'preorder':
-                item.style.display = item.getAttribute('data-stock') === 'preorder' ? 'block' : 'none';
-                break;
-            case 'outofstock':
-                item.style.display = item.getAttribute('data-stock') === 'out' ? 'block' : 'none';
-                break;
-            default:
-                item.style.display = 'block';
-        }
-    });
-}
-
-function removeWishlistItem(item) {
-    // Animazione di rimozione
-    item.style.transform = 'scale(0.9)';
-    item.style.opacity = '0';
-    item.style.transition = 'all 0.3s ease';
-
-    setTimeout(() => {
-        item.remove();
-        checkEmptyWishlist();
-    }, 300);
-}
 
 function addToCart(item) {
     const itemId = item.getAttribute('data-id');
@@ -376,7 +343,6 @@ function loadWishlistContent(page = 1) {
                 });
             }else{
                 renderWishlistContent(mainContent,data);
-                specificheWishlistItem(data);
                 riempiWishlistContainer(data);
                 elem = true;
             }
@@ -399,75 +365,87 @@ function loadWishlistContent(page = 1) {
             console.error('Error loading wishlist:', error);
         });
 }
-function specificheWishlistItem(item){
-    const params = new URLSearchParams();
-    params.append("action", "wishlist");
-    params.append("actionWishList","specifiche");
-    params.append("id",item.idWishlist);
+function specificheWishlistItem(btn) {
+    // parsiamo la singola entry
+    const entry = JSON.parse(btn.dataset.item);
+    const idW   = entry.idWishlist;
 
+    // prendo il div corrispondente
+    const wishlistTable = document.getElementById(`specifiche${idW}`);
+    if (!wishlistTable) {
+        console.error(`Div specifiche${idW} non trovato`);
+        return;
+    }
+
+    // toggle visibilità
+    if (wishlistTable.classList.contains("hidden")) {
+        wishlistTable.classList.remove("hidden");
+    } else {
+        wishlistTable.classList.add("hidden");
+        wishlistTable.innerHTML = "";
+        return;
+    }
+
+    // preparo i parametri per il fetch
+    const params = new URLSearchParams({
+        action: "wishlist",
+        actionWishList: "specifiche",
+        id: idW
+    });
 
     fetch('common/utentdategesture', {
         method: 'POST',
-        headers:{
-            'Content-type':'application/x-www-form-urlencode; charset=UTF-8',
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
         body: params.toString()
-    })  .then(response => {
-        if (!response.ok) throw new Error('Visualizzazione specifiche fallita');
-        return response.json();
-
-    }).then(data => {
-        const prodotti = data.filter(item => item.idVolume === undefined);  // prodotti
-        const volumi = data.filter(item => item.idVolume !== undefined);// volumi
-
-
-        const wishlistTable = document.getElementById("wishlist-items-grid");
-        wishlistTable.innerHTML = "";
-
-        item.forEach(e => {
-            if (e.idVolume === undefined || e === 0) {
-                prodotti.forEach(prod => {
-                    if (prod.idProdotto == e.idProdotto) {
-                        const imgSrc = item.imgProd
-                            ? (item.imgProd.startsWith("data:")
-                                ? item.imgProd
-                                : `data:image/jpeg;base64,${item.imgProd}`)
-                            : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-                        wishlistTable.innerHTML += `
-                            <div class="order-card bg-white p-4 rounded-lg relative mb-4">
-                                <img src="${imgSrc}" alt="" class="w-full h-48 object-cover rounded-lg mb-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="font-bold text-gray-800">${prod.nome}</h4>
-                                        <p class="text-sm text-gray-600">${prod.descrizione}</p>`
-                    }
-                })
-            } else {
-                volumi.forEach(vol => {
-                    if (vol.idVolume == e.idVolume) {
-                        const prod = data.filter(item => item.idProdotto === vol.idProdotto);  // prodotti
-                        const imgSrc = item.imgVol
-                            ? (item.imgVol.startsWith("data:")
-                                ? item.imgVol
-                                : `data:image/jpeg;base64,${item.imgVol}`)
-                            : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-                        wishlistTable.innerHTML += `
-                                <div class="order-card bg-white p-4 rounded-lg relative mb-4">
-                                    <img src="${imgSrc}" alt="" class="w-full h-48 object-cover rounded-lg mb-4">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-bold text-gray-800">${prod.nome}</h4>
-                                            <p class="text-sm text-gray-600">${prod.descrizione}</p>`
-                    }
-
-
-                })
-            }
-
-
+    })
+        .then(res => {
+            if (!res.ok) throw new Error('Visualizzazione specifiche fallita');
+            return res.json();
         })
-    }).catch(error => {console.error('Error:', error)})
+        .then(details => {
+            // split master data in prodotti e volumi
+            const prodotti = details.filter(d => d.idVolume === undefined);
+            const volumi   = details.filter(d => d.idVolume    !== undefined);
+
+            // svuoto e poi popolo con UN SOLO entry
+            wishlistTable.innerHTML = "";
+            const e = entry;
+
+            if (e.idVolume === undefined) {
+                // è un prodotto
+                const p = prodotti.find(p => p.idProdotto == e.idProdotto);
+                if (!p) return;
+                const img = p.imgProd?.startsWith("data:")
+                    ? p.imgProd
+                    : `data:image/jpeg;base64,${p.imgProd}`;
+
+                wishlistTable.innerHTML = `
+        <div class="order-card bg-white p-4 rounded-lg mb-4">
+          <img src="${img||''}" class="w-full h-48 object-cover rounded-lg mb-2" />
+          <h4 class="font-bold text-gray-800">${p.nome}</h4>
+          <p class="text-sm text-gray-600">${p.descrizione}</p>
+        </div>`;
+            } else {
+                // è un volume
+                const v = volumi.find(v => v.idVolume == e.idVolume);
+                if (!v) return;
+                const p = prodotti.find(p => p.idProdotto == v.idProdotto);
+                if (!p) return;
+                const img = v.imgVol?.startsWith("data:")
+                    ? v.imgVol
+                    : `data:image/jpeg;base64,${v.imgVol}`;
+
+                wishlistTable.innerHTML = `
+        <div class="order-card bg-white p-4 rounded-lg mb-4">
+          <img src="${img||''}" class="w-full h-48 object-cover rounded-lg mb-2" />
+          <h4 class="font-bold text-gray-800">${p.nome} ${v.numVolumi}</h4>
+          <p class="text-sm text-gray-600">${p.descrizione}</p>
+        </div>`;
+            }
+        })
+        .catch(err => console.error("Error:", err));
 }
+
 function riempiWishlistContainer(data) {
     let container = document.getElementById("wishlist-items-grid");
     container.innerHTML = "";
@@ -477,8 +455,12 @@ function riempiWishlistContainer(data) {
         container.appendChild(wishlistCard);
     })
     function createWishlistCardHTML(item) {
+        const safeDataItem = JSON.stringify(item)
+            .replace(/"/g, '&quot;')  // escape i doppi apici per HTML
+            .replace(/'/g, '&#39;');
         return `
-                    <div class="order-card bg-white p-4 rounded-lg relative mb-4">
+                    <div id = "${item.idWishlist}" class="wishlist-card bg-white p-4 rounded-lg relative mb-4">
+                    
                         <div class="flex justify-between items-start">
                             <div>
                                 <h4 class="font-bold text-gray-800"> #NEKO ${item.idWishlist}</h4>
@@ -487,13 +469,16 @@ function riempiWishlistContainer(data) {
                             
                         </div>
                         
-                        <button onclick="specificheWishlistItem(\`${item.idWishlist}\`)" class="action-btn view-btn">
+                        <button data-item="${safeDataItem}" onclick="specificheWishlistItem(this)" class="action-btn view-btn">
                                         <i class="fas fa-eye mr-1"></i> specifiche
                                     </button>
                         <button onclick="removeWishlistItem(\`${item.idWishlist}\`)" class="action-btn cancel-btn">
                                         <i class="fas fa-times mr-1"></i> elimina
                                     </button>
-                    </div>`
+                        
+                        <div id="specifiche${item.idWishlist}" class="hidden"> </div>
+                        
+                    </div>`;
     }
 
 }
@@ -503,7 +488,7 @@ function removeWishlistItem(idWishlist) {
     params.append("action", "wishlist");
     params.append("actionWishList", "remove");
     const data={
-        idWishlist: idWishlist,
+        idWishList: idWishlist,
         idProdotto: 0,
         idCliente: 0,
         idVolume:0,
@@ -522,7 +507,8 @@ function removeWishlistItem(idWishlist) {
         return response.json();
     })
     .then(data => {
-        // Animazione di rimozione
+        const item = document.getElementById(`${idWishlist}`)
+        console.log("Item ID:", item.idWishList);
         item.style.transform = 'scale(0.9)';
         item.style.opacity = '0';
         item.style.transition = 'all 0.3s ease';

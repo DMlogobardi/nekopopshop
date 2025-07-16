@@ -271,7 +271,7 @@ public class WishListGesture extends HttpServlet {
                 } else {
                     try {
                         VolumeBean vol = volumeDAO.doRetrieveByKey(wishlistBean.getIdVolume());
-                        ProdottoBean prod = prodottoDAO.doRetrieveByKey(wishlistBean.getIdProdotto());
+                        ProdottoBean prod = prodottoDAO.doRetrieveByKey(vol.getIdProdotto());
                         prodotto.add(prod);
                         volume.add(vol);
                     } catch (SQLException e) {
