@@ -119,7 +119,7 @@ public class Login extends HttpServlet {
 
                 Cookie accessCookie = new Cookie("access", access);
                 accessCookie.setMaxAge(86400); // 1 giorno
-                accessCookie.setPath("/");
+                accessCookie.setPath(request.getContextPath());
                 response.addCookie(accessCookie);
 
                 response.setContentType("application/json");
